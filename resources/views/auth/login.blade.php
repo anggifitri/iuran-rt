@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root{--accent:#D1A151;--bg-1:#031022;--bg-2:#042e55}
-        
+
         /* Light Mode */
         html[data-theme="light"] {
             --accent:#6366f1;
@@ -21,7 +21,7 @@
             --gradient-from:#ec4899;
             --gradient-to:#d946ef;
         }
-        
+
         /* Dark Mode */
         html[data-theme="dark"] {
             --accent:#D1A151;
@@ -34,12 +34,12 @@
             --gradient-from:#D1A151;
             --gradient-to:#fb923c;
         }
-        
+
         body { font-family: 'Plus Jakarta Sans', sans-serif; color: #e6eef6; position: relative; transition: background-color 0.3s, color 0.3s; }
-        
+
         html[data-theme="dark"] .bg-animated{background: linear-gradient(180deg,#031022 0%, #041d34 40%, #042e55 100%);background-size:300% 300%;animation: moveGrad 15s ease infinite;}
         html[data-theme="light"] .bg-animated{background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 40%, #fce7f3 100%);background-size:300% 300%;animation: moveGrad 15s ease infinite;}
-        
+
         .bg-animated{background-size:300% 300%;animation: moveGrad 15s ease infinite;}
         @keyframes moveGrad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
         .stars{position:absolute;inset:0;pointer-events:none;background:
@@ -56,12 +56,12 @@
         background-size: 180px 180px, 160px 160px, 220px 220px, 140px 140px, 240px 240px, 200px 200px, 88px 88px, 130px 130px, 170px 170px, 95px 95px;
         opacity:.9;
         }
-        
+
         html[data-theme="light"] .stars {
             background: none !important;
             opacity: 0;
         }
-        
+
         .stars::after{content:'';position:absolute;inset:0;background:
             radial-gradient(circle at 25% 82%, rgba(255,255,255,0.35) 2px, transparent 0),
             radial-gradient(circle at 48% 72%, rgba(255,255,255,0.4) 1.5px, transparent 0),
@@ -73,56 +73,56 @@
         opacity:.7;animation: twinkle 10s ease-in-out infinite alternate;
         }
         @keyframes twinkle{from{opacity:.55}to{opacity:.8}}
-        
+
         .card { width: min(980px, calc(100% - 2rem)); max-width: 1080px; border-radius: 36px; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.03); background: linear-gradient(180deg, #041026 0%, #052f4a 35%, #042b44 100%); display:grid; grid-template-columns:1fr 1fr; }
-        
+
         html[data-theme="light"] .card {
             background: linear-gradient(180deg, #ffffff 0%, #f9f5ff 35%, #faf5ff 100%);
             border-color: rgba(99,102,241,0.1);
             box-shadow: 0 40px 100px rgba(99,102,241,0.1);
         }
-        
+
         .left-panel, .right-panel { padding: 3rem 2.5rem; display:flex; align-items:center; justify-content:center; min-height:520px; }
-        
+
         html[data-theme="dark"] .left-panel { background: linear-gradient(180deg, #020b13 0%, #071522 100%); }
         html[data-theme="light"] .left-panel { background: linear-gradient(180deg, #f8f6ff 0%, #faf5ff 100%); }
-        
+
         html[data-theme="dark"] .left-panel .brand-title { color: #c69d4d; }
         html[data-theme="light"] .left-panel .brand-title { color: #6366f1; }
-        
+
         html[data-theme="dark"] .left-panel p { color: #9fb4c3; }
         html[data-theme="light"] .left-panel p { color: #7c3aed; }
-        
+
         html[data-theme="dark"] .right-panel { background: linear-gradient(180deg, rgba(5,12,25,0.92) 0%, rgba(10,24,46,0.98) 100%); border-left: 1px solid rgba(255,255,255,0.08); position: relative; }
         html[data-theme="light"] .right-panel { background: linear-gradient(180deg, rgba(248,245,255,0.95) 0%, rgba(243,244,255,0.98) 100%); border-left: 1px solid rgba(99,102,241,0.1); position: relative; }
-        
+
         html[data-theme="dark"] .right-panel::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at top right, rgba(209,161,81,0.04), transparent 25%); pointer-events: none; }
         html[data-theme="light"] .right-panel::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at top right, rgba(99,102,241,0.05), transparent 25%); pointer-events: none; }
-        
+
         .panel-inner { width: 100%; max-width: 520px; position: relative; z-index: 1; }
-        
+
         html[data-theme="dark"] .form-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(20px); border-radius: 28px; padding: 2rem; box-shadow: 0 24px 60px rgba(0,0,0,0.18); }
         html[data-theme="light"] .form-card { background: rgba(255,255,255,0.8); border: 1px solid rgba(99,102,241,0.2); backdrop-filter: blur(20px); border-radius: 28px; padding: 2rem; box-shadow: 0 24px 60px rgba(99,102,241,0.08); }
-        
+
         html[data-theme="dark"] .form-card label { color: #f8fafc; }
         html[data-theme="light"] .form-card label { color: #1e293b; }
-        
+
         html[data-theme="dark"] .form-card input { width: 100%; border-radius: 1rem; padding: 0.85rem 1rem; background: rgba(243,246,255,0.95); color: #0f172a; border: 1px solid rgba(209,161,81,0.3); }
         html[data-theme="light"] .form-card input { width: 100%; border-radius: 1rem; padding: 0.85rem 1rem; background: rgba(248,245,255,0.95); color: #1e293b; border: 1px solid rgba(99,102,241,0.2); }
-        
+
         html[data-theme="dark"] .form-card input::placeholder { color: rgba(15,23,42,0.45); }
         html[data-theme="light"] .form-card input::placeholder { color: rgba(30,41,59,0.45); }
-        
+
         html[data-theme="dark"] .form-card input:focus { outline: none; box-shadow: 0 0 0 4px rgba(209,161,81,0.16); border-color: rgba(209,161,81,0.55); }
         html[data-theme="light"] .form-card input:focus { outline: none; box-shadow: 0 0 0 4px rgba(99,102,241,0.16); border-color: rgba(99,102,241,0.55); }
-        
+
         .form-card button { width: 100%; border-radius: 1rem; padding: 0.95rem 1rem; }
-        
+
         html[data-theme="dark"] .form-card .helper { color: #cbd5e1; }
         html[data-theme="light"] .form-card .helper { color: #64748b; }
-        
+
         .brand-title { font-family: 'Playfair Display', serif; letter-spacing: -0.035em; text-shadow: 0 4px 20px rgba(0,0,0,0.25); }
-        
+
         /* Theme Toggle Button */
         .theme-toggle {
             position: fixed;
@@ -142,27 +142,27 @@
             transition: all 0.3s ease;
             color: white;
         }
-        
+
         html[data-theme="light"] .theme-toggle {
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
             box-shadow: 0 8px 24px rgba(99,102,241,0.3);
         }
-        
+
         .theme-toggle:hover {
             transform: scale(1.1);
             box-shadow: 0 12px 32px rgba(0,0,0,0.3);
         }
-        
+
         .theme-toggle svg {
             width: 24px;
             height: 24px;
             transition: transform 0.3s ease;
         }
-        
+
         html[data-theme="light"] .theme-toggle:hover {
             box-shadow: 0 12px 32px rgba(99,102,241,0.4);
         }
-        
+
         @media (max-width:1024px) {.card{grid-template-columns:1fr;} .left-panel,.right-panel{padding:2rem;} .form-card{max-width:100%;}}
         @media (max-width:640px){body{padding:1rem;} .left-panel{padding:1.5rem;} .right-panel{padding:1.5rem;} .brand-title{text-align:center;} .theme-toggle{width:45px;height:45px;top:15px;right:15px;}}
     </style>
@@ -272,7 +272,7 @@
             </div>
         </div>
     </div>
-    
+
     <script>
         // Initialize theme from localStorage or system preference
         function initTheme() {
@@ -284,7 +284,7 @@
         function updateThemeIcons(theme) {
             const sunIcon = document.getElementById('sunIcon');
             const moonIcon = document.getElementById('moonIcon');
-            
+
             if (theme === 'light') {
                 sunIcon.style.display = 'block';
                 moonIcon.style.display = 'none';
@@ -298,7 +298,7 @@
             const html = document.documentElement;
             const currentTheme = html.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
+
             html.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             updateThemeIcons(newTheme);

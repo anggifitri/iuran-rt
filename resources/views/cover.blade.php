@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <style>
         :root{--accent:#D1A151;--bg-1:#031221;--bg-2:#072433}
-        
+
         /* Light Mode */
         html[data-theme="light"] {
             --accent:#6366f1;
@@ -21,7 +21,7 @@
             --gradient-from:#ec4899;
             --gradient-to:#d946ef;
         }
-        
+
         /* Dark Mode */
         html[data-theme="dark"] {
             --accent:#D1A151;
@@ -34,28 +34,28 @@
             --gradient-from:#D1A151;
             --gradient-to:#fb923c;
         }
-        
+
         body { font-family: 'Plus Jakarta Sans', sans-serif; color: var(--text-primary); transition: background-color 0.3s, color 0.3s; }
 
-        
+
         /* animated gradient background (navy, darker) */
         html[data-theme="dark"] .bg-animated {
             background: linear-gradient(180deg,#031022 0%, #041d34 40%, #042e55 100%);
             background-size:300% 300%;
             animation: moveGrad 15s ease infinite;
         }
-        
+
         /* light mode background */
         html[data-theme="light"] .bg-animated {
             background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 40%, #fce7f3 100%);
             background-size:300% 300%;
             animation: moveGrad 15s ease infinite;
         }
-        
+
         .bg-animated{background-size:300% 300%;animation: moveGrad 15s ease infinite;}
         @keyframes moveGrad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
-        body{position:relative;}        
+        body{position:relative;}
         .stars{position:absolute;inset:0;pointer-events:none;background:
             radial-gradient(circle at 12% 18%, rgba(255,255,255,0.9) 1px, transparent 0),
             radial-gradient(circle at 28% 14%, rgba(255,255,255,0.75) 1px, transparent 0),
@@ -70,12 +70,12 @@
         background-size: 180px 180px, 160px 160px, 220px 220px, 140px 140px, 240px 240px, 200px 200px, 88px 88px, 130px 130px, 170px 170px, 95px 95px;
         opacity:.9;
         }
-        
+
         html[data-theme="light"] .stars {
             background: none !important;
             opacity: 0;
         }
-        
+
         .stars::after{content:'';position:absolute;inset:0;background:
             radial-gradient(circle at 25% 82%, rgba(255,255,255,0.35) 2px, transparent 0),
             radial-gradient(circle at 48% 72%, rgba(255,255,255,0.4) 1.5px, transparent 0),
@@ -88,13 +88,13 @@
         }
         @keyframes twinkle{from{opacity:.55}to{opacity:.8}}
 
-        
-        html[data-theme="dark"] .glass { 
-            background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); 
-            border: 1px solid rgba(255,255,255,0.02); 
-            backdrop-filter: blur(10px); 
+
+        html[data-theme="dark"] .glass {
+            background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+            border: 1px solid rgba(255,255,255,0.02);
+            backdrop-filter: blur(10px);
         }
-        
+
         html[data-theme="light"] .glass {
             background: linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0.3));
             border: 1px solid rgba(99,102,241,0.1);
@@ -117,33 +117,33 @@
         html[data-theme="dark"] .cta-primary{background:linear-gradient(90deg,var(--accent),#fb923c);box-shadow:0 10px 30px rgba(209,161,81,0.12);}
         html[data-theme="light"] .cta-primary{background:linear-gradient(90deg, #6366f1, #8b5cf6);box-shadow:0 10px 30px rgba(99,102,241,0.2);}
         .cta-primary:hover{transform:translateY(-4px) scale(1.02)}
-        
+
         html[data-theme="light"] .cta-ghost{border-color:rgba(99,102,241,0.3); color: var(--text-primary); background: rgba(99,102,241,0.05);}
         html[data-theme="light"] .cta-ghost:hover{background: rgba(99,102,241,0.1);}
-        
+
         .cta-ghost{border-color:rgba(148,163,184,0.14)}
 
         .feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0.85rem;margin-top:1.5rem;}
-        
+
         html[data-theme="dark"] .feature-card{background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));border:1px solid rgba(255,255,255,0.12);backdrop-filter:blur(18px);border-radius:1.8rem;padding:1.25rem 1.2rem 1.2rem;text-align:left;box-shadow:0 16px 40px rgba(0,0,0,0.1);transition:transform .25s ease,background .25s ease;display:flex;flex-direction:column;justify-content:space-between;min-height:150px;}
         html[data-theme="dark"] .feature-card:hover{background:linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));transform:translateY(-2px);}
-        
+
         html[data-theme="light"] .feature-card{background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(248,245,255,0.95));border:1px solid rgba(99,102,241,0.2);backdrop-filter:blur(18px);border-radius:1.8rem;padding:1.25rem 1.2rem 1.2rem;text-align:left;box-shadow:0 16px 40px rgba(99,102,241,0.08);transition:transform .25s ease,background .25s ease,border-color .25s ease;display:flex;flex-direction:column;justify-content:space-between;min-height:150px;}
         html[data-theme="light"] .feature-card:hover{background:linear-gradient(180deg, rgba(248,245,255,1), rgba(243,244,255,1));border-color:rgba(99,102,241,0.4);transform:translateY(-2px);}
-        
+
         .feature-card{border-radius:1.8rem;padding:1.25rem 1.2rem 1.2rem;text-align:left;transition:transform .25s ease,background .25s ease;display:flex;flex-direction:column;justify-content:space-between;min-height:150px;}
-        
+
         html[data-theme="dark"] .feature-icon{width:2.6rem;height:2.6rem;min-width:2.6rem;display:grid;place-items:center;border-radius:9999px;background:rgba(209,161,81,0.18);color:#D1A151;box-shadow:0 10px 20px rgba(209,161,81,0.08);}
         html[data-theme="light"] .feature-icon{width:2.6rem;height:2.6rem;min-width:2.6rem;display:grid;place-items:center;border-radius:9999px;background:linear-gradient(135deg, rgba(99,102,241,0.15), rgba(217,70,239,0.1));color:#6366f1;box-shadow:0 10px 20px rgba(99,102,241,0.08);}
-        
+
         .feature-icon{width:2.6rem;height:2.6rem;min-width:2.6rem;display:grid;place-items:center;border-radius:9999px;}
-        
+
         html[data-theme="light"] .feature-card h4{font-size:1rem;font-weight:700;color:#1e293b;margin-bottom:0.35rem;line-height:1.35;}
         html[data-theme="light"] .feature-card p{margin:0;color:#64748b;font-size:0.92rem;line-height:1.65;}
-        
+
         .feature-card h4{font-size:1rem;font-weight:700;margin-bottom:0.35rem;line-height:1.35;}
         .feature-card p{margin:0;font-size:0.92rem;line-height:1.65;}
-        
+
         @media (max-width:768px){.feature-grid{grid-template-columns:1fr;}.feature-card{min-height:auto;}}        .feature-item{display:flex;align-items:flex-start;gap:0.85rem;}
 
         /* decorative shapes (muted) */
@@ -169,23 +169,23 @@
             transition: all 0.3s ease;
             color: white;
         }
-        
+
         html[data-theme="light"] .theme-toggle {
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
             box-shadow: 0 8px 24px rgba(99,102,241,0.3);
         }
-        
+
         .theme-toggle:hover {
             transform: scale(1.1);
             box-shadow: 0 12px 32px rgba(0,0,0,0.3);
         }
-        
+
         .theme-toggle svg {
             width: 24px;
             height: 24px;
             transition: transform 0.3s ease;
         }
-        
+
         html[data-theme="light"] .theme-toggle:hover {
             box-shadow: 0 12px 32px rgba(99,102,241,0.4);
         }
@@ -194,7 +194,7 @@
         html[data-theme="light"] [data-light-bg] {
             background: var(--light-bg) !important;
         }
-        
+
         html[data-theme="light"] svg {
             stroke: var(--text-primary);
         }
@@ -327,7 +327,7 @@
             </div>
         </div>
     </div>
-    
+
     <script>
         // Initialize theme from localStorage or system preference
         function initTheme() {
@@ -339,7 +339,7 @@
         function updateThemeIcons(theme) {
             const sunIcon = document.getElementById('sunIcon');
             const moonIcon = document.getElementById('moonIcon');
-            
+
             if (theme === 'light') {
                 sunIcon.style.display = 'block';
                 moonIcon.style.display = 'none';
@@ -353,7 +353,7 @@
             const html = document.documentElement;
             const currentTheme = html.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
+
             html.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             updateThemeIcons(newTheme);
