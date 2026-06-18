@@ -391,7 +391,7 @@
         function updateThemeIcons(theme) {
             const sunIcon = document.getElementById('sunIcon');
             const moonIcon = document.getElementById('moonIcon');
-            
+
             if (theme === 'light') {
                 sunIcon.style.display = 'block';
                 moonIcon.style.display = 'none';
@@ -405,7 +405,7 @@
             const html = document.documentElement;
             const currentTheme = html.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
+
             html.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
             updateThemeIcons(newTheme);

@@ -63,8 +63,8 @@
         background: rgba(99, 102, 241, 0.12) !important;
     }
 
-    html[data-theme="light"] h4, 
-    html[data-theme="light"] h5, 
+    html[data-theme="light"] h4,
+    html[data-theme="light"] h5,
     html[data-theme="light"] h6 {
         color: #1e293b !important;
     }
