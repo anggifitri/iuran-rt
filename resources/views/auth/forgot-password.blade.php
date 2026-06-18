@@ -3,46 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lupa Password | Digital Tapestry</title>
+    <title>Lupa Password | Kas RT</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #0e2430; }
-        .card { width: 920px; border-radius: 24px; overflow: hidden; box-shadow: 0 30px 60px rgba(2,6,23,0.6); }
-        .left-panel { background: linear-gradient(180deg,#050d1a,#0b1424); }
-        .right-panel { background: linear-gradient(180deg,#1e3a5f,#0f172a); }
-        .brand-title { color: #D1A151; }
+        :root{--accent:#D1A151;--bg-1:#031022;--bg-2:#042e55}
+        body { font-family: 'Plus Jakarta Sans', sans-serif; color: #e6eef6; position: relative; }
+        .bg-animated{background: linear-gradient(180deg,#031022 0%, #041d34 40%, #042e55 100%);background-size:300% 300%;animation: moveGrad 15s ease infinite;}
+        @keyframes moveGrad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+        .stars{position:absolute;inset:0;pointer-events:none;background:
+            radial-gradient(circle at 12% 18%, rgba(255,255,255,0.9) 1px, transparent 0),
+            radial-gradient(circle at 28% 14%, rgba(255,255,255,0.75) 1px, transparent 0),
+            radial-gradient(circle at 46% 22%, rgba(255,255,255,0.85) 1px, transparent 0),
+            radial-gradient(circle at 63% 12%, rgba(255,255,255,0.8) 1px, transparent 0),
+            radial-gradient(circle at 84% 20%, rgba(255,255,255,0.7) 1px, transparent 0),
+            radial-gradient(circle at 15% 50%, rgba(255,255,255,0.75) 1px, transparent 0),
+            radial-gradient(circle at 36% 58%, rgba(255,255,255,0.9) 1px, transparent 0),
+            radial-gradient(circle at 52% 44%, rgba(255,255,255,0.8) 1px, transparent 0),
+            radial-gradient(circle at 71% 62%, rgba(255,255,255,0.7) 1px, transparent 0),
+            radial-gradient(circle at 90% 55%, rgba(255,255,255,0.85) 1px, transparent 0);
+        background-size: 180px 180px, 160px 160px, 220px 220px, 140px 140px, 240px 240px, 200px 200px, 88px 88px, 130px 130px, 170px 170px, 95px 95px;
+        opacity:.9;
+        }
+        .stars::after{content:'';position:absolute;inset:0;background:
+            radial-gradient(circle at 25% 82%, rgba(255,255,255,0.35) 2px, transparent 0),
+            radial-gradient(circle at 48% 72%, rgba(255,255,255,0.4) 1.5px, transparent 0),
+            radial-gradient(circle at 68% 92%, rgba(255,255,255,0.38) 1px, transparent 0),
+            radial-gradient(circle at 12% 62%, rgba(255,255,255,0.3) 1px, transparent 0),
+            radial-gradient(circle at 82% 35%, rgba(255,255,255,0.35) 1px, transparent 0),
+            radial-gradient(circle at 37% 30%, rgba(255,255,255,0.3) 1px, transparent 0);
+        background-size: 120px 120px, 90px 90px, 140px 140px, 80px 80px, 100px 100px, 130px 130px;
+        opacity:.7;animation: twinkle 10s ease-in-out infinite alternate;
+        }
+        @keyframes twinkle{from{opacity:.55}to{opacity:.8}}
+        .card { width: min(980px, calc(100% - 2rem)); max-width: 1080px; border-radius: 36px; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.03); background: linear-gradient(180deg, #041026 0%, #052f4a 35%, #042b44 100%); display:grid; grid-template-columns:1fr 1fr; }
+        .left-panel, .right-panel { padding: 3rem 2.5rem; display:flex; align-items:center; justify-content:center; min-height:520px; }
+        .left-panel { background: linear-gradient(180deg, #020b13 0%, #071522 100%); }
+        .left-panel .brand-title { color: #c69d4d; }
+        .left-panel p { color: #9fb4c3; }
+        .right-panel { background: linear-gradient(180deg, rgba(5,12,25,0.92) 0%, rgba(10,24,46,0.98) 100%); border-left: 1px solid rgba(255,255,255,0.08); position: relative; }
+        .right-panel::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at top right, rgba(209,161,81,0.04), transparent 25%); pointer-events: none; }
+        .panel-inner { width: 100%; max-width: 520px; position: relative; z-index: 1; }
+        .form-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(20px); border-radius: 28px; padding: 2rem; box-shadow: 0 24px 60px rgba(0,0,0,0.18); }
+        .form-card label { color: #f8fafc; }
+        .form-card input { width: 100%; border-radius: 1rem; padding: 0.85rem 1rem; background: rgba(243,246,255,0.95); color: #0f172a; border: 1px solid rgba(209,161,81,0.3); }
+        .form-card input::placeholder { color: rgba(15,23,42,0.45); }
+        .form-card input:focus { outline: none; box-shadow: 0 0 0 4px rgba(209,161,81,0.16); border-color: rgba(209,161,81,0.55); }
+        .form-card button { width: 100%; border-radius: 1rem; padding: 0.95rem 1rem; }
+        .form-card .helper { color: #cbd5e1; }
+        .brand-title { color: #D1A151; font-family: 'Playfair Display', serif; letter-spacing: -0.035em; text-shadow: 0 4px 20px rgba(0,0,0,0.25); }
+        @media (max-width:1024px) {.card{grid-template-columns:1fr;} .left-panel,.right-panel{padding:2rem;} .form-card{max-width:100%;}}
+        @media (max-width:640px){body{padding:1rem;} .left-panel{padding:1.5rem;} .right-panel{padding:1.5rem;} .brand-title{text-align:center;} }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-8">
-    <div class="card flex">
-        <div class="left-panel w-1/2 p-16 flex flex-col items-center justify-center text-center">
-            <div class="mb-6 text-[#D1A151] filter drop-shadow-[0_10px_20px_rgba(209,161,81,0.3)]">
-                <svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M50 10 L15 45 L22 45 L50 17 L78 45 L85 45 Z" fill="currentColor" opacity="0.15"/>
-                    <path d="M50 10 L15 45 H25 L50 20 L75 45 H85 Z" fill="currentColor"/>
-                    <path d="M25 45 V85 H75 V45 Z" stroke="currentColor" stroke-width="2"/>
-                    <path d="M43 85 V65 H57 V85 Z" fill="currentColor" opacity="0.2" stroke="currentColor" stroke-width="1.5"/>
-                    <path d="M32 52 L42 62 M32 62 L42 52" stroke="currentColor" stroke-width="1" opacity="0.7"/>
-                    <path d="M32 70 L42 80 M32 80 L42 70" stroke="currentColor" stroke-width="1" opacity="0.7"/>
-                    <path d="M58 52 L68 62 M58 62 L68 52" stroke="currentColor" stroke-width="1" opacity="0.7"/>
-                    <path d="M58 70 L68 80 M58 80 L68 70" stroke="currentColor" stroke-width="1" opacity="0.7"/>
-                    <path d="M46 25 L50 21 L54 25 L50 29 Z" fill="currentColor"/>
-                    <path d="M40 32 L50 42 L60 32" stroke="currentColor" stroke-width="1.2"/>
-                    <path d="M45 32 L50 37 L55 32" stroke="currentColor" stroke-width="1"/>
-                </svg>
+<body class="min-h-screen flex items-center justify-center p-6 bg-animated">
+    <div class="stars"></div>
+    <div class="card">
+        <div class="left-panel">
+            <div class="panel-inner text-center">
+                <div class="mb-4 mx-auto text-amber-400 filter drop-shadow-[0_10px_25px_rgba(209,161,81,0.4)]" style="width:180px;height:180px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <line x1="5" y1="80" x2="95" y2="80" stroke="currentColor" stroke-width="0.5" opacity="0.2"/>
+                        <line x1="25" y1="20" x2="25" y2="90" stroke="currentColor" stroke-width="0.5" opacity="0.2"/>
+                        <line x1="75" y1="20" x2="75" y2="90" stroke="currentColor" stroke-width="0.5" opacity="0.2"/>
+
+                        <line x1="10" y1="48" x2="52" y2="14" stroke="currentColor" stroke-width="1.8"/>
+                        <line x1="48" y1="14" x2="90" y2="48" stroke="currentColor" stroke-width="1.8"/>
+                        <path d="M22 45 L50 20 L78 45" stroke="currentColor" stroke-width="1.2" opacity="0.7"/>
+
+                        <path d="M25 45 V80 H75 V45" stroke="currentColor" stroke-width="2"/>
+
+                        <path d="M63 26 V35" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M63 26 H69 V40" stroke="currentColor" stroke-width="1.5"/>
+
+                        <rect x="44" y="58" width="14" height="22" stroke="currentColor" stroke-width="1.5" fill="#0b1424" fill-opacity="0.5"/>
+                        <rect x="32" y="52" width="6" height="10" stroke="currentColor" stroke-width="1.5"/>
+                        <rect x="62" y="52" width="6" height="10" stroke="currentColor" stroke-width="1.5"/>
+
+                        <line x1="20" y1="45" x2="80" y2="45" stroke="currentColor" stroke-width="0.8" opacity="0.5"/>
+                        <line x1="15" y1="80" x2="85" y2="80" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </div>
+                <h2 class="brand-title text-5xl font-semibold tracking-tight -mt-3">Lupa Password</h2>
+                <p class="mt-2 text-slate-300 text-sm tracking-wide uppercase max-w-lg mx-auto">Masukkan email dan password baru tanpa kirim link</p>
             </div>
-            <h2 class="brand-title text-5xl font-bold tracking-wide">Lupa Password</h2>
-            <p class="mt-3 text-slate-400 text-sm tracking-wider uppercase">Masukkan email dan password baru tanpa kirim link</p>
         </div>
-        <div class="right-panel w-1/2 p-12 flex items-center">
-            <div class="w-full max-w-md mx-auto">
-                @if (session('status'))
-                    <div class="mb-6 rounded-xl bg-emerald-600/10 border border-emerald-500/20 p-4 text-emerald-200">
-                        {{ session('status') }}
-                    </div>
-                @endif
-                <form action="{{ route('password.email') }}" method="POST" class="space-y-5">
+        <div class="right-panel">
+            <div class="panel-inner">
+                <div class="form-card">
+                    @if (session('status'))
+                        <div class="mb-6 rounded-xl bg-emerald-600/10 border border-emerald-500/20 p-4 text-emerald-200">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+                    <form action="{{ route('password.email') }}" method="POST" class="space-y-5">
                     @csrf
                     <div>
                         <label class="block text-sm font-semibold text-slate-200 mb-2">Email Terdaftar</label>

@@ -7,9 +7,9 @@ use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 
-// 1. Arahkan halaman utama ke Login
+// 1. Halaman utama: tampilkan cover sebelum login
 Route::get('/', function () {
-    return redirect()->route('login');
+    return view('cover');
 });
 
 // 2. Route Login & Register (Penting agar image_a8278c.png tidak error)

@@ -10,7 +10,7 @@
     @endif
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-white fw-bold mb-0">Daftar Data Warga</h2>
+        <h2 class="text-white fw-bold">Daftar Data Warga</h2>
         <a href="{{ route('warga.create') }}" class="btn btn-primary px-3 fw-bold">
             <i class="fas fa-plus me-2"></i>Tambah Warga
         </a>
@@ -21,7 +21,7 @@
             <div class="table-responsive">
                 <table class="table table-dark table-hover mb-0 align-middle">
                     <thead>
-                        <tr class="border-bottom border-secondary text-secondary">
+                            <tr class="border-bottom border-secondary text-secondary">
                             <th class="py-3 px-4" style="width: 80px;">No</th>
                             <th class="py-3">Nama</th>
                             <th class="py-3">Blok Rumah</th>
@@ -76,14 +76,8 @@
         </div>
     </div>
 
-    <div class="d-flex justify-content-between align-items-center mt-4">
-        <a href="{{ route('dashboard') }}" class="btn btn-secondary px-3 fw-bold">
-            <i class="fas fa-arrow-left me-2"></i>Back
-        </a>
-
-        <div>
-            {{ $wargas->links() }}
-        </div>
+    <div class="d-flex justify-content-end mt-4">
+        {{ $wargas->links() }}
     </div>
 </div>
 @endsection
