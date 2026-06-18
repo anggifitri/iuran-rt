@@ -3,17 +3,96 @@
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<style>
+    /* Dashboard Light Mode Support */
+    html[data-theme="light"] .stat-card {
+        background: linear-gradient(135deg, #f0f4ff 0%, #faf5ff 100%) !important;
+        border-color: rgba(99, 102, 241, 0.2) !important;
+    }
+
+    html[data-theme="light"] .stat-card p {
+        color: #64748b !important;
+    }
+
+    html[data-theme="light"] .card {
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+        border-color: rgba(99, 102, 241, 0.1) !important;
+    }
+
+    html[data-theme="light"] .text-white {
+        color: #1e293b !important;
+    }
+
+    html[data-theme="light"] .text-white-50 {
+        color: #94a3b8 !important;
+    }
+
+    html[data-theme="light"] .fw-bold {
+        color: #1e293b !important;
+    }
+
+    html[data-theme="light"] .badge {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+    }
+
+    html[data-theme="light"] .rounded {
+        background: rgba(99, 102, 241, 0.05) !important;
+    }
+
+    html[data-theme="light"] [style*="rgba(255,255,255,0.03)"] {
+        background: rgba(99, 102, 241, 0.03) !important;
+    }
+
+    html[data-theme="light"] [style*="rgba(255,255,255,0.08)"] {
+        background: rgba(99, 102, 241, 0.08) !important;
+    }
+
+    html[data-theme="light"] [style*="rgba(255,255,255,0.14)"] {
+        background: rgba(99, 102, 241, 0.1) !important;
+    }
+
+    html[data-theme="light"] [style*="rgba(148,163,184,0.12)"] {
+        border-color: rgba(99, 102, 241, 0.15) !important;
+    }
+
+    html[data-theme="light"] [style*="rgba(148,163,184,0.14)"] {
+        border-color: rgba(99, 102, 241, 0.15) !important;
+    }
+
+    html[data-theme="light"] [style*="rgba(148,163,184,0.18)"] {
+        background: rgba(99, 102, 241, 0.12) !important;
+    }
+
+    html[data-theme="light"] h4, 
+    html[data-theme="light"] h5, 
+    html[data-theme="light"] h6 {
+        color: #1e293b !important;
+    }
+
+    html[data-theme="light"] p {
+        color: #64748b !important;
+    }
+
+    .sidebar .brand-icon i {
+        color: var(--primary) !important;
+    }
+
+    html[data-theme="light"] .sidebar .brand-icon i {
+        color: #6366f1 !important;
+    }
+</style>
+
 <div class="row">
     <div class="col-xl-3 col-lg-4">
         <aside class="sidebar">
             <div class="brand">
                 <div class="brand-icon">
-                    <i class="fas fa-house-chimney" style="color: #D4AF37;"></i>
+                    <i class="fas fa-house-chimney" style="color: var(--primary);"></i>
                 </div>
                 <div>
-                    <h5 class="fw-bold mb-2" style="color: #D4AF37; font-family: serif; font-style: italic; padding: 0; line-height: 1;">Kas RT</h5>
+                    <h5 class="fw-bold mb-2" style="color: var(--primary); font-family: serif; font-style: italic; padding: 0; line-height: 1;">Kas RT</h5>
 
-                    <p class="mb-0" style="color: #D4AF37; font-size: 1.0rem; line-height: 1.4; font-family: 'Times New Roman', Times, serif;">Solusi Pintar Pengelolaan Iuran Anda</p>
+                    <p class="mb-0" style="color: var(--primary); font-size: 1.0rem; line-height: 1.4; font-family: 'Times New Roman', Times, serif;">Solusi Pintar Pengelolaan Iuran Anda</p>
                 </div>
             </div>
 
@@ -63,9 +142,9 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
                 <h4 class="fw-bold mb-0" style="color: var(--text-main);">Selamat datang, {{ $user->name }} 👋</h4>
-                <p style="color: #94A3B8; font-size: 0.9rem;">Kelola keuangan RT {{ $user->rt_number ?? '-' }} dengan transparan</p>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Kelola keuangan RT {{ $user->rt_number ?? '-' }} dengan transparan</p>
             </div>
-            <div class="p-2 px-3 rounded shadow-sm" style="background: var(--bg-card); border: 1px solid var(--border-color); color: #F8FAFC;">
+            <div class="p-2 px-3 rounded shadow-sm" style="background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main);">
                 <i class="far fa-calendar-alt me-2" style="color: var(--primary);"></i>
                 {{ date('l, d M Y') }}
             </div>

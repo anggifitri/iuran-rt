@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,13 +19,24 @@
     <style>
 
         :root {
-            --bg-body: #0F172A; /* Slate 900 - Latar belakang utama (Gelap kebiruan) */
-            --bg-card: #1E293B; /* Slate 800 - Latar card (Sedikit lebih terang) */
-            --primary: #818CF8; /* Indigo 400 - Warna aksen (Lebih terang agar kontras di gelap) */
+            --bg-body: #0F172A;
+            --bg-card: #1E293B;
+            --primary: #818CF8;
             --primary-hover: #6366F1;
-            --text-main: #F8FAFC; /* Slate 50 - Teks utama (Bukan putih murni agar tidak silau) */
-            --text-muted: #94A3B8; /* Slate 400 - Teks sekunder */
-            --border-color: #334155; /* Slate 700 - Garis pembatas halus */
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --border-color: #334155;
+        }
+
+        /* Light Mode */
+        html[data-theme="light"] {
+            --bg-body: #ffffff;
+            --bg-card: #f8fafc;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
         }
 
         body {
@@ -33,12 +44,14 @@
             min-height: 100vh;
             font-family: 'Inter', sans-serif;
             color: var(--text-main);
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .navbar {
             background: var(--bg-card) !important;
             border-bottom: 1px solid var(--border-color);
             padding: 15px 0;
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
         .navbar-brand {
@@ -53,11 +66,16 @@
             filter: invert(1) grayscale(100%) brightness(200%);
         }
 
+        html[data-theme="light"] .navbar-toggler-icon {
+            filter: none;
+        }
+
         .dropdown-menu {
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
             border-radius: 12px;
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
         .dropdown-item {
@@ -70,23 +88,33 @@
             color: var(--primary);
         }
 
+        html[data-theme="light"] .dropdown-item:hover {
+            background-color: #e2e8f0;
+        }
+
         .dropdown-divider {
             border-top-color: var(--border-color);
         }
 
         .text-danger {
-            color: #F87171 !important; /* Merah yang cocok untuk dark mode */
+            color: #F87171 !important;
         }
 
-        /* Hover Card & Sidebar Modern */
+        html[data-theme="light"] .text-danger {
+            color: #ef4444 !important;
+        }
+
         .card-hover, .sidebar, .welcome-section, .stat-card {
             background: var(--bg-card);
             border-radius: 16px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
         }
 
+        html[data-theme="light"] .card-hover, html[data-theme="light"] .sidebar, html[data-theme="light"] .welcome-section, html[data-theme="light"] .stat-card {
+            box-shadow: 0 4px 6px -1px rgba(99,102,241,0.1);
+        }
 
         .sidebar {
             background: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.95));
@@ -96,6 +124,11 @@
             min-height: calc(100vh - 110px);
             position: sticky;
             top: 20px;
+        }
+
+        html[data-theme="light"] .sidebar {
+            background: linear-gradient(180deg, rgba(248, 250, 252, 0.95), rgba(241, 245, 249, 0.98));
+            border: 1px solid rgba(99, 102, 241, 0.1);
         }
 
         .sidebar .brand {
@@ -115,6 +148,10 @@
             background: rgba(129, 140, 248, 0.18);
             color: var(--primary);
             font-size: 1.1rem;
+        }
+
+        html[data-theme="light"] .sidebar .brand-icon {
+            background: rgba(99, 102, 241, 0.12);
         }
 
         .sidebar .menu-title {
@@ -147,6 +184,11 @@
             color: var(--primary);
         }
 
+        html[data-theme="light"] .sidebar .nav-link:hover,
+        html[data-theme="light"] .sidebar .nav-link.active {
+            background-color: rgba(99, 102, 241, 0.1);
+        }
+
         .sidebar .nav-link.active {
             border-left: 3px solid var(--primary);
             color: var(--primary);
@@ -157,7 +199,6 @@
             color: var(--primary);
         }
 
-        /* Animasi Card Statistik */
         .stat-card { padding: 24px; }
         .stat-card:hover, .card-hover:hover {
             transform: translateY(-4px);
@@ -165,12 +206,22 @@
             border-color: #475569;
         }
 
-        /* Custom Alert Dark Mode */
+        html[data-theme="light"] .stat-card:hover, html[data-theme="light"] .card-hover:hover {
+            box-shadow: 0 10px 15px -3px rgba(99,102,241,0.2);
+            border-color: var(--primary);
+        }
+
         .alert-success {
             background-color: rgba(6, 95, 70, 0.4);
             color: #34D399;
             border: 1px solid #065F46;
             border-radius: 12px;
+        }
+
+        html[data-theme="light"] .alert-success {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: #059669;
+            border: 1px solid #d1fae5;
         }
 
         .alert-danger {
@@ -180,8 +231,50 @@
             border-radius: 12px;
         }
 
+        html[data-theme="light"] .alert-danger {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border: 1px solid #fee2e2;
+        }
+
         .btn-close {
             filter: invert(1) grayscale(100%) brightness(200%);
+        }
+
+        html[data-theme="light"] .btn-close {
+            filter: none;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle-btn {
+            background: linear-gradient(135deg, var(--primary), #7c3aed);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+            margin-right: 15px;
+        }
+
+        html[data-theme="dark"] .theme-toggle-btn {
+            background: linear-gradient(135deg, #818CF8, #a78bfa);
+        }
+
+        .theme-toggle-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 16px rgba(99,102,241,0.4);
+        }
+
+        .theme-toggle-btn svg {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease;
         }
     </style>
 </head>
@@ -197,6 +290,14 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
+                <button id="themeToggle" class="theme-toggle-btn" title="Toggle Dark/Light Mode" aria-label="Toggle theme">
+                    <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display: none;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1m-16 0H1m15.364 1.636l.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                </button>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" style="font-weight: 500; color: var(--text-main);">
@@ -277,6 +378,52 @@
                 }
             });
         </script>
+    @endif
+
+    <script>
+        // Initialize theme from localStorage or system preference
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcons(savedTheme);
+        }
+
+        function updateThemeIcons(theme) {
+            const sunIcon = document.getElementById('sunIcon');
+            const moonIcon = document.getElementById('moonIcon');
+            
+            if (theme === 'light') {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            } else {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            }
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcons(newTheme);
+        }
+
+        // Setup event listeners
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', toggleTheme);
+        }
+
+        // Initialize on page load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initTheme);
+        } else {
+            initTheme();
+        }
+    </script>
     @endif
 </body>
 </html>
