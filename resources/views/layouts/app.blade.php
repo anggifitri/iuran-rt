@@ -424,6 +424,5 @@
             initTheme();
         }
     </script>
-    @endif
 </body>
 </html>
