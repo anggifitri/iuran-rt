@@ -41,14 +41,47 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                   id="password" name="password" required>
-                            @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            <div class="input-group">
+                                <span class="input-group-text" style="background: var(--bg-card); border-color: var(--border-color); color: var(--text-muted);">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                       id="password" name="password" required
+                                       placeholder="*******">
+                                <button class="input-group-text" type="button" onclick="toggleRegisterPass('password','eyeReg1','eyeOffReg1')" style="background: var(--bg-card); border-color: var(--border-color); color: var(--text-muted); cursor:pointer;" tabindex="-1">
+                                    <svg id="eyeReg1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                                        <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                                        <line x1="1" y1="1" x2="23" y2="23"/>
+                                    </svg>
+                                    <svg id="eyeOffReg1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                </button>
+                                @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
                         </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
-                            <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
+                            <div class="input-group">
+                                <span class="input-group-text" style="background: var(--bg-card); border-color: var(--border-color); color: var(--text-muted);">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                                <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required placeholder="*******">
+                                <button class="input-group-text" type="button" onclick="toggleRegisterPass('password_confirmation','eyeReg2','eyeOffReg2')" style="background: var(--bg-card); border-color: var(--border-color); color: var(--text-muted); cursor:pointer;" tabindex="-1">
+                                    <svg id="eyeReg2" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                                        <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                                        <line x1="1" y1="1" x2="23" y2="23"/>
+                                    </svg>
+                                    <svg id="eyeOffReg2" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -91,4 +124,22 @@
         </div>
     </div>
 </div>
+
+<script>
+    function toggleRegisterPass(inputId, eyeId, eyeOffId) {
+        const input = document.getElementById(inputId);
+        const eyeIcon = document.getElementById(eyeId);
+        const eyeOffIcon = document.getElementById(eyeOffId);
+        if (input.type === 'password') {
+            input.type = 'text';
+            eyeIcon.style.display = 'none';
+            eyeOffIcon.style.display = 'block';
+        } else {
+            input.type = 'password';
+            eyeIcon.style.display = 'block';
+            eyeOffIcon.style.display = 'none';
+        }
+    }
+</script>
+
 @endsection
