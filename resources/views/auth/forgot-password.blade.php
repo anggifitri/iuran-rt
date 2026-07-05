@@ -100,27 +100,73 @@
                     @csrf
                     <div>
                         <label class="block text-sm font-semibold text-slate-200 mb-2">Email Terdaftar</label>
-                        <input type="email" name="email" required autofocus
-                            class="w-full rounded-xl py-3 px-5 bg-slate-900/60 text-white placeholder-slate-500 border border-slate-700/70 focus:outline-none focus:border-amber-500 transition-all"
-                            placeholder="admin@rt.com">
+                        <div class="relative flex items-center">
+                            <span class="absolute left-4 flex items-center pointer-events-none" style="color: #94a3b8;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
+                            </span>
+                            <input type="email" name="email" required autofocus
+                                class="w-full rounded-xl py-3 pl-12 pr-5 bg-slate-900/60 text-white placeholder-slate-500 border border-slate-700/70 focus:outline-none focus:border-amber-500 transition-all"
+                                placeholder="Masukkan Email">
+                        </div>
                         @error('email')
                             <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
                         @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-slate-200 mb-2">Password Baru</label>
-                        <input type="password" name="password" required
-                            class="w-full rounded-xl py-3 px-5 bg-slate-900/60 text-white placeholder-slate-500 border border-slate-700/70 focus:outline-none focus:border-amber-500 transition-all"
-                            placeholder="Masukkan password baru">
+                        <div class="relative flex items-center">
+                            <span class="absolute left-4 flex items-center pointer-events-none" style="color: #94a3b8;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                            </span>
+                            <input type="password" id="newPassword" name="password" required
+                                class="w-full rounded-xl py-3 pl-12 pr-12 bg-slate-900/60 text-white placeholder-slate-500 border border-slate-700/70 focus:outline-none focus:border-amber-500 transition-all"
+                                placeholder="*******">
+                            <button type="button" onclick="toggleForgotPass('newPassword','eyeNew','eyeOffNew')" class="absolute right-4 flex items-center focus:outline-none" style="color: #94a3b8;" tabindex="-1">
+                                <svg id="eyeNew" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                                    <line x1="1" y1="1" x2="23" y2="23"/>
+                                </svg>
+                                <svg id="eyeOffNew" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
                         @error('password')
                             <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
                         @enderror
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-slate-200 mb-2">Konfirmasi Password</label>
-                        <input type="password" name="password_confirmation" required
-                            class="w-full rounded-xl py-3 px-5 bg-slate-900/60 text-white placeholder-slate-500 border border-slate-700/70 focus:outline-none focus:border-amber-500 transition-all"
-                            placeholder="Ulangi password baru">
+                        <div class="relative flex items-center">
+                            <span class="absolute left-4 flex items-center pointer-events-none" style="color: #94a3b8;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                            </span>
+                            <input type="password" id="confirmPassword" name="password_confirmation" required
+                                class="w-full rounded-xl py-3 pl-12 pr-12 bg-slate-900/60 text-white placeholder-slate-500 border border-slate-700/70 focus:outline-none focus:border-amber-500 transition-all"
+                                placeholder="*******">
+                            <button type="button" onclick="toggleForgotPass('confirmPassword','eyeConfirm','eyeOffConfirm')" class="absolute right-4 flex items-center focus:outline-none" style="color: #94a3b8;" tabindex="-1">
+                                <svg id="eyeConfirm" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                                    <line x1="1" y1="1" x2="23" y2="23"/>
+                                </svg>
+                                <svg id="eyeOffConfirm" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                     <button type="submit" class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold rounded-xl shadow-lg hover:from-amber-600 hover:to-orange-600 transition-all">Simpan Password Baru</button>
                 </form>
@@ -131,4 +177,20 @@
         </div>
     </div>
 </body>
+<script>
+    function toggleForgotPass(inputId, eyeId, eyeOffId) {
+        const input = document.getElementById(inputId);
+        const eyeIcon = document.getElementById(eyeId);
+        const eyeOffIcon = document.getElementById(eyeOffId);
+        if (input.type === 'password') {
+            input.type = 'text';
+            eyeIcon.style.display = 'none';
+            eyeOffIcon.style.display = 'block';
+        } else {
+            input.type = 'password';
+            eyeIcon.style.display = 'block';
+            eyeOffIcon.style.display = 'none';
+        }
+    }
+</script>
 </html>

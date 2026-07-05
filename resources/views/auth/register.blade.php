@@ -26,9 +26,15 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control @error('email') is-invalid @enderror"
-                                   id="email" name="email" value="{{ old('email') }}" required>
-                            @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            <div class="input-group">
+                                <span class="input-group-text" style="background: var(--bg-card); border-color: var(--border-color); color: var(--text-muted);">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                                <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                       id="email" name="email" value="{{ old('email') }}" required
+                                       placeholder="Masukkan Email">
+                                @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
                         </div>
                     </div>
 
