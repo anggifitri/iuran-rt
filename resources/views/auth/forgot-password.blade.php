@@ -112,14 +112,8 @@
                     <div>
                         <label class="block text-sm font-semibold text-slate-200 mb-2">Password Baru</label>
                         <div class="relative flex items-center">
-                            <span class="absolute left-4 flex items-center pointer-events-none" style="color: #94a3b8;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                                </svg>
-                            </span>
                             <input type="password" id="newPassword" name="password" required
-                                class="w-full rounded-xl py-3 pl-12 pr-4 bg-slate-900/60 text-white placeholder-slate-500 border border-slate-700/70 focus:outline-none focus:border-amber-500 transition-all"
+                                class="w-full rounded-xl py-3 pl-4 pr-4 bg-slate-900/60 text-white placeholder-slate-500 border border-slate-700/70 focus:outline-none focus:border-amber-500 transition-all"
                                 placeholder="*******">
                             <button type="button" onclick="toggleForgotPass('newPassword','eyeNew','eyeOffNew')" class="absolute flex items-center focus:outline-none" style="color: #94a3b8; right:-12px; top:50%; transform:translateY(-50%);" tabindex="-1">
                                 <svg id="eyeNew" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
@@ -140,14 +134,8 @@
                     <div>
                         <label class="block text-sm font-semibold text-slate-200 mb-2">Konfirmasi Password</label>
                         <div class="relative flex items-center">
-                            <span class="absolute left-4 flex items-center pointer-events-none" style="color: #94a3b8;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                                </svg>
-                            </span>
                             <input type="password" id="confirmPassword" name="password_confirmation" required
-                                class="w-full rounded-xl py-3 pl-12 pr-4 bg-slate-900/60 text-white placeholder-slate-500 border border-slate-700/70 focus:outline-none focus:border-amber-500 transition-all"
+                                class="w-full rounded-xl py-3 pl-4 pr-4 bg-slate-900/60 text-white placeholder-slate-500 border border-slate-700/70 focus:outline-none focus:border-amber-500 transition-all"
                                 placeholder="*******">
                             <button type="button" onclick="toggleForgotPass('confirmPassword','eyeConfirm','eyeOffConfirm')" class="absolute flex items-center focus:outline-none" style="color: #94a3b8; right:-12px; top:50%; transform:translateY(-50%);" tabindex="-1">
                                 <svg id="eyeConfirm" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
