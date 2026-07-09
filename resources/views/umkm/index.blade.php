@@ -48,7 +48,7 @@
                             <span class="badge rounded-pill bg-primary text-white">{{ $usaha->kategori ?? 'Umum' }}</span>
                         </div>
 
-                        <p class="mb-2 text-white-50">{{ Str::limit($usaha->deskripsi ?? 'Belum ada deskripsi usaha.', 120) }}</p>
+                        <p class="mb-2 text-white-50">{{ \Illuminate\Support\Str::limit($usaha->deskripsi ?? 'Belum ada deskripsi usaha.', 120) }}</p>
 
                         <div class="mb-3">
                             <p class="mb-1"><i class="fas fa-map-marker-alt me-2"></i>{{ $usaha->alamat ?? 'Alamat belum diisi' }}</p>
