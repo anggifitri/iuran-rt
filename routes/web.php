@@ -47,6 +47,6 @@ Route::middleware(['auth'])->group(function () {
     // Layanan Mandiri: Penerbitan Surat, Pengaduan, Posyandu, UMKM
     Route::resource('surat', App\Http\Controllers\SuratController::class)->only(['index','create','store']);
     Route::resource('pengaduan', App\Http\Controllers\PengaduanController::class)->only(['index','create','store']);
-    Route::get('/posyandu', [App\Http\Controllers\PosyanduController::class, 'index'])->name('posyandu.index');
-    Route::get('/umkm', [App\Http\Controllers\UmkmController::class, 'index'])->name('umkm.index');
+    Route::resource('posyandu', App\Http\Controllers\PosyanduController::class)->only(['index','create','store']);
+    Route::resource('umkm', App\Http\Controllers\UmkmController::class)->only(['index','create','store']);
 });
