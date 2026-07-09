@@ -16,7 +16,7 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        // 1. Ambil Pengumuman (Tetap sesuai kodingan lu)
+        // 1. Pengumuman 
         try {
             $pengumuman = Pengumuman::where(function($query) {
                     $query->where('published_at', '<=', now())->orWhereNull('published_at');
@@ -29,7 +29,7 @@ class DashboardController extends Controller
             $pengumuman = collect();
         }
 
-        // 2. Hitung Kas (Tetap sesuai kodingan lu)
+        // 2. Hitung Kas 
         try {
             $pemasukan = Pembayaran::where('tipe', 'masuk')->sum('jumlah');
             $pengeluaran = Pembayaran::where('tipe', 'keluar')->sum('jumlah');
@@ -47,7 +47,7 @@ class DashboardController extends Controller
             $totalWarga = User::where('role', 'user')->count();
         }
 
-        // 4. Data untuk Grafik (FIX UTAMA: Penambahan template kontinu 6 bulan terakhir)
+        // 4. Data untuk Grafik 
         try {
             // Langkah A: Buat susunan template 6 bulan terakhir dengan nilai default 0
             $templateBulan = collect();
@@ -98,7 +98,7 @@ class DashboardController extends Controller
                         'masuk'       => 0,
                         'keluar'      => 0
                     ]);
-                }
+                } 
 
                 $pembayarans = Pembayaran::where('tanggal', '>=', now()->subMonths(5)->startOfMonth())
                     ->orderBy('tanggal', 'asc')
@@ -146,10 +146,22 @@ class DashboardController extends Controller
             $latestExpenseDate = null;
         }
 
+        // 7. Admin summary untuk fitur baru
+        $newFeatureCounts = [];
+        if ($user->isAdmin()) {
+            $newFeatureCounts = [
+                'surat' => \App\Models\Surat::count(),
+                'pengaduan' => \App\Models\Pengaduan::count(),
+                'posyandu' => \App\Models\Posyandu::count(),
+                'umkm' => \App\Models\Umkm::count(),
+            ];
+        }
+
         return view('dashboard', compact(
             'user', 'pengumuman', 'pemasukan',
             'pengeluaran', 'saldo', 'totalWarga', 'chartData',
-            'maleCount', 'femaleCount', 'latestExpenseAmount', 'latestExpenseDate'
+            'maleCount', 'femaleCount', 'latestExpenseAmount', 'latestExpenseDate',
+            'newFeatureCounts'
         ));
     }
 }

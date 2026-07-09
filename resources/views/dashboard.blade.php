@@ -164,7 +164,50 @@
             </div>
         </div>
 
-
+        @if($user->isAdmin())
+            <div class="row g-3 mb-4">
+                <div class="col-12">
+                    <div class="card p-4" style="border-radius: 20px;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h5 class="fw-bold mb-1" style="color: var(--text-main);">Ringkasan Admin</h5>
+                                <p class="mb-0 text-muted">Pantau status fitur baru secara cepat dari dashboard.</p>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-sm-6 col-md-3">
+                                <div class="card p-3 stat-card" style="border-radius: 18px; background: var(--bg-card); border: 1px solid var(--border-color);">
+                                    <p class="mb-2 text-white-50" style="font-size: 0.8rem;">Surat</p>
+                                    <h4 class="fw-bold">{{ $newFeatureCounts['surat'] ?? 0 }}</h4>
+                                    <small class="text-muted">Permintaan surat</small>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <div class="card p-3 stat-card" style="border-radius: 18px; background: var(--bg-card); border: 1px solid var(--border-color);">
+                                    <p class="mb-2 text-white-50" style="font-size: 0.8rem;">Pengaduan</p>
+                                    <h4 class="fw-bold">{{ $newFeatureCounts['pengaduan'] ?? 0 }}</h4>
+                                    <small class="text-muted">Kasus warga</small>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <div class="card p-3 stat-card" style="border-radius: 18px; background: var(--bg-card); border: 1px solid var(--border-color);">
+                                    <p class="mb-2 text-white-50" style="font-size: 0.8rem;">Posyandu</p>
+                                    <h4 class="fw-bold">{{ $newFeatureCounts['posyandu'] ?? 0 }}</h4>
+                                    <small class="text-muted">Jadwal tersedia</small>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <div class="card p-3 stat-card" style="border-radius: 18px; background: var(--bg-card); border: 1px solid var(--border-color);">
+                                    <p class="mb-2 text-white-50" style="font-size: 0.8rem;">UMKM</p>
+                                    <h4 class="fw-bold">{{ $newFeatureCounts['umkm'] ?? 0 }}</h4>
+                                    <small class="text-muted">Usaha terdaftar</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
 
         <div class="row g-3 mb-4">
             <div class="col-md-3">
