@@ -7,10 +7,33 @@ use Illuminate\Http\Request;
 
 class UmkmController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $usahas = Umkm::orderBy('nama', 'asc')->get();
-        return view('umkm.index', compact('usahas'));
+        $query = Umkm::query();
+
+        if ($request->filled('q')) {
+            $search = trim($request->q);
+            $query->where(function ($builder) use ($search) {
+                $builder->where('nama', 'like', "%{$search}%")
+                        ->orWhere('pemilik', 'like', "%{$search}%")
+                        ->orWhere('kategori', 'like', "%{$search}%")
+                        ->orWhere('alamat', 'like', "%{$search}%")
+                        ->orWhere('deskripsi', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
+        }
+
+        $usahas = $query->orderBy('nama', 'asc')->get();
+        $categories = Umkm::select('kategori')
+            ->whereNotNull('kategori')
+            ->where('kategori', '<>', '')
+            ->orderBy('kategori')
+            ->pluck('kategori');
+
+        return view('umkm.index', compact('usahas', 'categories'));
     }
 
     public function create()
