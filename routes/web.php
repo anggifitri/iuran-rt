@@ -43,4 +43,10 @@ Route::middleware(['auth'])->group(function () {
     // Profil Admin RT
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    // Layanan Mandiri: Penerbitan Surat, Pengaduan, Posyandu, UMKM
+    Route::resource('surat', App\Http\Controllers\SuratController::class)->only(['index','create','store']);
+    Route::resource('pengaduan', App\Http\Controllers\PengaduanController::class)->only(['index','create','store']);
+    Route::get('/posyandu', [App\Http\Controllers\PosyanduController::class, 'index'])->name('posyandu.index');
+    Route::get('/umkm', [App\Http\Controllers\UmkmController::class, 'index'])->name('umkm.index');
 });
