@@ -218,14 +218,8 @@
                         <div>
                             <label class="text-slate-400 text-xs font-semibold mb-2 block uppercase tracking-wider" style="color: var(--text-secondary);">Alamat Email</label>
                             <div class="relative flex items-center">
-                                <span class="absolute left-4 flex items-center pointer-events-none" style="color: #94a3b8;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                        <circle cx="12" cy="7" r="4"/>
-                                    </svg>
-                                </span>
                                 <input type="email" name="email" value="{{ old('email') }}" required autofocus
-                                    class="w-full rounded-xl py-3 pl-12 pr-5 border transition-all focus:outline-none"
+                                    class="w-full rounded-xl py-3 pl-4 pr-5 border transition-all focus:outline-none"
                                     style="background-color: rgba(243,246,255,0.95); color: var(--text-primary); border-color: var(--border-color);"
                                     placeholder="Masukkan Email">
                             </div>
@@ -237,14 +231,8 @@
                         <div>
                             <label class="text-slate-400 text-xs font-semibold mb-2 block uppercase tracking-wider" style="color: var(--text-secondary);">Password</label>
                             <div class="relative flex items-center">
-                                <span class="absolute left-4 flex items-center pointer-events-none" style="color: #94a3b8;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                                    </svg>
-                                </span>
                                 <input type="password" id="loginPassword" name="password" required
-                                    class="w-full rounded-xl py-3 pl-12 pr-12 border transition-all focus:outline-none"
+                                    class="w-full rounded-xl py-3 pl-4 pr-12 border transition-all focus:outline-none"
                                     style="background-color: rgba(243,246,255,0.95); color: var(--text-primary); border-color: var(--border-color);"
                                     placeholder="*******">
                                 <button type="button" onclick="toggleLoginPassword()" class="absolute right-4 flex items-center focus:outline-none" style="color: #94a3b8;" tabindex="-1">

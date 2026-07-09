@@ -27,9 +27,6 @@
                         <div class="col-md-6 mb-3">
                             <label for="email" class="form-label">Email</label>
                             <div class="input-group">
-                                <span class="input-group-text" style="background: var(--bg-card); border-color: var(--border-color); color: var(--text-muted);">
-                                    <i class="fas fa-user"></i>
-                                </span>
                                 <input type="email" class="form-control @error('email') is-invalid @enderror"
                                        id="email" name="email" value="{{ old('email') }}" required
                                        placeholder="Masukkan Email">
@@ -42,9 +39,6 @@
                         <div class="col-md-6 mb-3">
                             <label for="password" class="form-label">Password</label>
                             <div class="input-group">
-                                <span class="input-group-text" style="background: var(--bg-card); border-color: var(--border-color); color: var(--text-muted);">
-                                    <i class="fas fa-lock"></i>
-                                </span>
                                 <input type="password" class="form-control @error('password') is-invalid @enderror"
                                        id="password" name="password" required
                                        placeholder="*******">
@@ -66,9 +60,6 @@
                         <div class="col-md-6 mb-3">
                             <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
                             <div class="input-group">
-                                <span class="input-group-text" style="background: var(--bg-card); border-color: var(--border-color); color: var(--text-muted);">
-                                    <i class="fas fa-lock"></i>
-                                </span>
                                 <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required placeholder="*******">
                                 <button class="input-group-text" type="button" onclick="toggleRegisterPass('password_confirmation','eyeReg2','eyeOffReg2')" style="background: var(--bg-card); border-color: var(--border-color); color: var(--text-muted); cursor:pointer;" tabindex="-1">
                                     <svg id="eyeReg2" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
