@@ -247,6 +247,10 @@
 
         /* Theme Toggle Button */
         .theme-toggle-btn {
+            position: fixed;
+            top: 12px;
+            right: 12px;
+            z-index: 1100;
             background: linear-gradient(135deg, var(--primary), #7c3aed);
             border: none;
             border-radius: 50%;
@@ -259,7 +263,6 @@
             color: white;
             transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(99,102,241,0.3);
-            margin-right: 15px;
         }
 
         html[data-theme="dark"] .theme-toggle-btn {
