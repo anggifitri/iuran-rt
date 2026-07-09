@@ -117,20 +117,41 @@
 </div>
 
 <script>
+    // Toggle register password visibility only when clicking the eye button
     function toggleRegisterPass(inputId, eyeId, eyeOffId) {
         const input = document.getElementById(inputId);
         const eyeIcon = document.getElementById(eyeId);
         const eyeOffIcon = document.getElementById(eyeOffId);
+        // mark this input as toggled by eye so focus won't force-hide immediately
+        window['toggledByEye_' + inputId] = true;
         if (input.type === 'password') {
             input.type = 'text';
-            eyeIcon.style.display = 'none';
-            eyeOffIcon.style.display = 'block';
+            if (eyeIcon) eyeIcon.style.display = 'none';
+            if (eyeOffIcon) eyeOffIcon.style.display = 'block';
         } else {
             input.type = 'password';
-            eyeIcon.style.display = 'block';
-            eyeOffIcon.style.display = 'none';
+            if (eyeIcon) eyeIcon.style.display = 'block';
+            if (eyeOffIcon) eyeOffIcon.style.display = 'none';
         }
+        setTimeout(() => { window['toggledByEye_' + inputId] = false; }, 350);
     }
+
+    // Attach focus handlers so clicking the input itself won't reveal the password
+    (function() {
+        ['password','password_confirmation'].forEach(function(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('focus', function() {
+                if (!window['toggledByEye_' + id]) {
+                    this.type = 'password';
+                    const eye = document.getElementById(id === 'password' ? 'eyeReg1' : 'eyeReg2');
+                    const eyeOff = document.getElementById(id === 'password' ? 'eyeOffReg1' : 'eyeOffReg2');
+                    if (eye) eye.style.display = 'block';
+                    if (eyeOff) eyeOff.style.display = 'none';
+                }
+            });
+        });
+    })();
 </script>
 
 @endsection

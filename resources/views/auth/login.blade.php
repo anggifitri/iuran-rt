@@ -289,11 +289,13 @@
     </div>
 
     <script>
-        // Toggle Login Password Visibility
+        // Toggle Login Password Visibility (only via eye icon)
+        window.loginEyeClicked = false;
         function toggleLoginPassword() {
             const input = document.getElementById('loginPassword');
             const eyeIcon = document.getElementById('loginEyeIcon');
             const eyeOffIcon = document.getElementById('loginEyeOffIcon');
+            window.loginEyeClicked = true;
             if (input.type === 'password') {
                 input.type = 'text';
                 eyeIcon.style.display = 'none';
@@ -303,7 +305,23 @@
                 eyeIcon.style.display = 'block';
                 eyeOffIcon.style.display = 'none';
             }
+            setTimeout(() => { window.loginEyeClicked = false; }, 350);
         }
+
+        // Ensure clicking or focusing the password field does NOT reveal it — only the eye button does
+        (function() {
+            const input = document.getElementById('loginPassword');
+            if (!input) return;
+            input.addEventListener('focus', function() {
+                if (!window.loginEyeClicked) {
+                    this.type = 'password';
+                    const eyeIcon = document.getElementById('loginEyeIcon');
+                    const eyeOffIcon = document.getElementById('loginEyeOffIcon');
+                    if (eyeIcon) eyeIcon.style.display = 'block';
+                    if (eyeOffIcon) eyeOffIcon.style.display = 'none';
+                }
+            });
+        })();
 
         // Initialize theme from localStorage or system preference
         function initTheme() {

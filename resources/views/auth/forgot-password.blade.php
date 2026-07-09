@@ -164,15 +164,35 @@
         const input = document.getElementById(inputId);
         const eyeIcon = document.getElementById(eyeId);
         const eyeOffIcon = document.getElementById(eyeOffId);
+        // Only toggle when eye button is clicked
+        window['toggledByEye_' + inputId] = true;
         if (input.type === 'password') {
             input.type = 'text';
-            eyeIcon.style.display = 'none';
-            eyeOffIcon.style.display = 'block';
+            if (eyeIcon) eyeIcon.style.display = 'none';
+            if (eyeOffIcon) eyeOffIcon.style.display = 'block';
         } else {
             input.type = 'password';
-            eyeIcon.style.display = 'block';
-            eyeOffIcon.style.display = 'none';
+            if (eyeIcon) eyeIcon.style.display = 'block';
+            if (eyeOffIcon) eyeOffIcon.style.display = 'none';
         }
+        setTimeout(() => { window['toggledByEye_' + inputId] = false; }, 350);
     }
+</script>
+<script>
+    (function() {
+        ['newPassword','confirmPassword'].forEach(function(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('focus', function() {
+                if (!window['toggledByEye_' + id]) {
+                    this.type = 'password';
+                    const eye = document.getElementById(id === 'newPassword' ? 'eyeNew' : 'eyeConfirm');
+                    const eyeOff = document.getElementById(id === 'newPassword' ? 'eyeOffNew' : 'eyeOffConfirm');
+                    if (eye) eye.style.display = 'block';
+                    if (eyeOff) eyeOff.style.display = 'none';
+                }
+            });
+        });
+    })();
 </script>
 </html>
