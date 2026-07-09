@@ -125,6 +125,31 @@
                         </a>
                     </li>
                     <li class="nav-item mb-2">
+                        <a class="nav-link rounded d-flex align-items-center" data-bs-toggle="collapse" href="#layananMenu" role="button" aria-expanded="false">
+                            <i class="fas fa-th-large me-3"></i> Layanan
+                            <i class="fas fa-chevron-down ms-auto"></i>
+                        </a>
+                        <div class="collapse" id="layananMenu">
+                            <ul class="nav flex-column ms-3">
+                                @if(isset($user) && ($user->role ?? '') === 'admin')
+                                    <li class="nav-item"><a class="nav-link rounded" href="{{ route('warga.index') }}"><i class="fas fa-users me-2"></i> Data Warga</a></li>
+                                    <li class="nav-item"><a class="nav-link rounded" href="{{ route('pembayaran.index') }}"><i class="fas fa-money-bill-wave me-2"></i> Transaksi Kas</a></li>
+                                    <li class="nav-item"><a class="nav-link rounded" href="#"><i class="fas fa-bullhorn me-2"></i> Pengumuman</a></li>
+                                    <li class="nav-item"><a class="nav-link rounded" href="#"><i class="fas fa-file-alt me-2"></i> Laporan</a></li>
+                                @else
+                                    <li class="nav-item"><a class="nav-link rounded" href="#"><i class="fas fa-file-alt me-2"></i> Penerbitan Surat</a></li>
+                                    <li class="nav-item"><a class="nav-link rounded" href="{{ route('pembayaran.index') }}"><i class="fas fa-credit-card me-2"></i> Pembayaran Iuran</a></li>
+                                    <li class="nav-item"><a class="nav-link rounded" href="#"><i class="fas fa-phone me-2"></i> Pengaduan Warga</a></li>
+                                    <li class="nav-item"><a class="nav-link rounded" href="#"><i class="fas fa-bicycle me-2"></i> Pinjam Fasilitas</a></li>
+                                    <li class="nav-item"><a class="nav-link rounded" href="#"><i class="fas fa-heart me-2"></i> Info Posyandu</a></li>
+                                    <li class="nav-item"><a class="nav-link rounded" href="{{ route('warga.index') }}"><i class="fas fa-database me-2"></i> Data Warga</a></li>
+                                    <li class="nav-item"><a class="nav-link rounded" href="#"><i class="fas fa-leaf me-2"></i> Bank Sampah</a></li>
+                                    <li class="nav-item"><a class="nav-link rounded" href="#"><i class="fas fa-store me-2"></i> Direktori UMKM</a></li>
+                                @endif
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item mb-2">
                         <a class="nav-link rounded d-flex align-items-center text-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                             <i class="fas fa-sign-out-alt me-3"></i> Keluar
                         </a>
