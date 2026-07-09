@@ -150,6 +150,157 @@
             </div>
         </div>
 
+        <!-- Service Cards: Layanan Mandiri -->
+        <div class="row g-3 mb-4">
+            <div class="col-12">
+                <div class="card p-4 card-hover" style="border-radius:16px;">
+                    <h5 class="fw-bold mb-2" style="color: var(--text-main);">Layanan Mandiri Warga</h5>
+                    <p class="mb-3" style="color: var(--text-muted);">Akses semua layanan RT secara online, kapan saja dan di mana saja.</p>
+
+                    @if(isset($user) && ($user->role ?? '') === 'admin')
+                        <div class="row g-3">
+                            <div class="col-sm-6 col-md-3">
+                                <a href="{{ route('warga.index') }}" class="text-decoration-none">
+                                    <div class="card p-3 text-center" style="border-radius:14px; background: var(--bg-card); border: 1px solid var(--border-color);">
+                                        <div class="mb-3" style="width:56px;height:56px;border-radius:12px;background:rgba(99,102,241,0.08);display:inline-flex;align-items:center;justify-content:center;color:var(--primary);">
+                                            <i class="fas fa-users"></i>
+                                        </div>
+                                        <h6 class="mb-1" style="color: var(--text-main);">Data Warga</h6>
+                                        <small class="text-muted">Kelola warga</small>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <a href="{{ route('pembayaran.index') }}" class="text-decoration-none">
+                                    <div class="card p-3 text-center" style="border-radius:14px;background: var(--bg-card); border: 1px solid var(--border-color);">
+                                        <div class="mb-3" style="width:56px;height:56px;border-radius:12px;background:rgba(34,197,94,0.08);display:inline-flex;align-items:center;justify-content:center;color:#16a34a;">
+                                            <i class="fas fa-money-bill-wave"></i>
+                                        </div>
+                                        <h6 class="mb-1" style="color: var(--text-main);">Transaksi Kas</h6>
+                                        <small class="text-muted">Cek & rekonsiliasi</small>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <a href="#" class="text-decoration-none">
+                                    <div class="card p-3 text-center" style="border-radius:14px;background: var(--bg-card); border: 1px solid var(--border-color);">
+                                        <div class="mb-3" style="width:56px;height:56px;border-radius:12px;background:rgba(250,204,21,0.08);display:inline-flex;align-items:center;justify-content:center;color:#f59e0b;">
+                                            <i class="fas fa-bullhorn"></i>
+                                        </div>
+                                        <h6 class="mb-1" style="color: var(--text-main);">Pengumuman</h6>
+                                        <small class="text-muted">Kelola pemberitahuan</small>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <a href="#" class="text-decoration-none">
+                                    <div class="card p-3 text-center" style="border-radius:14px;background: var(--bg-card); border: 1px solid var(--border-color);">
+                                        <div class="mb-3" style="width:56px;height:56px;border-radius:12px;background:rgba(99,102,241,0.06);display:inline-flex;align-items:center;justify-content:center;color:#7c3aed;">
+                                            <i class="fas fa-file-alt"></i>
+                                        </div>
+                                        <h6 class="mb-1" style="color: var(--text-main);">Laporan</h6>
+                                        <small class="text-muted">Export & cetak</small>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    @else
+                        <div class="row g-3">
+                            <div class="col-sm-6 col-md-3">
+                                <a href="#" class="text-decoration-none">
+                                    <div class="card p-3 text-center" style="border-radius:14px;background: var(--bg-card); border: 1px solid var(--border-color);">
+                                        <div class="mb-3" style="width:56px;height:56px;border-radius:12px;background:rgba(226,232,240,0.18);display:inline-flex;align-items:center;justify-content:center;color:#0ea5e9;">
+                                            <i class="fas fa-file-alt"></i>
+                                        </div>
+                                        <h6 class="mb-1" style="color: var(--text-main);">Penerbitan Surat</h6>
+                                        <small class="text-muted">Urus Surat</small>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <a href="{{ route('pembayaran.index') }}" class="text-decoration-none">
+                                    <div class="card p-3 text-center" style="border-radius:14px;background: var(--bg-card); border: 1px solid var(--border-color);">
+                                        <div class="mb-3" style="width:56px;height:56px;border-radius:12px;background:rgba(220,252,231,0.2);display:inline-flex;align-items:center;justify-content:center;color:#16a34a;">
+                                            <i class="fas fa-credit-card"></i>
+                                        </div>
+                                        <h6 class="mb-1" style="color: var(--text-main);">Pembayaran Iuran</h6>
+                                        <small class="text-muted">Cek Tagihan</small>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <a href="#" class="text-decoration-none">
+                                    <div class="card p-3 text-center" style="border-radius:14px;background: var(--bg-card); border: 1px solid var(--border-color);">
+                                        <div class="mb-3" style="width:56px;height:56px;border-radius:12px;background:rgba(250, 232, 255,0.18);display:inline-flex;align-items:center;justify-content:center;color:#8b5cf6;">
+                                            <i class="fas fa-phone"></i>
+                                        </div>
+                                        <h6 class="mb-1" style="color: var(--text-main);">Pengaduan Warga</h6>
+                                        <small class="text-muted">Laporkan</small>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <a href="#" class="text-decoration-none">
+                                    <div class="card p-3 text-center" style="border-radius:14px;background: var(--bg-card); border: 1px solid var(--border-color);">
+                                        <div class="mb-3" style="width:56px;height:56px;border-radius:12px;background:rgba(255,250,236,0.18);display:inline-flex;align-items:center;justify-content:center;color:#f59e0b;">
+                                            <i class="fas fa-bicycle"></i>
+                                        </div>
+                                        <h6 class="mb-1" style="color: var(--text-main);">Pinjam Fasilitas</h6>
+                                        <small class="text-muted">Cek Jadwal</small>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="col-sm-6 col-md-3">
+                                <a href="#" class="text-decoration-none">
+                                    <div class="card p-3 text-center" style="border-radius:14px;background: var(--bg-card); border: 1px solid var(--border-color);">
+                                        <div class="mb-3" style="width:56px;height:56px;border-radius:12px;background:rgba(255,238,238,0.18);display:inline-flex;align-items:center;justify-content:center;color:#ef4444;">
+                                            <i class="fas fa-heart"></i>
+                                        </div>
+                                        <h6 class="mb-1" style="color: var(--text-main);">Info Posyandu</h6>
+                                        <small class="text-muted">Lihat Jadwal</small>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <a href="{{ route('warga.index') }}" class="text-decoration-none">
+                                    <div class="card p-3 text-center" style="border-radius:14px;background: var(--bg-card); border: 1px solid var(--border-color);">
+                                        <div class="mb-3" style="width:56px;height:56px;border-radius:12px;background:rgba(226, 232, 240,0.18);display:inline-flex;align-items:center;justify-content:center;color:#60a5fa;">
+                                            <i class="fas fa-database"></i>
+                                        </div>
+                                        <h6 class="mb-1" style="color: var(--text-main);">Data Warga</h6>
+                                        <small class="text-muted">Lihat Data</small>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <a href="#" class="text-decoration-none">
+                                    <div class="card p-3 text-center" style="border-radius:14px;background: var(--bg-card); border: 1px solid var(--border-color);">
+                                        <div class="mb-3" style="width:56px;height:56px;border-radius:12px;background:rgba(220, 252, 231,0.18);display:inline-flex;align-items:center;justify-content:center;color:#10b981;">
+                                            <i class="fas fa-leaf"></i>
+                                        </div>
+                                        <h6 class="mb-1" style="color: var(--text-main);">Bank Sampah</h6>
+                                        <small class="text-muted">Setor Sampah</small>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <a href="#" class="text-decoration-none">
+                                    <div class="card p-3 text-center" style="border-radius:14px;background: var(--bg-card); border: 1px solid var(--border-color);">
+                                        <div class="mb-3" style="width:56px;height:56px;border-radius:12px;background:rgba(255,249,235,0.18);display:inline-flex;align-items:center;justify-content:center;color:#f97316;">
+                                            <i class="fas fa-store"></i>
+                                        </div>
+                                        <h6 class="mb-1" style="color: var(--text-main);">Direktori UMKM</h6>
+                                        <small class="text-muted">Lihat Usaha</small>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+
         <div class="row g-3 mb-4">
             <div class="col-md-3">
                 <div class="stat-card p-3" style="background: linear-gradient(135deg, #111827 0%, #1f2937 100%); border-radius: 20px; border: 1px solid rgba(148, 163, 184, 0.12); box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);">
