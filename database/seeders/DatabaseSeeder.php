@@ -24,9 +24,10 @@ class DatabaseSeeder extends Seeder
         // --- DATA USER (DIPERTAHANKAN) ---
 
         // Admin
-        User::create([
+        User::firstOrCreate([
+            'email' => 'admin@rt.com'
+        ], [
             'name' => 'Admin RT',
-            'email' => 'admin@rt.com',
             'password' => Hash::make('password123'),
             'role' => 'admin',
             'rt_number' => '001',
@@ -37,9 +38,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Bendahara
-        User::create([
+        User::firstOrCreate([
+            'email' => 'bendahara@rt.com'
+        ], [
             'name' => 'Bendahara RT',
-            'email' => 'bendahara@rt.com',
             'password' => Hash::make('password123'),
             'role' => 'bendahara',
             'rt_number' => '001',
@@ -51,9 +53,10 @@ class DatabaseSeeder extends Seeder
 
         // Warga sample (User Login)
         for ($i = 1; $i <= 5; $i++) {
-            User::create([
+            User::firstOrCreate([
+                'email' => "warga$i@rt.com"
+            ], [
                 'name' => "Warga $i",
-                'email' => "warga$i@rt.com",
                 'password' => Hash::make('password123'),
                 'role' => 'warga',
                 'rt_number' => str_pad($i, 3, '0', STR_PAD_LEFT),
@@ -166,5 +169,7 @@ class DatabaseSeeder extends Seeder
             'is_pinned' => true,
             'published_at' => now()
         ]);
+
+        $this->call(UmkmSeeder::class);
     }
 }

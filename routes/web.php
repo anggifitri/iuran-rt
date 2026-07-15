@@ -48,5 +48,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('surat', App\Http\Controllers\SuratController::class)->only(['index','create','store']);
     Route::resource('pengaduan', App\Http\Controllers\PengaduanController::class)->only(['index','create','store']);
     Route::resource('posyandu', App\Http\Controllers\PosyanduController::class)->only(['index','create','store']);
-    Route::resource('umkm', App\Http\Controllers\UmkmController::class)->only(['index','create','store']);
+    Route::resource('umkm', App\Http\Controllers\UmkmController::class)->only(['index','show','create','store']);
+    Route::get('/umkm/categories', [App\Http\Controllers\UmkmController::class, 'categories'])->name('umkm.categories');
 });

@@ -280,6 +280,7 @@
             transition: transform 0.3s ease;
         }
     </style>
+    @stack('styles')
 </head>
 <body>
     @auth
@@ -427,5 +428,7 @@
             initTheme();
         }
     </script>
+
+    @stack('scripts')
 </body>
 </html>
