@@ -63,14 +63,17 @@
                                 <!-- Foto Makanan -->
                                 <div class="me-3">
                                     @php
-                                        // Logika pengecekan gambar:
-                                        // Kalau di database ada nama file gambarnya, pakai itu.
-                                        // Kalau kosong, otomatis bikin gambar inisial dari nama menu (kayak foto profil).
-                                        $menuImage = !empty($item['image'])
-                                            ? asset('images/menu/' . $item['image'])
-                                            : 'https://ui-avatars.com/api/?name=' . urlencode($item['nama']) . '&background=f3f4f6&color=6b7280&size=100';
-                                    @endphp
-                                    <div style="width: 70px; height: 70px; border-radius: 12px; background: url('{{ $menuImage }}') center/cover no-repeat; border: 1px solid #e5e7eb;"></div>
+                                            if (!empty($item['image'])) {
+                                                if (preg_match('/^https?:\/\//', $item['image'])) {
+                                                    $menuImage = $item['image'];
+                                                } elseif (Illuminate\Support\Str::startsWith($item['image'], 'images/')) {
+                                                    $menuImage = asset($item['image']);
+                                                } else {
+                                                    $menuImage = asset('images/menu/' . $item['image']);
+                                                }
+                                            } else {
+                                                $menuImage = 'https://ui-avatars.com/api/?name=' . urlencode($item['nama']) . '&background=f3f4f6&color=6b7280&size=100';
+                                            }
                                 </div>
 
                                 <!-- Info Makanan -->
