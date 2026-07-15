@@ -117,14 +117,14 @@ class UmkmController extends Controller
         $defaultImage = 'images/umkm/product.svg';
         $itemsByCategory = [
             'jasa' => [
-                ['nama' => 'Konsultasi Branding', 'deskripsi' => 'Sesi strategi brand dan visual identity.', 'harga' => 'Rp 250.000', 'image' => 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=400&q=80'],
-                ['nama' => 'Desain Konten Sosial', 'deskripsi' => 'Konten promosi Instagram dan Facebook.', 'harga' => 'Rp 175.000', 'image' => 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=400&q=80'],
-                ['nama' => 'Foto Produk', 'deskripsi' => 'Foto produk aesthetic untuk katalog online.', 'harga' => 'Rp 150.000', 'image' => 'https://images.unsplash.com/photo-1513865307998-0a263f588b83?auto=format&fit=crop&w=400&q=80'],
+                ['nama' => 'Konsultasi Branding', 'deskripsi' => 'Sesi strategi brand dan visual identity.', 'harga' => 'Rp 250.000', 'image' => 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=400&q=80'], // Gambar meeting/strategi
+                ['nama' => 'Desain Konten Sosial', 'deskripsi' => 'Konten promosi Instagram dan Facebook.', 'harga' => 'Rp 175.000', 'image' => 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=400&q=80'], // Gambar logo sosmed/hp
+                ['nama' => 'Foto Produk', 'deskripsi' => 'Foto produk aesthetic untuk katalog online.', 'harga' => 'Rp 150.000', 'image' => 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=400&q=80'], // Gambar kamera studio
             ],
             'kerajinan' => [
-                ['nama' => 'Tas Anyaman', 'deskripsi' => 'Handmade dengan bahan lokal berkualitas.', 'harga' => 'Rp 120.000', 'image' => 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=400&q=80'],
-                ['nama' => 'Gelombang Lilin Aromaterapi', 'deskripsi' => 'Set lilin wangi untuk rumah dan hadiah.', 'harga' => 'Rp 65.000', 'image' => 'https://images.unsplash.com/photo-1509460913899-1b97f687de65?auto=format&fit=crop&w=400&q=80'],
-                ['nama' => 'Gelang Kulit', 'deskripsi' => 'Aksesoris stylish untuk sehari-hari.', 'harga' => 'Rp 75.000', 'image' => 'https://images.unsplash.com/photo-1535702351475-1f4eeddc25a2?auto=format&fit=crop&w=400&q=80'],
+                ['nama' => 'Tas Anyaman', 'deskripsi' => 'Handmade dengan bahan lokal berkualitas.', 'harga' => 'Rp 120.000', 'image' => 'https://images.unsplash.com/photo-1590736704728-f4730bb30770?auto=format&fit=crop&w=400&q=80'], // Gambar tas rotan/anyaman
+                ['nama' => 'Lilin Aromaterapi', 'deskripsi' => 'Set lilin wangi untuk rumah dan hadiah.', 'harga' => 'Rp 65.000', 'image' => 'https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=400&q=80'], // Gambar lilin
+                ['nama' => 'Gelang Kulit', 'deskripsi' => 'Aksesoris stylish untuk sehari-hari.', 'harga' => 'Rp 75.000', 'image' => 'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=400&q=80'], // Gambar gelang kulit
             ],
             'makanan & minuman' => [
                 ['nama' => 'Es Kopi', 'deskripsi' => 'Kopi susu dingin dengan shot ekstra.', 'harga' => 'Rp 12.000', 'image' => 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=400&q=80'],
@@ -132,9 +132,9 @@ class UmkmController extends Controller
                 ['nama' => 'Sate Taichan', 'deskripsi' => 'Sate pedas gurih dengan perasan jeruk nipis segar.', 'harga' => 'Rp 20.000', 'image' => 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=400&q=80'],
             ],
             'jasa/service' => [
-                ['nama' => 'Servis Elektronik', 'deskripsi' => 'Perbaikan cepat untuk alat rumah tangga.', 'harga' => 'Rp 120.000', 'image' => 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=400&q=80'],
-                ['nama' => 'Jasa Cuci Motor', 'deskripsi' => 'Cuci kilat motor dengan detailing sederhana.', 'harga' => 'Rp 35.000', 'image' => 'https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=400&q=80'],
-                ['nama' => 'Cetak Spanduk', 'deskripsi' => 'Spanduk promo ukuran custom kualitas tajam.', 'harga' => 'Rp 90.000', 'image' => 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=400&q=80'],
+                ['nama' => 'Servis Elektronik', 'deskripsi' => 'Perbaikan cepat untuk alat rumah tangga.', 'harga' => 'Rp 120.000', 'image' => 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=400&q=80'], // Gambar servis/solder PCB
+                ['nama' => 'Jasa Cuci Motor', 'deskripsi' => 'Cuci kilat motor dengan detailing sederhana.', 'harga' => 'Rp 35.000', 'image' => 'https://images.unsplash.com/photo-1552930294-6b595f4c2974?auto=format&fit=crop&w=400&q=80'], // Gambar cuci motor
+                ['nama' => 'Cetak Spanduk', 'deskripsi' => 'Spanduk promo ukuran custom kualitas tajam.', 'harga' => 'Rp 90.000', 'image' => 'https://images.unsplash.com/photo-1562664377-709f2c337eb2?auto=format&fit=crop&w=400&q=80'], // Gambar mesin cetak/print
             ],
             'kuliner' => [
                 ['nama' => 'Nasi Goreng Spesial', 'deskripsi' => 'Nasi goreng bumbu jawa dengan topping ayam dan telur.', 'harga' => 'Rp 22.000', 'image' => 'https://images.unsplash.com/photo-1612927601601-6638404737ce?auto=format&fit=crop&w=400&q=80'],
@@ -142,9 +142,9 @@ class UmkmController extends Controller
                 ['nama' => 'Teh Tarik', 'deskripsi' => 'Minuman teh susu manis legit khas warung kopi.', 'harga' => 'Rp 12.000', 'image' => 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=400&q=80'],
             ],
             'perdagangan' => [
-                ['nama' => 'Paket Sembako', 'deskripsi' => 'Pilihan kebutuhan sehari-hari lengkap dan murah.', 'harga' => 'Rp 80.000', 'image' => 'https://images.unsplash.com/photo-1542831371-d531d36971e6?auto=format&fit=crop&w=400&q=80'],
-                ['nama' => 'Souvenir Lokal', 'deskripsi' => 'Pilihan souvenir unik buatan pengrajin lokal.', 'harga' => 'Rp 40.000', 'image' => 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80'],
-                ['nama' => 'Aksesoris Rumah', 'deskripsi' => 'Pajangan dekoratif estetik untuk mempercantik ruangan.', 'harga' => 'Rp 65.000', 'image' => 'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=400&q=80'],
+                ['nama' => 'Paket Sembako', 'deskripsi' => 'Pilihan kebutuhan sehari-hari lengkap dan murah.', 'harga' => 'Rp 80.000', 'image' => 'https://images.unsplash.com/photo-1583258292688-d0213dc5a3a8?auto=format&fit=crop&w=400&q=80'], // Gambar bahan pokok/sembako
+                ['nama' => 'Souvenir Lokal', 'deskripsi' => 'Pilihan souvenir unik buatan pengrajin lokal.', 'harga' => 'Rp 40.000', 'image' => 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=400&q=80'], // Gambar kerajinan oleh-oleh
+                ['nama' => 'Aksesoris Rumah', 'deskripsi' => 'Pajangan dekoratif estetik untuk mempercantik ruangan.', 'harga' => 'Rp 65.000', 'image' => 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=400&q=80'], // Gambar dekorasi interior
             ],
         ];
 
