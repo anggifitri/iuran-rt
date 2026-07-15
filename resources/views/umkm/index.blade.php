@@ -60,15 +60,20 @@
                 <div class="carousel-inner">
                     @foreach($featuredItems as $index => $item)
                         @php
-                            $rawCat = strtolower(trim($item->kategori ?? 'default'));
-                            if (strpos($rawCat, 'jasa') !== false) $fKey = 'jasa';
-                            elseif (strpos($rawCat, 'kerajinan') !== false) $fKey = 'kerajinan';
-                            elseif (strpos($rawCat, 'makanan') !== false || strpos($rawCat, 'kuliner') !== false) $fKey = 'makanan & minuman';
-                            elseif (strpos($rawCat, 'perdagangan') !== false) $fKey = 'perdagangan';
-                            else $fKey = $rawCat;
+                            $rawCat = strtolower(trim($item->kategori ?? ''));
+                            $coverImages = [
+                                'jasa' => 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80',
+                                'kerajinan' => 'https://images.unsplash.com/photo-1477867082705-47a1d8d462f8?auto=format&fit=crop&w=900&q=80',
+                                'makanan' => 'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=900&q=80',
+                                'perdagangan' => 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80',
+                                'default' => 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80'
+                            ];
 
-                            $fUrl = $categoryImages[$fKey] ?? $categoryImages['default'];
-                            $fSrc = preg_match('/^https?:\/\//', $fUrl) ? $fUrl : asset($fUrl);
+                            if (strpos($rawCat, 'jasa') !== false) $fSrc = $coverImages['jasa'];
+                            elseif (strpos($rawCat, 'kerajinan') !== false) $fSrc = $coverImages['kerajinan'];
+                            elseif (strpos($rawCat, 'makan') !== false || strpos($rawCat, 'kuliner') !== false) $fSrc = $coverImages['makanan'];
+                            elseif (strpos($rawCat, 'dagang') !== false || strpos($rawCat, 'perdagangan') !== false) $fSrc = $coverImages['perdagangan'];
+                            else $fSrc = $coverImages['default'];
                         @endphp
                         <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                             <div class="row g-3 align-items-center">
@@ -84,9 +89,9 @@
                                     <p class="mb-1"><strong>Pemilik:</strong> {{ $item->pemilik ?? 'Tidak tercantum' }}</p>
                                     <p class="mb-1"><strong>Telepon:</strong> {{ $item->telepon ?? '-' }}</p>
                                     <p class="mb-0"><strong>Alamat:</strong> {{ $item->alamat ?? '-' }}</p>
-                                        <div class="mt-4">
-                                            <a href="#" data-url="{{ route('umkm.show', $item) }}?embed=1" class="btn btn-purple open-umkm">Kunjungi</a>
-                                        </div>
+                                    <div class="mt-4">
+                                        <a href="#" data-url="{{ route('umkm.show', $item) }}?embed=1" class="btn btn-purple open-umkm">Kunjungi</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -189,15 +194,20 @@
         <div class="row g-4">
             @foreach($usahas as $usaha)
                 @php
-                    $rawCat = strtolower(trim($usaha->kategori ?? 'default'));
-                    if (strpos($rawCat, 'jasa') !== false) $imgKey = 'jasa';
-                    elseif (strpos($rawCat, 'kerajinan') !== false) $imgKey = 'kerajinan';
-                    elseif (strpos($rawCat, 'makanan') !== false || strpos($rawCat, 'kuliner') !== false) $imgKey = 'makanan & minuman';
-                    elseif (strpos($rawCat, 'perdagangan') !== false) $imgKey = 'perdagangan';
-                    else $imgKey = $rawCat;
+                    $rawCat = strtolower(trim($usaha->kategori ?? ''));
+                    $coverImages = [
+                        'jasa' => 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80',
+                        'kerajinan' => 'https://images.unsplash.com/photo-1477867082705-47a1d8d462f8?auto=format&fit=crop&w=900&q=80',
+                        'makanan' => 'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=900&q=80',
+                        'perdagangan' => 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80',
+                        'default' => 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80'
+                    ];
 
-                    $imgUrl = $categoryImages[$imgKey] ?? $categoryImages['default'];
-                    $imgSrc = preg_match('/^https?:\/\//', $imgUrl) ? $imgUrl : asset($imgUrl);
+                    if (strpos($rawCat, 'jasa') !== false) $imgSrc = $coverImages['jasa'];
+                    elseif (strpos($rawCat, 'kerajinan') !== false) $imgSrc = $coverImages['kerajinan'];
+                    elseif (strpos($rawCat, 'makan') !== false || strpos($rawCat, 'kuliner') !== false) $imgSrc = $coverImages['makanan'];
+                    elseif (strpos($rawCat, 'dagang') !== false || strpos($rawCat, 'perdagangan') !== false) $imgSrc = $coverImages['perdagangan'];
+                    else $imgSrc = $coverImages['default'];
                 @endphp
                 <div class="col-md-6 col-xl-4">
                     <div class="card umkm-card h-100 shadow-sm border-0">
@@ -225,88 +235,21 @@
 
 @push('styles')
 <style>
-    .umkm-hero {
-        min-height: 320px;
-        border-radius: 24px;
-    }
-
-    .umkm-hero-image {
-        min-height: 280px;
-    }
-
-    .umkm-stat-card {
-        border-radius: 18px;
-        background: #fff;
-        color: #0f172a;
-        border: 1px solid rgba(226, 232, 240, 0.8);
-    }
-
-    .umkm-featured-card {
-        border-radius: 24px;
-        background: #ffffff;
-        border: 1px solid rgba(226, 232, 240, 0.8);
-    }
-
-    .umkm-search-card {
-        border-radius: 22px;
-        background: #ffffff;
-        color: #0f172a;
-        border: 1px solid rgba(226,232,240,0.9);
-    }
-
-    .umkm-card {
-        border-radius: 24px;
-        background: #ffffff;
-    }
-
-    .umkm-card .card-img-top {
-        height: 220px;
-        object-fit: cover;
-        border-top-left-radius: 24px;
-        border-top-right-radius: 24px;
-    }
-
-    .umkm-card .card-body {
-        padding: 1.5rem;
-    }
-
-    .umkm-card h5 {
-        color: #0f172a;
-    }
-
-    .umkm-card p {
-        color: #6b7280;
-    }
-
-    .umkm-search-card .form-control,
-    .umkm-search-card .form-select {
-        border-radius: 999px;
-        border: 1px solid rgba(226,232,240,0.9);
-    }
-
-    .umkm-search-card .input-group-text {
-        background: transparent;
-        border: none;
-    }
-
-    .btn-purple {
-        background: linear-gradient(135deg, #7c3aed, #22d3ee);
-        border: none;
-        color: #fff;
-        box-shadow: 0 10px 25px rgba(124, 58, 237, 0.18);
-    }
-
-    .btn-purple:hover {
-        background: linear-gradient(135deg, #6d28d9, #0ea5e9);
-    }
-
-    .carousel-item {
-        min-height: 320px;
-    }
-
-    .carousel-control-prev-icon,
-    .carousel-control-next-icon {
-        filter: invert(1);
-    }
+    .umkm-hero { min-height: 320px; border-radius: 24px; }
+    .umkm-hero-image { min-height: 280px; }
+    .umkm-stat-card { border-radius: 18px; background: #fff; color: #0f172a; border: 1px solid rgba(226, 232, 240, 0.8); }
+    .umkm-featured-card { border-radius: 24px; background: #ffffff; border: 1px solid rgba(226, 232, 240, 0.8); }
+    .umkm-search-card { border-radius: 22px; background: #ffffff; color: #0f172a; border: 1px solid rgba(226,232,240,0.9); }
+    .umkm-card { border-radius: 24px; background: #ffffff; }
+    .umkm-card .card-img-top { height: 220px; object-fit: cover; border-top-left-radius: 24px; border-top-right-radius: 24px; }
+    .umkm-card .card-body { padding: 1.5rem; }
+    .umkm-card h5 { color: #0f172a; }
+    .umkm-card p { color: #6b7280; }
+    .umkm-search-card .form-control, .umkm-search-card .form-select { border-radius: 999px; border: 1px solid rgba(226,232,240,0.9); }
+    .umkm-search-card .input-group-text { background: transparent; border: none; }
+    .btn-purple { background: linear-gradient(135deg, #7c3aed, #22d3ee); border: none; color: #fff; box-shadow: 0 10px 25px rgba(124, 58, 237, 0.18); }
+    .btn-purple:hover { background: linear-gradient(135deg, #6d28d9, #0ea5e9); }
+    .carousel-item { min-height: 320px; }
+    .carousel-control-prev-icon, .carousel-control-next-icon { filter: invert(1); }
 </style>
 @endpush

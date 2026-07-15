@@ -1,104 +1,93 @@
-@extends('layouts.app')
-
-@section('content')
-<div class="container py-4">
-
-    <div class="col-lg-8 col-xl-7 mx-auto">
-        <div class="card border-0 shadow-lg rounded-4 overflow-hidden mb-5" style="background-color: #fff;">
-
-
-            <div class="p-3" style="background-color: #8b5cf6; color: #fff;">
-                <div class="d-flex align-items-center">
-                    <img src="{{ preg_match('/^https?:\/\//', $categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default']) ? ($categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default']) : asset($categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default']) }}"
-                         alt="Logo UMKM"
-                         class="rounded-3 me-3"
-                         style="width: 55px; height: 55px; object-fit: cover; border: 2px solid rgba(255,255,255,0.5);">
-                    <div>
-                        <h5 class="mb-0 fw-bold">{{ $umkm->nama }}</h5>
-                        <small style="opacity: 0.85;">{{ $umkm->kategori }} • RT {{ Auth::user()->rt_number ?? '00' }}</small>
-                    </div>
+@if(request('embed'))
+    <div class="card border-0 shadow-sm position-relative overflow-hidden rounded-4">
+        @php
+            $rawCat = strtolower(trim($usaha->kategori ?? ''));
+            $coverImages = [
+                'jasa' => 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80',
+                'kerajinan' => 'https://images.unsplash.com/photo-1477867082705-47a1d8d462f8?auto=format&fit=crop&w=900&q=80',
+                'makanan' => 'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=900&q=80',
+                'perdagangan' => 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80',
+                'default' => 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80'
+            ];
+            if (strpos($rawCat, 'jasa') !== false) $imgSrc = $coverImages['jasa'];
+            elseif (strpos($rawCat, 'kerajinan') !== false) $imgSrc = $coverImages['kerajinan'];
+            elseif (strpos($rawCat, 'makan') !== false || strpos($rawCat, 'kuliner') !== false) $imgSrc = $coverImages['makanan'];
+            elseif (strpos($rawCat, 'dagang') !== false || strpos($rawCat, 'perdagangan') !== false) $imgSrc = $coverImages['perdagangan'];
+            else $imgSrc = $coverImages['default'];
+        @endphp
+        <div style="height: 240px; background: url('{{ $imgSrc }}') center/cover no-repeat;">
+            <button type="button" class="btn btn-light rounded-circle position-absolute top-square" style="top: 15px; right: 15px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; z-index: 10;">
+                <i class="fas fa-times text-dark"></i>
+            </button>
+        </div>
+        <div class="card-body p-4">
+            <span class="badge bg-primary mb-2">{{ $usaha->kategori ?? 'Umum' }}</span>
+            <h3 class="fw-bold text-dark mb-3">{{ $usaha->nama }}</h3>
+            <p class="text-muted mb-4">{{ $usaha->deskripsi ?? 'Deskripsi belum tersedia.' }}</p>
+            <hr>
+            <div class="row g-3 text-secondary">
+                <div class="col-md-6">
+                    <p class="mb-2"><i class="fas fa-user me-2 text-primary"></i><strong>Pemilik:</strong> {{ $usaha->pemilik ?? '-' }}</p>
+                    <p class="mb-0"><i class="fas fa-phone me-2 text-success"></i><strong>Telepon:</strong> {{ $usaha->telepon ?? '-' }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p class="mb-0"><i class="fas fa-map-marker-alt me-2 text-danger"></i><strong>Alamat:</strong> {{ $usaha->alamat ?? '-' }}</p>
                 </div>
             </div>
-
-
-            @php
-                $bannerImage = preg_match('/^https?:\/\//', $categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default']) ? $categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default'] : asset($categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default']);
-            @endphp
-            <img src="{{ $bannerImage }}" class="w-100" style="height: 220px; object-fit: cover;" alt="Banner Utama">
-
-
-            <div class="card-body p-4">
-                <p class="mb-4" style="color: #4b5563; font-size: 0.95rem;">
-                    {{ $umkm->deskripsi ?? 'Deskripsi usaha belum tersedia.' }}
-                </p>
-
-
-                <div class="row mb-4" style="color: #6b7280; font-size: 0.9rem;">
-                    <div class="col-sm-6 mb-2 mb-sm-0 d-flex align-items-start">
-                        <i class="fas fa-map-marker-alt me-2 mt-1" style="color: #ef4444;"></i>
-                        <span>{{ $umkm->alamat ?? '-' }}</span>
-                    </div>
-                    <div class="col-sm-6 d-flex align-items-start">
-                        <i class="far fa-user me-2 mt-1" style="color: #6366f1;"></i>
-                        <span>Pemilik: <strong style="color: #1f2937;">{{ strtoupper($umkm->pemilik ?? 'Tidak tercantum') }}</strong></span>
-                    </div>
-                </div>
-
-
-                <a href="{{ $whatsappUrl }}" target="_blank" class="btn btn-success d-inline-flex align-items-center gap-2 mb-4 px-3 py-2 rounded-3 fw-medium" style="background-color: #22c55e; border: none;">
-                    <i class="fab fa-whatsapp fs-5"></i>
-                    Chat Langsung WhatsApp
+            <div class="mt-4 text-end">
+                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $usaha->telepon) }}" target="_blank" class="btn btn-success rounded-pill px-4">
+                    <i class="fab fa-whatsapp me-2"></i>Hubungi Warga
                 </a>
-
-                <!-- 4. Katalog Menu -->
-                <h6 class="fw-bold mb-3 d-flex align-items-center gap-2" style="color: #1f2937;">
-                    <i class="fas fa-book text-primary"></i>
-                    Katalog Produk / Menu
-                </h6>
-
-                <div class="d-flex flex-column gap-3">
-                    @foreach($menuItems as $item)
-                        <div class="card border rounded-4 shadow-sm p-3" style="border-color: #f3f4f6 !important;">
-                            <div class="d-flex align-items-center">
-                                <!-- Foto Makanan -->
-                                <div class="me-3">
-                                    @php
-                                        if (!empty($item['image'])) {
-                                            if (preg_match('/^https?:\/\//', $item['image'])) {
-                                                $menuImage = $item['image'];
-                                            } elseif (Illuminate\Support\Str::startsWith($item['image'], 'images/')) {
-                                                $menuImage = asset($item['image']);
-                                            } else {
-                                                $menuImage = asset('images/menu/' . $item['image']);
-                                            }
-                                        } else {
-                                            $menuImage = 'https://ui-avatars.com/api/?name=' . urlencode($item['nama']) . '&background=f3f4f6&color=6b7280&size=100';
-                                        }
-                                    @endphp
-
-                                    <img src="{{ $menuImage }}" alt="{{ $item['nama'] }}" class="rounded-4" style="width: 90px; height: 90px; object-fit: cover;">
-                                </div>
-
-                                <!-- Info Makanan -->
-                                <div class="flex-grow-1">
-                                    <h6 class="fw-bold mb-1" style="color: #1f2937;">{{ $item['nama'] }}</h6>
-                                    <small class="d-block mb-1" style="color: #9ca3af;">{{ $item['deskripsi'] }}</small>
-                                    <div class="fw-bold" style="color: #6366f1;">{{ $item['harga'] }}</div>
-                                </div>
-
-                                <!-- Tombol Order -->
-                                <div class="ms-2">
-                                    <a href="{{ $whatsappUrl }}&text=Halo,%20saya%20mau%20pesan%20{{ urlencode($item['nama']) }}" target="_blank" class="btn btn-success btn-sm d-inline-flex align-items-center gap-1 px-3 rounded-pill" style="background-color: #22c55e; border: none; font-weight: 500;">
-                                        <i class="fab fa-whatsapp"></i> Order
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-
             </div>
         </div>
     </div>
-</div>
-@endsection
+@else
+    @extends('layouts.app')
+    @section('content')
+    <div class="container py-4">
+        <div class="mb-3">
+            <a href="{{ route('umkm.index') }}" class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+                <i class="fas fa-arrow-left me-1"></i> Kembali ke Direktori
+            </a>
+        </div>
+        <div class="card border-0 shadow-sm overflow-hidden rounded-4">
+            @php
+                $rawCat = strtolower(trim($usaha->kategori ?? ''));
+                $coverImages = [
+                    'jasa' => 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80',
+                    'kerajinan' => 'https://images.unsplash.com/photo-1477867082705-47a1d8d462f8?auto=format&fit=crop&w=900&q=80',
+                    'makanan' => 'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=900&q=80',
+                    'perdagangan' => 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80',
+                    'default' => 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80'
+                ];
+                if (strpos($rawCat, 'jasa') !== false) $imgSrc = $coverImages['jasa'];
+                elseif (strpos($rawCat, 'kerajinan') !== false) $imgSrc = $coverImages['kerajinan'];
+                elseif (strpos($rawCat, 'makan') !== false || strpos($rawCat, 'kuliner') !== false) $imgSrc = $coverImages['makanan'];
+                elseif (strpos($rawCat, 'dagang') !== false || strpos($rawCat, 'perdagangan') !== false) $imgSrc = $coverImages['perdagangan'];
+                else $imgSrc = $coverImages['default'];
+            @endphp
+            <div style="height: 350px; background: url('{{ $imgSrc }}') center/cover no-repeat;"></div>
+            <div class="card-body p-4">
+                <span class="badge bg-primary mb-2">{{ $usaha->kategori ?? 'Umum' }}</span>
+                <h2 class="fw-bold text-dark mb-3">{{ $usaha->nama }}</h2>
+                <p class="text-muted fs-5 mb-4">{{ $usaha->deskripsi ?? 'Deskripsi belum tersedia.' }}</p>
+                <hr>
+                <div class="row g-3 text-secondary fs-6">
+                    <div class="col-md-6">
+                        <p class="mb-2"><i class="fas fa-user me-2 text-primary"></i><strong>Pemilik:</strong> {{ $usaha->pemilik ?? '-' }}</p>
+                        <p class="mb-0"><i class="fas fa-phone me-2 text-success"></i><strong>Telepon:</strong> {{ $usaha->telepon ?? '-' }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-0"><i class="fas fa-map-marker-alt me-2 text-danger"></i><strong>Alamat:</strong> {{ $usaha->alamat ?? '-' }}</p>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $usaha->telepon) }}" target="_blank" class="btn btn-success rounded-pill px-4 btn-lg">
+                        <i class="fab fa-whatsapp me-2"></i>Hubungi Via WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endsection
+@endif
