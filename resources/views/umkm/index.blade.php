@@ -60,17 +60,21 @@
                 <div class="carousel-inner">
                     @foreach($featuredItems as $index => $item)
                         @php
-                            $featuredImageKey = strtolower(trim($item->kategori ?? 'default'));
-                            $featuredImageUrl = $categoryImages[$featuredImageKey] ?? $categoryImages['default'];
-                            $featuredImageSrc = preg_match('/^https?:\/\//', $featuredImageUrl)
-                                ? $featuredImageUrl
-                                : asset($featuredImageUrl);
+                            $rawCat = strtolower(trim($item->kategori ?? 'default'));
+                            if (strpos($rawCat, 'jasa') !== false) $fKey = 'jasa';
+                            elseif (strpos($rawCat, 'kerajinan') !== false) $fKey = 'kerajinan';
+                            elseif (strpos($rawCat, 'makanan') !== false || strpos($rawCat, 'kuliner') !== false) $fKey = 'makanan & minuman';
+                            elseif (strpos($rawCat, 'perdagangan') !== false) $fKey = 'perdagangan';
+                            else $fKey = $rawCat;
+
+                            $fUrl = $categoryImages[$fKey] ?? $categoryImages['default'];
+                            $fSrc = preg_match('/^https?:\/\//', $fUrl) ? $fUrl : asset($fUrl);
                         @endphp
                         <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                             <div class="row g-3 align-items-center">
                                 <div class="col-lg-5">
                                     <div class="rounded-4 overflow-hidden" style="height: 280px;">
-                                        <img src="{{ $featuredImageSrc }}" alt="{{ $item->kategori ?? 'UMKM' }}" class="img-fluid w-100 h-100" style="object-fit: cover; min-height: 280px;">
+                                        <img src="{{ $fSrc }}" alt="{{ $item->kategori ?? 'UMKM' }}" class="img-fluid w-100 h-100" style="object-fit: cover; min-height: 280px;">
                                     </div>
                                 </div>
                                 <div class="col-lg-7">
@@ -89,7 +93,6 @@
                     @endforeach
                 </div>
                 <div class="d-flex justify-content-between mt-4">
-                <div class="d-flex justify-content-between mt-4">
                     <button class="carousel-control-prev btn btn-light rounded-circle shadow-sm p-2" type="button" data-bs-target="#umkmFeaturedCarousel" data-bs-slide="prev" style="width: 48px; height: 48px;">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Sebelumnya</span>
@@ -99,12 +102,10 @@
                         <span class="visually-hidden">Berikutnya</span>
                     </button>
                 </div>
-                </div>
             </div>
         </div>
     @endif
 
-    <!-- Modal container for UMKM embed -->
     <div class="modal fade" id="umkmModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content" style="background: transparent; border: none; box-shadow: none;">
@@ -120,7 +121,6 @@
       .modal-backdrop.show { background-color: rgba(0,0,0,0.35); }
       #umkmModal .modal-content { background: transparent; }
       #umkmModal .modal-body { padding: 0 20px 40px 20px; }
-      /* ensure underlying page still visible through modal corners */
       #umkmModal .umkm-modal-content { background: rgba(255,255,255,0.96); border-radius: 14px; padding: 18px; }
       @media (max-width: 576px) { #umkmModal .modal-dialog { margin: 12px; } }
     </style>
@@ -141,7 +141,6 @@
                         container.innerHTML = '<div class="umkm-modal-content">'+html+'<\/div>';
                         var modal = new bootstrap.Modal(document.getElementById('umkmModal'));
                         modal.show();
-                        // close when clicking the top-square inside embed
                         var top = container.querySelector('.top-square');
                         if (top) top.addEventListener('click', function(){ modal.hide(); });
                     }).catch(function(err){ console.error(err); });
@@ -190,15 +189,19 @@
         <div class="row g-4">
             @foreach($usahas as $usaha)
                 @php
-                    $imageKey = strtolower(trim($usaha->kategori ?? 'default'));
-                    $imageUrl = $categoryImages[$imageKey] ?? $categoryImages['default'];
-                    $imageSrc = preg_match('/^https?:\/\//', $imageUrl)
-                        ? $imageUrl
-                        : asset($imageUrl);
+                    $rawCat = strtolower(trim($usaha->kategori ?? 'default'));
+                    if (strpos($rawCat, 'jasa') !== false) $imgKey = 'jasa';
+                    elseif (strpos($rawCat, 'kerajinan') !== false) $imgKey = 'kerajinan';
+                    elseif (strpos($rawCat, 'makanan') !== false || strpos($rawCat, 'kuliner') !== false) $imgKey = 'makanan & minuman';
+                    elseif (strpos($rawCat, 'perdagangan') !== false) $imgKey = 'perdagangan';
+                    else $imgKey = $rawCat;
+
+                    $imgUrl = $categoryImages[$imgKey] ?? $categoryImages['default'];
+                    $imgSrc = preg_match('/^https?:\/\//', $imgUrl) ? $imgUrl : asset($imgUrl);
                 @endphp
                 <div class="col-md-6 col-xl-4">
                     <div class="card umkm-card h-100 shadow-sm border-0">
-                        <img src="{{ $imageSrc }}" class="card-img-top" alt="{{ $usaha->kategori ?? 'UMKM' }}" loading="lazy">
+                        <img src="{{ $imgSrc }}" class="card-img-top" alt="{{ $usaha->kategori ?? 'UMKM' }}" loading="lazy">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start mb-3">
                                 <span class="badge bg-primary">{{ $usaha->kategori ?? 'Umum' }}</span>
