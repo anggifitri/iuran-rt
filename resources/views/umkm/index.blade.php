@@ -81,7 +81,7 @@
                                     <p class="mb-1"><strong>Telepon:</strong> {{ $item->telepon ?? '-' }}</p>
                                     <p class="mb-0"><strong>Alamat:</strong> {{ $item->alamat ?? '-' }}</p>
                                     <div class="mt-4">
-                                        <a href="{{ route('umkm.index') }}" class="btn btn-purple">Lihat Selengkapnya</a>
+                                        <a href="{{ route('umkm.show', $item) }}" class="btn btn-purple">Lihat Selengkapnya</a>
                                     </div>
                                 </div>
                             </div>
@@ -163,7 +163,7 @@
                                 <p class="mb-2"><i class="fas fa-map-marker-alt me-2"></i>{{ $usaha->alamat ?? '-' }}</p>
                                 <p class="mb-0"><i class="fas fa-phone me-2"></i>{{ $usaha->telepon ?? '-' }}</p>
                             </div>
-                            <a href="{{ route('umkm.index') }}" class="btn btn-purple w-100">Kunjungi</a>
+                            <a href="{{ route('umkm.show', $usaha) }}" class="btn btn-purple w-100">Kunjungi</a>
                         </div>
                     </div>
                 </div>
