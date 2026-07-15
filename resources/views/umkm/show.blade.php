@@ -58,8 +58,6 @@
 
                 <div class="d-flex flex-column gap-3">
                     @foreach($menuItems as $item)
-                       <div class="d-flex flex-column gap-3">
-                    @foreach($menuItems as $item)
                         <div class="card border rounded-4 shadow-sm p-3" style="border-color: #f3f4f6 !important;">
                             <div class="d-flex align-items-center">
                                 <!-- Foto Makanan -->
