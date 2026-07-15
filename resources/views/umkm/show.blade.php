@@ -63,17 +63,20 @@
                                 <!-- Foto Makanan -->
                                 <div class="me-3">
                                     @php
-                                            if (!empty($item['image'])) {
-                                                if (preg_match('/^https?:\/\//', $item['image'])) {
-                                                    $menuImage = $item['image'];
-                                                } elseif (Illuminate\Support\Str::startsWith($item['image'], 'images/')) {
-                                                    $menuImage = asset($item['image']);
-                                                } else {
-                                                    $menuImage = asset('images/menu/' . $item['image']);
-                                                }
+                                        if (!empty($item['image'])) {
+                                            if (preg_match('/^https?:\/\//', $item['image'])) {
+                                                $menuImage = $item['image'];
+                                            } elseif (Illuminate\Support\Str::startsWith($item['image'], 'images/')) {
+                                                $menuImage = asset($item['image']);
                                             } else {
-                                                $menuImage = 'https://ui-avatars.com/api/?name=' . urlencode($item['nama']) . '&background=f3f4f6&color=6b7280&size=100';
+                                                $menuImage = asset('images/menu/' . $item['image']);
                                             }
+                                        } else {
+                                            $menuImage = 'https://ui-avatars.com/api/?name=' . urlencode($item['nama']) . '&background=f3f4f6&color=6b7280&size=100';
+                                        }
+                                    @endphp
+
+                                    <img src="{{ $menuImage }}" alt="{{ $item['nama'] }}" class="rounded-4" style="width: 90px; height: 90px; object-fit: cover;">
                                 </div>
 
                                 <!-- Info Makanan -->

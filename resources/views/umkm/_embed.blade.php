@@ -39,15 +39,15 @@
                                 <div class="d-flex align-items-center p-3">
                                     <div class="me-3">
                                         @php
-    if (preg_match('/^https?:\/\//', $item['image'])) {
-        $imgSrc = $item['image'];
-    } elseif (Illuminate\Support\Str::startsWith($item['image'], 'images/')) {
-        $imgSrc = asset($item['image']);
-    } else {
-        $imgSrc = asset('images/menu/'.$item['image']);
-    }
-@endphp
-<div class="product-image" style="background: url('{{ $imgSrc }}') center/cover no-repeat;"></div>
+                                            if (preg_match('/^https?:\/\//', $item['image'])) {
+                                                $imgSrc = $item['image'];
+                                            } elseif (Illuminate\Support\Str::startsWith($item['image'], 'images/')) {
+                                                $imgSrc = asset($item['image']);
+                                            } else {
+                                                $imgSrc = asset('images/menu/'.$item['image']);
+                                            }
+                                        @endphp
+                                        <img src="{{ $imgSrc }}" alt="{{ $item['nama'] }}" class="product-image rounded-4">
                                     </div>
                                     <div class="flex-grow-1">
                                         <h6 class="fw-bold mb-1">{{ $item['nama'] }}</h6>
