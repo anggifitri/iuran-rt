@@ -2,11 +2,11 @@
 
 @section('content')
 <div class="container py-4">
-    <!-- Bikin container lebih kecil dan ke tengah biar mirip tampilan modal/card -->
+
     <div class="col-lg-8 col-xl-7 mx-auto">
         <div class="card border-0 shadow-lg rounded-4 overflow-hidden mb-5" style="background-color: #fff;">
 
-            <!-- 1. Header Area (Ungu) -->
+
             <div class="p-3" style="background-color: #8b5cf6; color: #fff;">
                 <div class="d-flex align-items-center">
                     <img src="{{ preg_match('/^https?:\/\//', $categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default']) ? ($categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default']) : asset($categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default']) }}"
@@ -20,19 +20,19 @@
                 </div>
             </div>
 
-            <!-- 2. Banner Image Area (Full Width) -->
+
             @php
                 $bannerImage = preg_match('/^https?:\/\//', $categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default']) ? $categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default'] : asset($categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default']);
             @endphp
             <img src="{{ $bannerImage }}" class="w-100" style="height: 220px; object-fit: cover;" alt="Banner Utama">
 
-            <!-- 3. Detail Info Area (Putih) -->
+
             <div class="card-body p-4">
                 <p class="mb-4" style="color: #4b5563; font-size: 0.95rem;">
                     {{ $umkm->deskripsi ?? 'Deskripsi usaha belum tersedia.' }}
                 </p>
 
-                <!-- Alamat & Pemilik (Kiri - Kanan) -->
+
                 <div class="row mb-4" style="color: #6b7280; font-size: 0.9rem;">
                     <div class="col-sm-6 mb-2 mb-sm-0 d-flex align-items-start">
                         <i class="fas fa-map-marker-alt me-2 mt-1" style="color: #ef4444;"></i>
@@ -44,13 +44,13 @@
                     </div>
                 </div>
 
-                <!-- Tombol WA Utama -->
+
                 <a href="{{ $whatsappUrl }}" target="_blank" class="btn btn-success d-inline-flex align-items-center gap-2 mb-4 px-3 py-2 rounded-3 fw-medium" style="background-color: #22c55e; border: none;">
                     <i class="fab fa-whatsapp fs-5"></i>
                     Chat Langsung WhatsApp
                 </a>
 
-                <!-- 4. Katalog Menu Area -->
+                <!-- 4. Katalog Menu -->
                 <h6 class="fw-bold mb-3 d-flex align-items-center gap-2" style="color: #1f2937;">
                     <i class="fas fa-book text-primary"></i>
                     Katalog Produk / Menu
