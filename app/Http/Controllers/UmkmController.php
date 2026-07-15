@@ -28,7 +28,7 @@ class UmkmController extends Controller
             'jasa/service' => 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80',
             'kuliner' => 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80',
             'perdagangan' => 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80',
-            'default' => 'images/umkm/default.svg',
+            'default' => 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80', // Default diganti ke link agar tidak pecah
         ];
     }
 
