@@ -2,86 +2,89 @@
 
 @section('content')
 <div class="container py-4">
-    <div class="umkm-modal mx-auto">
-    <div class="card p-0 mb-4 border-0 shadow-sm umkm-hero" style="background: linear-gradient(135deg, #7c3aed, #22d3ee); color: #fff; overflow: hidden; position: relative;">
-        <div class="top-square"></div>
-        <div class="row align-items-center">
-            <div class="col-lg-7">
-                <div class="d-flex align-items-center mb-2">
-                    <img src="{{ preg_match('/^https?:\/\//', $categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default']) ? ($categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default']) : asset($categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default']) }}" alt="" class="avatar me-3">
-                    <div>
-                        <h4 class="mb-0 fw-bold">{{ $umkm->nama }}</h4>
-                        <small class="opacity-85">{{ $umkm->kategori }} • RT {{ Auth::user()->rt_number ?? '00' }}</small>
-                    </div>
-                </div>
-                <p class="mb-1">{{ $umkm->deskripsi ?? 'Deskripsi usaha belum tersedia.' }}</p>
-                <p class="mb-0 opacity-75">Pemilik: {{ $umkm->pemilik ?? 'Tidak tercantum' }} • {{ $umkm->alamat ?? '-' }}</p>
-            </div>
-            <div class="col-lg-5 mt-4 mt-lg-0">
-                <div class="rounded-4 overflow-hidden shadow-lg" style="min-height: 280px; background: url('{{ preg_match('/^https?:\/\//', $categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default']) ? $categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default'] : asset($categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default']) }}') center/cover no-repeat;"></div>
-            </div>
-        </div>
-    </div>
+    <!-- Bikin container lebih kecil dan ke tengah biar mirip tampilan modal/card -->
+    <div class="col-lg-8 col-xl-7 mx-auto">
+        <div class="card border-0 shadow-lg rounded-4 overflow-hidden mb-5" style="background-color: #fff;">
 
-    <div class="row g-4">
-        <div class="col-lg-8">
-                <div class="card p-4 shadow-sm border-0 mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-4">
+            <!-- 1. Header Area (Ungu) -->
+            <div class="p-3" style="background-color: #8b5cf6; color: #fff;">
+                <div class="d-flex align-items-center">
+                    <img src="{{ preg_match('/^https?:\/\//', $categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default']) ? ($categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default']) : asset($categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default']) }}"
+                         alt="Logo UMKM"
+                         class="rounded-3 me-3"
+                         style="width: 55px; height: 55px; object-fit: cover; border: 2px solid rgba(255,255,255,0.5);">
                     <div>
-                        <h5 class="fw-bold mb-1">Katalog Produk / Menu</h5>
-                        <p class="text-muted mb-0">Pilih produk atau layanan favorit, lalu chat penjual langsung via WhatsApp.</p>
+                        <h5 class="mb-0 fw-bold">{{ $umkm->nama }}</h5>
+                        <small style="opacity: 0.85;">{{ $umkm->kategori }} • RT {{ Auth::user()->rt_number ?? '00' }}</small>
                     </div>
-                    <a href="{{ $whatsappUrl }}" target="_blank" class="btn whatsapp-btn d-inline-flex align-items-center gap-2 px-4 py-2">
-                        <i class="fab fa-whatsapp"></i>
-                        Chat Langsung WhatsApp
-                    </a>
                 </div>
-                <div class="row g-3">
+            </div>
+
+            <!-- 2. Banner Image Area (Full Width) -->
+            @php
+                $bannerImage = preg_match('/^https?:\/\//', $categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default']) ? $categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default'] : asset($categoryImages[strtolower(trim($umkm->kategori ?? 'default'))] ?? $categoryImages['default']);
+            @endphp
+            <img src="{{ $bannerImage }}" class="w-100" style="height: 220px; object-fit: cover;" alt="Banner Utama">
+
+            <!-- 3. Detail Info Area (Putih) -->
+            <div class="card-body p-4">
+                <p class="mb-4" style="color: #4b5563; font-size: 0.95rem;">
+                    {{ $umkm->deskripsi ?? 'Deskripsi usaha belum tersedia.' }}
+                </p>
+
+                <!-- Alamat & Pemilik (Kiri - Kanan) -->
+                <div class="row mb-4" style="color: #6b7280; font-size: 0.9rem;">
+                    <div class="col-sm-6 mb-2 mb-sm-0 d-flex align-items-start">
+                        <i class="fas fa-map-marker-alt me-2 mt-1" style="color: #ef4444;"></i>
+                        <span>{{ $umkm->alamat ?? '-' }}</span>
+                    </div>
+                    <div class="col-sm-6 d-flex align-items-start">
+                        <i class="far fa-user me-2 mt-1" style="color: #6366f1;"></i>
+                        <span>Pemilik: <strong style="color: #1f2937;">{{ strtoupper($umkm->pemilik ?? 'Tidak tercantum') }}</strong></span>
+                    </div>
+                </div>
+
+                <!-- Tombol WA Utama -->
+                <a href="{{ $whatsappUrl }}" target="_blank" class="btn btn-success d-inline-flex align-items-center gap-2 mb-4 px-3 py-2 rounded-3 fw-medium" style="background-color: #22c55e; border: none;">
+                    <i class="fab fa-whatsapp fs-5"></i>
+                    Chat Langsung WhatsApp
+                </a>
+
+                <!-- 4. Katalog Menu Area -->
+                <h6 class="fw-bold mb-3 d-flex align-items-center gap-2" style="color: #1f2937;">
+                    <i class="fas fa-book text-primary"></i>
+                    Katalog Produk / Menu
+                </h6>
+
+                <div class="d-flex flex-column gap-3">
                     @foreach($menuItems as $item)
-                        <div class="col-12">
-                            <div class="product-card card border-0 shadow-sm rounded-4 overflow-hidden">
-                                <div class="d-flex align-items-center p-3">
-                                    <div class="me-3">
-                                        <div class="product-image" style="background: url('{{ asset($item['image']) }}') center/cover no-repeat;"></div>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <h6 class="fw-bold mb-1">{{ $item['nama'] }}</h6>
-                                        <p class="text-muted mb-2">{{ $item['deskripsi'] }}</p>
-                                    </div>
-                                    <div class="text-end">
-                                        <div class="mb-2 fw-bold price-text">{{ $item['harga'] }}</div>
-                                        <a href="{{ $whatsappUrl }}" target="_blank" class="btn order-btn d-inline-flex align-items-center gap-2">
-                                            <i class="fab fa-whatsapp"></i>
-                                            Order
-                                        </a>
-                                    </div>
+                        <div class="card border rounded-4 shadow-sm p-3" style="border-color: #f3f4f6 !important;">
+                            <div class="d-flex align-items-center">
+                                <!-- Foto Makanan -->
+                                <div class="me-3">
+                                    <div style="width: 70px; height: 70px; border-radius: 12px; background: url('{{ asset($item['image']) }}') center/cover no-repeat; border: 1px solid #e5e7eb;"></div>
+                                </div>
+
+                                <!-- Info Makanan -->
+                                <div class="flex-grow-1">
+                                    <h6 class="fw-bold mb-1" style="color: #1f2937;">{{ $item['nama'] }}</h6>
+                                    <small class="d-block mb-1" style="color: #9ca3af;">{{ $item['deskripsi'] }}</small>
+                                    <div class="fw-bold" style="color: #6366f1;">{{ $item['harga'] }}</div>
+                                </div>
+
+                                <!-- Tombol Order -->
+                                <div class="ms-2">
+                                    <a href="{{ $whatsappUrl }}" target="_blank" class="btn btn-success btn-sm d-inline-flex align-items-center gap-1 px-3 rounded-pill" style="background-color: #22c55e; border: none; font-weight: 500;">
+                                        <i class="fab fa-whatsapp"></i> Order
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     @endforeach
                 </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card p-4 shadow-sm border-0">
-                <h5 class="fw-bold mb-3">Detail Kontak</h5>
-                <p class="mb-2"><strong>Telepon:</strong> {{ $umkm->telepon ?? '-' }}</p>
-                <p class="mb-2"><strong>Alamat:</strong> {{ $umkm->alamat ?? '-' }}</p>
-                <p class="mb-0"><strong>Kategori:</strong> {{ $umkm->kategori }}</p>
+
             </div>
         </div>
     </div>
-    </div>
-</div>
 </div>
 @endsection
-
-@push('styles')
-@extends('layouts.app')
-
-@section('content')
-    <div class="container py-4">
-        @include('umkm._embed')
-    </div>
-@endsection
-        border-radius: 16px 16px 0 0;
