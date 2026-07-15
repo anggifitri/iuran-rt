@@ -58,11 +58,21 @@
 
                 <div class="d-flex flex-column gap-3">
                     @foreach($menuItems as $item)
+                       <div class="d-flex flex-column gap-3">
+                    @foreach($menuItems as $item)
                         <div class="card border rounded-4 shadow-sm p-3" style="border-color: #f3f4f6 !important;">
                             <div class="d-flex align-items-center">
                                 <!-- Foto Makanan -->
                                 <div class="me-3">
-                                    <div style="width: 70px; height: 70px; border-radius: 12px; background: url('{{ asset($item['image']) }}') center/cover no-repeat; border: 1px solid #e5e7eb;"></div>
+                                    @php
+                                        // Logika pengecekan gambar:
+                                        // Kalau di database ada nama file gambarnya, pakai itu.
+                                        // Kalau kosong, otomatis bikin gambar inisial dari nama menu (kayak foto profil).
+                                        $menuImage = !empty($item['image'])
+                                            ? asset('images/menu/' . $item['image'])
+                                            : 'https://ui-avatars.com/api/?name=' . urlencode($item['nama']) . '&background=f3f4f6&color=6b7280&size=100';
+                                    @endphp
+                                    <div style="width: 70px; height: 70px; border-radius: 12px; background: url('{{ $menuImage }}') center/cover no-repeat; border: 1px solid #e5e7eb;"></div>
                                 </div>
 
                                 <!-- Info Makanan -->
@@ -74,7 +84,7 @@
 
                                 <!-- Tombol Order -->
                                 <div class="ms-2">
-                                    <a href="{{ $whatsappUrl }}" target="_blank" class="btn btn-success btn-sm d-inline-flex align-items-center gap-1 px-3 rounded-pill" style="background-color: #22c55e; border: none; font-weight: 500;">
+                                    <a href="{{ $whatsappUrl }}&text=Halo,%20saya%20mau%20pesan%20{{ urlencode($item['nama']) }}" target="_blank" class="btn btn-success btn-sm d-inline-flex align-items-center gap-1 px-3 rounded-pill" style="background-color: #22c55e; border: none; font-weight: 500;">
                                         <i class="fab fa-whatsapp"></i> Order
                                     </a>
                                 </div>
