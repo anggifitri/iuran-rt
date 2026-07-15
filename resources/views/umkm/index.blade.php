@@ -80,9 +80,9 @@
                                     <p class="mb-1"><strong>Pemilik:</strong> {{ $item->pemilik ?? 'Tidak tercantum' }}</p>
                                     <p class="mb-1"><strong>Telepon:</strong> {{ $item->telepon ?? '-' }}</p>
                                     <p class="mb-0"><strong>Alamat:</strong> {{ $item->alamat ?? '-' }}</p>
-                                    <div class="mt-4">
-                                        <a href="{{ route('umkm.show', $item) }}" class="btn btn-purple">Lihat Selengkapnya</a>
-                                    </div>
+                                        <div class="mt-4">
+                                            <a href="#" data-url="{{ route('umkm.show', $item) }}?embed=1" class="btn btn-purple open-umkm">Kunjungi</a>
+                                        </div>
                                 </div>
                             </div>
                         </div>
@@ -103,6 +103,53 @@
             </div>
         </div>
     @endif
+
+    <!-- Modal container for UMKM embed -->
+    <div class="modal fade" id="umkmModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content" style="background: transparent; border: none; box-shadow: none;">
+          <div class="modal-body p-0">
+            <div id="umkmModalContent"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    @push('styles')
+    <style>
+      .modal-backdrop.show { background-color: rgba(0,0,0,0.35); }
+      #umkmModal .modal-content { background: transparent; }
+      #umkmModal .modal-body { padding: 0 20px 40px 20px; }
+      /* ensure underlying page still visible through modal corners */
+      #umkmModal .umkm-modal-content { background: rgba(255,255,255,0.96); border-radius: 14px; padding: 18px; }
+      @media (max-width: 576px) { #umkmModal .modal-dialog { margin: 12px; } }
+    </style>
+    @endpush
+
+    @push('scripts')
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.open-umkm').forEach(function(el){
+            el.addEventListener('click', function(e){
+                e.preventDefault();
+                var url = el.getAttribute('data-url');
+                if (!url) return;
+                fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                    .then(function(r){ return r.text(); })
+                    .then(function(html){
+                        var container = document.getElementById('umkmModalContent');
+                        container.innerHTML = '<div class="umkm-modal-content">'+html+'<\/div>';
+                        var modal = new bootstrap.Modal(document.getElementById('umkmModal'));
+                        modal.show();
+                        // close when clicking the top-square inside embed
+                        var top = container.querySelector('.top-square');
+                        if (top) top.addEventListener('click', function(){ modal.hide(); });
+                    }).catch(function(err){ console.error(err); });
+            });
+        });
+    });
+    </script>
+    @endpush
 
     <div class="card p-3 mb-4 shadow-sm umkm-search-card border-0">
         <div class="row g-3 align-items-center">
@@ -163,7 +210,7 @@
                                 <p class="mb-2"><i class="fas fa-map-marker-alt me-2"></i>{{ $usaha->alamat ?? '-' }}</p>
                                 <p class="mb-0"><i class="fas fa-phone me-2"></i>{{ $usaha->telepon ?? '-' }}</p>
                             </div>
-                            <a href="{{ route('umkm.show', $usaha) }}" class="btn btn-purple w-100">Kunjungi</a>
+                            <a href="#" data-url="{{ route('umkm.show', $usaha) }}?embed=1" class="btn btn-purple w-100 open-umkm">Kunjungi</a>
                         </div>
                     </div>
                 </div>

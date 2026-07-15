@@ -57,13 +57,13 @@ class UmkmController extends Controller
 
         $totalUsaha = $usahas->count();
         $totalKategori = count($categories);
-        $featuredUsaha = Umkm::count();
+        $featuredUsaha = Umkm::all()->count();
         $featuredItems = Umkm::orderBy('created_at', 'desc')->take(6)->get();
 
         return view('umkm.index', compact('usahas', 'categories', 'totalUsaha', 'totalKategori', 'featuredUsaha', 'featuredItems', 'categoryImages'));
     }
 
-    public function show(Umkm $umkm)
+    public function show(Request $request, Umkm $umkm)
     {
         $categoryImages = $this->getUmkmCategoryImages();
         $menuItems = $this->getUmkmMenuItems($umkm);
@@ -71,6 +71,10 @@ class UmkmController extends Controller
             $umkm->telepon,
             "Halo%2C%20saya%20ingin%20order%20dari%20usaha%20{$umkm->nama}%20(%20Kategori%20{$umkm->kategori}%20)."
         );
+
+        if ($request->filled('embed') || $request->ajax()) {
+            return view('umkm._embed', compact('umkm', 'categoryImages', 'menuItems', 'whatsappUrl'));
+        }
 
         return view('umkm.show', compact('umkm', 'categoryImages', 'menuItems', 'whatsappUrl'));
     }
@@ -113,34 +117,34 @@ class UmkmController extends Controller
         $defaultImage = 'images/umkm/product.svg';
         $itemsByCategory = [
             'jasa' => [
-                ['nama' => 'Konsultasi Branding', 'deskripsi' => 'Sesi strategi brand dan visual identity.', 'harga' => 'Rp 250.000', 'image' => $defaultImage],
-                ['nama' => 'Desain Konten Sosial', 'deskripsi' => 'Konten promosi Instagram dan Facebook.', 'harga' => 'Rp 175.000', 'image' => $defaultImage],
-                ['nama' => 'Foto Produk', 'deskripsi' => 'Foto produk aesthetic untuk katalog online.', 'harga' => 'Rp 150.000', 'image' => $defaultImage],
+                ['nama' => 'Konsultasi Branding', 'deskripsi' => 'Sesi strategi brand dan visual identity.', 'harga' => 'Rp 250.000', 'image' => 'images/umkm/products/konsultasi-branding.svg'],
+                ['nama' => 'Desain Konten Sosial', 'deskripsi' => 'Konten promosi Instagram dan Facebook.', 'harga' => 'Rp 175.000', 'image' => 'images/umkm/products/desain-konten-sosial.svg'],
+                ['nama' => 'Foto Produk', 'deskripsi' => 'Foto produk aesthetic untuk katalog online.', 'harga' => 'Rp 150.000', 'image' => 'images/umkm/products/foto-produk.svg'],
             ],
             'kerajinan' => [
-                ['nama' => 'Tas Anyaman', 'deskripsi' => 'Handmade dengan bahan lokal berkualitas.', 'harga' => 'Rp 120.000', 'image' => $defaultImage],
-                ['nama' => 'Gelombang Lilin Aromaterapi', 'deskripsi' => 'Set lilin wangi untuk rumah dan hadiah.', 'harga' => 'Rp 65.000', 'image' => $defaultImage],
-                ['nama' => 'Gelang Kulit', 'deskripsi' => 'Aksesoris stylish untuk sehari-hari.', 'harga' => 'Rp 75.000', 'image' => $defaultImage],
+                ['nama' => 'Tas Anyaman', 'deskripsi' => 'Handmade dengan bahan lokal berkualitas.', 'harga' => 'Rp 120.000', 'image' => 'images/umkm/products/tas-anyaman.svg'],
+                ['nama' => 'Gelombang Lilin Aromaterapi', 'deskripsi' => 'Set lilin wangi untuk rumah dan hadiah.', 'harga' => 'Rp 65.000', 'image' => 'images/umkm/products/lilin-aromaterapi.svg'],
+                ['nama' => 'Gelang Kulit', 'deskripsi' => 'Aksesoris stylish untuk sehari-hari.', 'harga' => 'Rp 75.000', 'image' => 'images/umkm/products/gelang-kulit.svg'],
             ],
             'makanan & minuman' => [
-                ['nama' => 'Es Kopi', 'deskripsi' => 'Kopi susu dingin dengan shot ekstra.', 'harga' => 'Rp 12.000', 'image' => $defaultImage],
-                ['nama' => 'Kue Lapis', 'deskripsi' => 'Kue lapis lembut manis cocok untuk camilan.', 'harga' => 'Rp 10.000', 'image' => $defaultImage],
-                ['nama' => 'Sate Taichan', 'deskripsi' => 'Sate pedas kekinian dengan sambal special.', 'harga' => 'Rp 20.000', 'image' => $defaultImage],
+                ['nama' => 'Es Kopi', 'deskripsi' => 'Kopi susu dingin dengan shot ekstra.', 'harga' => 'Rp 12.000', 'image' => 'images/umkm/products/es-kopi.svg'],
+                ['nama' => 'Kue Lapis', 'deskripsi' => 'Kue lapis lembut manis cocok untuk camilan.', 'harga' => 'Rp 10.000', 'image' => 'images/umkm/products/kue-lapis.svg'],
+                ['nama' => 'Sate Taichan', 'deskripsi' => 'Sate pedas kekinian dengan sambal special.', 'harga' => 'Rp 20.000', 'image' => 'images/umkm/products/sate-taichan.svg'],
             ],
             'jasa/service' => [
-                ['nama' => 'Servis Elektronik', 'deskripsi' => 'Perbaikan cepat untuk alat rumah tangga.', 'harga' => 'Rp 120.000', 'image' => $defaultImage],
-                ['nama' => 'Jasa Cuci Motor', 'deskripsi' => 'Cuci kilat motor dengan detailing sederhana.', 'harga' => 'Rp 35.000', 'image' => $defaultImage],
-                ['nama' => 'Cetak Spanduk', 'deskripsi' => 'Spanduk promosi ukuran custom.', 'harga' => 'Rp 90.000', 'image' => $defaultImage],
+                ['nama' => 'Servis Elektronik', 'deskripsi' => 'Perbaikan cepat untuk alat rumah tangga.', 'harga' => 'Rp 120.000', 'image' => 'images/umkm/products/servis-elektronik.svg'],
+                ['nama' => 'Jasa Cuci Motor', 'deskripsi' => 'Cuci kilat motor dengan detailing sederhana.', 'harga' => 'Rp 35.000', 'image' => 'images/umkm/products/cuci-motor.svg'],
+                ['nama' => 'Cetak Spanduk', 'deskripsi' => 'Spanduk promosi ukuran custom.', 'harga' => 'Rp 90.000', 'image' => 'images/umkm/products/cetak-spanduk.svg'],
             ],
             'kuliner' => [
-                ['nama' => 'Nasi Goreng Spesial', 'deskripsi' => 'Nasi goreng dengan topping ayam dan telur.', 'harga' => 'Rp 22.000', 'image' => $defaultImage],
-                ['nama' => 'Dessert Box', 'deskripsi' => 'Kotak dessert berbagai rasa untuk 2 orang.', 'harga' => 'Rp 55.000', 'image' => $defaultImage],
-                ['nama' => 'Teh Tarik', 'deskripsi' => 'Minuman hangat manis khas warung kopi.', 'harga' => 'Rp 12.000', 'image' => $defaultImage],
+                ['nama' => 'Nasi Goreng Spesial', 'deskripsi' => 'Nasi goreng dengan topping ayam dan telur.', 'harga' => 'Rp 22.000', 'image' => 'images/umkm/products/nasi-goreng-spesial.svg'],
+                ['nama' => 'Dessert Box', 'deskripsi' => 'Kotak dessert berbagai rasa untuk 2 orang.', 'harga' => 'Rp 55.000', 'image' => 'images/umkm/products/dessert-box.svg'],
+                ['nama' => 'Teh Tarik', 'deskripsi' => 'Minuman hangat manis khas warung kopi.', 'harga' => 'Rp 12.000', 'image' => 'images/umkm/products/teh-tarik.svg'],
             ],
             'perdagangan' => [
-                ['nama' => 'Paket Hemat', 'deskripsi' => 'Pilihan kebutuhan sehari-hari lengkap.', 'harga' => 'Rp 80.000', 'image' => $defaultImage],
-                ['nama' => 'Souvenir Lokal', 'deskripsi' => 'Pilihan souvenir unik untuk oleh-oleh.', 'harga' => 'Rp 40.000', 'image' => $defaultImage],
-                ['nama' => 'Aksesoris Rumah', 'deskripsi' => 'Pajangan dekoratif untuk interior.', 'harga' => 'Rp 65.000', 'image' => $defaultImage],
+                ['nama' => 'Paket Hemat', 'deskripsi' => 'Pilihan kebutuhan sehari-hari lengkap.', 'harga' => 'Rp 80.000', 'image' => 'images/umkm/products/paket-hemat.svg'],
+                ['nama' => 'Souvenir Lokal', 'deskripsi' => 'Pilihan souvenir unik untuk oleh-oleh.', 'harga' => 'Rp 40.000', 'image' => 'images/umkm/products/souvenir-lokal.svg'],
+                ['nama' => 'Aksesoris Rumah', 'deskripsi' => 'Pajangan dekoratif untuk interior.', 'harga' => 'Rp 65.000', 'image' => 'images/umkm/products/aksesoris-rumah.svg'],
             ],
         ];
 

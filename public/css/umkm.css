@@ -1,0 +1,16 @@
+/* UMKM modal and product styles */
+.umkm-modal { max-width: 980px; }
+.umkm-hero { min-height: 140px; border-radius: 16px 16px 0 0; padding: 22px 28px; }
+.top-square { position: absolute; right: 18px; top: 16px; width: 34px; height: 34px; background: #fff; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); cursor: pointer; }
+.avatar { width: 56px; height: 56px; object-fit: cover; border-radius: 12px; border: 2px solid rgba(255,255,255,0.2); box-shadow: 0 6px 18px rgba(124,58,237,0.12); }
+.whatsapp-btn { background: linear-gradient(90deg, #34d058, #22c55e); color: #fff; border: none; box-shadow: 0 8px 24px rgba(34,197,94,0.18); border-radius: 10px; }
+.product-card { border-radius: 14px; }
+.product-image { width: 84px; height: 84px; border-radius: 12px; background-color: #fff; background-size: cover; background-position: center; box-shadow: 0 6px 18px rgba(15,23,42,0.04); }
+.price-text { color: #6d28d9; font-size: 1rem; }
+.order-btn { background: #22c55e; color: #fff; border: none; border-radius: 10px; padding: 8px 12px; }
+/* Modal appearance */
+.modal-backdrop.show { background-color: rgba(0,0,0,0.35); }
+#umkmModal .modal-content { background: transparent; }
+#umkmModal .modal-body { padding: 0 20px 40px 20px; }
+#umkmModal .umkm-modal-content { background: rgba(255,255,255,0.96); border-radius: 14px; padding: 18px; }
+@media (max-width: 576px) { #umkmModal .modal-dialog { margin: 12px; } }
