@@ -58,28 +58,66 @@
 
             <div id="umkmFeaturedCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
-                    @foreach($featuredItems as $index => $item)
+                    @foreach ($featuredItems as $index => $item)
                         @php
                             $rawCat = strtolower(trim($item->kategori ?? ''));
-                            $coverImages = [
-                                'jasa' => 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80',
-                                'kerajinan' => 'https://images.unsplash.com/photo-1477867082705-47a1d8d462f8?auto=format&fit=crop&w=900&q=80',
-                                'makanan' => 'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=900&q=80',
-                                'perdagangan' => 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80',
-                                'default' => 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80'
+
+                            $imgJasa = [
+                                'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=600&q=80'
+                            ];
+                            $imgKerajinan = [
+                                'https://images.unsplash.com/photo-1477867082705-47a1d8d462f8?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1585806871183-b78cc70f5e1f?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?auto=format&fit=crop&w=600&q=80'
+                            ];
+                            $imgMakanan = [
+                                'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80'
+                            ];
+                            $imgDagang = [
+                                'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1534452203293-494d7ddbf7e0?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=600&q=80'
+                            ];
+                            $imgDefault = [
+                                'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80',
+                                'https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=600&q=80'
                             ];
 
-                            if (strpos($rawCat, 'jasa') !== false) $fSrc = $coverImages['jasa'];
-                            elseif (strpos($rawCat, 'kerajinan') !== false) $fSrc = $coverImages['kerajinan'];
-                            elseif (strpos($rawCat, 'makan') !== false || strpos($rawCat, 'kuliner') !== false) $fSrc = $coverImages['makanan'];
-                            elseif (strpos($rawCat, 'dagang') !== false || strpos($rawCat, 'perdagangan') !== false) $fSrc = $coverImages['perdagangan'];
-                            else $fSrc = $coverImages['default'];
+                            // Gunakan iterasi loop biar gambar selang-seling rapi
+                            $idx = $loop->iteration;
+
+                            if (strpos($rawCat, 'jasa') !== false) $fallback = $imgJasa[$idx % count($imgJasa)];
+                            elseif (strpos($rawCat, 'kerajinan') !== false) $fallback = $imgKerajinan[$idx % count($imgKerajinan)];
+                            elseif (strpos($rawCat, 'makan') !== false || strpos($rawCat, 'kuliner') !== false) $fallback = $imgMakanan[$idx % count($imgMakanan)];
+                            elseif (strpos($rawCat, 'dagang') !== false || strpos($rawCat, 'perdagangan') !== false) $fallback = $imgDagang[$idx % count($imgDagang)];
+                            else $fallback = $imgDefault[$idx % count($imgDefault)];
+
+                            $dbImage = trim($item->cover_image ?? '');
+                            $fSrc = $fallback;
+
+                            if (!empty($dbImage)) {
+                                if (filter_var($dbImage, FILTER_VALIDATE_URL)) {
+                                    $fSrc = $dbImage;
+                                } elseif (file_exists(public_path('storage/' . $dbImage))) {
+                                    $fSrc = asset('storage/' . $dbImage);
+                                }
+                            }
                         @endphp
                         <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                             <div class="row g-3 align-items-center">
                                 <div class="col-lg-5">
                                     <div class="rounded-4 overflow-hidden" style="height: 280px;">
-                                        <img src="{{ $fSrc }}" alt="{{ $item->kategori ?? 'UMKM' }}" class="img-fluid w-100 h-100" style="object-fit: cover; min-height: 280px;">
+                                        <img src="{{ $fSrc }}"
+                                             onerror="this.onerror=null; this.src='{{ $fallback }}';"
+                                             alt="{{ $item->kategori ?? 'UMKM' }}"
+                                             class="img-fluid w-100 h-100"
+                                             style="object-fit: cover; min-height: 280px;">
                                     </div>
                                 </div>
                                 <div class="col-lg-7">
@@ -172,7 +210,7 @@
                     <div class="col-md-4">
                         <select name="kategori" class="form-select">
                             <option value="">Semua Kategori</option>
-                            @foreach($categories as $category)
+                            @foreach ($categories as $category)
                                 <option value="{{ $category }}" {{ request('kategori') === $category ? 'selected' : '' }}>{{ $category }}</option>
                             @endforeach
                         </select>
@@ -192,26 +230,64 @@
         </div>
     @else
         <div class="row g-4">
-            @foreach($usahas as $usaha)
+            @foreach ($usahas as $usaha)
                 @php
                     $rawCat = strtolower(trim($usaha->kategori ?? ''));
-                    $coverImages = [
-                        'jasa' => 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80',
-                        'kerajinan' => 'https://images.unsplash.com/photo-1477867082705-47a1d8d462f8?auto=format&fit=crop&w=900&q=80',
-                        'makanan' => 'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=900&q=80',
-                        'perdagangan' => 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80',
-                        'default' => 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80'
+
+                    $imgJasa = [
+                        'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=600&q=80',
+                        'https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=600&q=80',
+                        'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=600&q=80',
+                        'https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=600&q=80'
+                    ];
+                    $imgKerajinan = [
+                        'https://images.unsplash.com/photo-1477867082705-47a1d8d462f8?auto=format&fit=crop&w=600&q=80',
+                        'https://images.unsplash.com/photo-1585806871183-b78cc70f5e1f?auto=format&fit=crop&w=600&q=80',
+                        'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?auto=format&fit=crop&w=600&q=80'
+                    ];
+                    $imgMakanan = [
+                        'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=600&q=80',
+                        'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80',
+                        'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80',
+                        'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80'
+                    ];
+                    $imgDagang = [
+                        'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=600&q=80',
+                        'https://images.unsplash.com/photo-1534452203293-494d7ddbf7e0?auto=format&fit=crop&w=600&q=80',
+                        'https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=600&q=80'
+                    ];
+                    $imgDefault = [
+                        'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80',
+                        'https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=600&q=80'
                     ];
 
-                    if (strpos($rawCat, 'jasa') !== false) $imgSrc = $coverImages['jasa'];
-                    elseif (strpos($rawCat, 'kerajinan') !== false) $imgSrc = $coverImages['kerajinan'];
-                    elseif (strpos($rawCat, 'makan') !== false || strpos($rawCat, 'kuliner') !== false) $imgSrc = $coverImages['makanan'];
-                    elseif (strpos($rawCat, 'dagang') !== false || strpos($rawCat, 'perdagangan') !== false) $imgSrc = $coverImages['perdagangan'];
-                    else $imgSrc = $coverImages['default'];
+                    $idx = $loop->iteration;
+
+                    if (strpos($rawCat, 'jasa') !== false) $fallback = $imgJasa[$idx % count($imgJasa)];
+                    elseif (strpos($rawCat, 'kerajinan') !== false) $fallback = $imgKerajinan[$idx % count($imgKerajinan)];
+                    elseif (strpos($rawCat, 'makan') !== false || strpos($rawCat, 'kuliner') !== false) $fallback = $imgMakanan[$idx % count($imgMakanan)];
+                    elseif (strpos($rawCat, 'dagang') !== false || strpos($rawCat, 'perdagangan') !== false) $fallback = $imgDagang[$idx % count($imgDagang)];
+                    else $fallback = $imgDefault[$idx % count($imgDefault)];
+
+                    $dbImage = trim($usaha->cover_image ?? '');
+                    $imgSrc = $fallback;
+
+                    if (!empty($dbImage)) {
+                        if (filter_var($dbImage, FILTER_VALIDATE_URL)) {
+                            $imgSrc = $dbImage;
+                        } elseif (file_exists(public_path('storage/' . $dbImage))) {
+                            $imgSrc = asset('storage/' . $dbImage);
+                        }
+                    }
                 @endphp
                 <div class="col-md-6 col-xl-4">
                     <div class="card umkm-card h-100 shadow-sm border-0">
-                        <img src="{{ $imgSrc }}" class="card-img-top" alt="{{ $usaha->kategori ?? 'UMKM' }}" loading="lazy">
+                        <!-- Ini kuncinya: onerror otomatis nyelametin gambar bolong -->
+                        <img src="{{ $imgSrc }}"
+                             onerror="this.onerror=null; this.src='{{ $fallback }}';"
+                             class="card-img-top"
+                             alt="{{ $usaha->kategori ?? 'UMKM' }}"
+                             loading="lazy">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start mb-3">
                                 <span class="badge bg-primary">{{ $usaha->kategori ?? 'Umum' }}</span>

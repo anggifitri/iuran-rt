@@ -117,6 +117,7 @@
         html[data-theme="light"] .form-card input:focus { outline: none; box-shadow: 0 0 0 4px rgba(99,102,241,0.16); border-color: rgba(99,102,241,0.55); }
 
         .form-card button { width: 100%; border-radius: 1rem; padding: 0.95rem 1rem; }
+        .form-card .absolute { z-index: 10; pointer-events: auto; }
 
         html[data-theme="dark"] .form-card .helper { color: #cbd5e1; }
         html[data-theme="light"] .form-card .helper { color: #64748b; }
@@ -231,22 +232,19 @@
                         <div>
                             <label class="text-slate-400 text-xs font-semibold mb-2 block uppercase tracking-wider" style="color: var(--text-secondary);">Password</label>
                             <div class="relative flex items-center">
-                                <input type="password" id="loginPassword" name="password" required
-                                    class="w-full rounded-xl py-3 pl-4 pr-4 border transition-all focus:outline-none"
-                                    style="background-color: rgba(243,246,255,0.95); color: var(--text-primary); border-color: var(--border-color);"
-                                    placeholder="*******">
-                                <button type="button" onclick="toggleLoginPassword()" class="absolute flex items-center focus:outline-none" style="color: #94a3b8; right:-12px; top:50%; transform:translateY(-50%);" tabindex="-1">
-                                    <svg id="loginEyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
-                                        <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
-                                        <line x1="1" y1="1" x2="23" y2="23"/>
-                                    </svg>
-                                    <svg id="loginEyeOffIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                        <circle cx="12" cy="12" r="3"/>
-                                    </svg>
-                                </button>
-                            </div>
+    <input type="password" id="loginPassword" name="password" required
+        class="w-full rounded-xl py-3 pl-4 pr-12 border transition-all focus:outline-none"
+        style="background-color: rgba(243,246,255,0.95); color: var(--text-primary); border-color: var(--border-color);"
+        placeholder="*******">
+
+    <button type="button" onclick="toggleLoginPassword()"
+        class="absolute right-3 flex items-center justify-center focus:outline-none"
+        style="color: #94a3b8;" tabindex="-1">
+        <svg id="loginEyeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+        </svg>
+    </button>
+</div>
                             @error('password')
                                 <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
                             @enderror

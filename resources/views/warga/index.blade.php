@@ -2,82 +2,107 @@
 
 @section('content')
 <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-0">Data Warga (Kepala Keluarga)</h2>
+            <p class="text-muted">Klik pada nama Kepala Keluarga untuk melihat anggota keluarganya.</p>
+        </div>
+        <a href="{{ route('warga.create') }}" class="btn btn-primary shadow-sm"><i class="fas fa-plus me-2"></i>Tambah Warga</a>
+    </div>
+
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show bg-success text-white border-0 mb-4" role="alert">
-            <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+        <div class="alert alert-success border-0 shadow-sm rounded-3">
+            {{ session('success') }}
         </div>
     @endif
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-white fw-bold">Daftar Data Warga</h2>
-        <a href="{{ route('warga.create') }}" class="btn btn-primary px-3 fw-bold">
-            <i class="fas fa-plus me-2"></i>Tambah Warga
-        </a>
-    </div>
-
-    <div class="card shadow border-0 bg-dark text-white">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-dark table-hover mb-0 align-middle">
-                    <thead>
-                            <tr class="border-bottom border-secondary text-secondary">
-                            <th class="py-3 px-4" style="width: 80px;">No</th>
-                            <th class="py-3">Nama</th>
-                            <th class="py-3">Blok Rumah</th>
-                            <th class="py-3">No. KK</th>
-                            <th class="py-3">NIK</th>
-                            <th class="py-3">Gender</th>
-                            <th class="py-3">No. HP</th>
-                            <th class="py-3 text-center" style="width: 200px;">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($wargas as $index => $warga)
-                            <tr class="border-bottom border-transparent">
-                                <td class="py-3 px-4 text-secondary">{{ $wargas->firstItem() + $index }}</td>
-                                <td class="py-3">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <img src="{{ $warga->profile_photo_url }}" alt="Foto {{ $warga->nama }}" width="42" height="42" class="rounded-circle" style="object-fit: cover;">
-                                        <span class="fw-semibold text-white">{{ $warga->nama }}</span>
-                                    </div>
-                                </td>
-                                <td class="py-3 text-light">{{ $warga->blok_rumah }}</td>
-                                <td class="py-3 text-light">{{ $warga->no_kk ?? '-' }}</td>
-                                <td class="py-3 text-light">{{ $warga->nik ?? '-' }}</td>
-                                <td class="py-3 text-light">{{ $warga->gender ?? '-' }}</td>
-                                <td class="py-3 text-light">{{ $warga->nomor_hp ?? '-' }}</td>
-                                <td class="py-3 text-center">
-                                    <div class="d-flex justify-content-center gap-2">
-                                        <a href="{{ route('warga.edit', $warga->id) }}" class="btn btn-sm btn-outline-warning">
-                                            <i class="fas fa-edit"></i> Edit
-                                        </a>
-                                        <form action="{{ route('warga.destroy', $warga->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                <i class="fas fa-trash"></i> Hapus
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="8" class="text-center py-5 text-secondary">
-                                    <i class="fas fa-users-slash fa-2x mb-3 d-block"></i>
-                                    Belum ada data warga.
-                                </td>
-                            </tr>
-                        @endempty
-                    </tbody>
-                </table>
+    <div class="accordion" id="accordionWarga">
+        @if($wargas->isEmpty())
+            <div class="card border-0 shadow-sm rounded-4 p-5 text-center text-muted">
+                <i class="fas fa-users fa-3x mb-3 text-light"></i>
+                <h5>Belum ada data warga terdaftar.</h5>
+                <p>Silakan klik tombol Tambah Warga di atas.</p>
             </div>
-        </div>
-    </div>
+        @else
+            @foreach ($wargas as $kk)
+                <div class="card mb-3 border-0 shadow-sm" style="border-radius: 12px; overflow: hidden;">
+                    <div class="card-header bg-white p-3 d-flex justify-content-between align-items-center"
+                         id="heading{{ $kk->id }}"
+                         data-bs-toggle="collapse"
+                         data-bs-target="#collapse{{ $kk->id }}"
+                         style="cursor: pointer; border-bottom: none;">
 
-    <div class="d-flex justify-content-end mt-4">
-        {{ $wargas->links() }}
+                        <div class="d-flex align-items-center gap-3">
+                            @if($kk->profile_photo)
+                                <img src="{{ asset('storage/' . $kk->profile_photo) }}" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
+                            @else
+                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white" style="width: 50px; height: 50px;">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            @endif
+                            <div>
+                                <h5 class="fw-bold mb-0 text-dark">{{ $kk->nama }}</h5>
+                                <small class="text-muted"><i class="fas fa-map-marker-alt me-1"></i>Blok: {{ $kk->blok_rumah }} | RT {{ $kk->rt_number }} / RW {{ $kk->rw_number }}</small>
+                            </div>
+                        </div>
+
+                        <div class="text-end">
+                            <span class="badge bg-purple rounded-pill mb-1">{{ $kk->anggotaKeluarga->count() }} Anggota Keluarga</span><br>
+                            <form action="{{ route('warga.destroy', $kk->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus data KK beserta anggotanya?')">
+                                @csrf @method('DELETE')
+                                <a href="{{ route('warga.edit', $kk->id) }}" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i> Edit</a>
+                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i> Hapus</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div id="collapse{{ $kk->id }}" class="collapse" aria-labelledby="heading{{ $kk->id }}" data-bs-parent="#accordionWarga">
+                        <div class="card-body bg-light border-top p-0">
+                            <div class="p-3 bg-white border-bottom">
+                                <small class="text-secondary fw-semibold">ALAMAT KK:</small>
+                                <p class="mb-0 small">{{ $kk->alamat }}</p>
+                            </div>
+                            <table class="table table-hover table-borderless mb-0">
+                                <thead class="table-light">
+                                    <tr class="text-muted text-uppercase" style="font-size: 0.75rem;">
+                                        <th class="ps-4">Nama Anggota</th>
+                                        <th>Gender</th>
+                                        <th>Umur</th>
+                                        <th>NIK</th>
+                                        <th class="text-end pe-4">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($kk->anggotaKeluarga as $anggota)
+                                        <tr>
+                                            <td class="ps-4 fw-semibold text-secondary">{{ $anggota->nama }}</td>
+                                            <td>{{ $anggota->gender == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
+                                            <td>{{ $anggota->umur }} Tahun</td>
+                                            <td>{{ $anggota->nik ?? '-' }}</td>
+                                            <td class="text-end pe-4">
+                                                <form action="{{ route('warga.destroy', $anggota->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus anggota ini?')">
+                                                    @csrf @method('DELETE')
+                                                    <a href="{{ route('warga.edit', $anggota->id) }}" class="btn btn-sm btn-link text-primary p-0 me-2"><i class="fas fa-edit"></i></a>
+                                                    <button type="submit" class="btn btn-sm btn-link text-danger p-0 border-0 bg-transparent"><i class="fas fa-trash"></i></button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted py-3">Belum ada anggota keluarga yang terdaftar.</td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        @endif
+
+        <div class="mt-4">
+            {{ $wargas->links() }}
+        </div>
     </div>
 </div>
 @endsection
