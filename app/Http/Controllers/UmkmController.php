@@ -22,14 +22,41 @@ class UmkmController extends Controller
     protected function getUmkmCategoryImages(): array
     {
         return [
-            'jasa' => 'https://images.unsplash.com/photo-1515165562835-cf2d1d5113d6?auto=format&fit=crop&w=900&q=80',
+            'jasa' => 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80',
             'kerajinan' => 'https://images.unsplash.com/photo-1477867082705-47a1d8d462f8?auto=format&fit=crop&w=900&q=80',
             'makanan & minuman' => 'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=900&q=80',
             'jasa/service' => 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80',
-            'kuliner' => 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80',
+            'kuliner' => 'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=900&q=80',
             'perdagangan' => 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80',
-            'default' => 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80', // Default diganti ke link agar tidak pecah
+            'default' => 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80',
         ];
+    }
+
+    public function resolveCoverImage(?string $coverImage, ?string $category): string
+    {
+        if (!empty($coverImage)) {
+            return $coverImage;
+        }
+
+        $normalized = strtolower(trim($category ?? ''));
+
+        if (strpos($normalized, 'jasa') !== false) {
+            return 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80';
+        }
+
+        if (strpos($normalized, 'kerajinan') !== false) {
+            return 'https://images.unsplash.com/photo-1477867082705-47a1d8d462f8?auto=format&fit=crop&w=900&q=80';
+        }
+
+        if (strpos($normalized, 'makan') !== false || strpos($normalized, 'kuliner') !== false) {
+            return 'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=900&q=80';
+        }
+
+        if (strpos($normalized, 'dagang') !== false || strpos($normalized, 'perdagangan') !== false) {
+            return 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80';
+        }
+
+        return 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80';
     }
 
     public function index(Request $request)

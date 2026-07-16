@@ -90,9 +90,9 @@
                     <i class="fas fa-house-chimney" style="color: var(--primary);"></i>
                 </div>
                 <div>
-                    <h5 class="fw-bold mb-2" style="color: var(--primary); font-family: serif; font-style: italic; padding: 0; line-height: 1;">Kas RT</h5>
+                    <h5 class="fw-bold mb-2" style="color: var(--primary); font-family: serif; font-style: italic; padding: 0; line-height: 1;">NexaNest</h5>
 
-                    <p class="mb-0" style="color: var(--primary); font-size: 1.0rem; line-height: 1.4; font-family: 'Times New Roman', Times, serif;">Solusi Pintar Pengelolaan Iuran Anda</p>
+                    <p class="mb-0" style="color: var(--primary); font-size: 1.0rem; line-height: 1.4; font-family: 'Times New Roman', Times, serif;">Platform Digital RW 018 untuk Kas, Surat, Posyandu & UMKM</p>
                 </div>
             </div>
 
@@ -243,7 +243,7 @@
                     <h1 class="fw-bold mb-4">Rp {{ number_format($saldo, 0, ',', '.') }}</h1>
                     <div class="d-flex align-items-center gap-2 px-3 py-2 rounded" style="background: rgba(255,255,255,0.14); width: fit-content;">
                         <i class="fas fa-wallet" style="font-size: 1rem;"></i>
-                        <span class="small">Kas RT Aktif</span>
+                        <span class="small">NexaNest Aktif</span>
                     </div>
                     <div style="position:absolute; right:-20px; top:-20px; width:120px; height:120px; background: rgba(255,255,255,0.12); border-radius: 50%;"></div>
                 </div>

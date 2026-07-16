@@ -16,7 +16,7 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        // 1. Pengumuman 
+        // 1. Pengumuman
         try {
             $pengumuman = Pengumuman::where(function($query) {
                     $query->where('published_at', '<=', now())->orWhereNull('published_at');
@@ -29,7 +29,7 @@ class DashboardController extends Controller
             $pengumuman = collect();
         }
 
-        // 2. Hitung Kas 
+        // 2. Hitung Kas
         try {
             $pemasukan = Pembayaran::where('tipe', 'masuk')->sum('jumlah');
             $pengeluaran = Pembayaran::where('tipe', 'keluar')->sum('jumlah');
@@ -40,14 +40,14 @@ class DashboardController extends Controller
 
         $saldo = $pemasukan - $pengeluaran;
 
-        // 3. Total Warga (Tetap sesuai kodingan lu)
+        // 3. Total Warga
         try {
-            $totalWarga = Warga::count();
+            $totalWarga = User::where('role', 'warga')->count();
         } catch (\Exception $e) {
-            $totalWarga = User::where('role', 'user')->count();
+            $totalWarga = Warga::count();
         }
 
-        // 4. Data untuk Grafik 
+        // 4. Data untuk Grafik
         try {
             // Langkah A: Buat susunan template 6 bulan terakhir dengan nilai default 0
             $templateBulan = collect();
@@ -98,7 +98,7 @@ class DashboardController extends Controller
                         'masuk'       => 0,
                         'keluar'      => 0
                     ]);
-                } 
+                }
 
                 $pembayarans = Pembayaran::where('tanggal', '>=', now()->subMonths(5)->startOfMonth())
                     ->orderBy('tanggal', 'asc')
@@ -146,18 +146,14 @@ class DashboardController extends Controller
             $latestExpenseDate = null;
         }
 
-        // 7. Admin summary untuk fitur baru
-        $newFeatureCounts = [];
-        if ($user->isAdmin()) {
-            $newFeatureCounts = [
-                'surat' => \App\Models\Surat::count(),
-                'pengaduan' => \App\Models\Pengaduan::count(),
-                'posyandu' => \App\Models\Posyandu::count(),
-                'umkm' => \App\Models\Umkm::count(),
-            ];
-        }
-
-        return view('dashboard', compact(
+        // 7. Admin summary untuk fitur baru (DIPATIKAN SEMENTARA AGAR TIDAK ERROR)
+$newFeatureCounts = [
+    'surat' => 0,
+    'pengaduan' => 0,
+    'posyandu' => 0,
+    'umkm' => 0,
+];
+return view('dashboard', compact(
             'user', 'pengumuman', 'pemasukan',
             'pengeluaran', 'saldo', 'totalWarga', 'chartData',
             'maleCount', 'femaleCount', 'latestExpenseAmount', 'latestExpenseDate',
@@ -165,3 +161,4 @@ class DashboardController extends Controller
         ));
     }
 }
+

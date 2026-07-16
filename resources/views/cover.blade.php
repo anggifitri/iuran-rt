@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selamat Datang — Kas RT</title>
+    <title>Selamat Datang — NexaNest</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <style>
@@ -248,7 +248,7 @@
                 </svg>
             </div>
 
-            <h1 class="hero-title text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-4 fade-up delay-2" style="color: var(--text-primary);">Kas RT — Solusi Iuran<br class="hidden md:block">Warga & Pengurus</h1>
+            <h1 class="hero-title text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-4 fade-up delay-2" style="color: var(--text-primary);">NexaNest — Solusi Iuran<br class="hidden md:block">Warga & Pengurus</h1>
             <p class="text-slate-300 max-w-xl text-lg mb-8 fade-up delay-3" style="color: var(--text-secondary);">Kelola iuran, pembayaran, dan laporan RT Anda dengan aman dan efisien. Antarmuka modern, ringkas, dan mudah dipahami untuk pengurus dan warga.</p>
 
             <div class="flex flex-wrap gap-4 items-center fade-up delay-4">

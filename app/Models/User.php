@@ -37,7 +37,17 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return $this->role === 'admin';
+        return in_array($this->role, ['admin', 'admin_rt', 'admin_rw'], true);
+    }
+
+    public function isAdminRt()
+    {
+        return $this->role === 'admin_rt';
+    }
+
+    public function isAdminRw()
+    {
+        return $this->role === 'admin_rw';
     }
 
     public function isBendahara()

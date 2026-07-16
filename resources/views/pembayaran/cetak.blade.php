@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Keuangan Kas RT</title>
+    <title>Laporan Keuangan NexaNest</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -112,7 +112,7 @@
     </div>
 
     <div class="header">
-        <h2>Laporan Keuangan Kas RT</h2>
+        <h2>Laporan Keuangan NexaNest</h2>
         <p>Rekapitulasi Transaksi Pemasukan dan Pengeluaran Kas Warga</p>
     </div>
 

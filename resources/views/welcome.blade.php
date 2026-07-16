@@ -7,7 +7,7 @@
     <div class="col-lg-6 mx-auto text-center">
         <div class="welcome-section">
             <i class="fas fa-home fa-4x mb-4 text-primary"></i>
-            <h1 class="display-4 fw-bold mb-3">Kas RT</h1>
+            <h1 class="display-4 fw-bold mb-3">NexaNest</h1>
             <p class="lead mb-4">Solusi pintar untuk mengelola iuran warga secara digital</p>
             <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
                 <a href="{{ route('login') }}" class="btn btn-primary btn-lg btn-animated px-4">

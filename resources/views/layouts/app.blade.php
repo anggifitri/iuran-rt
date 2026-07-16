@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Kas RT')</title>
+    <title>@yield('title', 'NexaNest')</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -19,32 +19,37 @@
     <style>
 
         :root {
-            --bg-body: #0F172A;
-            --bg-card: #1E293B;
-            --primary: #818CF8;
-            --primary-hover: #6366F1;
-            --text-main: #F8FAFC;
-            --text-muted: #94A3B8;
-            --border-color: #334155;
+            --bg-main: linear-gradient(135deg, #030712, #0b1528);
+            --bg-card: #111c30;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-pink: #f472b6;
+            --border-color: #1e293b;
+            --bg-body: #030712;
+            --primary: #38bdf8;
+            --primary-hover: #0ea5e9;
         }
 
-        /* Light Mode */
         html[data-theme="light"] {
-            --bg-body: #ffffff;
-            --bg-card: #f8fafc;
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
+            --bg-main: linear-gradient(135deg, #e0f2fe, #fce7f3);
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --accent: #3b82f6;
+            --accent-pink: #ec4899;
             --border-color: #e2e8f0;
+            --bg-body: #f8fafc;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
         }
 
         body {
-            background-color: var(--bg-body);
+            background: var(--bg-main);
             min-height: 100vh;
             font-family: 'Inter', sans-serif;
             color: var(--text-main);
-            transition: background-color 0.3s, color 0.3s;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         .navbar {
@@ -52,6 +57,34 @@
             border-bottom: 1px solid var(--border-color);
             padding: 15px 0;
             transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .card,
+        .table,
+        .form-control,
+        .form-select,
+        .modal-content,
+        .input-group-text {
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            border-color: var(--border-color);
+        }
+
+        .table th,
+        .table td,
+        .form-control,
+        .form-select,
+        .input-group-text {
+            color: var(--text-main);
+        }
+
+        .table thead th {
+            color: var(--text-muted);
+            border-bottom-color: var(--border-color);
+        }
+
+        .modal-content {
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.25);
         }
 
         .navbar-brand {
@@ -117,18 +150,13 @@
         }
 
         .sidebar {
-            background: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.95));
+            background: var(--bg-card);
             padding: 24px;
             border-radius: 24px;
-            border: 1px solid rgba(148, 163, 184, 0.15);
+            border: 1px solid var(--border-color);
             min-height: calc(100vh - 110px);
             position: sticky;
             top: 20px;
-        }
-
-        html[data-theme="light"] .sidebar {
-            background: linear-gradient(180deg, rgba(248, 250, 252, 0.95), rgba(241, 245, 249, 0.98));
-            border: 1px solid rgba(99, 102, 241, 0.1);
         }
 
         .sidebar .brand {
@@ -212,29 +240,17 @@
         }
 
         .alert-success {
-            background-color: rgba(6, 95, 70, 0.4);
-            color: #34D399;
-            border: 1px solid #065F46;
+            background-color: rgba(56, 189, 248, 0.16);
+            color: var(--accent);
+            border: 1px solid rgba(56, 189, 248, 0.24);
             border-radius: 12px;
-        }
-
-        html[data-theme="light"] .alert-success {
-            background-color: rgba(16, 185, 129, 0.1);
-            color: #059669;
-            border: 1px solid #d1fae5;
         }
 
         .alert-danger {
-            background-color: rgba(153, 27, 27, 0.4);
-            color: #F87171;
-            border: 1px solid #991B1B;
+            background-color: rgba(244, 114, 182, 0.16);
+            color: var(--accent-pink);
+            border: 1px solid rgba(244, 114, 182, 0.24);
             border-radius: 12px;
-        }
-
-        html[data-theme="light"] .alert-danger {
-            background-color: rgba(239, 68, 68, 0.1);
-            color: #dc2626;
-            border: 1px solid #fee2e2;
         }
 
         .btn-close {
@@ -251,7 +267,7 @@
             top: 12px;
             right: 12px;
             z-index: 1100;
-            background: linear-gradient(135deg, var(--primary), #7c3aed);
+            background: linear-gradient(135deg, var(--accent), var(--accent-pink));
             border: none;
             border-radius: 50%;
             width: 40px;
@@ -266,7 +282,7 @@
         }
 
         html[data-theme="dark"] .theme-toggle-btn {
-            background: linear-gradient(135deg, #818CF8, #a78bfa);
+            background: linear-gradient(135deg, var(--accent), var(--accent-pink));
         }
 
         .theme-toggle-btn:hover {
@@ -288,7 +304,7 @@
         <div class="container">
             <a class="navbar-brand fw-bold" href="{{ route('dashboard') }}">
                 <i class="fas fa-hand-holding-usd me-2" style="color: var(--primary);"></i>
-                Kas RT
+                NexaNest
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>

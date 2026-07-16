@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Laporan Bulanan Kas RT</title>
+    <title>Laporan Bulanan NexaNest</title>
     <style>
         body { font-family: Arial, sans-serif; color: #333; line-height: 1.5; padding: 20px; }
         .header { text-align: center; margin-bottom: 25px; border-bottom: 3px double #000; padding-bottom: 10px; }

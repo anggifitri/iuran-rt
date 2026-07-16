@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kas RT — Masuk</title>
+    <title>NexaNest — Masuk</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <style>
@@ -204,7 +204,7 @@
                 </svg>
             </div>
 
-            <h2 class="brand-title text-5xl font-bold tracking-wide italic -mt-1" style="color: var(--accent);">Kas RT</h2>
+            <h2 class="brand-title text-5xl font-bold tracking-wide italic -mt-1" style="color: var(--accent);">NexaNest</h2>
             <p class="mt-1 text-slate-400 text-xs tracking-widest uppercase" style="color: var(--text-secondary);">Solusi Pintar Pengelolaan Iuran</p>
         </div>
         </div>

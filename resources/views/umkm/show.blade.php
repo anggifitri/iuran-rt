@@ -1,19 +1,7 @@
 @if(request('embed'))
     <div class="card border-0 shadow-sm position-relative overflow-hidden rounded-4">
         @php
-            $rawCat = strtolower(trim($usaha->kategori ?? ''));
-            $coverImages = [
-                'jasa' => 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80',
-                'kerajinan' => 'https://images.unsplash.com/photo-1477867082705-47a1d8d462f8?auto=format&fit=crop&w=900&q=80',
-                'makanan' => 'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=900&q=80',
-                'perdagangan' => 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80',
-                'default' => 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80'
-            ];
-            if (strpos($rawCat, 'jasa') !== false) $imgSrc = $coverImages['jasa'];
-            elseif (strpos($rawCat, 'kerajinan') !== false) $imgSrc = $coverImages['kerajinan'];
-            elseif (strpos($rawCat, 'makan') !== false || strpos($rawCat, 'kuliner') !== false) $imgSrc = $coverImages['makanan'];
-            elseif (strpos($rawCat, 'dagang') !== false || strpos($rawCat, 'perdagangan') !== false) $imgSrc = $coverImages['perdagangan'];
-            else $imgSrc = $coverImages['default'];
+            $imgSrc = app(\App\Http\Controllers\UmkmController::class)->resolveCoverImage($usaha->cover_image ?? null, $usaha->kategori ?? null);
         @endphp
         <div style="height: 240px; background: url('{{ $imgSrc }}') center/cover no-repeat;">
             <button type="button" class="btn btn-light rounded-circle position-absolute top-square" style="top: 15px; right: 15px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; z-index: 10;">
@@ -52,19 +40,7 @@
         </div>
         <div class="card border-0 shadow-sm overflow-hidden rounded-4">
             @php
-                $rawCat = strtolower(trim($usaha->kategori ?? ''));
-                $coverImages = [
-                    'jasa' => 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=900&q=80',
-                    'kerajinan' => 'https://images.unsplash.com/photo-1477867082705-47a1d8d462f8?auto=format&fit=crop&w=900&q=80',
-                    'makanan' => 'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=900&q=80',
-                    'perdagangan' => 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=900&q=80',
-                    'default' => 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=80'
-                ];
-                if (strpos($rawCat, 'jasa') !== false) $imgSrc = $coverImages['jasa'];
-                elseif (strpos($rawCat, 'kerajinan') !== false) $imgSrc = $coverImages['kerajinan'];
-                elseif (strpos($rawCat, 'makan') !== false || strpos($rawCat, 'kuliner') !== false) $imgSrc = $coverImages['makanan'];
-                elseif (strpos($rawCat, 'dagang') !== false || strpos($rawCat, 'perdagangan') !== false) $imgSrc = $coverImages['perdagangan'];
-                else $imgSrc = $coverImages['default'];
+                $imgSrc = app(\App\Http\Controllers\UmkmController::class)->resolveCoverImage($usaha->cover_image ?? null, $usaha->kategori ?? null);
             @endphp
             <div style="height: 350px; background: url('{{ $imgSrc }}') center/cover no-repeat;"></div>
             <div class="card-body p-4">

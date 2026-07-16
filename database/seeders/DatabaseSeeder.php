@@ -67,7 +67,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // --- DATA WARGA KAS RT (DIPERTAHANKAN) ---
+        // --- DATA WARGA NexaNest (DIPERTAHANKAN) ---
         $dataWarga = [
             ['nama' => 'Abel', 'blok_rumah' => 'A1', 'nomor_hp' => '08111'],
             ['nama' => 'Araa', 'blok_rumah' => 'A2', 'nomor_hp' => '08112'],

@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Kas RT')
+@section('title', 'NexaNest')
 
 @section('content')
 <div class="row">
     <div class="col-md-6 mx-auto">
         <div class="card">
             <div class="card-header bg-white text-center">
-                <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Laporan Kas RT</h5>
+                <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Laporan NexaNest</h5>
             </div>
             <div class="card-body">
                 <div class="text-center mb-4">
