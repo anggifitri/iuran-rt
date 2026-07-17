@@ -33,15 +33,9 @@
                          style="cursor: pointer; border-bottom: none;">
 
                         <div class="d-flex align-items-center gap-3">
-                            @if($kk->profile_photo)
-                                <img src="{{ asset('storage/' . $kk->profile_photo) }}" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;">
-                            @else
-                                <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center text-white" style="width: 50px; height: 50px;">
-                                    <i class="fas fa-user"></i>
-                                </div>
-                            @endif
+                            <img src="{{ $kk->profile_photo_url }}" class="rounded-circle shadow-sm" style="width: 50px; height: 50px; object-fit: cover;">
                             <div>
-                                <h5 class="fw-bold mb-0 text-dark">{{ $kk->nama }}</h5>
+                                <h5 class="fw-bold mb-0" style="color: var(--text-main);">{{ $kk->nama }}</h5>
                                 <small class="text-muted"><i class="fas fa-map-marker-alt me-1"></i>Blok: {{ $kk->blok_rumah }} | RT {{ $kk->rt_number }} / RW {{ $kk->rw_number }}</small>
                             </div>
                         </div>
@@ -57,43 +51,79 @@
                     </div>
 
                     <div id="collapse{{ $kk->id }}" class="collapse" aria-labelledby="heading{{ $kk->id }}" data-bs-parent="#accordionWarga">
-                        <div class="card-body bg-light border-top p-0">
-                            <div class="p-3 bg-white border-bottom">
-                                <small class="text-secondary fw-semibold">ALAMAT KK:</small>
-                                <p class="mb-0 small">{{ $kk->alamat }}</p>
+                        <div class="card-body bg-light border-top p-4">
+                            <div class="row g-3">
+                                @php
+                                    // Menggabungkan Kepala Keluarga itu sendiri dan anggotanya untuk ditampilkan lengkap
+                                    $allMembers = collect([$kk])->concat($kk->anggotaKeluarga);
+                                @endphp
+                                @foreach ($allMembers as $anggota)
+                                    <div class="col-md-6 col-12">
+                                        <div class="card border shadow-sm h-100" style="border-radius: 14px; background-color: var(--bg-card); border-color: var(--border-color) !important;">
+                                            <div class="card-body p-3">
+                                                <div class="d-flex align-items-start gap-3">
+                                                    <!-- Foto Profil & Badge Status -->
+                                                    <div class="text-center" style="width: 80px; flex-shrink: 0;">
+                                                        <img src="{{ $anggota->profile_photo_url }}" class="rounded-circle shadow-sm border border-2" style="width: 70px; height: 70px; object-fit: cover; border-color: var(--border-color) !important;">
+                                                        <span class="badge mt-2 px-2 py-1 rounded-pill {{ $anggota->is_kk ? 'bg-primary' : ($anggota->status_hubungan === 'Istri' ? 'bg-success' : 'bg-info') }}" style="font-size: 0.65rem; display: inline-block;">
+                                                            {{ $anggota->status_hubungan }}
+                                                        </span>
+                                                    </div>
+                                                    
+                                                    <!-- Detail Data Warga -->
+                                                    <div class="flex-grow-1">
+                                                        <div class="d-flex justify-content-between align-items-start">
+                                                            <h6 class="fw-bold mb-1" style="color: var(--text-main) !important;">{{ $anggota->nama }}</h6>
+                                                            <div>
+                                                                <a href="{{ route('warga.edit', $anggota->id) }}" class="btn btn-sm btn-link text-primary p-0 me-2" title="Edit"><i class="fas fa-edit"></i></a>
+                                                                <form action="{{ route('warga.destroy', $anggota->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus anggota keluarga ini?')">
+                                                                    @csrf @method('DELETE')
+                                                                    <button type="submit" class="btn btn-sm btn-link text-danger p-0 border-0 bg-transparent" title="Hapus"><i class="fas fa-trash"></i></button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                        <hr class="my-2" style="border-color: var(--border-color); opacity: 0.5;">
+                                                        
+                                                        <div class="row g-2" style="font-size: 0.8rem; color: var(--text-muted);">
+                                                            <div class="col-6">
+                                                                <span class="d-block" style="font-size: 0.7rem; opacity: 0.8;">NIK</span>
+                                                                <span class="fw-semibold" style="color: var(--text-main);">{{ $anggota->nik ?? '-' }}</span>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <span class="d-block" style="font-size: 0.7rem; opacity: 0.8;">No. KK</span>
+                                                                <span class="fw-semibold" style="color: var(--text-main);">{{ $anggota->no_kk ?? '-' }}</span>
+                                                            </div>
+                                                            
+                                                            <div class="col-6">
+                                                                <span class="d-block" style="font-size: 0.7rem; opacity: 0.8;">No. HP</span>
+                                                                <span class="fw-semibold" style="color: var(--text-main);">{{ $anggota->nomor_hp ?? '-' }}</span>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <span class="d-block" style="font-size: 0.7rem; opacity: 0.8;">Jenis Kelamin</span>
+                                                                <span class="fw-semibold" style="color: var(--text-main);">{{ $anggota->gender == 'L' ? 'Laki-laki' : 'Perempuan' }}</span>
+                                                            </div>
+                                                            
+                                                            <div class="col-6">
+                                                                <span class="d-block" style="font-size: 0.7rem; opacity: 0.8;">Tanggal Lahir</span>
+                                                                <span class="fw-semibold" style="color: var(--text-main);">{{ $anggota->tanggal_lahir ? \Carbon\Carbon::parse($anggota->tanggal_lahir)->translatedFormat('d F Y') : '-' }} ({{ $anggota->umur }} Thn)</span>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <span class="d-block" style="font-size: 0.7rem; opacity: 0.8;">RT / RW</span>
+                                                                <span class="fw-semibold" style="color: var(--text-main);">RT {{ $anggota->rt_number }} / RW {{ $anggota->rw_number }}</span>
+                                                            </div>
+                                                            
+                                                            <div class="col-12 mt-1">
+                                                                <span class="d-block" style="font-size: 0.7rem; opacity: 0.8;">Alamat</span>
+                                                                <span class="fw-semibold d-block" style="color: var(--text-main); line-height: 1.2;">{{ $anggota->alamat ?? '-' }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
-                            <table class="table table-hover table-borderless mb-0">
-                                <thead class="table-light">
-                                    <tr class="text-muted text-uppercase" style="font-size: 0.75rem;">
-                                        <th class="ps-4">Nama Anggota</th>
-                                        <th>Gender</th>
-                                        <th>Umur</th>
-                                        <th>NIK</th>
-                                        <th class="text-end pe-4">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($kk->anggotaKeluarga as $anggota)
-                                        <tr>
-                                            <td class="ps-4 fw-semibold text-secondary">{{ $anggota->nama }}</td>
-                                            <td>{{ $anggota->gender == 'L' ? 'Laki-laki' : 'Perempuan' }}</td>
-                                            <td>{{ $anggota->umur }} Tahun</td>
-                                            <td>{{ $anggota->nik ?? '-' }}</td>
-                                            <td class="text-end pe-4">
-                                                <form action="{{ route('warga.destroy', $anggota->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus anggota ini?')">
-                                                    @csrf @method('DELETE')
-                                                    <a href="{{ route('warga.edit', $anggota->id) }}" class="btn btn-sm btn-link text-primary p-0 me-2"><i class="fas fa-edit"></i></a>
-                                                    <button type="submit" class="btn btn-sm btn-link text-danger p-0 border-0 bg-transparent"><i class="fas fa-trash"></i></button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center text-muted py-3">Belum ada anggota keluarga yang terdaftar.</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>

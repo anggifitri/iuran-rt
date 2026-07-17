@@ -29,7 +29,18 @@ class Warga extends Model
         'alamat',
     ];
 
-    protected $appends = ['profile_photo_url'];
+    protected $appends = ['profile_photo_url', 'status_hubungan'];
+
+    public function getStatusHubunganAttribute()
+    {
+        if ($this->is_kk) {
+            return 'Kepala Keluarga';
+        }
+        if ($this->gender === 'P' && $this->umur >= 18) {
+            return 'Istri';
+        }
+        return 'Anak';
+    }
 
     public function getProfilePhotoUrlAttribute()
     {

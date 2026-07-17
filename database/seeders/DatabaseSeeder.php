@@ -67,70 +67,13 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // --- DATA WARGA NexaNest (DIPERTAHANKAN & DITAMBAHKAN IS_KK) ---
-        $dataWarga = [
-            ['nama' => 'Abel', 'blok_rumah' => 'A1', 'nomor_hp' => '08111'],
-            ['nama' => 'Araa', 'blok_rumah' => 'A2', 'nomor_hp' => '08112'],
-            ['nama' => 'Adara', 'blok_rumah' => 'B1', 'nomor_hp' => '08113'],
-            ['nama' => 'Sera', 'blok_rumah' => 'B2', 'nomor_hp' => '08114'],
-            ['nama' => 'Fez', 'blok_rumah' => 'C1', 'nomor_hp' => '08115'],
-            ['nama' => 'Faren', 'blok_rumah' => 'C2', 'nomor_hp' => '08116'],
-            ['nama' => 'Albara', 'blok_rumah' => 'D1', 'nomor_hp' => '08117'],
-            ['nama' => 'Aditama', 'blok_rumah' => 'D2', 'nomor_hp' => '08118'],
-        ];
+        // --- DATA WARGA NexaNest ---
+        $this->call(WargaAestheticSeeder::class);
 
-        foreach ($dataWarga as $w) {
-            Warga::create(array_merge($w, [
-                'no_kk' => $generateIdentityNumber(),
-                'nik' => $generateIdentityNumber(),
-                'gender' => $faker->randomElement(['L', 'P']),
-                // INI WAJIB ADA BIAR MUNCUL DI DASHBOARD
-                'is_kk' => true,
-                'tanggal_lahir' => Carbon::now()->subYears(rand(20, 50))->format('Y-m-d'),
-                'rt_number' => '006',
-                'rw_number' => '018',
-                'alamat' => 'KOTA BANDUNG, Provinsi JAWA BARAT',
-                'profile_photo' => 'https://ui-avatars.com/api/?name=' . urlencode($w['nama']) . '&background=random&color=fff&size=128',
-            ]));
-        }
-
-        // Isi No.KK dan NIK untuk semua warga lama yang belum lengkap
-        $rows = DB::select("select id, no_kk, nik, gender from wargas where no_kk is null or nik is null or gender is null");
-        foreach ($rows as $row) {
-            DB::table('wargas')->where('id', $row->id)->update([
-                'no_kk' => $row->no_kk ?: $generateIdentityNumber(),
-                'nik' => $row->nik ?: $generateIdentityNumber(),
-                'gender' => $row->gender ?: $faker->randomElement(['L', 'P']),
-                'is_kk' => 1, // Pastikan jadi Kepala Keluarga
-            ]);
-        }
-
-        $semuaWargaIds = Warga::query()->pluck('id')->toArray(); // Ambil ID 8 warga awal
-
-        // --- NAMBAH 192 WARGA BIAR TOTAL PAS 200 ---
-        for ($i = 1; $i <= 192; $i++) {
-            $namaWarga = $faker->name;
-            $wargaBaru = Warga::create([
-                'nama' => $namaWarga,
-                'blok_rumah' => 'Blok ' . $faker->randomElement(['A', 'B', 'C', 'D']) . ' No. ' . rand(10, 99),
-                'nomor_hp' => '08' . rand(1000000000, 9999999999),
-                'no_kk' => $generateIdentityNumber(),
-                'nik' => $generateIdentityNumber(),
-                'gender' => $faker->randomElement(['L', 'P']),
-
-                // INI KUNCINYA BIAR GAK ERROR DAN MUNCUL
-                'is_kk' => true,
-                'tanggal_lahir' => Carbon::now()->subYears(rand(20, 50))->format('Y-m-d'),
-                'rt_number' => '00' . rand(6, 9),
-                'rw_number' => '018',
-                'alamat' => 'KOTA BANDUNG, Provinsi JAWA BARAT',
-                'profile_photo' => 'https://ui-avatars.com/api/?name=' . urlencode($namaWarga) . '&background=random&color=fff&size=128',
-            ]);
-            $semuaWargaIds[] = $wargaBaru->id; // Kumpulin ID nya
-        }
+        $kkIds = Warga::where('is_kk', true)->pluck('id')->toArray();
 
         // TRANSAKSI OTOMATIS UNTUK SEMUA WARGA (JAN - MEI 2026) DIPERTAHANKAN
-        foreach ($semuaWargaIds as $wargaId) {
+        foreach ($kkIds as $wargaId) {
             for ($bulan = 1; $bulan <= 5; $bulan++) {
                 // 1. Pemasukan Wajib Bulanan (100k)
                 Pembayaran::create([
@@ -160,7 +103,7 @@ class DatabaseSeeder extends Seeder
         }
 
         Pembayaran::create([
-            'warga_id' => 1, // ID 1 ini otomatis mengikat ke warga pertama yaitu 'Abel'
+            'warga_id' => $kkIds[0], // ID dynamic from first KK
             'tipe' => 'masuk',
             'jumlah' => 500000,
             'kategori' => 'Iuran Bulanan',
