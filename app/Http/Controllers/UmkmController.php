@@ -125,7 +125,17 @@ class UmkmController extends Controller
             'telepon' => 'nullable|string|max:50',
             'alamat' => 'nullable|string|max:255',
             'deskripsi' => 'nullable|string|max:2000',
+            'rt_number' => 'required|string|in:006,007,008,009,010',
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        $coverImage = null;
+        if ($request->hasFile('cover_image')) {
+            $coverImage = $request->file('cover_image')->store('umkm_covers', 'public');
+        } else {
+            // Gunakan resolveCoverImage untuk mendapatkan Unsplash URL default sesuai kategori
+            $coverImage = $this->resolveCoverImage(null, $validated['kategori']);
+        }
 
         Umkm::create([
             'nama' => $validated['nama'],
@@ -134,6 +144,8 @@ class UmkmController extends Controller
             'telepon' => $validated['telepon'] ?? null,
             'alamat' => $validated['alamat'] ?? null,
             'deskripsi' => $validated['deskripsi'] ?? null,
+            'rt_number' => $validated['rt_number'],
+            'cover_image' => $coverImage,
         ]);
 
         return redirect()->route('umkm.index')->with('success', 'Data UMKM berhasil disimpan.');

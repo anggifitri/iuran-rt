@@ -14,6 +14,12 @@ return new class extends Migration
             $table->string('title');
             $table->text('content');
             $table->string('status')->default('pending');
+            $table->string('barcode_code')->nullable();
+            $table->string('category')->nullable();
+            $table->string('rt_number')->nullable();
+            $table->string('location_details')->nullable();
+            $table->double('latitude')->nullable();
+            $table->double('longitude')->nullable();
             $table->timestamps();
         });
     }

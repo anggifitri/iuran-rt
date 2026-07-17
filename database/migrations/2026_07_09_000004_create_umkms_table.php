@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('telepon')->nullable();
             $table->string('alamat')->nullable();
             $table->text('deskripsi')->nullable();
+            $table->string('cover_image')->nullable();
+            $table->string('rt_number')->nullable();
             $table->timestamps();
         });
     }

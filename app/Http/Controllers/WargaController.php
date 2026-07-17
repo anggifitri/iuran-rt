@@ -8,15 +8,21 @@ use Illuminate\Support\Facades\Storage;
 
 class WargaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $wargas = Warga::where(function($query) {
-            $query->where('is_kk', true)
-                  ->orWhere('is_kk', 1)
-                  ->orWhere('is_kk', '1');
-        })->with('anggotaKeluarga')->orderBy('nama', 'asc')->paginate(10);
+        $viewMode = $request->input('view', 'family');
 
-        return view('warga.index', compact('wargas'));
+        if ($viewMode === 'table') {
+            $wargas = Warga::orderBy('nama', 'asc')->paginate(20);
+        } else {
+            $wargas = Warga::where(function($query) {
+                $query->where('is_kk', true)
+                      ->orWhere('is_kk', 1)
+                      ->orWhere('is_kk', '1');
+            })->with('anggotaKeluarga')->orderBy('nama', 'asc')->paginate(10);
+        }
+
+        return view('warga.index', compact('wargas', 'viewMode'));
     }
 
     public function create()

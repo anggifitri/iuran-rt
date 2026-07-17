@@ -16,5 +16,7 @@ class Umkm extends Model
         'telepon',
         'alamat',
         'deskripsi',
+        'cover_image',
+        'rt_number',
     ];
 }

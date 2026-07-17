@@ -14,6 +14,12 @@ class Pengaduan extends Model
         'title',
         'content',
         'status',
+        'barcode_code',
+        'category',
+        'rt_number',
+        'location_details',
+        'latitude',
+        'longitude',
     ];
 
     public function user()

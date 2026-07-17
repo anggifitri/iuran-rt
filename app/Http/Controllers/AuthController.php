@@ -46,7 +46,7 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        if (Auth::attempt($credentials, $request->remember)) {
+        if (Auth::attempt($credentials, true)) {
             $request->session()->regenerate();
             return redirect()->intended(route('dashboard'))->with('success', 'Selamat datang kembali!');
         }
@@ -80,7 +80,7 @@ class AuthController extends Controller
             'rt_number' => $request->rt_number
         ]);
 
-        Auth::login($user);
+        Auth::login($user, true);
         return redirect()->route('dashboard')->with('success', 'Pendaftaran berhasil!');
     }
 

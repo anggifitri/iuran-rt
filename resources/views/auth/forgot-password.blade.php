@@ -1,198 +1,557 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lupa Password | NexaNest</title>
+    <title>NexaNest — Atur Ulang Password</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        :root{--accent:#D1A151;--bg-1:#031022;--bg-2:#042e55}
-        body { font-family: 'Plus Jakarta Sans', sans-serif; color: #e6eef6; position: relative; }
-        .bg-animated{background: linear-gradient(180deg,#031022 0%, #041d34 40%, #042e55 100%);background-size:300% 300%;animation: moveGrad 15s ease infinite;}
-        @keyframes moveGrad{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-        .stars{position:absolute;inset:0;pointer-events:none;background:
-            radial-gradient(circle at 12% 18%, rgba(255,255,255,0.9) 1px, transparent 0),
-            radial-gradient(circle at 28% 14%, rgba(255,255,255,0.75) 1px, transparent 0),
-            radial-gradient(circle at 46% 22%, rgba(255,255,255,0.85) 1px, transparent 0),
-            radial-gradient(circle at 63% 12%, rgba(255,255,255,0.8) 1px, transparent 0),
-            radial-gradient(circle at 84% 20%, rgba(255,255,255,0.7) 1px, transparent 0),
-            radial-gradient(circle at 15% 50%, rgba(255,255,255,0.75) 1px, transparent 0),
-            radial-gradient(circle at 36% 58%, rgba(255,255,255,0.9) 1px, transparent 0),
-            radial-gradient(circle at 52% 44%, rgba(255,255,255,0.8) 1px, transparent 0),
-            radial-gradient(circle at 71% 62%, rgba(255,255,255,0.7) 1px, transparent 0),
-            radial-gradient(circle at 90% 55%, rgba(255,255,255,0.85) 1px, transparent 0);
-        background-size: 180px 180px, 160px 160px, 220px 220px, 140px 140px, 240px 240px, 200px 200px, 88px 88px, 130px 130px, 170px 170px, 95px 95px;
-        opacity:.9;
+        :root {
+            --accent: #D1A151;
+            --accent-light: #f59e0b;
+            --bg-1: #020914;
+            --bg-2: #052646;
         }
-        .stars::after{content:'';position:absolute;inset:0;background:
-            radial-gradient(circle at 25% 82%, rgba(255,255,255,0.35) 2px, transparent 0),
-            radial-gradient(circle at 48% 72%, rgba(255,255,255,0.4) 1.5px, transparent 0),
-            radial-gradient(circle at 68% 92%, rgba(255,255,255,0.38) 1px, transparent 0),
-            radial-gradient(circle at 12% 62%, rgba(255,255,255,0.3) 1px, transparent 0),
-            radial-gradient(circle at 82% 35%, rgba(255,255,255,0.35) 1px, transparent 0),
-            radial-gradient(circle at 37% 30%, rgba(255,255,255,0.3) 1px, transparent 0);
-        background-size: 120px 120px, 90px 90px, 140px 140px, 80px 80px, 100px 100px, 130px 130px;
-        opacity:.7;animation: twinkle 10s ease-in-out infinite alternate;
+
+        /* Light Mode */
+        html[data-theme="light"] {
+            --accent: #6366f1;
+            --accent-light: #4f46e5;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: rgba(99, 102, 241, 0.08);
+            --gradient-from: #6366f1;
+            --gradient-to: #a855f7;
+            --glow-color: rgba(99, 102, 241, 0.15);
         }
-        @keyframes twinkle{from{opacity:.55}to{opacity:.8}}
-        .card { width: min(980px, calc(100% - 2rem)); max-width: 1080px; border-radius: 36px; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.03); background: linear-gradient(180deg, #041026 0%, #052f4a 35%, #042b44 100%); display:grid; grid-template-columns:1fr 1fr; }
-        .left-panel, .right-panel { padding: 3rem 2.5rem; display:flex; align-items:center; justify-content:center; min-height:520px; }
-        .left-panel { background: linear-gradient(180deg, #020b13 0%, #071522 100%); }
-        .left-panel .brand-title { color: #c69d4d; }
-        .left-panel p { color: #9fb4c3; }
-        .right-panel { background: linear-gradient(180deg, rgba(5,12,25,0.92) 0%, rgba(10,24,46,0.98) 100%); border-left: 1px solid rgba(255,255,255,0.08); position: relative; }
-        .right-panel::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at top right, rgba(209,161,81,0.04), transparent 25%); pointer-events: none; }
-        .panel-inner { width: 100%; max-width: 520px; position: relative; z-index: 1; }
-        .form-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(20px); border-radius: 28px; padding: 2rem; box-shadow: 0 24px 60px rgba(0,0,0,0.18); }
-        .form-card label { color: #f8fafc; }
-        .form-card input { width: 100%; border-radius: 1rem; padding: 0.85rem 1rem; background: rgba(243,246,255,0.95); color: #0f172a; border: 1px solid rgba(209,161,81,0.3); }
-        .form-card input::placeholder { color: rgba(15,23,42,0.45); }
-        .form-card input:focus { outline: none; box-shadow: 0 0 0 4px rgba(209,161,81,0.16); border-color: rgba(209,161,81,0.55); }
-        .form-card button { width: 100%; border-radius: 1rem; padding: 0.95rem 1rem; }
-        .form-card .helper { color: #cbd5e1; }
-        .brand-title { color: #D1A151; font-family: 'Playfair Display', serif; letter-spacing: -0.035em; text-shadow: 0 4px 20px rgba(0,0,0,0.25); }
-        @media (max-width:1024px) {.card{grid-template-columns:1fr;} .left-panel,.right-panel{padding:2rem;} .form-card{max-width:100%;}}
-        @media (max-width:640px){body{padding:1rem;} .left-panel{padding:1.5rem;} .right-panel{padding:1.5rem;} .brand-title{text-align:center;} }
+
+        /* Dark Mode */
+        html[data-theme="dark"] {
+            --accent: #D1A151;
+            --accent-light: #fbbf24;
+            --bg-primary: #031022;
+            --bg-secondary: #042e55;
+            --text-primary: #e6eef6;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(209, 161, 81, 0.12);
+            --gradient-from: #D1A151;
+            --gradient-to: #ea580c;
+            --glow-color: rgba(209, 161, 81, 0.18);
+        }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            color: var(--text-primary); 
+            transition: background-color 0.4s, color 0.4s;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        html[data-theme="dark"] .bg-animated {
+            background: linear-gradient(135deg, #020914 0%, #03172e 45%, #052d56 100%);
+            background-size: 400% 400%;
+            animation: moveGrad 18s ease infinite;
+        }
+        html[data-theme="light"] .bg-animated {
+            background: linear-gradient(135deg, #ffffff 0%, #eff6ff 45%, #f5f3ff 100%);
+            background-size: 400% 400%;
+            animation: moveGrad 18s ease infinite;
+        }
+
+        @keyframes moveGrad {
+            0% { background-position: 0% 50% }
+            50% { background-position: 100% 50% }
+            100% { background-position: 0% 50% }
+        }
+
+        /* Twinkling Starfield */
+        .stars {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(255,255,255,0.7) 1px, transparent 0),
+                radial-gradient(circle at 35% 15%, rgba(255,255,255,0.6) 1.5px, transparent 0),
+                radial-gradient(circle at 55% 25%, rgba(255,255,255,0.8) 1px, transparent 0),
+                radial-gradient(circle at 75% 12%, rgba(255,255,255,0.5) 1px, transparent 0),
+                radial-gradient(circle at 90% 30%, rgba(255,255,255,0.75) 1.5px, transparent 0),
+                radial-gradient(circle at 20% 60%, rgba(255,255,255,0.65) 1px, transparent 0),
+                radial-gradient(circle at 50% 65%, rgba(255,255,255,0.8) 1px, transparent 0),
+                radial-gradient(circle at 80% 55%, rgba(255,255,255,0.5) 2px, transparent 0);
+            background-size: 250px 250px;
+            opacity: 0.8;
+            animation: twinkleStars 12s infinite alternate ease-in-out;
+        }
+
+        @keyframes twinkleStars {
+            0% { opacity: 0.5; }
+            100% { opacity: 0.9; }
+        }
+
+        html[data-theme="light"] .stars { display: none; }
+
+        /* Floating Aurora Orbs */
+        .aurora-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.25;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--accent);
+            top: -100px;
+            right: -100px;
+            animation: floatOrb1 15s infinite alternate ease-in-out;
+        }
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: #3b82f6;
+            bottom: -150px;
+            left: -150px;
+            animation: floatOrb2 20s infinite alternate ease-in-out;
+        }
+
+        @keyframes floatOrb1 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(-80px, 50px) scale(1.15); }
+        }
+        @keyframes floatOrb2 {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(100px, -60px) scale(0.9); }
+        }
+
+        /* Glassmorphism Card with Entrance Animation */
+        .login-card {
+            width: min(1000px, calc(100% - 2rem));
+            border-radius: 36px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.25);
+            transition: box-shadow 0.5s ease, transform 0.5s ease;
+        }
+
+        .login-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 40px 90px rgba(0, 0, 0, 0.35);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        html[data-theme="dark"] .login-card {
+            background: linear-gradient(135deg, rgba(4, 15, 33, 0.75) 0%, rgba(5, 37, 65, 0.85) 100%);
+        }
+        html[data-theme="light"] .login-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.75) 0%, rgba(248, 250, 252, 0.85) 100%);
+        }
+
+        /* Split Panels */
+        .left-panel {
+            padding: 4rem 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        html[data-theme="dark"] .left-panel {
+            background: rgba(3, 10, 22, 0.4);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        html[data-theme="light"] .left-panel {
+            background: rgba(241, 245, 249, 0.4);
+            border-right: 1px solid rgba(99, 102, 241, 0.06);
+        }
+
+        .right-panel {
+            padding: 4rem 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Glassmorphism Form Wrapper */
+        .form-container {
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .input-group-modern {
+            position: relative;
+            margin-bottom: 1.25rem;
+        }
+
+        .input-modern {
+            width: 100%;
+            border-radius: 14px;
+            padding: 0.95rem 1rem 0.95rem 2.8rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border: 1.5px solid var(--border-color);
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        html[data-theme="dark"] .input-modern {
+            color: #f8fafc;
+            background: rgba(255, 255, 255, 0.03);
+        }
+        html[data-theme="light"] .input-modern {
+            color: #1e293b;
+            background: rgba(255, 255, 255, 0.8);
+            border-color: rgba(99, 102, 241, 0.15);
+        }
+
+        .input-modern:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px var(--glow-color);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .input-icon-left {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            pointer-events: none;
+            transition: color 0.3s ease;
+        }
+        .input-modern:focus ~ .input-icon-left {
+            color: var(--accent);
+        }
+
+        /* Eye Icon Button Reset */
+        .eye-toggle-btn {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            cursor: pointer;
+            z-index: 10;
+            border: none;
+            background: transparent;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .eye-toggle-btn:hover {
+            color: var(--accent);
+        }
+
+        /* 3D Floating Key SVG Animation */
+        .floating-art {
+            animation: floatArt 6s ease-in-out infinite;
+        }
+
+        @keyframes floatArt {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(-2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* Golden/Blue Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            z-index: 1000;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            color: white;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        html[data-theme="dark"] .theme-toggle {
+            background: rgba(209, 161, 81, 0.15);
+            color: #fbbf24;
+        }
+        html[data-theme="light"] .theme-toggle {
+            background: rgba(99, 102, 241, 0.15);
+            color: #6366f1;
+        }
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            background: linear-gradient(135deg, var(--gradient-from), var(--gradient-to));
+            color: white;
+            font-weight: 700;
+            border: none;
+            letter-spacing: 0.5px;
+            box-shadow: 0 10px 25px var(--glow-color);
+            transition: all 0.3s ease;
+        }
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 35px var(--glow-color);
+            filter: brightness(1.05);
+        }
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 992px) {
+            .login-card { grid-template-columns: 1fr; }
+            .left-panel { display: none; }
+            .right-panel { padding: 3rem 1.5rem; }
+        }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-6 bg-animated">
+<body class="min-h-screen flex items-center justify-center p-4 bg-animated relative">
+    
+    <!-- Theme Toggle -->
+    <button id="themeToggle" class="theme-toggle" title="Ubah Tema" aria-label="Ubah Tema">
+        <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display: none;" width="22" height="22">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1m-16 0H1m15.364 1.636l.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="22" height="22">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+    </button>
+
+    <!-- Starfield & Aurora Orbs -->
     <div class="stars"></div>
-    <div class="card">
+    <div class="aurora-orb orb-1"></div>
+    <div class="aurora-orb orb-2"></div>
+
+    <!-- Login Card -->
+    <div class="login-card">
+        
+        <!-- Left Panel: Graphic Branding -->
         <div class="left-panel">
-            <div class="panel-inner text-center">
-                <div class="mb-4 mx-auto text-amber-400 filter drop-shadow-[0_10px_25px_rgba(209,161,81,0.4)]" style="width:180px;height:180px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <line x1="5" y1="80" x2="95" y2="80" stroke="currentColor" stroke-width="0.5" opacity="0.2"/>
-                        <line x1="25" y1="20" x2="25" y2="90" stroke="currentColor" stroke-width="0.5" opacity="0.2"/>
-                        <line x1="75" y1="20" x2="75" y2="90" stroke="currentColor" stroke-width="0.5" opacity="0.2"/>
-
-                        <line x1="10" y1="48" x2="52" y2="14" stroke="currentColor" stroke-width="1.8"/>
-                        <line x1="48" y1="14" x2="90" y2="48" stroke="currentColor" stroke-width="1.8"/>
-                        <path d="M22 45 L50 20 L78 45" stroke="currentColor" stroke-width="1.2" opacity="0.7"/>
-
-                        <path d="M25 45 V80 H75 V45" stroke="currentColor" stroke-width="2"/>
-
-                        <path d="M63 26 V35" stroke="currentColor" stroke-width="1.5"/>
-                        <path d="M63 26 H69 V40" stroke="currentColor" stroke-width="1.5"/>
-
-                        <rect x="44" y="58" width="14" height="22" stroke="currentColor" stroke-width="1.5" fill="#0b1424" fill-opacity="0.5"/>
-                        <rect x="32" y="52" width="6" height="10" stroke="currentColor" stroke-width="1.5"/>
-                        <rect x="62" y="52" width="6" height="10" stroke="currentColor" stroke-width="1.5"/>
-
-                        <line x1="20" y1="45" x2="80" y2="45" stroke="currentColor" stroke-width="0.8" opacity="0.5"/>
-                        <line x1="15" y1="80" x2="85" y2="80" stroke="currentColor" stroke-width="2"/>
+            <div class="text-center w-full max-w-sm">
+                <!-- 3D Floating Lock/Key SVG Illustration -->
+                <div class="floating-art mx-auto mb-6" style="width: 190px; height: 190px; filter: drop-shadow(0 15px 30px var(--glow-color));">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" class="w-full h-full" style="color: var(--accent);">
+                        <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="0.5" stroke-dasharray="3 3" opacity="0.25"/>
+                        <path d="M15 75 H85" stroke="currentColor" stroke-width="1" opacity="0.3"/>
+                        
+                        <!-- Isometric padlock -->
+                        <!-- Shackle -->
+                        <path d="M35 50 V34 C35 25, 65 25, 65 34 V50" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                        
+                        <!-- Body -->
+                        <rect x="26" y="46" width="48" height="30" rx="6" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-width="2.2"/>
+                        
+                        <!-- Keyhole -->
+                        <circle cx="50" cy="58" r="3.5" stroke="currentColor" stroke-width="1.8" fill="#000" fill-opacity="0.3"/>
+                        <path d="M50 61 L53 69 H47 Z" fill="currentColor" stroke="currentColor" stroke-width="1.2"/>
+                        
+                        <!-- Sparkles/Glow lines -->
+                        <line x1="18" y1="35" x2="25" y2="39" stroke="currentColor" stroke-width="1.2"/>
+                        <line x1="82" y1="35" x2="75" y2="39" stroke="currentColor" stroke-width="1.2"/>
                     </svg>
                 </div>
-                <h2 class="brand-title text-5xl font-semibold tracking-tight -mt-3">Lupa Password</h2>
-                <p class="mt-2 text-slate-300 text-sm tracking-wide uppercase max-w-lg mx-auto">Masukkan email dan password baru tanpa kirim link</p>
+
+                <h1 class="brand-title text-4xl font-extrabold tracking-tight italic mb-2" style="color: var(--accent); text-shadow: 0 4px 15px var(--glow-color);">Atur Ulang</h1>
+                <p class="text-sm font-semibold tracking-widest uppercase opacity-85" style="color: var(--text-secondary);">Ganti Password Akun NexaNest</p>
+                <div class="w-16 h-1 mx-auto mt-4 rounded" style="background: linear-gradient(90deg, var(--gradient-from), var(--gradient-to));"></div>
             </div>
         </div>
+
+        <!-- Right Panel: Reset Password Form -->
         <div class="right-panel">
-            <div class="panel-inner">
-                <div class="form-card">
-                    @if (session('status'))
-                        <div class="mb-6 rounded-xl bg-emerald-600/10 border border-emerald-500/20 p-4 text-emerald-200">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-                    <form action="{{ route('password.email') }}" method="POST" class="space-y-5">
+            <div class="form-container">
+                <div class="mb-6">
+                    <h3 class="text-2xl font-extrabold mb-1" style="color: var(--text-main);">Reset Password</h3>
+                    <p class="text-xs text-secondary" style="color: var(--text-secondary);">Perbarui password terdaftar Anda tanpa mengirimkan tautan email.</p>
+                </div>
+
+                @if (session('status'))
+                    <div class="mb-5 p-4 rounded-xl border bg-emerald-950/20 border-emerald-900/40 text-emerald-300 text-xs flex items-center gap-2">
+                        <i class="fas fa-check-circle flex-shrink-0"></i>
+                        <span>{{ session('status') }}</span>
+                    </div>
+                @endif
+
+                <form action="{{ route('password.email') }}" method="POST" class="space-y-4">
                     @csrf
+
+                    <!-- Email Input -->
                     <div>
-                        <label class="block text-sm font-semibold text-slate-200 mb-2">Email Terdaftar</label>
-                        <div class="relative flex items-center">
-                            <input type="email" name="email" required autofocus
-                                class="w-full rounded-xl py-3 pl-4 pr-5 bg-slate-900/60 text-white placeholder-slate-500 border border-slate-700/70 focus:outline-none focus:border-amber-500 transition-all"
-                                placeholder="Masukkan Email">
+                        <label class="text-xs font-bold mb-2 block uppercase tracking-wider" style="color: var(--text-secondary);">Email Terdaftar</label>
+                        <div class="input-group-modern">
+                            <input type="email" name="email" value="{{ old('email') }}" required autofocus
+                                class="input-modern"
+                                placeholder="nama@email.com">
+                            <i class="fa-regular fa-envelope input-icon-left"></i>
                         </div>
                         @error('email')
-                            <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                            <span class="text-red-400 text-xs mt-1 block"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</span>
                         @enderror
                     </div>
+
+                    <!-- Password Baru Input -->
                     <div>
-                        <label class="block text-sm font-semibold text-slate-200 mb-2">Password Baru</label>
-                        <div class="relative flex items-center">
+                        <label class="text-xs font-bold mb-2 block uppercase tracking-wider" style="color: var(--text-secondary);">Password Baru</label>
+                        <div class="input-group-modern">
                             <input type="password" id="newPassword" name="password" required
-                                class="w-full rounded-xl py-3 pl-4 pr-12 bg-slate-900/60 text-white placeholder-slate-500 border border-slate-700/70 focus:outline-none focus:border-amber-500 transition-all"
-                                placeholder="*******">
-                            <button type="button" onclick="toggleForgotPass('newPassword','eyeNew','eyeOffNew')" class="absolute flex items-center justify-center focus:outline-none" style="color: #94a3b8; width: auto; height: auto; padding: 0; background: transparent; border: none; right: 14px; top: 50%; transform: translateY(-50%);" tabindex="-1">
-                                <svg id="eyeNew" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
-                                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
-                                    <line x1="1" y1="1" x2="23" y2="23"/>
-                                </svg>
-                                <svg id="eyeOffNew" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                    <circle cx="12" cy="12" r="3"/>
-                                </svg>
+                                class="input-modern"
+                                placeholder="••••••••">
+                            <i class="fa-solid fa-lock input-icon-left"></i>
+                            
+                            <!-- Toggle Eye -->
+                            <button type="button" onclick="toggleForgotPass('newPassword','eyeNew','eyeOffNew')" class="eye-toggle-btn" tabindex="-1">
+                                <i id="eyeNew" class="fa-regular fa-eye"></i>
+                                <i id="eyeOffNew" class="fa-regular fa-eye-slash" style="display: none;"></i>
                             </button>
                         </div>
                         @error('password')
-                            <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span>
+                            <span class="text-red-400 text-xs mt-1 block"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</span>
                         @enderror
                     </div>
+
+                    <!-- Konfirmasi Password Input -->
                     <div>
-                        <label class="block text-sm font-semibold text-slate-200 mb-2">Konfirmasi Password</label>
-                        <div class="relative flex items-center">
+                        <label class="text-xs font-bold mb-2 block uppercase tracking-wider" style="color: var(--text-secondary);">Konfirmasi Password Baru</label>
+                        <div class="input-group-modern">
                             <input type="password" id="confirmPassword" name="password_confirmation" required
-                                class="w-full rounded-xl py-3 pl-4 pr-12 bg-slate-900/60 text-white placeholder-slate-500 border border-slate-700/70 focus:outline-none focus:border-amber-500 transition-all"
-                                placeholder="*******">
-                            <button type="button" onclick="toggleForgotPass('confirmPassword','eyeConfirm','eyeOffConfirm')" class="absolute flex items-center justify-center focus:outline-none" style="color: #94a3b8; width: auto; height: auto; padding: 0; background: transparent; border: none; right: 14px; top: 50%; transform: translateY(-50%);" tabindex="-1">
-                                <svg id="eyeConfirm" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
-                                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
-                                    <line x1="1" y1="1" x2="23" y2="23"/>
-                                </svg>
-                                <svg id="eyeOffConfirm" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                    <circle cx="12" cy="12" r="3"/>
-                                </svg>
+                                class="input-modern"
+                                placeholder="••••••••">
+                            <i class="fa-solid fa-lock-open input-icon-left"></i>
+                            
+                            <!-- Toggle Eye -->
+                            <button type="button" onclick="toggleForgotPass('confirmPassword','eyeConfirm','eyeOffConfirm')" class="eye-toggle-btn" tabindex="-1">
+                                <i id="eyeConfirm" class="fa-regular fa-eye"></i>
+                                <i id="eyeOffConfirm" class="fa-regular fa-eye-slash" style="display: none;"></i>
                             </button>
                         </div>
                     </div>
-                    <button type="submit" class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold rounded-xl shadow-lg hover:from-amber-600 hover:to-orange-600 transition-all">Simpan Password Baru</button>
+
+                    <!-- Submit Button -->
+                    <div class="pt-2">
+                        <button type="submit" class="btn-submit w-full py-3.5 rounded-xl text-sm font-extrabold uppercase transition-all tracking-wider shadow-lg active:scale-[0.98]">
+                            <i class="fas fa-key me-1"></i> Simpan Password Baru
+                        </button>
+                    </div>
                 </form>
-                <div class="text-center mt-6 text-slate-300 text-sm">
-                    Ingat password? <a href="{{ route('login') }}" class="text-amber-400 font-semibold hover:underline">Kembali ke Login</a>
+
+                <div class="text-center mt-6 text-sm" style="color: var(--text-secondary);">
+                    Ingat password Anda? <a href="{{ route('login') }}" class="font-extrabold hover:underline" style="color: var(--accent);">Kembali ke Login</a>
                 </div>
+
+                @if ($errors->any())
+                    <div class="mt-6 p-4 rounded-xl border bg-red-950/20 border-red-900/40 text-red-400 text-xs space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-exclamation-triangle flex-shrink-0"></i>
+                                <span>{{ $error }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
             </div>
         </div>
     </div>
-</body>
-<script>
-    function toggleForgotPass(inputId, eyeId, eyeOffId) {
-        const input = document.getElementById(inputId);
-        const eyeIcon = document.getElementById(eyeId);
-        const eyeOffIcon = document.getElementById(eyeOffId);
-        // Only toggle when eye button is clicked
-        window['toggledByEye_' + inputId] = true;
-        if (input.type === 'password') {
-            input.type = 'text';
-            if (eyeIcon) eyeIcon.style.display = 'none';
-            if (eyeOffIcon) eyeOffIcon.style.display = 'block';
-        } else {
-            input.type = 'password';
-            if (eyeIcon) eyeIcon.style.display = 'block';
-            if (eyeOffIcon) eyeOffIcon.style.display = 'none';
+
+    <script>
+        // Toggle Password Visibility
+        function toggleForgotPass(inputId, eyeId, eyeOffId) {
+            const input = document.getElementById(inputId);
+            const eyeIcon = document.getElementById(eyeId);
+            const eyeOffIcon = document.getElementById(eyeOffId);
+            
+            window['toggledByEye_' + inputId] = true;
+            if (input.type === 'password') {
+                input.type = 'text';
+                eyeIcon.style.display = 'none';
+                eyeOffIcon.style.display = 'block';
+            } else {
+                input.type = 'password';
+                eyeIcon.style.display = 'block';
+                eyeOffIcon.style.display = 'none';
+            }
+            setTimeout(() => { window['toggledByEye_' + inputId] = false; }, 300);
         }
-        setTimeout(() => { window['toggledByEye_' + inputId] = false; }, 350);
-    }
-</script>
-<script>
-    (function() {
-        ['newPassword','confirmPassword'].forEach(function(id) {
-            const el = document.getElementById(id);
-            if (!el) return;
-            el.addEventListener('focus', function() {
-                if (!window['toggledByEye_' + id]) {
-                    this.type = 'password';
-                    const eye = document.getElementById(id === 'newPassword' ? 'eyeNew' : 'eyeConfirm');
-                    const eyeOff = document.getElementById(id === 'newPassword' ? 'eyeOffNew' : 'eyeOffConfirm');
-                    if (eye) eye.style.display = 'block';
-                    if (eyeOff) eyeOff.style.display = 'none';
-                }
+
+        // Prevent reveal on focus
+        (function() {
+            ['newPassword','confirmPassword'].forEach(function(id) {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.addEventListener('focus', function() {
+                    if (!window['toggledByEye_' + id]) {
+                        this.type = 'password';
+                        const eye = document.getElementById(id === 'newPassword' ? 'eyeNew' : 'eyeConfirm');
+                        const eyeOff = document.getElementById(id === 'newPassword' ? 'eyeOffNew' : 'eyeOffConfirm');
+                        if (eye) eye.style.display = 'block';
+                        if (eyeOff) eyeOff.style.display = 'none';
+                    }
+                });
             });
-        });
-    })();
-</script>
+        })();
+
+        // Initialize theme
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcons(savedTheme);
+        }
+
+        function updateThemeIcons(theme) {
+            const sunIcon = document.getElementById('sunIcon');
+            const moonIcon = document.getElementById('moonIcon');
+
+            if (theme === 'light') {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+            } else {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+            }
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcons(newTheme);
+        }
+
+        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initTheme);
+        } else {
+            initTheme();
+        }
+    </script>
+</body>
 </html>

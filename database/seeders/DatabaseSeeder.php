@@ -129,5 +129,74 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(UmkmSeeder::class);
+
+        // Seed 5 Modern Barcode Complaints
+        $wargaUser = User::where('role', 'warga')->first();
+        $userId = $wargaUser ? $wargaUser->id : 1;
+
+        \App\Models\Pengaduan::create([
+            'user_id' => $userId,
+            'title' => 'Korsleting & Lampu Jalan Padam di Tiang TL-018-006-012',
+            'content' => 'Lampu penerangan jalan umum pada tiang listrik nomor TL-018-006-012 mati total sejak semalam. Sempat terdengar suara letupan kecil di bagian atas kotak sekring tiang.',
+            'status' => 'pending',
+            'barcode_code' => 'TL-018-006-012',
+            'category' => 'Tiang Listrik (Kelistrikan)',
+            'rt_number' => '006',
+            'location_details' => 'Tiang Listrik TL-018-006-012, Jl. Sakura Depan Blok A No. 12, RT 006',
+            'latitude' => -6.914744,
+            'longitude' => 107.609810,
+        ]);
+
+        \App\Models\Pengaduan::create([
+            'user_id' => $userId,
+            'title' => 'Kebocoran Air Bersih di Pilar Hydrant HYD-018-007-003',
+            'content' => 'Ada rembesan air bersih yang cukup deras keluar dari katup bawah pilar hydrant nomor HYD-018-007-003. Air menggenangi jalan masuk gang Cemara.',
+            'status' => 'proses',
+            'barcode_code' => 'HYD-018-007-003',
+            'category' => 'Hydrant Damkar (Utilitas Air)',
+            'rt_number' => '007',
+            'location_details' => 'Hydrant Pemadam HYD-018-007-003, Samping Pos Ronda Cemara, RT 007',
+            'latitude' => -6.915230,
+            'longitude' => 107.610245,
+        ]);
+
+        \App\Models\Pengaduan::create([
+            'user_id' => $userId,
+            'title' => 'Kamera CCTV Keamanan Mati di Tiang CCTV-018-008-005',
+            'content' => 'Tampilan feed CCTV keamanan lingkungan pada tiang nomor CCTV-018-008-005 terputus dan tidak mengirimkan gambar sejak tadi siang. Mohon dicek koneksi kabel LAN atau powernya.',
+            'status' => 'selesai',
+            'barcode_code' => 'CCTV-018-008-005',
+            'category' => 'Tiang WiFi/CCTV (Keamanan)',
+            'rt_number' => '008',
+            'location_details' => 'Tiang CCTV CCTV-018-008-005, Pertigaan Balai Pertemuan, RT 008',
+            'latitude' => -6.914390,
+            'longitude' => 107.611102,
+        ]);
+
+        \App\Models\Pengaduan::create([
+            'user_id' => $userId,
+            'title' => 'Tutup Bak Sampah Komunal BSK-018-009-001 Pecah',
+            'content' => 'Engsel pintu penutup bak sampah komunal fiber nomor BSK-018-009-001 patah akibat benturan. Sampah menjadi berserakan karena tidak bisa tertutup rapat.',
+            'status' => 'pending',
+            'barcode_code' => 'BSK-018-009-001',
+            'category' => 'Bak Sampah (Sanitasi)',
+            'rt_number' => '009',
+            'location_details' => 'Bak Sampah Fiber BSK-018-009-001, Depan Taman Bermain Anak, RT 009',
+            'latitude' => -6.913880,
+            'longitude' => 107.610540,
+        ]);
+
+        \App\Models\Pengaduan::create([
+            'user_id' => $userId,
+            'title' => 'Portal Gerbang Otomatis PRT-018-010-002 Macet',
+            'content' => 'Motor penggerak portal otomatis pada gerbang masuk PRT-018-010-002 tidak merespon saat kartu RFID warga ditempelkan. Terpaksa gerbang dibuka secara manual.',
+            'status' => 'proses',
+            'barcode_code' => 'PRT-018-010-002',
+            'category' => 'Portal Gate (Akses RW)',
+            'rt_number' => '010',
+            'location_details' => 'Pintu Gerbang Utama PRT-018-010-002, Jl. Kenanga Masuk RT 010',
+            'latitude' => -6.916120,
+            'longitude' => 107.612003,
+        ]);
     }
 }
