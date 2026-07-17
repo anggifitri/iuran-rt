@@ -36,7 +36,10 @@ class AuthController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
 
-        return redirect()->route('login')->with('success', 'Password berhasil diperbarui. Silakan login dengan password baru.');
+        // Auto login after password reset so they go straight to dashboard
+        Auth::login($user, true);
+
+        return redirect()->route('dashboard')->with('success', 'Password berhasil diperbarui. Anda telah otomatis masuk ke dashboard!');
     }
 
     public function login(Request $request)

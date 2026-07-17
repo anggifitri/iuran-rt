@@ -16,18 +16,6 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        // 1. Pengumuman
-        try {
-            $pengumuman = Pengumuman::where(function($query) {
-                    $query->where('published_at', '<=', now())->orWhereNull('published_at');
-                })
-                ->orderBy('is_pinned', 'desc')
-                ->orderBy('created_at', 'desc')
-                ->limit(3)
-                ->get();
-        } catch (\Exception $e) {
-            $pengumuman = collect();
-        }
 
         // 2. Hitung Kas
         try {
@@ -42,9 +30,11 @@ class DashboardController extends Controller
 
         // 3. Total Warga
         try {
-            $totalWarga = User::where('role', 'warga')->count();
+            $totalKK = Warga::where('is_kk', true)->count();
+            $totalJiwa = Warga::count();
         } catch (\Exception $e) {
-            $totalWarga = Warga::count();
+            $totalKK = 0;
+            $totalJiwa = 0;
         }
 
         // 4. Data untuk Grafik
@@ -146,18 +136,60 @@ class DashboardController extends Controller
             $latestExpenseDate = null;
         }
 
-        // 7. Admin summary untuk fitur baru (DIPATIKAN SEMENTARA AGAR TIDAK ERROR)
-$newFeatureCounts = [
-    'surat' => 0,
-    'pengaduan' => 0,
-    'posyandu' => 0,
-    'umkm' => 0,
-];
-return view('dashboard', compact(
-            'user', 'pengumuman', 'pemasukan',
-            'pengeluaran', 'saldo', 'totalWarga', 'chartData',
+        // 7. Admin summary — query data riil dari database
+        $newFeatureCounts = [
+            'surat' => 0,
+            'pengaduan' => 0,
+            'posyandu' => 0,
+            'umkm' => 0,
+        ];
+        try {
+            $newFeatureCounts['surat'] = \App\Models\SuratPengajuan::count();
+            $newFeatureCounts['pengaduan'] = \App\Models\Pengaduan::count();
+            $newFeatureCounts['posyandu'] = \App\Models\Posyandu::count();
+            $newFeatureCounts['umkm'] = \App\Models\Umkm::count();
+        } catch (\Exception $e) {
+            // keep zeros
+        }
+
+        // Hitung jumlah admin
+        $totalAdminRT = User::where('role', 'admin')->where('rt_number', '!=', '000')->count();
+        $totalAdminRW = User::where('role', 'admin')->where('rt_number', '000')->count();
+
+        // 8. Dynamic Info Cards for Pengumuman Terbaru
+        $currentMonth = date('m');
+        $currentYear = date('Y');
+
+        // Iuran reminder: count KK who haven't paid this month
+        $totalKKForReminder = Warga::where('is_kk', true)->count();
+        $paidThisMonth = Pembayaran::where('tipe', 'masuk')
+            ->where('kategori', 'like', '%Iuran%')
+            ->whereMonth('tanggal', $currentMonth)
+            ->whereYear('tanggal', $currentYear)
+            ->distinct('warga_id')
+            ->count('warga_id');
+        $unpaidKK = $totalKKForReminder - $paidThisMonth;
+
+        // Latest Posyandu schedule
+        try {
+            $latestPosyandu = \App\Models\Posyandu::orderBy('tanggal', 'desc')->first();
+        } catch (\Exception $e) {
+            $latestPosyandu = null;
+        }
+
+        // Featured UMKM
+        try {
+            $featuredUmkm = \App\Models\Umkm::inRandomOrder()->first();
+        } catch (\Exception $e) {
+            $featuredUmkm = null;
+        }
+
+        return view('dashboard', compact(
+            'user', 'pemasukan',
+            'pengeluaran', 'saldo', 'totalKK', 'totalJiwa', 'chartData',
             'maleCount', 'femaleCount', 'latestExpenseAmount', 'latestExpenseDate',
-            'newFeatureCounts'
+            'newFeatureCounts', 'totalAdminRT', 'totalAdminRW',
+            'unpaidKK', 'totalKKForReminder', 'paidThisMonth', 'latestPosyandu', 'featuredUmkm'
         ));
     }
 }

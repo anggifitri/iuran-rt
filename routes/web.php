@@ -45,7 +45,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     // Layanan Mandiri: Penerbitan Surat, Pengaduan, Posyandu, UMKM
-    Route::resource('surat', App\Http\Controllers\SuratController::class)->only(['index','create','store']);
+    Route::resource('surat', App\Http\Controllers\SuratPengajuanController::class);
+    Route::post('/surat/{surat}/approve-rt', [App\Http\Controllers\SuratPengajuanController::class, 'approveRt'])->name('surat.approve_rt');
+    Route::post('/surat/{surat}/approve-rw', [App\Http\Controllers\SuratPengajuanController::class, 'approveRw'])->name('surat.approve_rw');
+    Route::get('/surat/{surat}/pdf', [App\Http\Controllers\SuratPengajuanController::class, 'downloadPdf'])->name('surat.pdf');
     Route::resource('pengaduan', App\Http\Controllers\PengaduanController::class)->only(['index','create','store']);
     Route::resource('posyandu', App\Http\Controllers\PosyanduController::class)->only(['index','create','store']);
     Route::resource('umkm', App\Http\Controllers\UmkmController::class)->only(['index','show','create','store']);

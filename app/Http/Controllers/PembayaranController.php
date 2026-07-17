@@ -15,12 +15,45 @@ class PembayaranController extends Controller
         $user = Auth::user();
 
         // Mengambil data dari tabel transactions (Model Pembayaran)
-        // Kita tampilkan semua transaksi, baik masuk maupun keluar
         $pembayarans = Pembayaran::with('warga')
             ->orderBy('tanggal', 'desc')
             ->paginate(15);
 
-        return view('pembayaran.index', compact('pembayarans'));
+        // Langkah A: Buat susunan template 6 bulan terakhir dengan nilai default 0
+        $templateBulan = collect();
+        for ($i = 5; $i >= 0; $i--) {
+            $targetDate = now()->subMonths($i);
+            $templateBulan->put($targetDate->format('Y-m'), (object)[
+                'year_month'  => $targetDate->format('Y-m'),
+                'bulan_tahun' => $targetDate->translatedFormat('F Y'),
+                'masuk'       => 0,
+                'keluar'      => 0
+            ]);
+        }
+
+        // Langkah B: Ambil data riil dari database (SQLite safe)
+        $pembayaransChart = Pembayaran::where('tanggal', '>=', now()->subMonths(5)->startOfMonth())
+            ->orderBy('tanggal', 'asc')
+            ->get()
+            ->groupBy(function($item) {
+                return Carbon::parse($item->tanggal)->format('Y-m');
+            });
+
+        // Langkah C: Gabungkan data database ke template
+        $chartData = $templateBulan->map(function($default, $key) use ($pembayaransChart) {
+            if ($pembayaransChart->has($key)) {
+                $group = $pembayaransChart[$key];
+                return (object)[
+                    'year_month'  => $key,
+                    'bulan_tahun' => Carbon::parse($group->first()->tanggal)->translatedFormat('F Y'),
+                    'masuk'       => $group->where('tipe', 'masuk')->sum('jumlah'),
+                    'keluar'      => $group->where('tipe', 'keluar')->sum('jumlah'),
+                ];
+            }
+            return $default;
+        })->values();
+
+        return view('pembayaran.index', compact('pembayarans', 'chartData'));
     }
 
     public function create()
@@ -143,12 +176,13 @@ class PembayaranController extends Controller
     {
         $bulan = $request->get('bulan', date('m'));
         $tahun = $request->get('tahun', date('Y'));
-        $wargaFilter = $request->get('warga_id');
+        $rtFilter = $request->get('rt_number');
 
-        $wargaList = Warga::orderBy('nama')->get();
-        $wargasQuery = Warga::orderBy('nama');
-        if ($wargaFilter) {
-            $wargasQuery->where('id', $wargaFilter);
+        $rtList = ['006', '007', '008', '009', '010'];
+
+        $wargasQuery = Warga::where('is_kk', true)->orderBy('nama');
+        if ($rtFilter) {
+            $wargasQuery->where('rt_number', $rtFilter);
         }
         $wargas = $wargasQuery->get();
 
@@ -187,12 +221,12 @@ class PembayaranController extends Controller
                 ->where('kategori', 'like', '%Iuran%')
                 ->count();
 
-            if ($totalPayments == 0) {
-                $keterangan = 'Tidak Pernah Bayar';
-            } elseif (collect($history)->every(fn($h) => $h['paid'])) {
+            if ($status === 'Lunas') {
                 $keterangan = 'Rajin';
+            } elseif ($totalPayments == 0) {
+                $keterangan = 'Tidak Pernah Bayar';
             } else {
-                $keterangan = 'Kadang-kadang';
+                $keterangan = 'Kurang Bayar';
             }
 
             $rows[] = [
@@ -204,20 +238,37 @@ class PembayaranController extends Controller
             ];
         }
 
+        // Hitung total ketaatan bayar
+        $countRajin = 0;
+        $countKurang = 0;
+        $countTidakPernah = 0;
+        foreach ($rows as $row) {
+            if ($row['keterangan'] === 'Rajin') {
+                $countRajin++;
+            } elseif ($row['keterangan'] === 'Kurang Bayar') {
+                $countKurang++;
+            } else {
+                $countTidakPernah++;
+            }
+        }
+
         $daftarTahun = range(date('Y'), date('Y') - 5);
 
-        return view('laporan.iuran', compact('rows', 'wargas', 'wargaList', 'bulan', 'tahun', 'daftarTahun', 'wargaFilter'));
+        return view('laporan.iuran', compact(
+            'rows', 'wargas', 'rtList', 'bulan', 'tahun', 'daftarTahun', 'rtFilter',
+            'countRajin', 'countKurang', 'countTidakPernah'
+        ));
     }
 
     public function cetakLaporanIuran(Request $request)
     {
         $bulan = $request->get('bulan', date('m'));
         $tahun = $request->get('tahun', date('Y'));
-        $wargaFilter = $request->get('warga_id');
+        $rtFilter = $request->get('rt_number');
 
-        $wargasQuery = Warga::orderBy('nama');
-        if ($wargaFilter) {
-            $wargasQuery->where('id', $wargaFilter);
+        $wargasQuery = Warga::where('is_kk', true)->orderBy('nama');
+        if ($rtFilter) {
+            $wargasQuery->where('rt_number', $rtFilter);
         }
         $wargas = $wargasQuery->get();
 
@@ -256,12 +307,12 @@ class PembayaranController extends Controller
                 ->where('kategori', 'like', '%Iuran%')
                 ->count();
 
-            if ($totalPayments == 0) {
-                $keterangan = 'Tidak Pernah Bayar';
-            } elseif (collect($history)->every(fn($h) => $h['paid'])) {
+            if ($status === 'Lunas') {
                 $keterangan = 'Rajin';
+            } elseif ($totalPayments == 0) {
+                $keterangan = 'Tidak Pernah Bayar';
             } else {
-                $keterangan = 'Kadang-kadang';
+                $keterangan = 'Kurang Bayar';
             }
 
             $rows[] = [
@@ -273,6 +324,6 @@ class PembayaranController extends Controller
             ];
         }
 
-        return view('laporan.cetak_iuran', compact('rows', 'bulan', 'tahun', 'wargaFilter'));
+        return view('laporan.cetak_iuran', compact('rows', 'bulan', 'tahun', 'rtFilter'));
     }
 }

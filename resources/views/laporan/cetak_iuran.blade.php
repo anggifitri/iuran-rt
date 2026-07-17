@@ -73,7 +73,7 @@
                         @elseif($row['keterangan'] == 'Tidak Pernah Bayar')
                             <span class="badge badge-danger">Tidak Pernah Bayar</span>
                         @else
-                            <span class="badge badge-warning">Kadang-kadang</span>
+                            <span class="badge badge-warning">Kurang Bayar</span>
                         @endif
                     </td>
                 </tr>

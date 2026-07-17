@@ -21,60 +21,119 @@ class DatabaseSeeder extends Seeder
             return $faker->numerify('################');
         };
 
-        // --- DATA USER (DIPERTAHANKAN) ---
-
-        // Admin
-        User::firstOrCreate([
-            'email' => 'admin@rt.com'
-        ], [
-            'name' => 'Admin RT',
-            'password' => Hash::make('password123'),
-            'role' => 'admin',
-            'rt_number' => '001',
-            'phone' => '081234567890',
-            'address' => 'Jl. Admin No. 1',
-            'no_kk' => $generateIdentityNumber(),
-            'nik' => $generateIdentityNumber(),
-        ]);
-
-        // Bendahara
-        User::firstOrCreate([
-            'email' => 'bendahara@rt.com'
-        ], [
-            'name' => 'Bendahara RT',
-            'password' => Hash::make('password123'),
-            'role' => 'bendahara',
-            'rt_number' => '001',
-            'phone' => '081234567891',
-            'address' => 'Jl. Bendahara No. 2',
-            'no_kk' => $generateIdentityNumber(),
-            'nik' => $generateIdentityNumber(),
-        ]);
-
-        // Warga sample (User Login)
-        for ($i = 1; $i <= 5; $i++) {
-            User::firstOrCreate([
-                'email' => "warga$i@rt.com"
-            ], [
-                'name' => "Warga $i",
-                'password' => Hash::make('password123'),
-                'role' => 'warga',
-                'rt_number' => str_pad($i, 3, '0', STR_PAD_LEFT),
-                'phone' => "08123456789$i",
-                'address' => "Jl. Contoh No. $i",
-                'no_kk' => $generateIdentityNumber(),
-                'nik' => $generateIdentityNumber(),
-            ]);
-        }
-
         // --- DATA WARGA NexaNest ---
         $this->call(WargaAestheticSeeder::class);
 
+        // --- DATA USER (DIPERTAHANKAN) ---
+        $wargaAdmins = Warga::where('is_kk', true)->inRandomOrder()->take(10)->get();
+        $adminIdx = 0;
+
+        // Admin
+        $wargaAdmin = $wargaAdmins[$adminIdx++];
+        User::updateOrCreate([
+            'email' => 'admin@rt.com'
+        ], [
+            'name' => $wargaAdmin->nama,
+            'password' => Hash::make('password123'),
+            'role' => 'admin',
+            'rt_number' => '001',
+            'phone' => $wargaAdmin->nomor_hp ?? '081234567890',
+            'address' => $wargaAdmin->alamat,
+            'no_kk' => $wargaAdmin->no_kk,
+            'nik' => $wargaAdmin->nik,
+            'profile_photo' => $wargaAdmin->profile_photo,
+        ]);
+
+        // Admin RW 018
+        $wargaRw = $wargaAdmins[$adminIdx++];
+        User::updateOrCreate([
+            'email' => 'adminrw@rt.com'
+        ], [
+            'name' => $wargaRw->nama,
+            'password' => Hash::make('mahenn09'),
+            'role' => 'admin',
+            'rt_number' => '000',
+            'phone' => $wargaRw->nomor_hp ?? '081299990000',
+            'address' => $wargaRw->alamat,
+            'no_kk' => $wargaRw->no_kk,
+            'nik' => $wargaRw->nik,
+            'profile_photo' => $wargaRw->profile_photo,
+        ]);
+
+        // Admin RT 006 s/d 010
+        for ($rt = 6; $rt <= 10; $rt++) {
+            $rtStr = str_pad($rt, 3, '0', STR_PAD_LEFT);
+            $wargaRt = Warga::where('is_kk', true)->where('rt_number', $rtStr)->whereNotIn('id', $wargaAdmins->pluck('id'))->first();
+            
+            if ($wargaRt) {
+                User::updateOrCreate([
+                    'email' => "adminrt{$rt}@rt.com"
+                ], [
+                    'name' => $wargaRt->nama,
+                    'password' => Hash::make('password123'),
+                    'role' => 'admin',
+                    'rt_number' => $rtStr,
+                    'phone' => $wargaRt->nomor_hp ?? "08129999000{$rt}",
+                    'address' => $wargaRt->alamat,
+                    'no_kk' => $wargaRt->no_kk,
+                    'nik' => $wargaRt->nik,
+                    'profile_photo' => $wargaRt->profile_photo,
+                ]);
+            }
+        }
+
+        // Bendahara
+        $wargaBendahara = $wargaAdmins[$adminIdx++];
+        User::updateOrCreate([
+            'email' => 'bendahara@rt.com'
+        ], [
+            'name' => $wargaBendahara->nama,
+            'password' => Hash::make('password123'),
+            'role' => 'bendahara',
+            'rt_number' => '001',
+            'phone' => $wargaBendahara->nomor_hp ?? '081234567891',
+            'address' => $wargaBendahara->alamat,
+            'no_kk' => $wargaBendahara->no_kk,
+            'nik' => $wargaBendahara->nik,
+            'profile_photo' => $wargaBendahara->profile_photo,
+        ]);
+
+        // Warga sample (User Login) linked to real seeded Wargas
+        $wargaList = Warga::where('is_kk', true)->orderBy('nama', 'asc')->limit(30)->get();
+        foreach ($wargaList as $index => $w) {
+            $i = $index + 1;
+            User::firstOrCreate([
+                'email' => "warga$i@rt.com"
+            ], [
+                'name' => $w->nama,
+                'password' => Hash::make('password123'),
+                'role' => 'warga',
+                'rt_number' => $w->rt_number,
+                'phone' => $w->nomor_hp ?? "08123456789$i",
+                'address' => $w->alamat,
+                'no_kk' => $w->no_kk,
+                'nik' => $w->nik,
+                'profile_photo' => $w->profile_photo,
+            ]);
+        }
+
         $kkIds = Warga::where('is_kk', true)->pluck('id')->toArray();
 
-        // TRANSAKSI OTOMATIS UNTUK SEMUA WARGA (JAN - MEI 2026) DIPERTAHANKAN
-        foreach ($kkIds as $wargaId) {
-            for ($bulan = 1; $bulan <= 5; $bulan++) {
+        // TRANSAKSI OTOMATIS UNTUK SEMUA WARGA (JAN - MEI 2026) DIPERTAHANKAN DENGAN DISTRIBUSI REALISTIS
+        foreach ($kkIds as $index => $wargaId) {
+            // Bagi 100 KK menjadi:
+            // - Index 0 - 74 (75 KK): Rajin (bayar bulan 1 s/d 5)
+            // - Index 75 - 89 (15 KK): Kurang Bayar (hanya bayar bulan 1 s/d 3)
+            // - Index 90 - 99 (10 KK): Tidak Pernah Bayar (tidak di-seed pembayaran)
+            if ($index < 75) {
+                $maxBulan = 5;
+            } elseif ($index < 90) {
+                $maxBulan = 3;
+            } else {
+                continue; // 10 KK tidak pernah bayar sama sekali
+            }
+
+            for ($bulan = 1; $bulan <= $maxBulan; $bulan++) {
                 // 1. Pemasukan Wajib Bulanan (100k)
                 Pembayaran::create([
                     'warga_id' => $wargaId,
@@ -111,13 +170,88 @@ class DatabaseSeeder extends Seeder
             'keterangan' => 'Iuran warga blok A'
         ]);
 
+        // --- DATA PENGELUARAN RUTIN BULANAN & EVENT (JANUARI - JULI 2026) ---
+        for ($bulan = 1; $bulan <= 7; $bulan++) {
+            // 1. Kebersihan Bulanan (Petugas Sampah)
+            Pembayaran::create([
+                'warga_id' => null,
+                'tipe' => 'keluar',
+                'jumlah' => 1500000,
+                'kategori' => 'Kebersihan',
+                'tanggal' => Carbon::create(2026, $bulan, 25)->format('Y-m-d'),
+                'keterangan' => 'Honor petugas kebersihan & angkutan sampah bulanan'
+            ]);
+
+            // 2. Keamanan Bulanan (Security)
+            Pembayaran::create([
+                'warga_id' => null,
+                'tipe' => 'keluar',
+                'jumlah' => 2000000,
+                'kategori' => 'Keamanan',
+                'tanggal' => Carbon::create(2026, $bulan, 28)->format('Y-m-d'),
+                'keterangan' => 'Honor petugas keamanan (security) & siskamling'
+            ]);
+
+            // 3. Listrik & Air PJU
+            Pembayaran::create([
+                'warga_id' => null,
+                'tipe' => 'keluar',
+                'jumlah' => 350000,
+                'kategori' => 'Listrik & Air',
+                'tanggal' => Carbon::create(2026, $bulan, 10)->format('Y-m-d'),
+                'keterangan' => 'Pembayaran PJU (Penerangan Jalan Umum) & air bersih pos ronda'
+            ]);
+        }
+
+        // SEED EXPENSES EVENTS (PENGELUARAN KEGIATAN KHUSUS)
+        // Januari 2026: Fogging Demam Berdarah
         Pembayaran::create([
             'warga_id' => null,
             'tipe' => 'keluar',
-            'jumlah' => 200000,
-            'kategori' => 'Kebersihan',
-            'tanggal' => now()->subDays(5)->format('Y-m-d'),
-            'keterangan' => 'Bayar tukang sampah'
+            'jumlah' => 850000,
+            'kategori' => 'Perbaikan/Maintenance',
+            'tanggal' => '2026-01-15',
+            'keterangan' => 'Kegiatan fogging DBD massal & pembelian obat abate'
+        ]);
+
+        // Maret 2026: Buka Bersama & Santunan Ramadhan
+        Pembayaran::create([
+            'warga_id' => null,
+            'tipe' => 'keluar',
+            'jumlah' => 2500000,
+            'kategori' => 'Lain-lain',
+            'tanggal' => '2026-03-20',
+            'keterangan' => 'Kegiatan buka bersama warga & santunan anak yatim'
+        ]);
+
+        // Mei 2026: Halal Bihalal Syawal
+        Pembayaran::create([
+            'warga_id' => null,
+            'tipe' => 'keluar',
+            'jumlah' => 3000000,
+            'kategori' => 'Lain-lain',
+            'tanggal' => '2026-05-10',
+            'keterangan' => 'Penyelenggaraan Halal Bihalal silaturahmi Idul Fitri warga RW 018'
+        ]);
+
+        // Juni 2026: Perbaikan Saluran Air Jebol
+        Pembayaran::create([
+            'warga_id' => null,
+            'tipe' => 'keluar',
+            'jumlah' => 1200000,
+            'kategori' => 'Perbaikan/Maintenance',
+            'tanggal' => '2026-06-18',
+            'keterangan' => 'Renovasi beton gorong-gorong selokan jalan yang jebol di RT 008'
+        ]);
+
+        // Juli 2026: Persiapan HUT RI
+        Pembayaran::create([
+            'warga_id' => null,
+            'tipe' => 'keluar',
+            'jumlah' => 950000,
+            'kategori' => 'Lain-lain',
+            'tanggal' => '2026-07-05',
+            'keterangan' => 'Pembelian umbul-umbul merah putih, bendera, dan persiapan gapura HUT RI'
         ]);
 
         Pengumuman::create([
@@ -129,6 +263,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(UmkmSeeder::class);
+        $this->call(SuratPengajuanSeeder::class);
 
         // Seed 5 Modern Barcode Complaints
         $wargaUser = User::where('role', 'warga')->first();

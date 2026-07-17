@@ -22,6 +22,12 @@ class WargaAestheticSeeder extends Seeder
         Posyandu::truncate();
         DB::statement('PRAGMA foreign_keys = ON;');
 
+        // Counter indeks foto portrait (randomuser.me/api/portraits)
+        $malePhotoIndex = 0;
+        $femalePhotoIndex = 0;
+        $childBoyPhotoIndex = 50;
+        $childGirlPhotoIndex = 50;
+
         // Pool nama-nama aesthetic untuk pembuatan data warga
         $namaCowok = [
             'Keenan', 'Aksara', 'Bumi', 'Langit', 'Mahesa', 'Dirgantara', 'Devan', 'Kenzo', 
@@ -91,7 +97,9 @@ class WargaAestheticSeeder extends Seeder
                 'gender' => $isMaleKk ? 'L' : 'P',
                 'no_kk' => $noKk,
                 'nik' => $kkNik,
-                'profile_photo' => 'https://i.pravatar.cc/300?u=' . $kkNik,
+                'profile_photo' => $isMaleKk
+                    ? 'https://randomuser.me/api/portraits/men/' . (($malePhotoIndex++) % 100) . '.jpg'
+                    : 'https://randomuser.me/api/portraits/women/' . (($femalePhotoIndex++) % 100) . '.jpg',
                 'tanggal_lahir' => $kkTglLahir,
                 'rt_number' => $rt,
                 'rw_number' => '018',
@@ -113,7 +121,7 @@ class WargaAestheticSeeder extends Seeder
                     'gender' => 'P',
                     'no_kk' => $noKk,
                     'nik' => $wifeNik,
-                    'profile_photo' => 'https://i.pravatar.cc/300?u=' . $wifeNik,
+                    'profile_photo' => 'https://randomuser.me/api/portraits/women/' . (($femalePhotoIndex++) % 100) . '.jpg',
                     'tanggal_lahir' => $wifeTglLahir,
                     'rt_number' => $rt,
                     'rw_number' => '018',
@@ -156,7 +164,9 @@ class WargaAestheticSeeder extends Seeder
                     'gender' => $isBoy ? 'L' : 'P',
                     'no_kk' => $noKk,
                     'nik' => $childNik,
-                    'profile_photo' => 'https://i.pravatar.cc/300?u=' . $childNik,
+                    'profile_photo' => $isBoy
+                        ? 'https://randomuser.me/api/portraits/men/' . (min(($childBoyPhotoIndex++), 99)) . '.jpg'
+                        : 'https://randomuser.me/api/portraits/women/' . (min(($childGirlPhotoIndex++), 99)) . '.jpg',
                     'tanggal_lahir' => $childTglLahir,
                     'rt_number' => $rt,
                     'rw_number' => '018',

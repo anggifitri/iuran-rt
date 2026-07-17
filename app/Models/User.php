@@ -23,6 +23,9 @@ class User extends Authenticatable
     public function getProfilePhotoUrlAttribute()
     {
         if ($this->profile_photo) {
+            if (filter_var($this->profile_photo, FILTER_VALIDATE_URL)) {
+                return $this->profile_photo;
+            }
             return asset('storage/' . $this->profile_photo);
         }
 
@@ -33,6 +36,11 @@ class User extends Authenticatable
     public function pembayarans()
     {
         return $this->hasMany(Pembayaran::class);
+    }
+
+    public function warga()
+    {
+        return $this->hasOne(Warga::class, 'nik', 'nik');
     }
 
     public function isAdmin()

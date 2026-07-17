@@ -171,36 +171,56 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
                                 <h5 class="fw-bold mb-1" style="color: var(--text-main);">Ringkasan Admin</h5>
-                                <p class="mb-0 text-muted">Pantau status fitur baru secara cepat dari dashboard.</p>
+                                <p class="mb-0 text-muted">Data riil dari seluruh fitur NexaNest RW 018.</p>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1" style="font-size: 0.7rem;"><i class="fas fa-user-shield me-1"></i>{{ $totalAdminRW }} Admin RW</span>
+                                <span class="badge bg-info-subtle text-info border border-info-subtle px-2 py-1" style="font-size: 0.7rem;"><i class="fas fa-user-tie me-1"></i>{{ $totalAdminRT }} Admin RT</span>
                             </div>
                         </div>
                         <div class="row g-3">
-                            <div class="col-sm-6 col-md-3">
+                            <div class="col-6 col-md-3">
                                 <div class="card p-3 stat-card" style="border-radius: 18px; background: var(--bg-card); border: 1px solid var(--border-color);">
-                                    <p class="mb-2 text-white-50" style="font-size: 0.8rem;">Surat</p>
-                                    <h4 class="fw-bold">{{ $newFeatureCounts['surat'] ?? 0 }}</h4>
-                                    <small class="text-muted">Permintaan surat</small>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <p class="mb-1 text-muted" style="font-size: 0.75rem;">Pengajuan Surat</p>
+                                            <h4 class="fw-bold mb-0">{{ $newFeatureCounts['surat'] }}</h4>
+                                        </div>
+                                        <div class="rounded-circle bg-primary-subtle text-primary d-flex align-items-center justify-content-center" style="width:38px;height:38px;"><i class="fas fa-file-signature"></i></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-md-3">
+                            <div class="col-6 col-md-3">
                                 <div class="card p-3 stat-card" style="border-radius: 18px; background: var(--bg-card); border: 1px solid var(--border-color);">
-                                    <p class="mb-2 text-white-50" style="font-size: 0.8rem;">Pengaduan</p>
-                                    <h4 class="fw-bold">{{ $newFeatureCounts['pengaduan'] ?? 0 }}</h4>
-                                    <small class="text-muted">Kasus warga</small>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <p class="mb-1 text-muted" style="font-size: 0.75rem;">Pengaduan Warga</p>
+                                            <h4 class="fw-bold mb-0">{{ $newFeatureCounts['pengaduan'] }}</h4>
+                                        </div>
+                                        <div class="rounded-circle bg-danger-subtle text-danger d-flex align-items-center justify-content-center" style="width:38px;height:38px;"><i class="fas fa-exclamation-circle"></i></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-md-3">
+                            <div class="col-6 col-md-3">
                                 <div class="card p-3 stat-card" style="border-radius: 18px; background: var(--bg-card); border: 1px solid var(--border-color);">
-                                    <p class="mb-2 text-white-50" style="font-size: 0.8rem;">Posyandu</p>
-                                    <h4 class="fw-bold">{{ $newFeatureCounts['posyandu'] ?? 0 }}</h4>
-                                    <small class="text-muted">Jadwal tersedia</small>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <p class="mb-1 text-muted" style="font-size: 0.75rem;">Jadwal Posyandu</p>
+                                            <h4 class="fw-bold mb-0">{{ $newFeatureCounts['posyandu'] }}</h4>
+                                        </div>
+                                        <div class="rounded-circle bg-success-subtle text-success d-flex align-items-center justify-content-center" style="width:38px;height:38px;"><i class="fas fa-heartbeat"></i></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-md-3">
+                            <div class="col-6 col-md-3">
                                 <div class="card p-3 stat-card" style="border-radius: 18px; background: var(--bg-card); border: 1px solid var(--border-color);">
-                                    <p class="mb-2 text-white-50" style="font-size: 0.8rem;">UMKM</p>
-                                    <h4 class="fw-bold">{{ $newFeatureCounts['umkm'] ?? 0 }}</h4>
-                                    <small class="text-muted">Usaha terdaftar</small>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <p class="mb-1 text-muted" style="font-size: 0.75rem;">UMKM Terdaftar</p>
+                                            <h4 class="fw-bold mb-0">{{ $newFeatureCounts['umkm'] }}</h4>
+                                        </div>
+                                        <div class="rounded-circle bg-warning-subtle text-warning d-flex align-items-center justify-content-center" style="width:38px;height:38px;"><i class="fas fa-store"></i></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -231,7 +251,8 @@
             <div class="col-md-3">
                 <div class="stat-card p-3" style="background: linear-gradient(135deg, #111827 0%, #1f2937 100%); border-radius: 20px; border: 1px solid rgba(148, 163, 184, 0.12); box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);">
                     <p class="mb-2 text-white-50" style="font-size: 0.8rem;">Total Warga</p>
-                    <h5 class="fw-bold mb-0" style="color: #f8fafc;">{{ $totalWarga }} Orang</h5>
+                    <h5 class="fw-bold mb-0" style="color: #f8fafc;">{{ $totalJiwa }} Jiwa</h5>
+                    <small class="text-white-50" style="font-size: 0.72rem;">{{ $totalKK }} Kepala Keluarga</small>
                 </div>
             </div>
         </div>
@@ -283,40 +304,85 @@
                 <div class="card h-100 p-4" style="background: linear-gradient(135deg, rgba(15,23,42,0.96) 0%, rgba(31,41,55,0.96) 100%); border: 1px solid rgba(148, 163, 184, 0.14); border-radius: 25px;">
                     <div class="d-flex justify-content-between align-items-start mb-4">
                         <div>
-                            <h6 class="fw-bold mb-1 text-white">Pengumuman Terbaru</h6>
-                            <p class="text-white-50 mb-0">Gunakan pemberitahuan ini untuk ringkasan pengeluaran dan pengingat iuran bulan ini.</p>
+                            <h6 class="fw-bold mb-1 text-white">Info & Pengumuman Terbaru</h6>
+                            <p class="text-white-50 mb-0">Informasi penting dan update terkini untuk warga RW 018.</p>
                         </div>
                         <div style="width:44px; height:44px; border-radius:14px; background: rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center;">
-                            <i class="fas fa-bullhorn text-white"></i>
+                            <i class="fas fa-bell text-white"></i>
                         </div>
                     </div>
-                    <div class="d-grid gap-3">
-                        <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(148,163,184,0.12); border-radius: 22px; padding: 18px;">
-                            <div class="d-flex align-items-start gap-3 mb-2">
-                                <div style="width:32px; height:32px; border-radius:12px; background: rgba(148,163,184,0.18); display:flex; align-items:center; justify-content:center; color:#ffffff; font-weight:700;">1</div>
-                                <div>
-                                    <h6 class="mb-1 text-white">Pengeluaran Terbaru</h6>
-                                    <p class="small text-white-50 mb-0">{{ $latestExpenseDate ?? 'Tanggal tidak tersedia' }}</p>
-                                </div>
-                            </div>
-                            <p class="text-white-50 small mb-0">Rp {{ number_format($latestExpenseAmount, 0, ',', '.') }} - Pastikan semua warga ingat untuk membayar iuran bulan ini.</p>
-                        </div>
-                        @forelse($pengumuman as $index => $p)
-                            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(148,163,184,0.12); border-radius: 22px; padding: 18px;">
-                                <div class="d-flex align-items-start gap-3 mb-2">
-                                    <div style="width:32px; height:32px; border-radius:12px; background: rgba(148,163,184,0.18); display:flex; align-items:center; justify-content:center; color:#ffffff; font-weight:700;">{{ $index + 2 }}</div>
+                    <div class="row g-3">
+                        {{-- Card 1: Pengingat Iuran --}}
+                        <div class="col-md-6">
+                            <div style="background: linear-gradient(135deg, rgba(239,68,68,0.12) 0%, rgba(239,68,68,0.04) 100%); border: 1px solid rgba(239,68,68,0.2); border-radius: 18px; padding: 16px;">
+                                <div class="d-flex align-items-center gap-3 mb-2">
+                                    <div style="width:36px; height:36px; border-radius:12px; background: rgba(239,68,68,0.2); display:flex; align-items:center; justify-content:center;">
+                                        <i class="fas fa-money-bill-wave" style="color: #f87171;"></i>
+                                    </div>
                                     <div>
-                                        <h6 class="mb-1 text-white">{{ $p->title }}</h6>
-                                        <p class="small text-white-50 mb-0">{{ $p->created_at->format('d M Y') }}</p>
+                                        <h6 class="mb-0 text-white" style="font-size: 0.85rem;">Pengingat Iuran Bulanan</h6>
+                                        <small class="text-white-50">{{ \Carbon\Carbon::now()->translatedFormat('F Y') }}</small>
                                     </div>
                                 </div>
-                                <p class="text-white-50 small mb-0">{{ Str::limit($p->content, 120) }}</p>
+                                <p class="text-white-50 small mb-1">Sudah bayar: <span class="text-success fw-bold">{{ $paidThisMonth }} KK</span> dari {{ $totalKKForReminder }} KK</p>
+                                <p class="mb-0"><span class="badge bg-danger rounded-pill px-2">{{ $unpaidKK }} KK belum bayar</span></p>
                             </div>
-                        @empty
-                            <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(148,163,184,0.12); border-radius: 22px; padding: 18px;">
-                                <p class="text-white-50 mb-0">Belum ada pengumuman untuk ditampilkan.</p>
+                        </div>
+                        {{-- Card 2: Info Posyandu --}}
+                        <div class="col-md-6">
+                            <div style="background: linear-gradient(135deg, rgba(16,185,129,0.12) 0%, rgba(16,185,129,0.04) 100%); border: 1px solid rgba(16,185,129,0.2); border-radius: 18px; padding: 16px;">
+                                <div class="d-flex align-items-center gap-3 mb-2">
+                                    <div style="width:36px; height:36px; border-radius:12px; background: rgba(16,185,129,0.2); display:flex; align-items:center; justify-content:center;">
+                                        <i class="fas fa-heartbeat" style="color: #34d399;"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 text-white" style="font-size: 0.85rem;">Info Posyandu</h6>
+                                        <small class="text-white-50">Jadwal terkini</small>
+                                    </div>
+                                </div>
+                                @if($latestPosyandu)
+                                    <p class="text-white-50 small mb-1">{{ $latestPosyandu->judul ?? $latestPosyandu->kegiatan ?? 'Posyandu Rutin' }}</p>
+                                    <p class="mb-0"><span class="badge bg-success rounded-pill px-2">{{ \Carbon\Carbon::parse($latestPosyandu->tanggal)->translatedFormat('d F Y') }}</span></p>
+                                @else
+                                    <p class="text-white-50 small mb-0">Belum ada jadwal posyandu tersedia.</p>
+                                @endif
                             </div>
-                        @endforelse
+                        </div>
+                        {{-- Card 3: Pengeluaran Terbaru --}}
+                        <div class="col-md-6">
+                            <div style="background: linear-gradient(135deg, rgba(251,146,60,0.12) 0%, rgba(251,146,60,0.04) 100%); border: 1px solid rgba(251,146,60,0.2); border-radius: 18px; padding: 16px;">
+                                <div class="d-flex align-items-center gap-3 mb-2">
+                                    <div style="width:36px; height:36px; border-radius:12px; background: rgba(251,146,60,0.2); display:flex; align-items:center; justify-content:center;">
+                                        <i class="fas fa-receipt" style="color: #fb923c;"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 text-white" style="font-size: 0.85rem;">Pengeluaran Terbaru</h6>
+                                        <small class="text-white-50">{{ $latestExpenseDate ?? 'Belum ada' }}</small>
+                                    </div>
+                                </div>
+                                <p class="text-white-50 small mb-0">Kas keluar sebesar <span class="fw-bold" style="color: #fb923c;">Rp {{ number_format($latestExpenseAmount, 0, ',', '.') }}</span></p>
+                            </div>
+                        </div>
+                        {{-- Card 4: Rekomendasi UMKM --}}
+                        <div class="col-md-6">
+                            <div style="background: linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(99,102,241,0.04) 100%); border: 1px solid rgba(99,102,241,0.2); border-radius: 18px; padding: 16px;">
+                                <div class="d-flex align-items-center gap-3 mb-2">
+                                    <div style="width:36px; height:36px; border-radius:12px; background: rgba(99,102,241,0.2); display:flex; align-items:center; justify-content:center;">
+                                        <i class="fas fa-store" style="color: #818cf8;"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 text-white" style="font-size: 0.85rem;">UMKM Pilihan Warga</h6>
+                                        <small class="text-white-50">Dukung usaha lokal!</small>
+                                    </div>
+                                </div>
+                                @if($featuredUmkm)
+                                    <p class="text-white-50 small mb-1">{{ $featuredUmkm->nama }} — {{ $featuredUmkm->kategori }}</p>
+                                    <p class="mb-0"><span class="badge rounded-pill px-2" style="background: rgba(99,102,241,0.3); color: #c7d2fe;">{{ $featuredUmkm->pemilik }}</span></p>
+                                @else
+                                    <p class="text-white-50 small mb-0">Belum ada UMKM terdaftar.</p>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

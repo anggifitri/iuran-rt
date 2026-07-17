@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <style>
         :root {
             --accent: #D1A151;
@@ -44,9 +44,9 @@
             --glow-color: rgba(209, 161, 81, 0.18);
         }
 
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            color: var(--text-primary); 
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-primary);
             transition: background-color 0.4s, color 0.4s;
             overflow-x: hidden;
         }
@@ -332,7 +332,7 @@
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4 bg-animated relative">
-    
+
     <!-- Theme Toggle -->
     <button id="themeToggle" class="theme-toggle" title="Ubah Tema" aria-label="Ubah Tema">
         <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display: none;" width="22" height="22">
@@ -350,7 +350,7 @@
 
     <!-- Login Card -->
     <div class="login-card">
-        
+
         <!-- Left Panel: Graphic Branding -->
         <div class="left-panel">
             <div class="text-center w-full max-w-sm">
@@ -360,28 +360,28 @@
                         <!-- Grid Lines behind -->
                         <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="0.5" stroke-dasharray="2 2" opacity="0.25"/>
                         <circle cx="50" cy="50" r="35" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
-                        
+
                         <!-- Ground line -->
                         <line x1="15" y1="75" x2="85" y2="75" stroke="currentColor" stroke-width="1" opacity="0.4"/>
-                        
+
                         <!-- Isometric house block -->
                         <!-- Roof Front -->
                         <path d="M50 20 L20 48 L28 48 L50 29" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="1.8"/>
                         <!-- Roof Right -->
                         <path d="M50 20 L80 48 L72 48 L50 29" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-width="1.8"/>
-                        
+
                         <!-- House Body Front -->
                         <path d="M28 48 V75 H50 V45 Z" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-width="1.8"/>
                         <!-- House Body Right -->
                         <path d="M72 48 V75 H50 V45 Z" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-width="1.8"/>
-                        
+
                         <!-- Door -->
                         <rect x="44" y="56" width="12" height="19" rx="2" stroke="currentColor" stroke-width="1.5" fill="#000" fill-opacity="0.3"/>
                         <!-- Window Left -->
                         <rect x="33" y="52" width="6" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/>
                         <!-- Window Right -->
                         <rect x="61" y="52" width="6" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/>
-                        
+
                         <!-- Chimney -->
                         <path d="M66 30 V42 H72 V30 Z" stroke="currentColor" stroke-width="1.5"/>
                     </svg>
@@ -426,7 +426,7 @@
                                 class="input-modern"
                                 placeholder="••••••••">
                             <i class="fa-solid fa-lock input-icon-left"></i>
-                            
+
                             <!-- Toggle Eye -->
                             <button type="button" onclick="toggleLoginPassword()" class="eye-toggle-btn" tabindex="-1">
                                 <i id="loginEyeIcon" class="fa-regular fa-eye"></i>
