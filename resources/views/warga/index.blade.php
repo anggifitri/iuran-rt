@@ -105,7 +105,7 @@
                                                             
                                                             <div class="col-6">
                                                                 <span class="d-block" style="font-size: 0.7rem; opacity: 0.8;">Tanggal Lahir</span>
-                                                                <span class="fw-semibold" style="color: var(--text-main);">{{ $anggota->tanggal_lahir ? \Carbon\Carbon::parse($anggota->tanggal_lahir)->translatedFormat('d F Y') : '-' }} ({{ $anggota->umur }} Thn)</span>
+                                                                <span class="fw-semibold" style="color: var(--text-main);">{{ $anggota->tanggal_lahir ? \Carbon\Carbon::parse($anggota->tanggal_lahir)->translatedFormat('d F Y') : '-' }} ({{ $anggota->umur_formatted }})</span>
                                                             </div>
                                                             <div class="col-6">
                                                                 <span class="d-block" style="font-size: 0.7rem; opacity: 0.8;">RT / RW</span>

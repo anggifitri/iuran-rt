@@ -17,8 +17,8 @@ return new class extends Migration
             }
         });
 
-        if (Schema::hasColumn('users', 'role')) {
-            DB::statement("ALTER TABLE users MODIFY role VARCHAR(255) NOT NULL DEFAULT 'warga'");
+        if (Schema::hasColumn('users', 'role') && \Illuminate\Support\Facades\DB::getDriverName() !== 'sqlite') {
+            \Illuminate\Support\Facades\DB::statement("ALTER TABLE users MODIFY role VARCHAR(255) NOT NULL DEFAULT 'warga'");
         }
     }
 

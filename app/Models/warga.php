@@ -29,7 +29,7 @@ class Warga extends Model
         'alamat',
     ];
 
-    protected $appends = ['profile_photo_url', 'status_hubungan'];
+    protected $appends = ['profile_photo_url', 'status_hubungan', 'umur_formatted'];
 
     public function getStatusHubunganAttribute()
     {
@@ -40,6 +40,26 @@ class Warga extends Model
             return 'Istri';
         }
         return 'Anak';
+    }
+
+    public function getUmurFormattedAttribute()
+    {
+        if (!$this->tanggal_lahir) return '-';
+        $birthdate = Carbon::parse($this->tanggal_lahir);
+        $now = Carbon::now();
+        
+        $years = $birthdate->diffInYears($now);
+        $months = $birthdate->diffInMonths($now) % 12;
+        
+        if ($years == 0) {
+            return $months . ' Bln';
+        }
+        
+        if ($months == 0) {
+            return $years . ' Thn';
+        }
+        
+        return $years . ' Thn ' . $months . ' Bln';
     }
 
     public function getProfilePhotoUrlAttribute()
