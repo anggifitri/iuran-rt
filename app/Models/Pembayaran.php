@@ -14,6 +14,7 @@ class Pembayaran extends Model
 
     protected $fillable = [
         'warga_id',
+        'rt_number',
         'tipe',
         'jumlah',
         'kategori',

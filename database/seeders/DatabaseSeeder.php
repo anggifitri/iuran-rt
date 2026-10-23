@@ -135,8 +135,10 @@ class DatabaseSeeder extends Seeder
 
             for ($bulan = 1; $bulan <= $maxBulan; $bulan++) {
                 // 1. Pemasukan Wajib Bulanan (100k)
+                $w = Warga::find($wargaId);
                 Pembayaran::create([
                     'warga_id' => $wargaId,
+                    'rt_number' => $w ? $w->rt_number : '000',
                     'tipe' => 'masuk',
                     'jumlah' => 100000,
                     'kategori' => 'Iuran Bulanan',
@@ -148,14 +150,14 @@ class DatabaseSeeder extends Seeder
                 if (rand(1, 10) > 7) {
                     $kategoriAcak = rand(0, 1) == 0 ? 'Iuran Sukarela' : 'Donasi Warga';
                     $nominalAcak = [50000, 100000, 200000, 500000][rand(0, 3)];
-
                     Pembayaran::create([
                         'warga_id' => $wargaId,
+                        'rt_number' => $w ? $w->rt_number : '000',
                         'tipe' => 'masuk',
                         'jumlah' => $nominalAcak,
                         'kategori' => $kategoriAcak,
                         'tanggal' => Carbon::create(2026, $bulan, rand(1, 28))->format('Y-m-d'),
-                        'keterangan' => $kategoriAcak . ' swadaya'
+                        'keterangan' => 'Pemasukan tambahan warga'
                     ]);
                 }
             }

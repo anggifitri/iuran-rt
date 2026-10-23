@@ -18,6 +18,21 @@
         </div>
     @endif
 
+    @if($user->isAdminRw() || $user->isAdminRt())
+        <div class="mb-4 d-flex gap-2 flex-wrap">
+            <a href="{{ route('surat.index', ['filter' => 'pending']) }}" class="btn {{ (isset($filter) && $filter === 'pending') ? 'btn-primary' : 'btn-outline-primary' }} rounded-pill px-4">
+                Menunggu Disetujui {{ $user->isAdminRw() ? '(RW)' : '(RT)' }}
+            </a>
+            
+            @if($user->isAdminRt())
+            <a href="{{ route('surat.index', ['filter' => 'pending_rw']) }}" class="btn {{ (isset($filter) && $filter === 'pending_rw') ? 'btn-primary' : 'btn-outline-primary' }} rounded-pill px-4">Sedang Diproses RW</a>
+            @endif
+
+            <a href="{{ route('surat.index', ['filter' => 'selesai']) }}" class="btn {{ (isset($filter) && $filter === 'selesai') ? 'btn-primary' : 'btn-outline-primary' }} rounded-pill px-4">Sudah Selesai</a>
+            <a href="{{ route('surat.index', ['filter' => 'all']) }}" class="btn {{ (!isset($filter) || $filter === 'all') ? 'btn-primary' : 'btn-outline-primary' }} rounded-pill px-4">Semua Surat</a>
+        </div>
+    @endif
+
     <div class="card border-0 shadow-sm rounded-4 overflow-hidden" style="background-color: var(--bg-card); border: 1px solid var(--border-color) !important;">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0" style="color: var(--text-main);">
@@ -89,7 +104,7 @@
                                     @endif
 
                                     <!-- ADMIN RT ACTION -->
-                                    @if($user->isAdmin() && $user->rt_number !== '000')
+                                    @if($user->isAdminRt())
                                         @if($surat->status === 'pending_rt')
                                             <form action="{{ route('surat.approve_rt', $surat->id) }}" method="POST" class="d-inline">
                                                 @csrf
@@ -107,7 +122,7 @@
                                     @endif
 
                                     <!-- ADMIN RW ACTION -->
-                                    @if($user->isAdmin() && $user->rt_number === '000')
+                                    @if($user->isAdminRw())
                                         @if($surat->status === 'pending_rt')
                                             <span class="text-muted small"><i class="fas fa-hourglass-half me-1"></i>Menunggu RT</span>
                                         @elseif($surat->status === 'pending_rw')

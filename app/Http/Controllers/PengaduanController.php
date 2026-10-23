@@ -15,6 +15,10 @@ class PengaduanController extends Controller
 
         if (!$user->isAdmin()) {
             $query->where('user_id', $user->id);
+        } elseif ($user->isAdminRt()) {
+            $query->whereHas('user', function($q) use ($user) {
+                $q->where('rt_number', $user->rt_number);
+            });
         }
 
         $pengaduans = $query->paginate(10);

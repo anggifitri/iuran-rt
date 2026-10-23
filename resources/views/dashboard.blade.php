@@ -104,6 +104,7 @@
                             <i class="fas fa-tachometer-alt me-3"></i> Dashboard
                         </a>
                     </li>
+                    @if(!isset($isWarga) || !$isWarga)
                     <li class="nav-item mb-2">
                         <a class="nav-link rounded" href="{{ route('warga.index') }}">
                             <i class="fas fa-users me-3"></i> Data Warga
@@ -119,9 +120,14 @@
                             <i class="fas fa-file-pdf me-3"></i> Laporan Bulanan
                         </a>
                     </li>
+                    @endif
                     <li class="nav-item mb-2">
                         <a class="nav-link rounded" href="{{ route('laporan.iuran') }}">
+                            @if(isset($isWarga) && $isWarga)
+                            <i class="fas fa-file-alt me-3"></i> Riwayat Iuran Saya
+                            @else
                             <i class="fas fa-file-alt me-3"></i> Laporan Iuran
+                            @endif
                         </a>
                     </li>
                     <li class="nav-item mb-2">

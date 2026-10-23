@@ -23,7 +23,6 @@ class ProfileController extends Controller
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'phone' => 'required|string|max:15',
             'address' => 'required|string',
-            'rt_number' => 'required|string|max:10',
             'no_kk' => 'nullable|string|max:25',
             'nik' => 'nullable|string|max:25',
             'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',

@@ -4,21 +4,29 @@ namespace App\Http\Controllers;
 
 use App\Models\Warga;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class WargaController extends Controller
 {
     public function index(Request $request)
     {
+        if (Auth::user()->role === 'warga') return redirect()->route('dashboard');
+
         $viewMode = $request->input('view', 'family');
+        $query = Warga::query();
+
+        if (Auth::user()->isAdminRt()) {
+            $query->where('rt_number', Auth::user()->rt_number);
+        }
 
         if ($viewMode === 'table') {
-            $wargas = Warga::orderBy('nama', 'asc')->paginate(20);
+            $wargas = $query->orderBy('nama', 'asc')->paginate(20);
         } else {
-            $wargas = Warga::where(function($query) {
-                $query->where('is_kk', true)
-                      ->orWhere('is_kk', 1)
-                      ->orWhere('is_kk', '1');
+            $wargas = $query->where(function($q) {
+                $q->where('is_kk', true)
+                  ->orWhere('is_kk', 1)
+                  ->orWhere('is_kk', '1');
             })->with('anggotaKeluarga')->orderBy('nama', 'asc')->paginate(10);
         }
 
@@ -27,18 +35,27 @@ class WargaController extends Controller
 
     public function create()
     {
-        // TAMBAHAN: Disamakan query-nya agar dropdown Kepala Keluarga tidak kosong di SQLite
-        $kepalaKeluargas = Warga::where(function($query) {
-            $query->where('is_kk', true)
-                  ->orWhere('is_kk', 1)
-                  ->orWhere('is_kk', '1');
-        })->orderBy('nama', 'asc')->get();
+        if (Auth::user()->role === 'warga') return redirect()->route('dashboard');
+
+        $query = Warga::where(function($q) {
+            $q->where('is_kk', true)
+              ->orWhere('is_kk', 1)
+              ->orWhere('is_kk', '1');
+        });
+
+        if (Auth::user()->isAdminRt()) {
+            $query->where('rt_number', Auth::user()->rt_number);
+        }
+
+        $kepalaKeluargas = $query->orderBy('nama', 'asc')->get();
 
         return view('warga.create', compact('kepalaKeluargas'));
     }
 
     public function store(Request $request)
     {
+        if (Auth::user()->role === 'warga') return redirect()->route('dashboard');
+
         if ($request->has('rt_number') && $request->rt_number != '') {
             $request->merge(['rt_number' => str_pad($request->rt_number, 3, '0', STR_PAD_LEFT)]);
         }
@@ -63,6 +80,10 @@ class WargaController extends Controller
             'kk_id' => 'nullable|exists:wargas,id',
             'alamat' => 'required|string',
         ]);
+
+        if (Auth::user()->isAdminRt() && $request->rt_number !== Auth::user()->rt_number) {
+            return redirect()->back()->withErrors(['rt_number' => 'Anda hanya bisa menambahkan warga ke RT Anda.']);
+        }
 
         $data = $request->only([
             'nama', 'blok_rumah', 'nomor_hp', 'no_kk', 'nik', 'gender',
@@ -87,20 +108,37 @@ class WargaController extends Controller
 
     public function edit(string $id)
     {
-        $warga = Warga::findOrFail($id);
+        if (Auth::user()->role === 'warga') return redirect()->route('dashboard');
 
-        // TAMBAHAN: Disamakan query-nya agar dropdown tidak kosong
-        $kepalaKeluargas = Warga::where(function($query) {
-            $query->where('is_kk', true)
-                  ->orWhere('is_kk', 1)
-                  ->orWhere('is_kk', '1');
-        })->where('id', '!=', $id)->orderBy('nama', 'asc')->get();
+        $warga = Warga::findOrFail($id);
+        if (Auth::user()->isAdminRt() && $warga->rt_number !== Auth::user()->rt_number) {
+            return redirect()->route('warga.index')->with('error', 'Akses ditolak.');
+        }
+
+        $query = Warga::where(function($q) {
+            $q->where('is_kk', true)
+              ->orWhere('is_kk', 1)
+              ->orWhere('is_kk', '1');
+        })->where('id', '!=', $id);
+
+        if (Auth::user()->isAdminRt()) {
+            $query->where('rt_number', Auth::user()->rt_number);
+        }
+
+        $kepalaKeluargas = $query->orderBy('nama', 'asc')->get();
 
         return view('warga.edit', compact('warga', 'kepalaKeluargas'));
     }
 
     public function update(Request $request, string $id)
     {
+        if (Auth::user()->role === 'warga') return redirect()->route('dashboard');
+
+        $warga = Warga::findOrFail($id);
+        if (Auth::user()->isAdminRt() && $warga->rt_number !== Auth::user()->rt_number) {
+            return redirect()->route('warga.index')->with('error', 'Akses ditolak.');
+        }
+
         if ($request->has('rt_number') && $request->rt_number != '') {
             $request->merge(['rt_number' => str_pad($request->rt_number, 3, '0', STR_PAD_LEFT)]);
         }
@@ -126,7 +164,9 @@ class WargaController extends Controller
             'alamat' => 'required|string',
         ]);
 
-        $warga = Warga::findOrFail($id);
+        if (Auth::user()->isAdminRt() && $request->rt_number !== Auth::user()->rt_number) {
+            return redirect()->back()->withErrors(['rt_number' => 'Anda tidak bisa mengubah RT ke luar wewenang Anda.']);
+        }
 
         $data = $request->only([
             'nama', 'blok_rumah', 'nomor_hp', 'no_kk', 'nik', 'gender',
@@ -136,14 +176,10 @@ class WargaController extends Controller
         $data['kk_id'] = $request->is_kk ? null : $request->kk_id;
 
         if ($request->hasFile('profile_photo')) {
-            $photo = $request->file('profile_photo');
-            $path = $photo->store('warga_photos', 'public');
-
-            // TAMBAHAN: Cek agar tidak menghapus URL foto dari seeder
-            if ($warga->profile_photo && !filter_var($warga->profile_photo, FILTER_VALIDATE_URL) && Storage::disk('public')->exists($warga->profile_photo)) {
+            if ($warga->profile_photo && Storage::disk('public')->exists($warga->profile_photo)) {
                 Storage::disk('public')->delete($warga->profile_photo);
             }
-            $data['profile_photo'] = $path;
+            $data['profile_photo'] = $request->file('profile_photo')->store('warga_photos', 'public');
         }
 
         $warga->update($data);
@@ -153,12 +189,17 @@ class WargaController extends Controller
 
     public function destroy(string $id)
     {
-        $warga = Warga::findOrFail($id);
+        if (Auth::user()->role === 'warga') return redirect()->route('dashboard');
 
-        // TAMBAHAN: Cek agar tidak menghapus URL foto dari seeder
-        if ($warga->profile_photo && !filter_var($warga->profile_photo, FILTER_VALIDATE_URL) && Storage::disk('public')->exists($warga->profile_photo)) {
+        $warga = Warga::findOrFail($id);
+        if (Auth::user()->isAdminRt() && $warga->rt_number !== Auth::user()->rt_number) {
+            return redirect()->route('warga.index')->with('error', 'Akses ditolak.');
+        }
+
+        if ($warga->profile_photo && Storage::disk('public')->exists($warga->profile_photo)) {
             Storage::disk('public')->delete($warga->profile_photo);
         }
+
         $warga->delete();
 
         return redirect()->route('warga.index')->with('success', 'Data warga berhasil dihapus.');

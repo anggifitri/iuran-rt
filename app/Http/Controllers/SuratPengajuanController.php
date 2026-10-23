@@ -9,22 +9,35 @@ use Illuminate\Support\Str;
 
 class SuratPengajuanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
+        $filter = $request->get('filter', 'all');
         
-        if ($user->rt_number === '000') {
-            // Admin RW: sees all requests
-            $surats = SuratPengajuan::with('user.warga')->latest()->paginate(15);
-        } elseif ($user->isAdmin()) {
-            // Admin RT: sees requests in their RT
-            $surats = SuratPengajuan::with('user.warga')->where('rt_number', $user->rt_number)->latest()->paginate(15);
+        $query = SuratPengajuan::with('user.warga')->latest();
+
+        if ($user->isAdminRw()) {
+            if ($filter === 'pending') {
+                $query->where('status', 'pending_rw');
+            } elseif ($filter === 'selesai') {
+                $query->where('status', 'selesai');
+            }
+        } elseif ($user->isAdminRt()) {
+            $query->where('rt_number', $user->rt_number);
+            if ($filter === 'pending') {
+                $query->where('status', 'pending_rt');
+            } elseif ($filter === 'pending_rw') {
+                $query->where('status', 'pending_rw');
+            } elseif ($filter === 'selesai') {
+                $query->where('status', 'selesai');
+            }
         } else {
-            // Warga: sees their own requests
-            $surats = SuratPengajuan::with('user.warga')->where('user_id', $user->id)->latest()->paginate(15);
+            $query->where('user_id', $user->id);
         }
 
-        return view('surat.index', compact('user', 'surats'));
+        $surats = $query->paginate(15);
+
+        return view('surat.index', compact('user', 'surats', 'filter'));
     }
 
     public function create()
@@ -35,7 +48,11 @@ class SuratPengajuanController extends Controller
         $wargas = collect();
         if ($user->isAdmin()) {
             // Fetch citizens who have registered user accounts for target selection
-            $wargas = \App\Models\Warga::orderBy('nama', 'asc')->get();
+            $wargaQuery = \App\Models\Warga::orderBy('nama', 'asc');
+            if ($user->isAdminRt()) {
+                $wargaQuery->where('rt_number', $user->rt_number);
+            }
+            $wargas = $wargaQuery->get();
         }
 
         return view('surat.create', compact('user', 'warga', 'wargas'));

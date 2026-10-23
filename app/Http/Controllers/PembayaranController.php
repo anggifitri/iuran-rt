@@ -14,10 +14,18 @@ class PembayaranController extends Controller
     {
         $user = Auth::user();
 
-        // Mengambil data dari tabel transactions (Model Pembayaran)
-        $pembayarans = Pembayaran::with('warga')
-            ->orderBy('tanggal', 'desc')
-            ->paginate(15);
+        // Warga should not access this raw kas table directly, but if they do, show only theirs
+        if ($user->role === 'warga') {
+            return redirect()->route('dashboard')->with('error', 'Akses ditolak: Halaman Transaksi Kas hanya untuk pengurus.');
+        }
+
+        $query = Pembayaran::with('warga')->orderBy('tanggal', 'desc');
+
+        if ($user->isAdminRt()) {
+            $query->where('rt_number', $user->rt_number);
+        }
+
+        $pembayarans = $query->paginate(15);
 
         // Langkah A: Buat susunan template 6 bulan terakhir dengan nilai default 0
         $templateBulan = collect();
@@ -31,13 +39,17 @@ class PembayaranController extends Controller
             ]);
         }
 
-        // Langkah B: Ambil data riil dari database (SQLite safe)
-        $pembayaransChart = Pembayaran::where('tanggal', '>=', now()->subMonths(5)->startOfMonth())
-            ->orderBy('tanggal', 'asc')
-            ->get()
-            ->groupBy(function($item) {
-                return Carbon::parse($item->tanggal)->format('Y-m');
-            });
+        // Langkah B: Ambil data riil dari database
+        $chartQuery = Pembayaran::where('tanggal', '>=', now()->subMonths(5)->startOfMonth())
+            ->orderBy('tanggal', 'asc');
+            
+        if ($user->isAdminRt()) {
+            $chartQuery->where('rt_number', $user->rt_number);
+        }
+
+        $pembayaransChart = $chartQuery->get()->groupBy(function($item) {
+            return Carbon::parse($item->tanggal)->format('Y-m');
+        });
 
         // Langkah C: Gabungkan data database ke template
         $chartData = $templateBulan->map(function($default, $key) use ($pembayaransChart) {
@@ -58,14 +70,20 @@ class PembayaranController extends Controller
 
     public function create()
     {
-        // Ambil data warga untuk dropdown di form iuran
-        $warga = Warga::all();
+        if (Auth::user()->role === 'warga') {
+            return redirect()->route('dashboard');
+        }
+        
+        $wargaQuery = Warga::query();
+        if (Auth::user()->isAdminRt()) {
+            $wargaQuery->where('rt_number', Auth::user()->rt_number);
+        }
+        $warga = $wargaQuery->get();
         return view('pembayaran.create', compact('warga'));
     }
 
     public function store(Request $request)
     {
-        // Validasi sesuai kolom di tabel transactions
         $request->validate([
             'warga_id' => 'nullable|exists:wargas,id',
             'tipe' => 'required|in:masuk,keluar',
@@ -75,9 +93,17 @@ class PembayaranController extends Controller
             'keterangan' => 'nullable|string',
         ]);
 
-        // Simpan ke tabel transactions
+        $rt_number = Auth::user()->isAdminRt() ? Auth::user()->rt_number : '000';
+        if ($request->warga_id) {
+            $warga = Warga::find($request->warga_id);
+            if ($warga) {
+                $rt_number = $warga->rt_number;
+            }
+        }
+
         Pembayaran::create([
-            'warga_id' => $request->warga_id, // Bisa kosong jika pengeluaran umum
+            'warga_id' => $request->warga_id,
+            'rt_number' => $rt_number,
             'tipe' => $request->tipe,
             'jumlah' => $request->jumlah,
             'kategori' => $request->kategori,
@@ -85,55 +111,63 @@ class PembayaranController extends Controller
             'tanggal' => $request->tanggal,
         ]);
 
-        return redirect()->route('dashboard')->with('success', 'Transaksi kas berhasil dicatat!');
+        return redirect()->route('pembayaran.index')->with('success', 'Transaksi kas berhasil dicatat!');
     }
 
     public function cetakLaporan()
     {
-        $pembayarans = Pembayaran::with('warga')->orderBy('tanggal', 'asc')->get();
+        if (Auth::user()->role === 'warga') return redirect()->route('dashboard');
+
+        $query = Pembayaran::with('warga')->orderBy('tanggal', 'asc');
+        if (Auth::user()->isAdminRt()) {
+            $query->where('rt_number', Auth::user()->rt_number);
+        }
+        $pembayarans = $query->get();
         return view('pembayaran.cetak', compact('pembayarans'));
     }
 
     public function destroy($id)
     {
+        if (Auth::user()->role === 'warga') return redirect()->route('dashboard');
+        
         $pembayaran = Pembayaran::findOrFail($id);
-        $pembayaran->delete();
+        
+        if (Auth::user()->isAdminRt() && $pembayaran->rt_number !== Auth::user()->rt_number) {
+            return redirect()->route('pembayaran.index')->with('error', 'Tidak berhak menghapus transaksi RT lain.');
+        }
 
-        return redirect()->route('dashboard')->with('success', 'Transaksi berhasil dihapus!');
+        $pembayaran->delete();
+        return redirect()->route('pembayaran.index')->with('success', 'Transaksi berhasil dihapus!');
     }
 
     public function indexLaporan(Request $request)
     {
-        // Mengambil filter bulan dan tahun, default-nya adalah bulan & tahun sekarang
+        if (Auth::user()->role === 'warga') return redirect()->route('dashboard');
+
         $bulan = $request->get('bulan', date('m'));
         $tahun = $request->get('tahun', date('Y'));
 
-        // 1. HITUNG SALDO AWAL (Semua transaksi MASUK dikurangi KELUAR SEBELUM bulan terpilih)
-        $saldoAwalMasuk = Pembayaran::where('tipe', 'masuk')
-            ->where('tanggal', '<', "$tahun-$bulan-01")
-            ->sum('jumlah');
+        $queryAwalMasuk = Pembayaran::where('tipe', 'masuk')->where('tanggal', '<', "$tahun-$bulan-01");
+        $queryAwalKeluar = Pembayaran::where('tipe', 'keluar')->where('tanggal', '<', "$tahun-$bulan-01");
+        $queryBulanIni = Pembayaran::with('warga')->whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun);
 
-        $saldoAwalKeluar = Pembayaran::where('tipe', 'keluar')
-            ->where('tanggal', '<', "$tahun-$bulan-01")
-            ->sum('jumlah');
+        if (Auth::user()->isAdminRt()) {
+            $rt = Auth::user()->rt_number;
+            $queryAwalMasuk->where('rt_number', $rt);
+            $queryAwalKeluar->where('rt_number', $rt);
+            $queryBulanIni->where('rt_number', $rt);
+        }
 
+        $saldoAwalMasuk = $queryAwalMasuk->sum('jumlah');
+        $saldoAwalKeluar = $queryAwalKeluar->sum('jumlah');
         $saldoAwal = $saldoAwalMasuk - $saldoAwalKeluar;
 
-        // 2. AMBIL TRANSAKSI KHUSUS BULAN INI
-        $pembayarans = Pembayaran::with('warga')
-            ->whereMonth('tanggal', $bulan)
-            ->whereYear('tanggal', $tahun)
-            ->orderBy('tanggal', 'asc')
-            ->get();
+        $pembayarans = $queryBulanIni->orderBy('tanggal', 'asc')->get();
 
-        // 3. HITUNG TOTAL MASUK & KELUAR DI BULAN INI
         $totalMasuk = $pembayarans->where('tipe', 'masuk')->sum('jumlah');
         $totalKeluar = $pembayarans->where('tipe', 'keluar')->sum('jumlah');
-
-        // 4. HITUNG SALDO AKHIR
         $saldoAkhir = $saldoAwal + $totalMasuk - $totalKeluar;
 
-        // Membuat daftar pilihan tahun (tahun ini mundur sampai 5 tahun ke belakang)
         $daftarTahun = range(date('Y'), date('Y') - 5);
 
         return view('laporan.index', compact(
@@ -144,23 +178,27 @@ class PembayaranController extends Controller
 
     public function cetakLaporanBulanan(Request $request)
     {
+        if (Auth::user()->role === 'warga') return redirect()->route('dashboard');
+
         $bulan = $request->get('bulan', date('m'));
         $tahun = $request->get('tahun', date('Y'));
 
-        // Logika perhitungan sama persis dengan indexLaporan
-        $saldoAwalMasuk = Pembayaran::where('tipe', 'masuk')
-            ->where('tanggal', '<', "$tahun-$bulan-01")
-            ->sum('jumlah');
-        $saldoAwalKeluar = Pembayaran::where('tipe', 'keluar')
-            ->where('tanggal', '<', "$tahun-$bulan-01")
-            ->sum('jumlah');
+        $queryAwalMasuk = Pembayaran::where('tipe', 'masuk')->where('tanggal', '<', "$tahun-$bulan-01");
+        $queryAwalKeluar = Pembayaran::where('tipe', 'keluar')->where('tanggal', '<', "$tahun-$bulan-01");
+        $queryBulanIni = Pembayaran::with('warga')->whereMonth('tanggal', $bulan)->whereYear('tanggal', $tahun);
+
+        if (Auth::user()->isAdminRt()) {
+            $rt = Auth::user()->rt_number;
+            $queryAwalMasuk->where('rt_number', $rt);
+            $queryAwalKeluar->where('rt_number', $rt);
+            $queryBulanIni->where('rt_number', $rt);
+        }
+
+        $saldoAwalMasuk = $queryAwalMasuk->sum('jumlah');
+        $saldoAwalKeluar = $queryAwalKeluar->sum('jumlah');
         $saldoAwal = $saldoAwalMasuk - $saldoAwalKeluar;
 
-        $pembayarans = Pembayaran::with('warga')
-            ->whereMonth('tanggal', $bulan)
-            ->whereYear('tanggal', $tahun)
-            ->orderBy('tanggal', 'asc')
-            ->get();
+        $pembayarans = $queryBulanIni->orderBy('tanggal', 'asc')->get();
 
         $totalMasuk = $pembayarans->where('tipe', 'masuk')->sum('jumlah');
         $totalKeluar = $pembayarans->where('tipe', 'keluar')->sum('jumlah');
@@ -176,7 +214,41 @@ class PembayaranController extends Controller
     {
         $bulan = $request->get('bulan', date('m'));
         $tahun = $request->get('tahun', date('Y'));
+        
+        $user = Auth::user();
+        if ($user->role === 'warga') {
+            // Warga only sees their own
+            $wargaRecord = Warga::where('nik', $user->nik)->orWhere('no_kk', $user->no_kk)->first();
+            $wargaId = $wargaRecord ? $wargaRecord->id : -1;
+
+            $paidThisMonth = Pembayaran::where('warga_id', $wargaId)
+                ->where('tipe', 'masuk')
+                ->where('kategori', 'like', '%Iuran%')
+                ->whereMonth('tanggal', $bulan)
+                ->whereYear('tanggal', $tahun)
+                ->orderBy('tanggal', 'desc')
+                ->get();
+
+            $rows = [];
+            if ($wargaRecord) {
+                $status = $paidThisMonth->isEmpty() ? 'Belum Bayar' : 'Lunas';
+                $badgeClass = $status === 'Lunas' ? 'bg-success' : 'bg-danger';
+
+                $rows[] = (object)[
+                    'warga' => $wargaRecord,
+                    'status' => $status,
+                    'badge_class' => $badgeClass,
+                    'pembayarans' => $paidThisMonth,
+                ];
+            }
+
+            return view('laporan.iuran', compact('rows', 'bulan', 'tahun'));
+        }
+
         $rtFilter = $request->get('rt_number');
+        if ($user->isAdminRt()) {
+            $rtFilter = $user->rt_number;
+        }
 
         $rtList = ['006', '007', '008', '009', '010'];
 
@@ -264,12 +336,20 @@ class PembayaranController extends Controller
     {
         $bulan = $request->get('bulan', date('m'));
         $tahun = $request->get('tahun', date('Y'));
+        
+        $user = Auth::user();
+        if ($user->role === 'warga') return redirect()->route('dashboard');
+        
         $rtFilter = $request->get('rt_number');
 
         $wargasQuery = Warga::where('is_kk', true)->orderBy('nama');
         if ($rtFilter) {
             $wargasQuery->where('rt_number', $rtFilter);
         }
+        if ($user->isAdminRt()) {
+            $wargasQuery->where('rt_number', $user->rt_number);
+        }
+        
         $wargas = $wargasQuery->get();
 
         $rows = [];

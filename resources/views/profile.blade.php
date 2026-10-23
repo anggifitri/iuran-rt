@@ -101,8 +101,8 @@
 
                             <div class="col-md-6">
                                 <label for="rt_number" class="form-label" style="color: var(--text-muted);">No. RT</label>
-                                <input type="text" class="form-control @error('rt_number') is-invalid @enderror" id="rt_number" name="rt_number" value="{{ old('rt_number', $user->rt_number) }}">
-                                @error('rt_number')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                <input type="text" class="form-control bg-light" id="rt_number" name="rt_number" value="{{ old('rt_number', $user->rt_number) }}" readonly>
+                                <small class="text-muted" style="font-size: 0.75rem;">Hubungi RW jika ada perubahan RT.</small>
                             </div>
 
                             <div class="col-md-6">

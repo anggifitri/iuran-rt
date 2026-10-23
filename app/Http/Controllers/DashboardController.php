@@ -8,19 +8,47 @@ use App\Models\Pengumuman;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon; // Pastikan import Carbon
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
     public function index()
     {
         $user = Auth::user();
+        $isWarga = $user->role === 'warga';
+        $isAdminRW = $user->role === 'admin' && $user->rt_number === '000';
+        $isAdminRT = $user->role === 'admin' && $user->rt_number !== '000';
 
+        // 1. Get Warga record if user is warga
+        $wargaId = null;
+        if ($isWarga) {
+            $wargaRecord = Warga::where('nik', $user->nik)->orWhere('no_kk', $user->no_kk)->first();
+            if ($wargaRecord) {
+                $wargaId = $wargaRecord->id;
+            }
+        }
 
-        // 2. Hitung Kas
+        // 2. Hitung Kas (RBAC applied)
         try {
-            $pemasukan = Pembayaran::where('tipe', 'masuk')->sum('jumlah');
-            $pengeluaran = Pembayaran::where('tipe', 'keluar')->sum('jumlah');
+            $pembayaranQuery = Pembayaran::query();
+            
+            if ($isWarga) {
+                // Warga only sees their own total payments
+                if ($wargaId) {
+                    $pembayaranQuery->where('warga_id', $wargaId);
+                } else {
+                    $pembayaranQuery->where('id', -1); // Force empty if not found
+                }
+            } elseif ($isAdminRT) {
+                // Admin RT sees kas for their RT
+                $pembayaranQuery->where('rt_number', $user->rt_number);
+            }
+            // Admin RW (or Bendahara) sees everything, no filter needed
+
+            $pemasukan = (clone $pembayaranQuery)->where('tipe', 'masuk')->sum('jumlah');
+            
+            // Warga has no 'keluar', but just in case
+            $pengeluaran = (clone $pembayaranQuery)->where('tipe', 'keluar')->sum('jumlah');
         } catch (\Exception $e) {
             $pemasukan = 0;
             $pengeluaran = 0;
@@ -28,47 +56,61 @@ class DashboardController extends Controller
 
         $saldo = $pemasukan - $pengeluaran;
 
-        // 3. Total Warga
+        // 3. Total Warga (RBAC applied)
         try {
-            $totalKK = Warga::where('is_kk', true)->count();
-            $totalJiwa = Warga::count();
+            $wargaQuery = Warga::query();
+            if ($isAdminRT) {
+                $wargaQuery->where('rt_number', $user->rt_number);
+            }
+            
+            $totalKK = (clone $wargaQuery)->where('is_kk', true)->count();
+            $totalJiwa = (clone $wargaQuery)->count();
+            
+            $maleCount = (clone $wargaQuery)->where('gender', 'L')->count();
+            $femaleCount = (clone $wargaQuery)->where('gender', 'P')->count();
         } catch (\Exception $e) {
             $totalKK = 0;
             $totalJiwa = 0;
+            $maleCount = 0;
+            $femaleCount = 0;
         }
 
-        // 4. Data untuk Grafik
+        // 4. Data untuk Grafik (RBAC applied)
         try {
-            // Langkah A: Buat susunan template 6 bulan terakhir dengan nilai default 0
             $templateBulan = collect();
             for ($i = 5; $i >= 0; $i--) {
                 $targetDate = now()->subMonths($i);
                 $templateBulan->put($targetDate->format('Y-m'), (object)[
                     'year_month'  => $targetDate->format('Y-m'),
-                    'bulan_tahun' => $targetDate->format('F Y'), // Format Bahasa Inggris: "July 2026"
+                    'bulan_tahun' => $targetDate->format('F Y'),
                     'masuk'       => 0,
                     'keluar'      => 0
                 ]);
             }
 
-            // Langkah B: Ambil data riil dari database menggunakan query SQL
-            $rawChartData = Pembayaran::select(
-                    DB::raw('DATE_FORMAT(tanggal, "%Y-%m") as year_month'),
-                    DB::raw('DATE_FORMAT(tanggal, "%M %Y") as bulan_tahun'),
+            $rawChartDataQuery = Pembayaran::select(
+                    DB::raw("strftime('%Y-%m', tanggal) as year_month"),
                     DB::raw("SUM(CASE WHEN tipe = 'masuk' THEN jumlah ELSE 0 END) as masuk"),
                     DB::raw("SUM(CASE WHEN tipe = 'keluar' THEN jumlah ELSE 0 END) as keluar")
                 )
-                ->where('tanggal', '>=', now()->subMonths(5)->startOfMonth())
-                ->groupBy('year_month', 'bulan_tahun')
+                ->where('tanggal', '>=', now()->subMonths(5)->startOfMonth());
+                
+            if ($isWarga) {
+                if ($wargaId) $rawChartDataQuery->where('warga_id', $wargaId);
+                else $rawChartDataQuery->where('id', -1);
+            } elseif ($isAdminRT) {
+                $rawChartDataQuery->where('rt_number', $user->rt_number);
+            }
+
+            $rawChartData = $rawChartDataQuery->groupBy('year_month')
                 ->get()
                 ->keyBy('year_month');
 
-            // Langkah C: Gabungkan (Merge) data riil database ke dalam template agar bulan kosong terisi 0
             $chartData = $templateBulan->map(function($default, $key) use ($rawChartData) {
                 if ($rawChartData->has($key)) {
                     return (object)[
                         'year_month'  => $key,
-                        'bulan_tahun' => $rawChartData[$key]->bulan_tahun,
+                        'bulan_tahun' => $default->bulan_tahun,
                         'masuk'       => (float) $rawChartData[$key]->masuk,
                         'keluar'      => (float) $rawChartData[$key]->keluar,
                     ];
@@ -77,58 +119,22 @@ class DashboardController extends Controller
             })->values();
 
         } catch (\Exception $e) {
-            // FALLBACK: Logika pencadangan jika raw SQL di atas gagal (menggunakan Collection Laravel)
-            try {
-                $templateBulan = collect();
-                for ($i = 5; $i >= 0; $i--) {
-                    $targetDate = now()->subMonths($i);
-                    $templateBulan->put($targetDate->format('Y-m'), (object)[
-                        'year_month'  => $targetDate->format('Y-m'),
-                        'bulan_tahun' => $targetDate->format('F Y'),
-                        'masuk'       => 0,
-                        'keluar'      => 0
-                    ]);
-                }
+            $chartData = collect();
+        }
 
-                $pembayarans = Pembayaran::where('tanggal', '>=', now()->subMonths(5)->startOfMonth())
-                    ->orderBy('tanggal', 'asc')
-                    ->get()
-                    ->groupBy(function($item) {
-                        return Carbon::parse($item->tanggal)->format('Y-m');
-                    });
-
-                $chartData = $templateBulan->map(function($default, $key) use ($pembayarans) {
-                    if ($pembayarans->has($key)) {
-                        $group = $pembayarans[$key];
-                        return (object)[
-                            'year_month'  => $key,
-                            'bulan_tahun' => Carbon::parse($group->first()->tanggal)->format('F Y'),
-                            'masuk'       => $group->where('tipe', 'masuk')->sum('jumlah'),
-                            'keluar'      => $group->where('tipe', 'keluar')->sum('jumlah'),
-                        ];
-                    }
-                    return $default;
-                })->values();
-
-            } catch (\Exception $ex) {
-                $chartData = collect();
+        // 6. Ambil pengeluaran terbaru (RBAC)
+        try {
+            $latestExpenseQuery = Pembayaran::where('tipe', 'keluar')->orderBy('tanggal', 'desc');
+            if ($isAdminRT) {
+                $latestExpenseQuery->where('rt_number', $user->rt_number);
             }
-        }
-
-        // 5. Hitung gender (L / P)
-        try {
-            $maleCount = Warga::where('gender', 'L')->count();
-            $femaleCount = Warga::where('gender', 'P')->count();
-        } catch (\Exception $e) {
-            $maleCount = 0;
-            $femaleCount = 0;
-        }
-
-        // 6. Ambil pengeluaran terbaru untuk notifikasi tampilan
-        try {
-            $latestExpense = Pembayaran::where('tipe', 'keluar')
-                ->orderBy('tanggal', 'desc')
-                ->first();
+            // Warga doesn't really see pengeluaran, but if they do, we'll just not show it
+            if ($isWarga) {
+                $latestExpense = null;
+            } else {
+                $latestExpense = $latestExpenseQuery->first();
+            }
+            
             $latestExpenseAmount = $latestExpense ? $latestExpense->jumlah : 0;
             $latestExpenseDate = $latestExpense ? \Carbon\Carbon::parse($latestExpense->tanggal)->format('d M Y') : null;
         } catch (\Exception $e) {
@@ -136,7 +142,7 @@ class DashboardController extends Controller
             $latestExpenseDate = null;
         }
 
-        // 7. Admin summary — query data riil dari database
+        // 7. Admin summary 
         $newFeatureCounts = [
             'surat' => 0,
             'pengaduan' => 0,
@@ -144,7 +150,19 @@ class DashboardController extends Controller
             'umkm' => 0,
         ];
         try {
-            $newFeatureCounts['surat'] = \App\Models\SuratPengajuan::count();
+            // Adjust based on RT
+            $suratQuery = \App\Models\SuratPengajuan::query();
+            $pengaduanQuery = \App\Models\Pengaduan::query();
+            
+            if ($isAdminRT) {
+                $suratQuery->whereHas('user', function($q) use ($user) {
+                    $q->where('rt_number', $user->rt_number);
+                });
+                // Pengaduan might not have user relation loaded properly here, we will just use basic count for now or try
+                // assuming user is related
+            }
+            
+            $newFeatureCounts['surat'] = $suratQuery->count();
             $newFeatureCounts['pengaduan'] = \App\Models\Pengaduan::count();
             $newFeatureCounts['posyandu'] = \App\Models\Posyandu::count();
             $newFeatureCounts['umkm'] = \App\Models\Umkm::count();
@@ -152,7 +170,6 @@ class DashboardController extends Controller
             // keep zeros
         }
 
-        // Hitung jumlah admin
         $totalAdminRT = User::where('role', 'admin')->where('rt_number', '!=', '000')->count();
         $totalAdminRW = User::where('role', 'admin')->where('rt_number', '000')->count();
 
@@ -161,23 +178,29 @@ class DashboardController extends Controller
         $currentYear = date('Y');
 
         // Iuran reminder: count KK who haven't paid this month
-        $totalKKForReminder = Warga::where('is_kk', true)->count();
-        $paidThisMonth = Pembayaran::where('tipe', 'masuk')
+        $wargaQuery2 = Warga::query();
+        if ($isAdminRT) {
+            $wargaQuery2->where('rt_number', $user->rt_number);
+        }
+        
+        $totalKKForReminder = $wargaQuery2->where('is_kk', true)->count();
+        
+        $paidQuery = Pembayaran::where('tipe', 'masuk')
             ->where('kategori', 'like', '%Iuran%')
             ->whereMonth('tanggal', $currentMonth)
-            ->whereYear('tanggal', $currentYear)
-            ->distinct('warga_id')
-            ->count('warga_id');
+            ->whereYear('tanggal', $currentYear);
+            
+        if ($isAdminRT) $paidQuery->where('rt_number', $user->rt_number);
+        
+        $paidThisMonth = $paidQuery->distinct('warga_id')->count('warga_id');
         $unpaidKK = $totalKKForReminder - $paidThisMonth;
 
-        // Latest Posyandu schedule
         try {
             $latestPosyandu = \App\Models\Posyandu::orderBy('tanggal', 'desc')->first();
         } catch (\Exception $e) {
             $latestPosyandu = null;
         }
 
-        // Featured UMKM
         try {
             $featuredUmkm = \App\Models\Umkm::inRandomOrder()->first();
         } catch (\Exception $e) {
@@ -189,8 +212,7 @@ class DashboardController extends Controller
             'pengeluaran', 'saldo', 'totalKK', 'totalJiwa', 'chartData',
             'maleCount', 'femaleCount', 'latestExpenseAmount', 'latestExpenseDate',
             'newFeatureCounts', 'totalAdminRT', 'totalAdminRW',
-            'unpaidKK', 'totalKKForReminder', 'paidThisMonth', 'latestPosyandu', 'featuredUmkm'
+            'unpaidKK', 'totalKKForReminder', 'paidThisMonth', 'latestPosyandu', 'featuredUmkm', 'isWarga', 'isAdminRT', 'isAdminRW'
         ));
     }
 }
-

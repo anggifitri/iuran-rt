@@ -50,12 +50,12 @@ class User extends Authenticatable
 
     public function isAdminRt()
     {
-        return $this->role === 'admin_rt';
+        return ($this->role === 'admin' && $this->rt_number !== '000') || $this->role === 'admin_rt';
     }
 
     public function isAdminRw()
     {
-        return $this->role === 'admin_rw';
+        return ($this->role === 'admin' && $this->rt_number === '000') || $this->role === 'admin_rw';
     }
 
     public function isBendahara()
