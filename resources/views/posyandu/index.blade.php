@@ -1,205 +1,279 @@
 @extends('layouts.app')
 
+@section('title', 'Posyandu Digital — NexaNest')
+
 @section('content')
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h2 class="fw-bold mb-0 text-dark" style="color: var(--text-main) !important;">NexaNest · Posyandu Digital</h2>
-            <p class="text-muted mb-0">Pantau secara rutin imunisasi balita, tumbuh kembang anak, serta kesehatan ibu hamil di RT 006-010 RW 018.</p>
+<div class="nx-page-header">
+    <div>
+        <span class="badge rounded-pill mb-2 px-3 py-1" style="background: rgba(40,89,67,0.12); color: var(--nx-forest); font-weight: 700;">
+            <i class="fas fa-heart-pulse me-1"></i> Layanan Kesehatan Lingkungan
+        </span>
+        <h1 class="nx-page-title">Informasi &amp; Rekam Posyandu Digital</h1>
+        <p class="nx-page-subtitle">Pantau jadwal posyandu, imunisasi balita, kurva KMS, serta kesehatan ibu hamil di lingkungan RW 018.</p>
+    </div>
+    <a href="{{ route('posyandu.create') }}" class="btn btn-primary">
+        <i class="fas fa-plus me-1"></i> Tambah Jadwal / Rekam Medis
+    </a>
+</div>
+
+<!-- 1. JADWAL KEGIATAN & PEMERIKSAAN POSYANDU -->
+<div class="card p-4 mb-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+        <div class="d-flex align-items-center gap-2">
+            <span class="rounded-3 d-inline-flex align-items-center justify-content-center"
+                  style="width: 36px; height: 36px; background: var(--nx-mint); color: var(--nx-forest);">
+                <i class="far fa-calendar-check"></i>
+            </span>
+            <div>
+                <h5 class="fw-bold mb-0" style="font-size: 1rem;">Kalender &amp; Jadwal Kegiatan Posyandu</h5>
+                <small class="text-muted">Jadwal pemeriksaan rutin balita, lansia, dan ibu hamil</small>
+            </div>
         </div>
+        <a href="{{ route('posyandu.create') }}" class="btn btn-sm btn-outline-primary">
+            <i class="fas fa-plus me-1"></i> Jadwal Baru
+        </a>
     </div>
 
-    <!-- 1. JADWAL KEGIATAN & PEMERIKSAAN POSYANDU -->
-    <div class="card p-4 shadow-sm border-0 mb-4" style="border-radius: 16px; background-color: var(--bg-card); border: 1px solid var(--border-color);">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="fw-bold mb-0 text-primary"><i class="fas fa-calendar-alt me-2"></i>Kalender & Jadwal Kegiatan Posyandu</h5>
-            <a href="{{ route('posyandu.create') }}" class="btn btn-sm btn-primary shadow-sm"><i class="fas fa-plus me-1"></i>Tambah Jadwal</a>
+    @if($jadwal->isEmpty())
+        <div class="p-4 rounded-4 text-center" style="background: var(--nx-bg); border: 1px dashed var(--nx-border);">
+            <p class="text-muted small mb-0">Belum ada jadwal kegiatan Posyandu mendatang yang tercatat.</p>
         </div>
-        
-        @if($jadwal->isEmpty())
-            <p class="text-muted mb-0">Belum ada jadwal posyandu mendatang.</p>
-        @else
-            <div class="row g-3">
-                @foreach($jadwal as $ev)
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card h-100 border border-light" style="border-radius: 12px; background: rgba(59,130,246,0.03);">
-                            <div class="card-body p-3">
-                                <span class="badge bg-primary mb-2" style="font-size: 0.65rem;">
-                                    <i class="fas fa-clock me-1"></i>{{ \Carbon\Carbon::parse($ev->tanggal)->translatedFormat('d F Y') }}
+    @else
+        <div class="row g-3">
+            @foreach($jadwal as $ev)
+                <div class="col-md-6 col-lg-3">
+                    <div class="p-3 rounded-4 h-100 d-flex flex-column justify-content-between"
+                         style="background: var(--nx-mint-soft); border: 1px solid var(--nx-sage);">
+                        <div>
+                            <span class="badge rounded-pill mb-2 px-3 py-1" style="background: var(--nx-forest); color: #fff; font-size: 0.7rem;">
+                                <i class="far fa-clock me-1"></i>{{ \Carbon\Carbon::parse($ev->tanggal)->translatedFormat('d F Y') }}
+                            </span>
+                            <h6 class="fw-bold mb-1" style="color: var(--nx-text);">{{ $ev->nama }}</h6>
+                            <small class="d-block text-muted mb-2">
+                                <i class="fas fa-location-dot text-success me-1"></i>{{ $ev->lokasi ?? 'Balai Warga RW 018' }}
+                            </small>
+                        </div>
+                        <p class="mb-0 text-muted small" style="font-size: 0.8rem; line-height: 1.4;">{{ $ev->keterangan }}</p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @endif
+</div>
+
+<div class="row g-4 mb-4">
+    <!-- 2. REKAM ANAK (BALITA) -->
+    <div class="col-lg-6">
+        <div class="card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="rounded-3 d-inline-flex align-items-center justify-content-center"
+                          style="width: 36px; height: 36px; background: var(--nx-mint); color: var(--nx-forest);">
+                        <i class="fas fa-baby"></i>
+                    </span>
+                    <h5 class="fw-bold mb-0" style="font-size: 1rem;">Tumbuh Kembang Anak (Balita)</h5>
+                </div>
+                <span class="badge rounded-pill px-3 py-1.5" style="background: var(--nx-mint); color: var(--nx-forest);">
+                    {{ $anak->count() }} Terdaftar
+                </span>
+            </div>
+
+            @if($anak->isEmpty())
+                <div class="p-4 rounded-4 text-center" style="background: var(--nx-bg);">
+                    <p class="text-muted small mb-0">Belum ada data pemeriksaan tumbuh kembang balita.</p>
+                </div>
+            @else
+                <div class="accordion" id="accordionAnak">
+                    @foreach($anak as $item)
+                        @php
+                            $badgeBg = 'var(--nx-mint)';
+                            $badgeColor = 'var(--nx-forest)';
+                            if ($item->status_tumbuh === 'Kurang Gizi') {
+                                $badgeBg = 'var(--nx-warning-soft)';
+                                $badgeColor = 'var(--nx-warning)';
+                            } elseif ($item->status_tumbuh === 'Stunting') {
+                                $badgeBg = 'var(--nx-soft-red)';
+                                $badgeColor = 'var(--nx-danger)';
+                            } elseif ($item->status_tumbuh === 'Kelebihan Berat Badan') {
+                                $badgeBg = 'var(--nx-powder)';
+                                $badgeColor = '#2B5F8E';
+                            }
+                        @endphp
+                        <div class="card mb-2 overflow-hidden" style="border-radius: 14px !important;">
+                            <div class="card-header p-3 d-flex justify-content-between align-items-center"
+                                 data-bs-toggle="collapse"
+                                 data-bs-target="#collapseAnak{{ $item->id }}"
+                                 style="cursor: pointer;">
+                                <div>
+                                    <h6 class="fw-bold mb-0" style="color: var(--nx-text); font-size: 0.92rem;">{{ $item->nama_anak }}</h6>
+                                    <small class="text-muted">Usia {{ $item->umur_bulan }} Bulan • {{ $item->berat_badan }} kg / {{ $item->tinggi_badan }} cm</small>
+                                </div>
+                                <span class="badge rounded-pill px-3 py-1" style="background: {{ $badgeBg }}; color: {{ $badgeColor }}; font-size: 0.72rem;">
+                                    {{ $item->status_tumbuh }}
                                 </span>
-                                <h6 class="fw-bold text-dark mb-1" style="color: var(--text-main) !important;">{{ $ev->nama }}</h6>
-                                <small class="d-block text-muted mb-2"><i class="fas fa-map-marker-alt me-1"></i>{{ $ev->lokasi ?? '-' }}</small>
-                                <p class="mb-0 text-secondary" style="font-size: 0.8rem; line-height: 1.3;">{{ $ev->keterangan }}</p>
+                            </div>
+
+                            <div id="collapseAnak{{ $item->id }}" class="collapse" data-bs-parent="#accordionAnak">
+                                <div class="card-body p-3" style="background: var(--nx-bg); font-size: 0.84rem;">
+                                    <div class="p-3 rounded-3 bg-white border mb-2">
+                                        <small class="fw-bold d-block mb-1" style="color: var(--nx-forest);">
+                                            <i class="fas fa-lightbulb me-1"></i>Rekomendasi &amp; Solusi Gizi:
+                                        </small>
+                                        <p class="mb-0 text-muted">{{ $item->solusi ?? 'Belum ada catatan solusi.' }}</p>
+                                    </div>
+
+                                    <div class="p-3 rounded-3 bg-white border">
+                                        <small class="fw-bold text-muted d-block mb-2"><i class="fas fa-syringe me-1"></i>Status Vaksinasi / Imunisasi:</small>
+                                        <div class="d-flex flex-wrap gap-1.5">
+                                            @php
+                                                $allVaccines = ['BCG', 'Polio 1', 'Polio 2', 'Polio 3', 'DPT-HB-Hib 1', 'DPT-HB-Hib 2', 'DPT-HB-Hib 3', 'Campak-Rubela'];
+                                                $checkedVaccines = is_array($item->imunisasi_checked) ? $item->imunisasi_checked : [];
+                                            @endphp
+                                            @foreach($allVaccines as $vax)
+                                                @php $hasVax = in_array($vax, $checkedVaccines); @endphp
+                                                <span class="badge rounded-pill px-2.5 py-1"
+                                                      style="background: {{ $hasVax ? 'var(--nx-mint)' : 'var(--nx-bg)' }}; color: {{ $hasVax ? 'var(--nx-forest)' : 'var(--nx-muted)' }}; border: 1px solid var(--nx-border); font-size: 0.7rem;">
+                                                    <i class="fas {{ $hasVax ? 'fa-check-circle me-1' : 'fa-clock me-1' }}"></i>{{ $vax }}
+                                                </span>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @endforeach
-            </div>
-        @endif
-    </div>
-
-    <div class="row g-4 mb-4">
-        <!-- 2. REKAM ANAK (BALITA) -->
-        <div class="col-lg-6">
-            <div class="card p-4 shadow-sm border-0 h-100" style="border-radius: 16px; background-color: var(--bg-card); border: 1px solid var(--border-color);">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="fw-bold mb-0 text-success"><i class="fas fa-baby me-2"></i>Rekam Medis & Tumbuh Kembang Anak</h5>
-                    <span class="badge bg-success rounded-pill">{{ $anak->count() }} Terdaftar</span>
+                    @endforeach
                 </div>
-                
-                @if($anak->isEmpty())
-                    <p class="text-muted mb-0">Belum ada data pemeriksaan anak.</p>
-                @else
-                    <div class="accordion" id="accordionAnak">
-                        @foreach($anak as $item)
-                            @php
-                                $statusClass = 'bg-success';
-                                if ($item->status_tumbuh === 'Kurang Gizi') $statusClass = 'bg-warning';
-                                if ($item->status_tumbuh === 'Stunting') $statusClass = 'bg-danger';
-                                if ($item->status_tumbuh === 'Kelebihan Berat Badan') $statusClass = 'bg-purple';
-                            @endphp
-                            <div class="card mb-2 border border-light" style="border-radius: 10px; overflow: hidden;">
-                                <div class="card-header bg-white p-3 d-flex justify-content-between align-items-center cursor-pointer" 
-                                     data-bs-toggle="collapse" 
-                                     data-bs-target="#collapseAnak{{ $item->id }}" 
-                                     style="cursor: pointer; border-bottom: none;">
-                                    <div>
-                                        <h6 class="fw-bold mb-0 text-dark" style="color: var(--text-main) !important;">{{ $item->nama_anak }}</h6>
-                                        <small class="text-muted">{{ $item->umur_bulan }} Bulan | {{ $item->berat_badan }} kg / {{ $item->tinggi_badan }} cm</small>
-                                    </div>
-                                    <span class="badge {{ $statusClass }} rounded-pill" style="font-size: 0.7rem;">{{ $item->status_tumbuh }}</span>
-                                </div>
-
-                                <div id="collapseAnak{{ $item->id }}" class="collapse" data-bs-parent="#accordionAnak">
-                                    <div class="card-body bg-light border-top p-3" style="font-size: 0.85rem;">
-                                        <!-- Solusi Tumbuh Kembang -->
-                                        <div class="p-3 rounded bg-white border border-light mb-3 shadow-sm">
-                                            <small class="fw-bold text-success d-block mb-1"><i class="fas fa-lightbulb me-1"></i>Rekomendasi & Solusi Gizi:</small>
-                                            <p class="mb-0 text-secondary" style="line-height: 1.4;">{{ $item->solusi ?? 'Belum ada catatan solusi.' }}</p>
-                                        </div>
-
-                                        <!-- Tracker Imunisasi -->
-                                        <div class="p-3 rounded bg-white border border-light shadow-sm">
-                                            <small class="fw-bold text-secondary d-block mb-2"><i class="fas fa-syringe me-1"></i>Status Vaksinasi / Imunisasi Anak:</small>
-                                            <div class="d-flex flex-wrap gap-2">
-                                                @php
-                                                    $allVaccines = ['BCG', 'Polio 1', 'Polio 2', 'Polio 3', 'DPT-HB-Hib 1', 'DPT-HB-Hib 2', 'DPT-HB-Hib 3', 'Campak-Rubela'];
-                                                    $checkedVaccines = is_array($item->imunisasi_checked) ? $item->imunisasi_checked : [];
-                                                @endphp
-                                                @foreach($allVaccines as $vax)
-                                                    @php $hasVax = in_array($vax, $checkedVaccines); @endphp
-                                                    <span class="badge {{ $hasVax ? 'bg-success text-white' : 'bg-secondary-subtle text-muted' }} rounded-pill border" style="font-size: 0.7rem; padding: 4px 10px;">
-                                                        <i class="fas {{ $hasVax ? 'fa-check-circle me-1' : 'fa-clock me-1' }}"></i>{{ $vax }}
-                                                    </span>
-                                                @endforeach
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                @endif
-            </div>
-        </div>
-
-        <!-- 3. REKAM IBU HAMIL (BUMIL) -->
-        <div class="col-lg-6">
-            <div class="card p-4 shadow-sm border-0 h-100" style="border-radius: 16px; background-color: var(--bg-card); border: 1px solid var(--border-color);">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="fw-bold mb-0 text-danger"><i class="fas fa-heartbeat me-2"></i>Rekam Medis & Kesehatan Ibu Hamil</h5>
-                    <span class="badge bg-danger rounded-pill">{{ $bumils->count() }} Terdaftar</span>
-                </div>
-                
-                @if($bumils->isEmpty())
-                    <p class="text-muted mb-0">Belum ada data pemeriksaan ibu hamil.</p>
-                @else
-                    <div class="accordion" id="accordionBumil">
-                        @foreach($bumils as $item)
-                            @php
-                                $statusBumilClass = 'bg-success';
-                                if ($item->status_kesehatan === 'Kekurangan Energi Kronis (KEK)') $statusBumilClass = 'bg-warning';
-                                if ($item->status_kesehatan === 'Hipertensi Gestasional') $statusBumilClass = 'bg-danger';
-                                if ($item->status_kesehatan === 'Anemia Ringan') $statusBumilClass = 'bg-purple';
-                            @endphp
-                            <div class="card mb-2 border border-light" style="border-radius: 10px; overflow: hidden;">
-                                <div class="card-header bg-white p-3 d-flex justify-content-between align-items-center cursor-pointer" 
-                                     data-bs-toggle="collapse" 
-                                     data-bs-target="#collapseBumil{{ $item->id }}" 
-                                     style="cursor: pointer; border-bottom: none;">
-                                    <div>
-                                        <h6 class="fw-bold mb-0 text-dark" style="color: var(--text-main) !important;">{{ $item->nama_ibu }}</h6>
-                                        <small class="text-muted">Kehamilan: {{ $item->usia_kehamilan_minggu }} Minggu | LiLA: {{ $item->lila }} cm</small>
-                                    </div>
-                                    <span class="badge {{ $statusBumilClass }} rounded-pill" style="font-size: 0.7rem;">{{ $item->status_kesehatan }}</span>
-                                </div>
-
-                                <div id="collapseBumil{{ $item->id }}" class="collapse" data-bs-parent="#accordionBumil">
-                                    <div class="card-body bg-light border-top p-3" style="font-size: 0.85rem;">
-                                        <!-- Vital Stats -->
-                                        <div class="row g-2 text-center mb-3">
-                                            <div class="col-4">
-                                                <div class="p-2 bg-white rounded border shadow-sm">
-                                                    <span class="d-block text-muted" style="font-size: 0.7rem;">Berat Badan</span>
-                                                    <span class="fw-bold text-dark">{{ $item->berat_badan }} kg</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="p-2 bg-white rounded border shadow-sm">
-                                                    <span class="d-block text-muted" style="font-size: 0.7rem;">Tensi Darah</span>
-                                                    <span class="fw-bold text-dark">{{ $item->tekanan_darah }}</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-4">
-                                                <div class="p-2 bg-white rounded border shadow-sm">
-                                                    <span class="d-block text-muted" style="font-size: 0.7rem;">LiLA (Lengan)</span>
-                                                    <span class="fw-bold text-dark">{{ $item->lila }} cm</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Solusi Bidan/Dokter -->
-                                        <div class="p-3 rounded bg-white border border-light mb-3 shadow-sm">
-                                            <small class="fw-bold text-danger d-block mb-1"><i class="fas fa-user-md me-1"></i>Catatan & Tindakan Medis Ibu:</small>
-                                            <p class="mb-0 text-secondary" style="line-height: 1.4;">{{ $item->solusi ?? 'Belum ada catatan solusi.' }}</p>
-                                        </div>
-
-                                        <!-- Perkembangan Janin Trimester -->
-                                        <div class="p-3 rounded bg-white border border-light shadow-sm border-start border-4 border-info">
-                                            <small class="fw-bold text-info d-block mb-1"><i class="fas fa-baby-carriage me-1"></i>Tahap Perkembangan Bayi (Fetus):</small>
-                                            <p class="mb-0 text-secondary" style="line-height: 1.4;">
-                                                @if($item->usia_kehamilan_minggu <= 12)
-                                                    <strong>Trimester I (Awal):</strong> Ukuran janin berkisar dari biji poppy hingga jeruk nipis. Detak jantung janin mulai terbentuk sejak minggu ke-6. Pembentukan awal sistem saraf, tangan, dan organ vital sedang berlangsung intensif.
-                                                @elseif($item->usia_kehamilan_minggu <= 26)
-                                                    <strong>Trimester II (Menengah):</strong> Ukuran janin seperti kelapa kupas. Bayi sudah dapat mendengar denyut jantung ibu dan suara luar, serta mulai merespon rangsangan cahaya. Tendangan dan pergerakan tangan janin mulai aktif terasa oleh ibu.
-                                                @else
-                                                    <strong>Trimester III (Akhir):</strong> Ukuran janin seperti semangka. Seluruh organ vital (terutama paru-paru) mematangkan fungsinya. Posisi kepala mulai berputar ke arah bawah pintu panggul bersiap untuk menyongsong proses persalinan harian.
-                                                @endif
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                @endif
-            </div>
+            @endif
         </div>
     </div>
 
-    <!-- KMS GRAPH -->
-    <div class="card p-4 shadow-sm border-0" style="border-radius: 16px; background-color: var(--bg-card); border: 1px solid var(--border-color);">
-        <h5 class="fw-bold mb-3 text-dark" style="color: var(--text-main) !important;"><i class="fas fa-chart-line me-2"></i>Kurva Kartu Menuju Sehat (KMS) Digital</h5>
-        <canvas id="kmsChart" height="120"></canvas>
+    <!-- 3. REKAM IBU HAMIL (BUMIL) -->
+    <div class="col-lg-6">
+        <div class="card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="rounded-3 d-inline-flex align-items-center justify-content-center"
+                          style="width: 36px; height: 36px; background: var(--nx-powder); color: #2B5F8E;">
+                        <i class="fas fa-person-pregnant"></i>
+                    </span>
+                    <h5 class="fw-bold mb-0" style="font-size: 1rem;">Kesehatan Ibu Hamil</h5>
+                </div>
+                <span class="badge rounded-pill px-3 py-1.5" style="background: var(--nx-powder); color: #2B5F8E;">
+                    {{ $bumils->count() }} Terdaftar
+                </span>
+            </div>
+
+            @if($bumils->isEmpty())
+                <div class="p-4 rounded-4 text-center" style="background: var(--nx-bg);">
+                    <p class="text-muted small mb-0">Belum ada data pemeriksaan kesehatan ibu hamil.</p>
+                </div>
+            @else
+                <div class="accordion" id="accordionBumil">
+                    @foreach($bumils as $item)
+                        @php
+                            $bBg = 'var(--nx-mint)';
+                            $bColor = 'var(--nx-forest)';
+                            if ($item->status_kesehatan === 'Kekurangan Energi Kronis (KEK)') {
+                                $bBg = 'var(--nx-warning-soft)';
+                                $bColor = 'var(--nx-warning)';
+                            } elseif ($item->status_kesehatan === 'Hipertensi Gestasional') {
+                                $bBg = 'var(--nx-soft-red)';
+                                $bColor = 'var(--nx-danger)';
+                            } elseif ($item->status_kesehatan === 'Anemia Ringan') {
+                                $bBg = 'var(--nx-powder)';
+                                $bColor = '#2B5F8E';
+                            }
+                        @endphp
+                        <div class="card mb-2 overflow-hidden" style="border-radius: 14px !important;">
+                            <div class="card-header p-3 d-flex justify-content-between align-items-center"
+                                 data-bs-toggle="collapse"
+                                 data-bs-target="#collapseBumil{{ $item->id }}"
+                                 style="cursor: pointer;">
+                                <div>
+                                    <h6 class="fw-bold mb-0" style="color: var(--nx-text); font-size: 0.92rem;">{{ $item->nama_ibu }}</h6>
+                                    <small class="text-muted">Usia Kehamilan {{ $item->usia_kehamilan_minggu }} Minggu • LiLA {{ $item->lila }} cm</small>
+                                </div>
+                                <span class="badge rounded-pill px-3 py-1" style="background: {{ $bBg }}; color: {{ $bColor }}; font-size: 0.72rem;">
+                                    {{ $item->status_kesehatan }}
+                                </span>
+                            </div>
+
+                            <div id="collapseBumil{{ $item->id }}" class="collapse" data-bs-parent="#accordionBumil">
+                                <div class="card-body p-3" style="background: var(--nx-bg); font-size: 0.84rem;">
+                                    <div class="row g-2 text-center mb-2">
+                                        <div class="col-4">
+                                            <div class="p-2 bg-white rounded-3 border">
+                                                <span class="d-block text-muted" style="font-size: 0.7rem;">Berat Badan</span>
+                                                <span class="fw-bold">{{ $item->berat_badan }} kg</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="p-2 bg-white rounded-3 border">
+                                                <span class="d-block text-muted" style="font-size: 0.7rem;">Tensi Darah</span>
+                                                <span class="fw-bold">{{ $item->tekanan_darah }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="p-2 bg-white rounded-3 border">
+                                                <span class="d-block text-muted" style="font-size: 0.7rem;">LiLA (Lengan)</span>
+                                                <span class="fw-bold">{{ $item->lila }} cm</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="p-3 rounded-3 bg-white border mb-2">
+                                        <small class="fw-bold d-block mb-1" style="color: var(--nx-forest);">
+                                            <i class="fas fa-user-doctor me-1"></i>Catatan &amp; Tindakan Medis:
+                                        </small>
+                                        <p class="mb-0 text-muted">{{ $item->solusi ?? 'Belum ada catatan solusi.' }}</p>
+                                    </div>
+
+                                    <div class="p-3 rounded-3 bg-white border" style="border-left: 4px solid #6AA6D8 !important;">
+                                        <small class="fw-bold d-block mb-1" style="color: #2B5F8E;">
+                                            <i class="fas fa-baby-carriage me-1"></i>Tahap Perkembangan Janin:
+                                        </small>
+                                        <p class="mb-0 text-muted">
+                                            @if($item->usia_kehamilan_minggu <= 12)
+                                                <strong>Trimester I (Awal):</strong> Pembentukan awal sistem saraf dan organ vital janin berlangsung intensif.
+                                            @elseif($item->usia_kehamilan_minggu <= 26)
+                                                <strong>Trimester II (Menengah):</strong> Janin mulai aktif bergerak dan merespons suara dari luar.
+                                            @else
+                                                <strong>Trimester III (Akhir):</strong> Pematangan fungsi paru-paru dan persiapan posisi jalan lahir.
+                                            @endif
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
     </div>
+</div>
+
+<!-- KMS GRAPH -->
+<div class="card p-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+        <h5 class="fw-bold mb-0" style="font-size: 1rem;">
+            <i class="fas fa-chart-area text-success me-2"></i>Kurva Kartu Menuju Sehat (KMS) Digital Balita
+        </h5>
+        <div class="d-flex gap-3 small fw-semibold">
+            <span><i class="fas fa-circle me-1" style="color: #285943;"></i> Berat Badan (kg)</span>
+            <span><i class="fas fa-circle me-1" style="color: #5B9BD5;"></i> Tinggi Badan (cm)</span>
+        </div>
+    </div>
+    <canvas id="kmsChart" height="105"></canvas>
 </div>
 @endsection
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-const ctx = document.getElementById('kmsChart');
-if (ctx) {
+document.addEventListener('DOMContentLoaded', function () {
+    const ctx = document.getElementById('kmsChart');
+    if (!ctx) return;
+
     const data = @json($anak->map(function($item){ return ['nama' => $item->nama_anak, 'berat' => (float) $item->berat_badan, 'tinggi' => (float) $item->tinggi_badan]; }));
     new Chart(ctx, {
         type: 'line',
@@ -209,50 +283,40 @@ if (ctx) {
                 {
                     label: 'Berat Badan (kg)',
                     data: data.map(item => item.berat),
-                    borderColor: '#10b981',
-                    backgroundColor: 'rgba(16,185,129,0.15)',
-                    tension: 0.3,
-                    borderWidth: 2
+                    borderColor: '#285943',
+                    backgroundColor: 'rgba(40, 89, 67, 0.12)',
+                    tension: 0.35,
+                    borderWidth: 2.5,
+                    fill: true
                 },
                 {
                     label: 'Tinggi Badan (cm)',
                     data: data.map(item => item.tinggi),
-                    borderColor: '#ec4899',
-                    backgroundColor: 'rgba(236,72,153,0.15)',
-                    tension: 0.3,
-                    borderWidth: 2
+                    borderColor: '#5B9BD5',
+                    backgroundColor: 'rgba(91, 155, 213, 0.12)',
+                    tension: 0.35,
+                    borderWidth: 2.5,
+                    fill: true
                 }
             ]
         },
         options: {
             responsive: true,
-            plugins: { 
-                legend: { 
-                    labels: { 
-                        color: getComputedStyle(document.documentElement).getPropertyValue('--text-main').trim() || '#333'
-                    } 
-                } 
+            plugins: {
+                legend: { display: false }
             },
-            scales: { 
-                x: { 
-                    ticks: { 
-                        color: getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || '#666'
-                    },
-                    grid: {
-                        color: getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim() || 'rgba(0,0,0,0.05)'
-                    }
-                }, 
-                y: { 
-                    ticks: { 
-                        color: getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || '#666'
-                    },
-                    grid: {
-                        color: getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim() || 'rgba(0,0,0,0.05)'
-                    }
-                } 
+            scales: {
+                x: {
+                    ticks: { color: '#718096' },
+                    grid: { display: false }
+                },
+                y: {
+                    ticks: { color: '#718096' },
+                    grid: { color: '#EDF3EE' }
+                }
             }
         }
     });
-}
+});
 </script>
 @endpush

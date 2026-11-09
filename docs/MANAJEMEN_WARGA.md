@@ -25,6 +25,9 @@ Admin mengelola data warga (penduduk) RW 018. Setiap warga memiliki RT/RW, NIK, 
 | Method | URI | Name | Aksi |
 |---|---|---|---|
 | GET | `/warga?view=family\|table` | `warga.index` | Daftar (family: 10/hal, table: 20/hal) |
+| GET/POST | `/api/rfid/scan` | `rfid.receive` | Endpoint penerima UID E-KTP dari NodeMCU ESP32 + RC522 |
+| GET | `/warga/rfid/latest` | `warga.rfid.latest` | Polling JSON hasil scan E-KTP terakhir untuk modal admin |
+| POST | `/warga/{warga}/rfid` | `warga.rfid.store` | Simpan/kaitkan UID E-KTP ke warga |
 | GET | `/warga/create` | `warga.create` | Form tambah |
 | POST | `/warga` | `warga.store` | Simpan |
 | GET | `/warga/{id}` | `warga.show` | Redirect ke index |

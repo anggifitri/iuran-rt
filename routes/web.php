@@ -21,12 +21,17 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 
+// Endpoint IoT NodeMCU ESP32 + RFID RC522 (bebas CSRF & session untuk mikrokontroler)
+Route::match(['get', 'post'], '/api/rfid/scan', [WargaController::class, 'receiveRfidScan'])->name('rfid.receive');
+
 // 3. Route yang butuh Login
 Route::middleware(['auth'])->group(function () {
     // Dashboard (image_a8a673.png)
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Resource (Otomatis bikin warga.index, pembayaran.index dll - image_b29c3a.png)
+    Route::get('/warga/rfid/latest', [WargaController::class, 'getLatestRfidScan'])->name('warga.rfid.latest');
+    Route::post('/warga/{warga}/rfid', [WargaController::class, 'storeRfidKtp'])->name('warga.rfid.store');
     Route::resource('warga', WargaController::class);
     Route::resource('pembayaran', PembayaranController::class);
 
@@ -40,9 +45,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/laporan/iuran', [PembayaranController::class, 'laporanIuran'])->name('laporan.iuran');
     Route::get('/laporan/cetak-iuran', [PembayaranController::class, 'cetakLaporanIuran'])->name('laporan.cetak_iuran');
 
-    // Profil Admin RT
+    // Profil Admin RT / RW / Warga
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::match(['post', 'put'], '/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     // Layanan Mandiri: Penerbitan Surat, Pengaduan, Posyandu, UMKM
     Route::resource('surat', App\Http\Controllers\SuratPengajuanController::class);
@@ -51,6 +56,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/surat/{surat}/pdf', [App\Http\Controllers\SuratPengajuanController::class, 'downloadPdf'])->name('surat.pdf');
     Route::resource('pengaduan', App\Http\Controllers\PengaduanController::class)->only(['index','create','store']);
     Route::resource('posyandu', App\Http\Controllers\PosyanduController::class)->only(['index','create','store']);
-    Route::resource('umkm', App\Http\Controllers\UmkmController::class)->only(['index','show','create','store']);
     Route::get('/umkm/categories', [App\Http\Controllers\UmkmController::class, 'categories'])->name('umkm.categories');
+    Route::resource('umkm', App\Http\Controllers\UmkmController::class)->only(['index','show','create','store']);
 });

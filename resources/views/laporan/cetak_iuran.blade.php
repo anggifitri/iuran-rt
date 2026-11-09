@@ -37,7 +37,7 @@
 
     <div class="meta">
         <div><strong>Tanggal Cetak:</strong> {{ date('d F Y - H:i') }} WIB</div>
-        <div><strong>Filter Warga:</strong> {{ $wargaFilter ? ($rows[0]['warga']->nama ?? 'Tidak ditemukan') : 'Semua Warga' }}</div>
+        <div><strong>Wilayah / Filter:</strong> {{ !empty($rtFilter) ? 'RT ' . $rtFilter : (!empty($wargaFilter) ? ($rows[0]['warga']->nama ?? 'Tidak ditemukan') : 'Semua Wilayah RW 018') }}</div>
     </div>
 
     <table class="data-table">

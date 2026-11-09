@@ -216,45 +216,29 @@ class PembayaranController extends Controller
         $tahun = $request->get('tahun', date('Y'));
         
         $user = Auth::user();
-        if ($user->role === 'warga') {
-            // Warga only sees their own
-            $wargaRecord = Warga::where('nik', $user->nik)->orWhere('no_kk', $user->no_kk)->first();
-            $wargaId = $wargaRecord ? $wargaRecord->id : -1;
-
-            $paidThisMonth = Pembayaran::where('warga_id', $wargaId)
-                ->where('tipe', 'masuk')
-                ->where('kategori', 'like', '%Iuran%')
-                ->whereMonth('tanggal', $bulan)
-                ->whereYear('tanggal', $tahun)
-                ->orderBy('tanggal', 'desc')
-                ->get();
-
-            $rows = [];
-            if ($wargaRecord) {
-                $status = $paidThisMonth->isEmpty() ? 'Belum Bayar' : 'Lunas';
-                $badgeClass = $status === 'Lunas' ? 'bg-success' : 'bg-danger';
-
-                $rows[] = (object)[
-                    'warga' => $wargaRecord,
-                    'status' => $status,
-                    'badge_class' => $badgeClass,
-                    'pembayarans' => $paidThisMonth,
-                ];
-            }
-
-            return view('laporan.iuran', compact('rows', 'bulan', 'tahun'));
-        }
-
         $rtFilter = $request->get('rt_number');
         if ($user->isAdminRt()) {
+            $rtFilter = $user->rt_number;
+        } elseif ($user->role === 'warga') {
             $rtFilter = $user->rt_number;
         }
 
         $rtList = ['006', '007', '008', '009', '010'];
 
-        $wargasQuery = Warga::where('is_kk', true)->orderBy('nama');
-        if ($rtFilter) {
-            $wargasQuery->where('rt_number', $rtFilter);
+        if ($user->role === 'warga') {
+            $wargasQuery = Warga::where(function ($q) use ($user) {
+                if ($user->nik) {
+                    $q->where('nik', $user->nik);
+                }
+                if ($user->no_kk) {
+                    $q->orWhere('no_kk', $user->no_kk);
+                }
+            })->orderByDesc('is_kk')->orderBy('nama');
+        } else {
+            $wargasQuery = Warga::where('is_kk', true)->orderBy('nama');
+            if ($rtFilter) {
+                $wargasQuery->where('rt_number', $rtFilter);
+            }
         }
         $wargas = $wargasQuery->get();
 

@@ -20,6 +20,7 @@ class Warga extends Model
         'gender',
         'no_kk',
         'nik',
+        'rfid_uid',
         'profile_photo',
         'tanggal_lahir',
         'rt_number',

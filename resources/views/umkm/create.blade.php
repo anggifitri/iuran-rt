@@ -1,88 +1,95 @@
 @extends('layouts.app')
 
+@section('title', 'Daftarkan UMKM Warga — NexaNest')
+
 @section('content')
-<div class="container py-4">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card p-4 shadow-sm border-0" style="border-radius: 20px; background-color: var(--bg-card); border: 1px solid var(--border-color);">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="fw-bold mb-0 text-dark" style="color: var(--text-main) !important;">
-                        <i class="fas fa-store-alt text-primary me-2"></i>Tambah UMKM Warga
-                    </h4>
-                    <a href="{{ route('umkm.index') }}" class="btn btn-sm btn-outline-secondary" style="border-radius: 8px;">
-                        <i class="fas fa-arrow-left me-1"></i>Kembali
-                    </a>
+<div class="nx-page-header">
+    <div>
+        <span class="badge rounded-pill mb-2 px-3 py-1" style="background: rgba(40,89,67,0.12); color: var(--nx-forest); font-weight: 700;">
+            <i class="fas fa-shop me-1"></i> Pendaftaran Mitra UMKM
+        </span>
+        <h1 class="nx-page-title">Tambah Usaha UMKM Warga</h1>
+        <p class="nx-page-subtitle">Promosikan produk kuliner, kerajinan, atau layanan jasa Anda kepada seluruh warga RW 018.</p>
+    </div>
+    <a href="{{ route('umkm.index') }}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left me-1"></i> Kembali ke Direktori
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <div class="card p-4">
+            <form method="POST" action="{{ route('umkm.store') }}" enctype="multipart/form-data">
+                @csrf
+
+                <div class="mb-3">
+                    <label class="form-label">Nama Usaha / Toko <span class="text-danger">*</span></label>
+                    <input id="namaUsahaInput" type="text" name="nama" value="{{ old('nama') }}" class="form-control"
+                           placeholder="Contoh: Dapur Sehat Bu Rina" required>
                 </div>
 
-                <form method="POST" action="{{ route('umkm.store') }}" enctype="multipart/form-data">
-                    @csrf
-
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold text-secondary">Nama Usaha / Toko</label>
-                        <input id="namaUsahaInput" type="text" name="nama" class="form-control form-control-lg" placeholder="Contoh: Warung Sejahtera Mandiri" required style="border-radius: 10px;">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nama Pemilik Usaha</label>
+                        <input type="text" name="pemilik" value="{{ old('pemilik', Auth::user()->name ?? '') }}" class="form-control"
+                               placeholder="Contoh: Budi Santoso">
                     </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold text-secondary">Nama Pemilik</label>
-                            <input type="text" name="pemilik" class="form-control" placeholder="Contoh: Budi Santoso" style="border-radius: 10px;">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold text-secondary">RT (Rukun Tetangga)</label>
-                            <select name="rt_number" class="form-select" required style="border-radius: 10px;">
-                                <option value="006" {{ (Auth::user()->rt_number ?? '') === '006' ? 'selected' : '' }}>RT 006</option>
-                                <option value="007" {{ (Auth::user()->rt_number ?? '') === '007' ? 'selected' : '' }}>RT 007</option>
-                                <option value="008" {{ (Auth::user()->rt_number ?? '') === '008' ? 'selected' : '' }}>RT 008</option>
-                                <option value="009" {{ (Auth::user()->rt_number ?? '') === '009' ? 'selected' : '' }}>RT 009</option>
-                                <option value="010" {{ (Auth::user()->rt_number ?? '') === '010' ? 'selected' : '' }}>RT 010</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold text-secondary">Kategori Usaha</label>
-                        <select id="kategoriSelect" name="kategori" class="form-select" required disabled style="border-radius: 10px;">
-                            <option value="">Isi nama usaha terlebih dahulu untuk memuat kategori...</option>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Wilayah RT <span class="text-danger">*</span></label>
+                        <select name="rt_number" class="form-select" required>
+                            @foreach(['001','002','003','004','005','006','007','008','009','010'] as $rtOpt)
+                                <option value="{{ $rtOpt }}" {{ (Auth::user()->rt_number ?? '') === $rtOpt ? 'selected' : '' }}>RT {{ $rtOpt }}</option>
+                            @endforeach
                         </select>
                     </div>
+                </div>
 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold text-secondary">No. Telepon / WhatsApp</label>
-                            <input type="text" name="telepon" class="form-control" placeholder="Contoh: 081234567890" style="border-radius: 10px;">
+                <div class="mb-3">
+                    <label class="form-label">Kategori Usaha <span class="text-danger">*</span></label>
+                    <select id="kategoriSelect" name="kategori" class="form-select" required disabled>
+                        <option value="">Isi nama usaha terlebih dahulu untuk memuat kategori...</option>
+                    </select>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nomor Telepon / WhatsApp Order</label>
+                        <input type="text" name="telepon" value="{{ old('telepon') }}" class="form-control" placeholder="Contoh: 081234567890">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Alamat / Blok Lokasi Usaha</label>
+                        <input type="text" name="alamat" value="{{ old('alamat') }}" class="form-control" placeholder="Contoh: Jl. Sakura Blok A No. 15">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Deskripsi Produk / Layanan Unggulan</label>
+                    <textarea name="deskripsi" class="form-control" rows="4"
+                              placeholder="Jelaskan produk unggulan, jam buka, atau layanan pesan antar yang Anda sediakan...">{{ old('deskripsi') }}</textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Foto Cover Toko / Produk (Opsional)</label>
+                    <input type="file" name="cover_image" id="coverImageInput" class="form-control" accept="image/*">
+                    <small class="text-muted d-block mt-1">
+                        Format JPG, PNG, atau WEBP (Maks. 2MB). Jika dikosongkan, sistem otomatis memasangkan ilustrasi sesuai kategori usaha.
+                    </small>
+
+                    <div id="imagePreviewContainer" class="mt-3 text-center" style="display: none;">
+                        <span class="d-block text-muted small mb-2"><i class="fas fa-image me-1"></i>Pratinjau Foto Cover:</span>
+                        <div class="d-inline-block rounded-4 overflow-hidden shadow-sm border" style="max-width: 100%; max-height: 240px;">
+                            <img id="imagePreview" src="#" alt="Preview Cover" style="max-height: 240px; width: auto; object-fit: cover;">
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-semibold text-secondary">Alamat Usaha</label>
-                            <input type="text" name="alamat" class="form-control" placeholder="Contoh: Jl. Sakura No. 15, RT 006 RW 018" style="border-radius: 10px;">
-                        </div>
                     </div>
+                </div>
 
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold text-secondary">Deskripsi Singkat Usaha</label>
-                        <textarea name="deskripsi" class="form-control" rows="4" placeholder="Jelaskan produk unggulan atau layanan yang Anda sediakan..." style="border-radius: 10px;"></textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold text-secondary">Foto Cover Toko / Usaha</label>
-                        <input type="file" name="cover_image" id="coverImageInput" class="form-control" accept="image/*" style="border-radius: 10px;">
-                        <small class="text-muted d-block mt-1">Format: JPG, JPEG, PNG, GIF. Maksimal 2MB. Jika dikosongkan, gambar cover estetik otomatis dari Unsplash akan dipasangkan sesuai kategori pilihan Anda.</small>
-                        
-                        <!-- Image Preview Container -->
-                        <div id="imagePreviewContainer" class="mt-3 text-center" style="display: none;">
-                            <span class="d-block text-secondary mb-2" style="font-size: 0.8rem;"><i class="fas fa-image me-1"></i>Pratinjau Foto Cover:</span>
-                            <div class="d-inline-block rounded-3 overflow-hidden shadow-sm border" style="max-width: 100%; max-height: 250px;">
-                                <img id="imagePreview" src="#" alt="Preview Cover" style="max-height: 250px; width: auto; object-fit: cover;">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-4">
-                        <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm" style="border-radius: 12px; font-weight: 600;">
-                            <i class="fas fa-save me-1"></i>Simpan & Daftarkan Usaha
-                        </button>
-                    </div>
-                </form>
-            </div>
+                <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+                    <a href="{{ route('umkm.index') }}" class="btn btn-outline-secondary px-4">Batal</a>
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="fas fa-save me-1"></i> Simpan &amp; Daftarkan Usaha
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -95,10 +102,7 @@
     let categoryLoaded = false;
 
     async function loadUmkmCategories() {
-        if (categoryLoaded) {
-            return;
-        }
-
+        if (categoryLoaded) return;
         try {
             const response = await fetch('{{ route('umkm.categories') }}');
             const categories = await response.json();
@@ -114,9 +118,8 @@
             categorySelect.disabled = false;
             categoryLoaded = true;
         } catch (error) {
-            categorySelect.innerHTML = '<option value="">Gagal memuat kategori</option>';
-            categorySelect.disabled = true;
-            console.error(error);
+            categorySelect.innerHTML = '<option value="Kuliner & Makanan">Kuliner & Makanan</option><option value="Perdagangan">Perdagangan</option><option value="Jasa">Jasa</option><option value="Kerajinan">Kerajinan</option>';
+            categorySelect.disabled = false;
         }
     }
 
@@ -139,7 +142,6 @@
         }
     });
 
-    // Image Upload Preview Logic
     const coverImageInput = document.getElementById('coverImageInput');
     const imagePreviewContainer = document.getElementById('imagePreviewContainer');
     const imagePreview = document.getElementById('imagePreview');

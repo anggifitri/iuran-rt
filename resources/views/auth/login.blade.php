@@ -1,535 +1,688 @@
-<!DOCTYPE html>
-<html lang="id" data-theme="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexaNest — Masuk Portal</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+@extends('layouts.app')
 
-    <style>
-        :root {
-            --accent: #D1A151;
-            --accent-light: #f59e0b;
-            --bg-1: #020914;
-            --bg-2: #052646;
-        }
+@section('title', 'Masuk ke Akun — NexaNest Smart & Green Community')
 
-        /* Light Mode */
-        html[data-theme="light"] {
-            --accent: #6366f1;
-            --accent-light: #4f46e5;
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8fafc;
-            --text-primary: #1e293b;
-            --text-secondary: #64748b;
-            --border-color: rgba(99, 102, 241, 0.08);
-            --gradient-from: #6366f1;
-            --gradient-to: #a855f7;
-            --glow-color: rgba(99, 102, 241, 0.15);
-        }
+@push('styles')
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --nx-forest: #285943;
+        --nx-forest-dark: #1E4633;
+        --nx-sage: #A8C9B5;
+        --nx-pastel-blue: #A9C9E8;
+        --nx-mint: #DCEBDD;
+        --nx-mint-soft: #EEF6EF;
+        --nx-powder: #DCEAF5;
+        --nx-bg: #F7F9F7;
+        --nx-white: #FFFFFF;
+        --nx-text: #263449;
+        --nx-muted: #718096;
+        --nx-border: #E5EBE6;
+        --nx-soft-red: #FCE8E9;
+        --nx-danger: #D94E4E;
+    }
 
-        /* Dark Mode */
-        html[data-theme="dark"] {
-            --accent: #D1A151;
-            --accent-light: #fbbf24;
-            --bg-primary: #031022;
-            --bg-secondary: #042e55;
-            --text-primary: #e6eef6;
-            --text-secondary: #94a3b8;
-            --border-color: rgba(209, 161, 81, 0.12);
-            --gradient-from: #D1A151;
-            --gradient-to: #ea580c;
-            --glow-color: rgba(209, 161, 81, 0.18);
-        }
+    body {
+        font-family: 'Plus Jakarta Sans', 'Inter', sans-serif !important;
+        background: radial-gradient(circle at 10% 15%, #E6F2E7 0%, #F7F9F7 48%, #E7F1FA 100%) !important;
+        color: var(--nx-text) !important;
+        min-height: 100vh;
+        margin: 0;
+    }
 
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            color: var(--text-primary);
-            transition: background-color 0.4s, color 0.4s;
-            overflow-x: hidden;
-        }
+    .theme-toggle-btn,
+    nav.navbar {
+        display: none !important;
+    }
 
-        /* Animated Background */
-        html[data-theme="dark"] .bg-animated {
-            background: linear-gradient(135deg, #020914 0%, #03172e 45%, #052d56 100%);
-            background-size: 400% 400%;
-            animation: moveGrad 18s ease infinite;
-        }
-        html[data-theme="light"] .bg-animated {
-            background: linear-gradient(135deg, #ffffff 0%, #eff6ff 45%, #f5f3ff 100%);
-            background-size: 400% 400%;
-            animation: moveGrad 18s ease infinite;
-        }
+    .nx-auth-page {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 28px 16px;
+        position: relative;
+        overflow: hidden;
+    }
 
-        @keyframes moveGrad {
-            0% { background-position: 0% 50% }
-            50% { background-position: 100% 50% }
-            100% { background-position: 0% 50% }
-        }
+    .nx-auth-shell {
+        width: 100%;
+        max-width: 1060px;
+        background: var(--nx-white);
+        border-radius: 28px;
+        border: 1px solid var(--nx-border);
+        box-shadow: 0 22px 60px rgba(40, 89, 67, 0.09);
+        display: grid;
+        grid-template-columns: 1.08fr 1fr;
+        overflow: hidden;
+        position: relative;
+        z-index: 2;
+    }
 
-        /* Twinkling Starfield */
-        .stars {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            background:
-                radial-gradient(circle at 15% 20%, rgba(255,255,255,0.7) 1px, transparent 0),
-                radial-gradient(circle at 35% 15%, rgba(255,255,255,0.6) 1.5px, transparent 0),
-                radial-gradient(circle at 55% 25%, rgba(255,255,255,0.8) 1px, transparent 0),
-                radial-gradient(circle at 75% 12%, rgba(255,255,255,0.5) 1px, transparent 0),
-                radial-gradient(circle at 90% 30%, rgba(255,255,255,0.75) 1.5px, transparent 0),
-                radial-gradient(circle at 20% 60%, rgba(255,255,255,0.65) 1px, transparent 0),
-                radial-gradient(circle at 50% 65%, rgba(255,255,255,0.8) 1px, transparent 0),
-                radial-gradient(circle at 80% 55%, rgba(255,255,255,0.5) 2px, transparent 0);
-            background-size: 250px 250px;
-            opacity: 0.8;
-            animation: twinkleStars 12s infinite alternate ease-in-out;
-        }
+    /* ============ LEFT VISUAL BRANDING PANEL ============ */
+    .nx-auth-visual {
+        background: linear-gradient(150deg, #DCEBDD 0%, #E7F2EE 52%, #DCEAF5 100%);
+        padding: 42px 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        overflow: hidden;
+        border-right: 1px solid var(--nx-border);
+    }
 
-        @keyframes twinkleStars {
-            0% { opacity: 0.5; }
-            100% { opacity: 0.9; }
-        }
+    .nx-auth-visual::before {
+        content: '';
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.45);
+        top: -90px;
+        right: -90px;
+        pointer-events: none;
+    }
 
-        html[data-theme="light"] .stars { display: none; }
+    .nx-auth-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        position: relative;
+        z-index: 2;
+    }
 
-        /* Floating Aurora Orbs */
-        .aurora-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.25;
-            z-index: 0;
-            pointer-events: none;
-        }
-        .orb-1 {
-            width: 400px;
-            height: 400px;
-            background: var(--accent);
-            top: -100px;
-            right: -100px;
-            animation: floatOrb1 15s infinite alternate ease-in-out;
-        }
-        .orb-2 {
-            width: 500px;
-            height: 500px;
-            background: #3b82f6;
-            bottom: -150px;
-            left: -150px;
-            animation: floatOrb2 20s infinite alternate ease-in-out;
-        }
+    .nx-brand-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+    }
 
-        @keyframes floatOrb1 {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(-80px, 50px) scale(1.15); }
-        }
-        @keyframes floatOrb2 {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(100px, -60px) scale(0.9); }
-        }
+    .nx-brand-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 14px;
+        background: var(--nx-white);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 20px rgba(40, 89, 67, 0.12);
+    }
 
-        /* Glassmorphism Card with Entrance Animation */
-        .login-card {
-            width: min(1000px, calc(100% - 2rem));
-            border-radius: 36px;
-            overflow: hidden;
-            display: grid;
-            grid-template-columns: 1.1fr 1fr;
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.25);
-            transition: box-shadow 0.5s ease, transform 0.5s ease;
-        }
+    .nx-brand-name {
+        font-weight: 800;
+        font-size: 1.25rem;
+        color: var(--nx-forest);
+        letter-spacing: -0.02em;
+        line-height: 1.15;
+        margin: 0;
+    }
 
-        .login-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 40px 90px rgba(0, 0, 0, 0.35);
-        }
+    .nx-brand-tagline {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #4A6B5B;
+        margin: 0;
+    }
 
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    .nx-back-home {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 14px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px solid rgba(40, 89, 67, 0.14);
+        color: var(--nx-forest);
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
 
-        html[data-theme="dark"] .login-card {
-            background: linear-gradient(135deg, rgba(4, 15, 33, 0.75) 0%, rgba(5, 37, 65, 0.85) 100%);
-        }
-        html[data-theme="light"] .login-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.75) 0%, rgba(248, 250, 252, 0.85) 100%);
-        }
+    .nx-back-home:hover {
+        background: var(--nx-white);
+        color: var(--nx-forest-dark);
+        transform: translateY(-1px);
+    }
 
-        /* Split Panels */
-        .left-panel {
-            padding: 4rem 3rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-        html[data-theme="dark"] .left-panel {
-            background: rgba(3, 10, 22, 0.4);
-            border-right: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        html[data-theme="light"] .left-panel {
-            background: rgba(241, 245, 249, 0.4);
-            border-right: 1px solid rgba(99, 102, 241, 0.06);
-        }
+    .nx-illustration-box {
+        margin: 22px 0;
+        background: rgba(255, 255, 255, 0.62);
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 22px;
+        padding: 18px 16px 10px;
+        box-shadow: 0 12px 30px rgba(40, 89, 67, 0.06);
+        position: relative;
+        z-index: 2;
+    }
 
-        .right-panel {
-            padding: 4rem 3rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    .nx-visual-copy {
+        position: relative;
+        z-index: 2;
+    }
 
-        /* Glassmorphism Form Wrapper */
-        .form-container {
-            width: 100%;
-            max-width: 440px;
-        }
+    .nx-visual-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        border-radius: 999px;
+        background: rgba(40, 89, 67, 0.1);
+        color: var(--nx-forest);
+        font-size: 0.74rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
 
-        .input-group-modern {
-            position: relative;
-            margin-bottom: 1.5rem;
-        }
+    .nx-visual-title {
+        font-size: 1.65rem;
+        font-weight: 800;
+        color: var(--nx-forest);
+        letter-spacing: -0.025em;
+        margin-bottom: 8px;
+        line-height: 1.25;
+    }
 
-        .input-modern {
-            width: 100%;
-            border-radius: 14px;
-            padding: 0.95rem 1rem 0.95rem 2.8rem;
-            font-size: 0.95rem;
-            font-weight: 500;
-            border: 1.5px solid var(--border-color);
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.05);
-        }
+    .nx-visual-desc {
+        font-size: 0.92rem;
+        color: #465A50;
+        line-height: 1.6;
+        margin-bottom: 16px;
+    }
 
-        html[data-theme="dark"] .input-modern {
-            color: #f8fafc;
-            background: rgba(255, 255, 255, 0.03);
-        }
-        html[data-theme="light"] .input-modern {
-            color: #1e293b;
-            background: rgba(255, 255, 255, 0.8);
-            border-color: rgba(99, 102, 241, 0.15);
-        }
+    .nx-visual-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
 
-        .input-modern:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 4px var(--glow-color);
-            background: rgba(255, 255, 255, 0.08);
+    .nx-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.8);
+        color: var(--nx-text);
+        font-size: 0.76rem;
+        font-weight: 600;
+    }
+
+    .nx-chip i {
+        color: var(--nx-forest);
+    }
+
+    /* ============ RIGHT FORM PANEL ============ */
+    .nx-auth-form-panel {
+        padding: 46px 44px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: var(--nx-white);
+    }
+
+    .nx-form-head {
+        margin-bottom: 26px;
+    }
+
+    .nx-form-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        border-radius: 999px;
+        background: var(--nx-mint-soft);
+        color: var(--nx-forest);
+        font-size: 0.74rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .nx-form-title {
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: var(--nx-text);
+        letter-spacing: -0.02em;
+        margin-bottom: 6px;
+    }
+
+    .nx-form-subtitle {
+        font-size: 0.88rem;
+        color: var(--nx-muted);
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    .nx-alert-error {
+        background: var(--nx-soft-red);
+        border: 1px solid #F5C2C5;
+        color: #9E2A2F;
+        border-radius: 14px;
+        padding: 12px 16px;
+        font-size: 0.84rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .nx-alert-status {
+        background: var(--nx-mint-soft);
+        border: 1px solid var(--nx-sage);
+        color: var(--nx-forest);
+        border-radius: 14px;
+        padding: 12px 16px;
+        font-size: 0.84rem;
+        font-weight: 600;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .nx-field-group {
+        margin-bottom: 18px;
+    }
+
+    .nx-label {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--nx-text);
+        margin-bottom: 7px;
+    }
+
+    .nx-input-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .nx-input-icon {
+        position: absolute;
+        left: 15px;
+        color: #8899A6;
+        font-size: 0.92rem;
+        pointer-events: none;
+        transition: color 0.2s ease;
+    }
+
+    .nx-input {
+        width: 100%;
+        padding: 12px 42px 12px 42px;
+        background: var(--nx-bg) !important;
+        border: 1.5px solid var(--nx-border) !important;
+        border-radius: 14px !important;
+        font-size: 0.9rem;
+        color: var(--nx-text) !important;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .nx-input::placeholder {
+        color: #9AA8B6;
+        font-weight: 400;
+    }
+
+    .nx-input:focus {
+        outline: none;
+        background: var(--nx-white) !important;
+        border-color: var(--nx-forest) !important;
+        box-shadow: 0 0 0 4px rgba(40, 89, 67, 0.1) !important;
+    }
+
+    .nx-input-wrap:focus-within .nx-input-icon {
+        color: var(--nx-forest);
+    }
+
+    .nx-eye-btn {
+        position: absolute;
+        right: 12px;
+        background: transparent;
+        border: none;
+        color: var(--nx-muted);
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .nx-eye-btn:hover {
+        background: var(--nx-mint-soft);
+        color: var(--nx-forest);
+    }
+
+    .nx-row-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 22px;
+        font-size: 0.83rem;
+    }
+
+    .nx-remember {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--nx-muted);
+        font-weight: 600;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .nx-remember input {
+        width: 16px;
+        height: 16px;
+        accent-color: var(--nx-forest);
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .nx-forgot-link {
+        color: var(--nx-forest);
+        font-weight: 700;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .nx-forgot-link:hover {
+        color: var(--nx-forest-dark);
+        text-decoration: underline;
+    }
+
+    .nx-submit-btn {
+        width: 100%;
+        padding: 13px 20px;
+        border-radius: 14px;
+        border: none;
+        background: var(--nx-forest);
+        color: var(--nx-white);
+        font-size: 0.94rem;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        cursor: pointer;
+        box-shadow: 0 10px 24px rgba(40, 89, 67, 0.22);
+        transition: all 0.25s ease;
+    }
+
+    .nx-submit-btn:hover:not(:disabled) {
+        background: var(--nx-forest-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 14px 28px rgba(40, 89, 67, 0.28);
+    }
+
+    .nx-submit-btn:disabled {
+        opacity: 0.75;
+        cursor: wait;
+    }
+
+    .nx-auth-footer {
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px solid var(--nx-border);
+        text-align: center;
+        font-size: 0.86rem;
+        color: var(--nx-muted);
+    }
+
+    .nx-auth-footer a {
+        color: var(--nx-forest);
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .nx-auth-footer a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 991.98px) {
+        .nx-auth-shell {
+            grid-template-columns: 1fr;
+            max-width: 520px;
         }
-
-        .input-icon-left {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            pointer-events: none;
-            transition: color 0.3s ease;
+        .nx-auth-visual {
+            padding: 28px 26px;
+            border-right: none;
+            border-bottom: 1px solid var(--nx-border);
         }
-        .input-modern:focus ~ .input-icon-left {
-            color: var(--accent);
+        .nx-illustration-box {
+            display: none;
         }
-
-        /* Eye Icon Button Reset */
-        .eye-toggle-btn {
-            position: absolute;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-            cursor: pointer;
-            z-index: 10;
-            border: none;
-            background: transparent;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .nx-auth-form-panel {
+            padding: 32px 26px;
         }
-        .eye-toggle-btn:hover {
-            color: var(--accent);
-        }
+    }
+</style>
+@endpush
 
-        /* 3D Floating House SVG Animation */
-        .floating-art {
-            animation: floatArt 6s ease-in-out infinite;
-        }
+@section('content')
+<div class="nx-auth-page">
+    <div class="nx-auth-shell">
 
-        @keyframes floatArt {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(1deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
+        <!-- KOLOM KIRI: VISUAL BRANDING PANEL -->
+        <div class="nx-auth-visual">
+            <div class="nx-auth-top">
+                <a href="{{ url('/') }}" class="nx-brand-badge">
+                    <span class="nx-brand-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                            <path d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V10.5Z" stroke="#285943" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M9 21V14C9 12.8954 9.89543 12 11 12H13C14.1046 12 15 12.8954 15 14V21" stroke="#285943" stroke-width="2"/>
+                            <path d="M13.5 8.5C15.5 7 18 8 18 10.5C16 11.5 13.5 10.5 13.5 8.5Z" fill="#285943"/>
+                        </svg>
+                    </span>
+                    <div>
+                        <h1 class="nx-brand-name">NexaNest</h1>
+                        <p class="nx-brand-tagline">Smart &amp; Green Community</p>
+                    </div>
+                </a>
 
-        /* Golden/Blue Theme Toggle Button */
-        .theme-toggle {
-            position: fixed;
-            top: 25px;
-            right: 25px;
-            z-index: 1000;
-            border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-            color: white;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        html[data-theme="dark"] .theme-toggle {
-            background: rgba(209, 161, 81, 0.15);
-            color: #fbbf24;
-        }
-        html[data-theme="light"] .theme-toggle {
-            background: rgba(99, 102, 241, 0.15);
-            color: #6366f1;
-        }
-        .theme-toggle:hover {
-            transform: scale(1.1) rotate(15deg);
-        }
+                <a href="{{ url('/') }}" class="nx-back-home">
+                    <i class="fas fa-arrow-left"></i> Beranda
+                </a>
+            </div>
 
-        /* Submit Button */
-        .btn-submit {
-            background: linear-gradient(135deg, var(--gradient-from), var(--gradient-to));
-            color: white;
-            font-weight: 700;
-            border: none;
-            letter-spacing: 0.5px;
-            box-shadow: 0 10px 25px var(--glow-color);
-            transition: all 0.3s ease;
-        }
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 14px 35px var(--glow-color);
-            filter: brightness(1.05);
-        }
-        .btn-submit:active {
-            transform: translateY(0);
-        }
+            <!-- Flat Vector Illustration: Sustainable Green Neighborhood -->
+            <div class="nx-illustration-box" aria-hidden="true">
+                <svg viewBox="0 0 460 230" width="100%" height="auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="460" height="230" rx="16" fill="#EBF5EE"/>
+                    <!-- Sun & Clouds -->
+                    <circle cx="385" cy="48" r="22" fill="#FBE5A2"/>
+                    <path d="M70 52C70 44 77 38 85 38C91 38 96 41 98 46C100 45 103 44 106 44C112 44 117 49 117 55C117 56 117 57 116 58H71C70 56 70 54 70 52Z" fill="#FFFFFF" fill-opacity="0.85"/>
+                    <path d="M270 38C270 32 275 27 282 27C287 27 291 30 293 34C295 33 297 32 299 32C304 32 308 36 308 41H271C270 40 270 39 270 38Z" fill="#FFFFFF" fill-opacity="0.8"/>
 
-        @media (max-width: 992px) {
-            .login-card { grid-template-columns: 1fr; }
-            .left-panel { display: none; }
-            .right-panel { padding: 3rem 1.5rem; }
-        }
-    </style>
-</head>
-<body class="min-h-screen flex items-center justify-center p-4 bg-animated relative">
+                    <!-- Rolling Pastel Hills -->
+                    <path d="M0 168C95 140 190 148 290 165C355 176 415 160 460 150V230H0V168Z" fill="#C4DFC8"/>
+                    <path d="M0 186C120 168 250 172 460 192V230H0V186Z" fill="#9EC6A8"/>
 
-    <!-- Theme Toggle -->
-    <button id="themeToggle" class="theme-toggle" title="Ubah Tema" aria-label="Ubah Tema">
-        <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="display: none;" width="22" height="22">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1m-16 0H1m15.364 1.636l.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-        </svg>
-        <svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width="22" height="22">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-        </svg>
-    </button>
+                    <!-- River / Eco Stream -->
+                    <path d="M180 182C215 194 250 205 295 230H225C205 212 182 198 158 184L180 182Z" fill="#A9C9E8"/>
 
-    <!-- Starfield & Aurora Orbs -->
-    <div class="stars"></div>
-    <div class="aurora-orb orb-1"></div>
-    <div class="aurora-orb orb-2"></div>
+                    <!-- Eco House 1 (Left) with Solar Roof -->
+                    <rect x="64" y="114" width="82" height="58" rx="4" fill="#FFFFFF"/>
+                    <polygon points="56,116 105,78 154,116" fill="#285943"/>
+                    <!-- Solar Panel on Roof -->
+                    <polygon points="88,92 122,92 132,108 94,108" fill="#6AA6D8" stroke="#FFFFFF" stroke-width="1.5"/>
+                    <rect x="94" y="138" width="22" height="34" rx="3" fill="#A8C9B5"/>
+                    <rect x="74" y="126" width="14" height="14" rx="2" fill="#DCEAF5"/>
+                    <rect x="122" y="126" width="14" height="14" rx="2" fill="#DCEAF5"/>
 
-    <!-- Login Card -->
-    <div class="login-card">
+                    <!-- Eco House 2 (Center-Right) -->
+                    <rect x="234" y="102" width="104" height="68" rx="5" fill="#F7F9F7"/>
+                    <polygon points="224,104 286,62 348,104" fill="#3B7A5E"/>
+                    <polygon points="268,78 308,78 318,96 274,96" fill="#A9C9E8" stroke="#FFFFFF" stroke-width="1.5"/>
+                    <rect x="275" y="132" width="24" height="38" rx="3" fill="#285943"/>
+                    <rect x="248" y="118" width="18" height="18" rx="3" fill="#A9C9E8"/>
+                    <rect x="308" y="118" width="18" height="18" rx="3" fill="#A9C9E8"/>
 
-        <!-- Left Panel: Graphic Branding -->
-        <div class="left-panel">
-            <div class="text-center w-full max-w-sm">
-                <!-- 3D Glowing House SVG Illustration -->
-                <div class="floating-art mx-auto mb-6" style="width: 200px; height: 200px; filter: drop-shadow(0 15px 30px var(--glow-color));">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" class="w-full h-full" style="color: var(--accent);">
-                        <!-- Grid Lines behind -->
-                        <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="0.5" stroke-dasharray="2 2" opacity="0.25"/>
-                        <circle cx="50" cy="50" r="35" stroke="currentColor" stroke-width="0.5" opacity="0.15"/>
+                    <!-- Trees & Greenery -->
+                    <rect x="184" y="138" width="6" height="32" rx="3" fill="#6D5446"/>
+                    <circle cx="187" cy="126" r="20" fill="#4C8C6A"/>
+                    <circle cx="177" cy="134" r="14" fill="#68A883"/>
 
-                        <!-- Ground line -->
-                        <line x1="15" y1="75" x2="85" y2="75" stroke="currentColor" stroke-width="1" opacity="0.4"/>
+                    <rect x="382" y="126" width="7" height="38" rx="3" fill="#6D5446"/>
+                    <circle cx="385" cy="112" r="23" fill="#285943"/>
+                    <circle cx="397" cy="122" r="16" fill="#5B9E7B"/>
 
-                        <!-- Isometric house block -->
-                        <!-- Roof Front -->
-                        <path d="M50 20 L20 48 L28 48 L50 29" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-width="1.8"/>
-                        <!-- Roof Right -->
-                        <path d="M50 20 L80 48 L72 48 L50 29" fill="currentColor" fill-opacity="0.1" stroke="currentColor" stroke-width="1.8"/>
+                    <circle cx="40" cy="144" r="16" fill="#5B9E7B"/>
+                    <rect x="38" y="154" width="5" height="20" fill="#6D5446"/>
+                </svg>
+            </div>
 
-                        <!-- House Body Front -->
-                        <path d="M28 48 V75 H50 V45 Z" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-width="1.8"/>
-                        <!-- House Body Right -->
-                        <path d="M72 48 V75 H50 V45 Z" fill="currentColor" fill-opacity="0.05" stroke="currentColor" stroke-width="1.8"/>
-
-                        <!-- Door -->
-                        <rect x="44" y="56" width="12" height="19" rx="2" stroke="currentColor" stroke-width="1.5" fill="#000" fill-opacity="0.3"/>
-                        <!-- Window Left -->
-                        <rect x="33" y="52" width="6" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/>
-                        <!-- Window Right -->
-                        <rect x="61" y="52" width="6" height="8" rx="1" stroke="currentColor" stroke-width="1.2"/>
-
-                        <!-- Chimney -->
-                        <path d="M66 30 V42 H72 V30 Z" stroke="currentColor" stroke-width="1.5"/>
-                    </svg>
+            <div class="nx-visual-copy">
+                <span class="nx-visual-pill">
+                    <i class="fas fa-seedling"></i> Smart &amp; Sustainable Neighborhood
+                </span>
+                <h2 class="nx-visual-title">Selamat Datang Kembali!</h2>
+                <p class="nx-visual-desc">
+                    Bersama NexaNest, wujudkan lingkungan yang lebih terorganisir, nyaman, dan berkelanjutan.
+                </p>
+                <div class="nx-visual-chips">
+                    <span class="nx-chip"><i class="fas fa-shield-halved"></i> Akses Aman RT/RW</span>
+                    <span class="nx-chip"><i class="fas fa-wallet"></i> Kas Transparan</span>
+                    <span class="nx-chip"><i class="fas fa-file-signature"></i> E-Surat &amp; TTE</span>
                 </div>
-
-                <h1 class="brand-title text-5xl font-extrabold tracking-tight italic mb-2" style="color: var(--accent); text-shadow: 0 4px 15px var(--glow-color);">NexaNest</h1>
-                <p class="text-sm font-semibold tracking-widest uppercase opacity-85" style="color: var(--text-secondary);">Portal Layanan Digital Warga</p>
-                <div class="w-16 h-1 mx-auto mt-4 rounded" style="background: linear-gradient(90deg, var(--gradient-from), var(--gradient-to));"></div>
             </div>
         </div>
 
-        <!-- Right Panel: Login Form -->
-        <div class="right-panel">
-            <div class="form-container">
-                <div class="mb-8">
-                    <h3 class="text-3xl font-extrabold mb-1" style="color: var(--text-main);">Selamat Datang</h3>
-                    <p class="text-sm text-secondary" style="color: var(--text-secondary);">Silakan masuk untuk mengakses portal kas, surat, dan posyandu.</p>
+        <!-- KOLOM KANAN: FORM LOGIN -->
+        <div class="nx-auth-form-panel">
+            <div class="nx-form-head">
+                <span class="nx-form-badge">
+                    <i class="fas fa-leaf"></i> Portal Warga &amp; Pengurus
+                </span>
+                <h2 class="nx-form-title">Masuk ke Akun</h2>
+                <p class="nx-form-subtitle">
+                    Masukkan email terdaftar dan kata sandi Anda untuk mengakses layanan digital NexaNest.
+                </p>
+            </div>
+
+            @if (session('status'))
+                <div class="nx-alert-status" role="alert">
+                    <i class="fas fa-check-circle"></i>
+                    <span>{{ session('status') }}</span>
                 </div>
+            @endif
 
-                <form action="{{ route('login') }}" method="POST" class="space-y-4">
-                    @csrf
-
-                    <!-- Email Input -->
+            @if ($errors->any())
+                <div class="nx-alert-error" role="alert">
+                    <i class="fas fa-circle-exclamation mt-1"></i>
                     <div>
-                        <label class="text-xs font-bold mb-2 block uppercase tracking-wider" style="color: var(--text-secondary);">Alamat Email</label>
-                        <div class="input-group-modern">
-                            <input type="email" name="email" value="{{ old('email') }}" required autofocus
-                                class="input-modern"
-                                placeholder="nama@email.com">
-                            <i class="fa-regular fa-envelope input-icon-left"></i>
-                        </div>
-                        @error('email')
-                            <span class="text-red-400 text-xs mt-1 block"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <!-- Password Input -->
-                    <div>
-                        <label class="text-xs font-bold mb-2 block uppercase tracking-wider" style="color: var(--text-secondary);">Password Akun</label>
-                        <div class="input-group-modern">
-                            <input type="password" id="loginPassword" name="password" required
-                                class="input-modern"
-                                placeholder="••••••••">
-                            <i class="fa-solid fa-lock input-icon-left"></i>
-
-                            <!-- Toggle Eye -->
-                            <button type="button" onclick="toggleLoginPassword()" class="eye-toggle-btn" tabindex="-1">
-                                <i id="loginEyeIcon" class="fa-regular fa-eye"></i>
-                                <i id="loginEyeOffIcon" class="fa-regular fa-eye-slash" style="display: none;"></i>
-                            </button>
-                        </div>
-                        @error('password')
-                            <span class="text-red-400 text-xs mt-1 block"><i class="fas fa-exclamation-circle me-1"></i>{{ $message }}</span>
-                        @enderror
-                    </div>
-
-                    <!-- Remember & Forgot Password -->
-                    <div class="flex items-center justify-between pt-1">
-                        <label class="flex items-center cursor-pointer select-none">
-                            <input id="remember" type="checkbox" name="remember" checked class="w-4 h-4 mr-2.5 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" style="accent-color: var(--accent);">
-                            <span class="text-xs font-medium" style="color: var(--text-primary);">Ingat Saya</span>
-                        </label>
-                        <a href="{{ route('password.request') }}" class="text-xs font-bold hover:underline" style="color: var(--accent);">Lupa Password?</a>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <div class="pt-2">
-                        <button type="submit" class="btn-submit w-full py-3.5 rounded-xl text-sm font-extrabold uppercase transition-all tracking-wider shadow-lg active:scale-[0.98]">
-                            <i class="fas fa-sign-in-alt me-1"></i> Masuk Sekarang
-                        </button>
-                    </div>
-                </form>
-
-                <div class="text-center mt-6 text-sm" style="color: var(--text-secondary);">
-                    Belum memiliki akun warga? <a href="{{ route('register') }}" class="font-extrabold hover:underline" style="color: var(--accent);">Daftar Baru</a>
-                </div>
-
-                @if ($errors->any())
-                    <div class="mt-6 p-4 rounded-xl border bg-red-950/20 border-red-900/40 text-red-400 text-xs space-y-1">
                         @foreach ($errors->all() as $error)
-                            <div class="flex items-center gap-2">
-                                <i class="fas fa-exclamation-triangle flex-shrink-0"></i>
-                                <span>{{ $error }}</span>
-                            </div>
+                            <div>{{ $error }}</div>
                         @endforeach
                     </div>
-                @endif
-            </div>
+                </div>
+            @endif
+
+            <form method="POST" action="{{ route('login') }}" id="nxLoginForm">
+                @csrf
+
+                <div class="nx-field-group">
+                    <label for="email" class="nx-label">Alamat Email</label>
+                    <div class="nx-input-wrap">
+                        <i class="far fa-envelope nx-input-icon"></i>
+                        <input
+                            id="email"
+                            type="email"
+                            name="email"
+                            value="{{ old('email') }}"
+                            class="nx-input"
+                            placeholder="nama@email.com"
+                            required
+                            autofocus
+                            autocomplete="username"
+                        >
+                    </div>
+                </div>
+
+                <div class="nx-field-group">
+                    <label for="password" class="nx-label">Kata Sandi</label>
+                    <div class="nx-input-wrap">
+                        <i class="fas fa-lock nx-input-icon"></i>
+                        <input
+                            id="password"
+                            type="password"
+                            name="password"
+                            class="nx-input"
+                            placeholder="Masukkan kata sandi Anda"
+                            required
+                            autocomplete="current-password"
+                        >
+                        <button type="button" class="nx-eye-btn" id="togglePasswordBtn" aria-label="Tampilkan atau sembunyikan kata sandi">
+                            <i class="far fa-eye" id="togglePasswordIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="nx-row-meta">
+                    <label class="nx-remember" for="remember">
+                        <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                        <span>Ingat Saya</span>
+                    </label>
+
+                    @if (Route::has('password.request'))
+                        <a href="{{ route('password.request') }}" class="nx-forgot-link">
+                            Lupa Password?
+                        </a>
+                    @endif
+                </div>
+
+                <button type="submit" class="nx-submit-btn" id="nxLoginBtn">
+                    <span id="nxLoginBtnText">Masuk</span>
+                    <i class="fas fa-arrow-right" id="nxLoginBtnIcon"></i>
+                </button>
+            </form>
+
+            @if (Route::has('register'))
+                <div class="nx-auth-footer">
+                    Belum punya akun warga?
+                    <a href="{{ route('register') }}">Daftar sekarang</a>
+                </div>
+            @endif
         </div>
+
     </div>
+</div>
+@endsection
 
-    <script>
-        // Toggle Password Visibility
-        window.loginEyeClicked = false;
-        function toggleLoginPassword() {
-            const input = document.getElementById('loginPassword');
-            const eyeIcon = document.getElementById('loginEyeIcon');
-            const eyeOffIcon = document.getElementById('loginEyeOffIcon');
-            window.loginEyeClicked = true;
-            if (input.type === 'password') {
-                input.type = 'text';
-                eyeIcon.style.display = 'none';
-                eyeOffIcon.style.display = 'block';
-            } else {
-                input.type = 'password';
-                eyeIcon.style.display = 'block';
-                eyeOffIcon.style.display = 'none';
-            }
-            setTimeout(() => { window.loginEyeClicked = false; }, 300);
-        }
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const pwdInput = document.getElementById('password');
+    const toggleBtn = document.getElementById('togglePasswordBtn');
+    const toggleIcon = document.getElementById('togglePasswordIcon');
 
-        // Initialize theme
-        function initTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            updateThemeIcons(savedTheme);
-        }
+    if (toggleBtn && pwdInput) {
+        toggleBtn.addEventListener('click', function () {
+            const isHidden = pwdInput.getAttribute('type') === 'password';
+            pwdInput.setAttribute('type', isHidden ? 'text' : 'password');
+            toggleIcon.className = isHidden ? 'far fa-eye-slash' : 'far fa-eye';
+        });
+    }
 
-        function updateThemeIcons(theme) {
-            const sunIcon = document.getElementById('sunIcon');
-            const moonIcon = document.getElementById('moonIcon');
+    const loginForm = document.getElementById('nxLoginForm');
+    const loginBtn = document.getElementById('nxLoginBtn');
+    const loginBtnText = document.getElementById('nxLoginBtnText');
+    const loginBtnIcon = document.getElementById('nxLoginBtnIcon');
 
-            if (theme === 'light') {
-                sunIcon.style.display = 'block';
-                moonIcon.style.display = 'none';
-            } else {
-                sunIcon.style.display = 'none';
-                moonIcon.style.display = 'block';
-            }
-        }
-
-        function toggleTheme() {
-            const html = document.documentElement;
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcons(newTheme);
-        }
-
-        document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initTheme);
-        } else {
-            initTheme();
-        }
-    </script>
-</body>
-</html>
+    if (loginForm && loginBtn) {
+        loginForm.addEventListener('submit', function () {
+            loginBtn.disabled = true;
+            loginBtnText.textContent = 'Memproses Masuk...';
+            loginBtnIcon.className = 'fas fa-circle-notch fa-spin';
+        });
+    }
+});
+</script>
+@endpush
