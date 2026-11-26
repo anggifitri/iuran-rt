@@ -237,6 +237,99 @@
         color: var(--nx-forest-dark);
     }
 
+    .nx-auth-theme-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.85);
+        border: 1px solid rgba(40, 89, 67, 0.15);
+        color: var(--nx-forest);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 0.85rem;
+    }
+
+    .nx-auth-theme-btn:hover {
+        background: var(--nx-white);
+        transform: translateY(-1px);
+    }
+
+    html.dark .nx-auth-theme-btn {
+        background: #17223B !important;
+        border-color: #243454 !important;
+        color: #FDE047 !important;
+    }
+
+    html.dark .nx-auth-theme-btn:hover {
+        background: #1E2D4A !important;
+        border-color: #38BDF8 !important;
+    }
+
+    /* Dark Mode Overrides */
+    html.dark body:has(.nx-reg-wrap),
+    html.dark .nx-reg-wrap {
+        background: #0A0F1E !important;
+    }
+
+    html.dark .nx-reg-hero {
+        background: linear-gradient(135deg, #0F172A 0%, #172554 55%, #1E3A8A 100%) !important;
+        border-color: #1E2D4A !important;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45) !important;
+    }
+
+    html.dark .nx-reg-hero-title {
+        color: #F8FAFC !important;
+    }
+
+    html.dark .nx-reg-hero-sub {
+        color: #94A3B8 !important;
+    }
+
+    html.dark .nx-reg-card {
+        background: #0D1426 !important;
+        border-color: #1E293B !important;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45) !important;
+    }
+
+    html.dark .nx-section-title {
+        color: #F8FAFC !important;
+    }
+
+    html.dark .nx-control,
+    html.dark .nx-select {
+        background: #131B2E !important;
+        border-color: #1E2D4A !important;
+        color: #F1F5F9 !important;
+    }
+
+    html.dark .nx-control:focus,
+    html.dark .nx-select:focus {
+        background: #17223B !important;
+        border-color: #3B82F6 !important;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+    }
+
+    html.dark .nx-outline-btn {
+        background: rgba(19, 27, 46, 0.85) !important;
+        border-color: #1E293B !important;
+        color: #CBD5E1 !important;
+    }
+
+    html.dark .nx-outline-btn:hover {
+        background: #1E2D4A !important;
+        color: #38BDF8 !important;
+        border-color: #38BDF8 !important;
+    }
+
+    html.dark .nx-submit-btn {
+        background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+        border-color: #1E40AF !important;
+        color: #FFFFFF !important;
+    }
+
     @media (max-width: 767.98px) {
         .nx-reg-card {
             padding: 20px 16px;
@@ -255,21 +348,15 @@
 
     <!-- TOP HEADER -->
     <div class="nx-reg-topbar">
-        <a href="{{ url('/') }}" class="nx-brand-badge">
-            <span class="nx-brand-icon">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-                    <path d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V10.5Z" stroke="#285943" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M9 21V14C9 12.8954 9.89543 12 11 12H13C14.1046 12 15 12.8954 15 14V21" stroke="#285943" stroke-width="2"/>
-                    <path d="M13.5 8.5C15.5 7 18 8 18 10.5C16 11.5 13.5 10.5 13.5 8.5Z" fill="#285943"/>
-                </svg>
-            </span>
-            <div>
-                <h1 class="nx-brand-name">NexaNest</h1>
-                <p class="nx-brand-tagline">Smart &amp; Green Community</p>
-            </div>
+        <a href="{{ url('/') }}" class="text-decoration-none">
+            <x-nexanest-logo size="md" />
         </a>
 
         <div class="d-flex align-items-center gap-2">
+            <button type="button" class="nx-theme-toggle-btn nx-auth-theme-btn" id="nxRegThemeToggle" title="Beralih Tema (Dark/Light)">
+                <i class="far fa-moon dark-icon-moon"></i>
+                <i class="far fa-sun dark-icon-sun"></i>
+            </button>
             <a href="{{ url('/') }}" class="nx-outline-btn">
                 <i class="fas fa-home"></i> Beranda
             </a>
@@ -332,8 +419,9 @@
                         <input type="text" name="name" value="{{ old('name') }}" class="nx-control" placeholder="Contoh: Budi Santoso" required>
                     </div>
                     <div class="col-md-6">
-                        <label class="nx-label">Alamat Email Aktif <span class="text-danger">*</span></label>
-                        <input type="email" name="email" value="{{ old('email') }}" class="nx-control" placeholder="budi@email.com" required>
+                        <label class="nx-label">Alamat Email Aktif (@gmail.com) <span class="text-danger">*</span></label>
+                        <input type="email" name="email" value="{{ old('email') }}" class="nx-control" placeholder="contoh: nama@gmail.com" required>
+                        <small class="text-muted d-block mt-1" style="font-size: 0.75rem;"><i class="fas fa-info-circle me-1"></i> Wajib menggunakan domain @gmail.com (contoh: nama@gmail.com).</small>
                     </div>
                     <div class="col-md-6">
                         <label class="nx-label">Kata Sandi <span class="text-danger">*</span></label>

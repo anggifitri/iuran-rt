@@ -44,7 +44,7 @@
             <div class="input-group">
                 <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
                 <input type="text" id="wargaSearchInput" class="form-control border-start-0"
-                       placeholder="Cari nama warga, NIK, No. KK, blok rumah, atau UID E-KTP pada halaman ini...">
+                       placeholder="Cari nama warga, email, NIK, No. KK, blok rumah, atau UID E-KTP pada halaman ini...">
             </div>
         </div>
         <div class="col-md-4 text-md-end">
@@ -72,9 +72,9 @@
             </div>
         </div>
     @else
-        <div class="card overflow-hidden mb-4">
-            <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0" id="wargaTable">
+        <div class="card nx-table-card overflow-hidden mb-4 shadow-xs">
+            <div class="table-responsive nx-table-responsive">
+                <table class="table table-hover align-middle nx-table mb-0" id="wargaTable">
                     <thead>
                         <tr>
                             <th class="ps-4">Warga</th>
@@ -97,6 +97,13 @@
                                              style="width: 42px; height: 42px; object-fit: cover; border: 2px solid var(--nx-mint);">
                                         <div>
                                             <div class="fw-bold" style="color: var(--nx-text);">{{ $warga->nama }}</div>
+                                            <div class="text-xs text-slate-500" style="font-size: 0.74rem;">
+                                                @if($warga->user && $warga->user->email)
+                                                    <span class="text-slate-500 font-monospace"><i class="fas fa-envelope text-muted me-1"></i>{{ $warga->user->email }}</span>
+                                                @else
+                                                    <span class="text-slate-400 fst-italic">Belum punya akun</span>
+                                                @endif
+                                            </div>
                                             <small class="text-muted">Blok {{ $warga->blok_rumah ?? '-' }}</small>
                                         </div>
                                     </div>
@@ -138,6 +145,9 @@
                                 </td>
                                 <td class="pe-4 text-end">
                                     <div class="d-flex justify-content-end gap-1">
+                                        <a href="{{ route('warga.show', $warga->id) }}" class="btn btn-sm btn-outline-success" title="Lihat Detail Profil">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
                                         <button type="button"
                                             class="btn btn-sm btn-outline-primary btn-rekam-ktp"
                                             title="Rekam E-KTP (RFID RC522)"
@@ -206,6 +216,7 @@
                                 </div>
                                 <small class="text-muted">
                                     <i class="fas fa-location-dot text-success me-1"></i>Blok {{ $kk->blok_rumah }} • RT {{ $kk->rt_number }} / RW {{ $kk->rw_number }} • No. KK: {{ $kk->no_kk ?? '-' }}
+                                    • <i class="fas fa-envelope text-muted me-1"></i>{{ $kk->user?->email ?: 'Belum punya akun' }}
                                 </small>
                             </div>
                         </div>
@@ -214,6 +225,10 @@
                             <span class="badge rounded-pill px-3 py-2" style="background: var(--nx-mint-soft); color: var(--nx-forest); border: 1px solid var(--nx-sage);">
                                 <i class="fas fa-users me-1"></i>{{ $kk->anggotaKeluarga->count() + 1 }} Jiwa
                             </span>
+
+                            <a href="{{ route('warga.show', $kk->id) }}" class="btn btn-sm btn-outline-success" onclick="event.stopPropagation();" title="Lihat Profil">
+                                <i class="fas fa-eye"></i>
+                            </a>
 
                             <button type="button"
                                 class="btn btn-sm btn-outline-primary btn-rekam-ktp"
@@ -275,6 +290,9 @@
                                                         </div>
 
                                                         <div class="d-flex align-items-center gap-1">
+                                                            <a href="{{ route('warga.show', $anggota->id) }}" class="btn btn-sm btn-outline-success py-1 px-2" style="font-size: 0.72rem;" title="Lihat Profil">
+                                                                <i class="fas fa-eye"></i>
+                                                            </a>
                                                             <button type="button"
                                                                 class="btn btn-sm btn-outline-primary py-1 px-2 btn-rekam-ktp"
                                                                 style="font-size: 0.72rem;"
@@ -324,6 +342,14 @@
                                                         <div class="col-6">
                                                             <span class="text-muted d-block" style="font-size: 0.7rem;">Blok &amp; RT/RW</span>
                                                             <span class="fw-semibold">Blok {{ $anggota->blok_rumah ?? '-' }} • RT {{ $anggota->rt_number }}</span>
+                                                        </div>
+                                                        <div class="col-12 mt-1">
+                                                            <span class="text-muted d-block" style="font-size: 0.7rem;">Akun Email</span>
+                                                            @if($anggota->user && $anggota->user->email)
+                                                                <span class="fw-semibold text-slate-600 font-monospace" style="font-size: 0.75rem;"><i class="fas fa-envelope text-muted me-1"></i>{{ $anggota->user->email }}</span>
+                                                            @else
+                                                                <span class="text-slate-400 fst-italic" style="font-size: 0.75rem;">Belum punya akun</span>
+                                                            @endif
                                                         </div>
                                                         <div class="col-12">
                                                             <span class="text-muted d-block" style="font-size: 0.7rem;">Alamat Domisili</span>

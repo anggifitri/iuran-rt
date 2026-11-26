@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Surat;
+use App\Services\AuditLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,12 +35,22 @@ class SuratController extends Controller
             'keterangan' => 'nullable|string|max:2000',
         ]);
 
-        Surat::create([
+        $surat = Surat::create([
             'user_id' => Auth::id(),
             'jenis' => $validated['jenis'],
             'keterangan' => $validated['keterangan'] ?? null,
             'status' => 'pending',
         ]);
+
+        AuditLogger::log(
+            event: 'create',
+            module: 'Penerbitan Surat',
+            recordId: $surat->id,
+            description: "Warga '" . Auth::user()->name . "' mengajukan permohonan surat jenis '{$surat->jenis}'.",
+            rtNumber: Auth::user()->rt_number,
+            status: 'success',
+            actionType: 'CREATE'
+        );
 
         return redirect()->route('surat.index')->with('success', 'Permintaan surat berhasil dikirim.');
     }

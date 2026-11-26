@@ -1,0 +1,3095 @@
+/**
+ * ==============================================================================
+ * NEXANEST DARK MODE — MODERN DARK NAVY & DEEP INDIGO THEME SYSTEM
+ * Strict scoping: All rules prefixed with `html.dark` to guarantee 100% clean
+ * reversion to Modern Green Community in Day / Light Mode.
+ * ==============================================================================
+ */
+
+/* ==========================================================================
+   1. CORE PALETTE & CSS VARIABLES
+   ========================================================================== */
+html.dark {
+    /* Surface tokens */
+    --nx-bg: #0A0F1E;
+    --nx-surface-nav: #0D1426;
+    --nx-surface-card: #131B2E;
+    --nx-surface-secondary: #17223B;
+    --nx-surface-input: #0F172A;
+    --nx-surface-hover: #1A2744;
+
+    /* Border tokens */
+    --nx-border: #1E2D4A;
+    --nx-border-subtle: #1E293B;
+    --nx-border-focus: #38BDF8;
+
+    /* Text tokens */
+    --nx-text: #F1F5F9;
+    --nx-text-main: #F1F5F9;
+    --nx-text-secondary: #94A3B8;
+    --nx-text-muted: #64748B;
+    --nx-muted: #64748B;
+
+    /* Brand & Accent tokens */
+    --nx-forest: #38BDF8;
+    --nx-forest-dark: #0284C7;
+    --nx-forest-soft: rgba(56, 189, 248, 0.16);
+    --nx-sage: #94A3B8;
+    --nx-mint: #172554;
+    --nx-mint-soft: rgba(56, 189, 248, 0.12);
+    --nx-powder: #1E293B;
+    --nx-powder-soft: #17223B;
+    --nx-white: #131B2E;
+
+    /* Status translucent tokens */
+    --nx-success-soft: rgba(16, 185, 129, 0.16);
+    --nx-success-text: #34D399;
+    --nx-danger-soft: rgba(244, 63, 94, 0.16);
+    --nx-danger-text: #FB7185;
+    --nx-warning-soft: rgba(245, 158, 11, 0.16);
+    --nx-warning-text: #FBBF24;
+    --nx-info-soft: rgba(56, 189, 248, 0.16);
+    --nx-info-text: #38BDF8;
+
+    color-scheme: dark;
+}
+
+/* ==========================================================================
+   2. BODY, SHELL & GLOBAL TYPOGRAPHY
+   ========================================================================== */
+html.dark,
+html.dark body {
+    background-color: #0A0F1E !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .nx-shell,
+html.dark .nx-main,
+html.dark .nx-content-body {
+    background-color: #0A0F1E !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark h4,
+html.dark h5,
+html.dark h6,
+html.dark .h1,
+html.dark .h2,
+html.dark .h3,
+html.dark .h4,
+html.dark .h5,
+html.dark .h6 {
+    color: #F1F5F9 !important;
+}
+
+html.dark p {
+    color: #CBD5E1;
+}
+
+html.dark .text-muted,
+html.dark small.text-muted,
+html.dark span.text-muted {
+    color: #94A3B8 !important;
+}
+
+html.dark .text-dark,
+html.dark .text-slate-900,
+html.dark .text-slate-800,
+html.dark .text-gray-900,
+html.dark .text-gray-800,
+html.dark .text-slate-700,
+html.dark .text-gray-700 {
+    color: #F1F5F9 !important;
+}
+
+/* ==========================================================================
+   3. SIDEBAR & TOP NAVBAR
+   ========================================================================== */
+html.dark .nx-sidebar {
+    background: #0D1426 !important;
+    border-right: 1px solid #1E293B !important;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark .nx-brand {
+    border-bottom: 1px solid #1E293B !important;
+}
+
+html.dark .nx-brand-title {
+    color: #F1F5F9 !important;
+}
+
+html.dark .nx-brand-sub,
+html.dark .nx-brand-tagline {
+    color: #94A3B8 !important;
+}
+
+html.dark .nx-collapse-btn {
+    background: #17223B !important;
+    border-color: #243454 !important;
+    color: #94A3B8 !important;
+}
+
+html.dark .nx-collapse-btn:hover {
+    background: #1E2D4A !important;
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-menu-group-label {
+    color: #64748B !important;
+}
+
+html.dark .nx-nav-link {
+    color: #94A3B8 !important;
+}
+
+html.dark .nx-nav-link i {
+    color: #64748B !important;
+}
+
+html.dark .nx-nav-link:hover {
+    background: #17223B !important;
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-nav-link:hover i {
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-nav-link.active {
+    background: rgba(56, 189, 248, 0.16) !important;
+    color: #38BDF8 !important;
+    font-weight: 700 !important;
+}
+
+html.dark .nx-nav-link.active i {
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-nav-badge {
+    background: #2563EB !important;
+    color: #FFFFFF !important;
+}
+
+html.dark .nx-sidebar-footer {
+    border-top: 1px solid #1E293B !important;
+}
+
+html.dark .nx-logout-btn {
+    background: rgba(239, 68, 68, 0.12) !important;
+    color: #F87171 !important;
+    border: 1px solid rgba(239, 68, 68, 0.25) !important;
+}
+
+html.dark .nx-logout-btn:hover {
+    background: #EF4444 !important;
+    color: #FFFFFF !important;
+}
+
+/* TOPBAR */
+html.dark .nx-topbar {
+    background: #0D1426 !important;
+    border-bottom: 1px solid #1E293B !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+html.dark .nx-search-wrap {
+    background: #0F172A !important;
+    border-color: #273654 !important;
+}
+
+html.dark .nx-search-input {
+    background: transparent !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .nx-search-input::placeholder {
+    color: #64748B !important;
+}
+
+html.dark .nx-search-icon {
+    color: #64748B !important;
+}
+
+html.dark .nx-search-kbd {
+    background: #1E293B !important;
+    border-color: #334155 !important;
+    color: #94A3B8 !important;
+}
+
+html.dark .nx-icon-btn {
+    background: #17223B !important;
+    border-color: #243454 !important;
+    color: #CBD5E1 !important;
+}
+
+html.dark .nx-icon-btn:hover {
+    background: #1E2D4A !important;
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-profile-btn {
+    background: #17223B !important;
+    border: 1px solid #243454 !important;
+}
+
+html.dark .nx-profile-btn:hover {
+    background: #1E2D4A !important;
+    border-color: #38BDF8 !important;
+}
+
+html.dark .nx-profile-avatar {
+    border-color: #38BDF8 !important;
+}
+
+/* ==========================================================================
+   4. EMERGENCY BUTTON & THEME TOGGLE IN NAVBAR
+   ========================================================================== */
+html.dark .nx-topbar-emergency-btn {
+    background: rgba(244, 63, 94, 0.16) !important;
+    color: #FB7185 !important;
+    border: 1px solid rgba(244, 63, 94, 0.35) !important;
+    box-shadow: 0 2px 10px rgba(244, 63, 94, 0.15) !important;
+}
+
+html.dark .nx-topbar-emergency-btn:hover {
+    background: #F43F5E !important;
+    color: #FFFFFF !important;
+    border-color: #F43F5E !important;
+    box-shadow: 0 4px 16px rgba(244, 63, 94, 0.4) !important;
+}
+
+html.dark .nx-theme-toggle-btn {
+    background: #17223B !important;
+    border-color: #243454 !important;
+    color: #FBBF24 !important;
+}
+
+html.dark .nx-theme-toggle-btn:hover {
+    background: #1E2D4A !important;
+    border-color: #38BDF8 !important;
+    color: #FDE047 !important;
+}
+
+html.dark .dark-icon-sun {
+    display: inline-block !important;
+    color: #FBBF24 !important;
+}
+
+html.dark .dark-icon-moon {
+    display: none !important;
+}
+
+/* ==========================================================================
+   5. HEADER BANNERS (ALL MODULES & DASHBOARD)
+   ========================================================================== */
+html.dark .nx-page-header {
+    background: linear-gradient(135deg, #0F172A 0%, #172554 55%, #1E3A8A 100%) !important;
+    border: 1px solid rgba(30, 58, 138, 0.6) !important;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45) !important;
+}
+
+html.dark .nx-page-title {
+    color: #F1F5F9 !important;
+}
+
+html.dark .nx-page-subtitle {
+    color: #CBD5E1 !important;
+}
+
+/* Dashboard Banner */
+html.dark .nx-hero {
+    background-color: #0F172A !important;
+    background-image: linear-gradient(90deg, rgba(15, 23, 42, 0.90) 0%, rgba(23, 37, 84, 0.75) 45%, rgba(30, 58, 138, 0.50) 75%, rgba(30, 58, 138, 0.35) 100%), url("/images/dashboard-banner.jpg") !important;
+    background-size: cover !important;
+    background-position: right center !important;
+    background-repeat: no-repeat !important;
+    border: 1px solid rgba(30, 58, 138, 0.6) !important;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Role Switcher Banner High Contrast in Dark Mode */
+html.dark .nx-role-switcher-banner .badge-gold,
+html.dark .nx-role-switcher-banner .btn-gold,
+html.dark .nx-role-switcher-banner .badge-preview,
+html.dark .nx-role-switcher-banner .badge-simulasi,
+html.dark .nx-sidebar .btn-gold,
+html.dark .btn-role-switcher-gold,
+html.dark [style*="#FFE082"],
+html.dark [style*="#FFDF79"],
+html.dark [style*="#FEF08A"],
+html.dark [style*="#FDE047"] {
+    color: #0F172A !important;
+}
+html.dark .nx-role-switcher-banner .badge-gold *,
+html.dark .nx-role-switcher-banner .btn-gold *,
+html.dark .nx-role-switcher-banner .badge-preview *,
+html.dark .nx-role-switcher-banner .badge-simulasi *,
+html.dark .nx-sidebar .btn-gold *,
+html.dark .btn-role-switcher-gold *,
+html.dark [style*="#FFE082"] *,
+html.dark [style*="#FFDF79"] *,
+html.dark [style*="#FEF08A"] *,
+html.dark [style*="#FDE047"] * {
+    color: #0F172A !important;
+}
+html.dark .nx-role-switcher-banner .badge-operational {
+    background: #059669 !important;
+    color: #FFFFFF !important;
+}
+html.dark .nx-role-switcher-banner .badge-context {
+    background: rgba(15, 23, 42, 0.75) !important;
+    color: #FFFFFF !important;
+}
+
+html.dark .nx-hero-title {
+    color: #F1F5F9 !important;
+}
+
+html.dark .nx-hero-subtitle {
+    color: #CBD5E1 !important;
+}
+
+html.dark .nx-hero-motto .nx-kalam-line {
+    color: #7DD3FC !important;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8) !important;
+}
+
+html.dark .nx-hero-motto .nx-kalam-curve path {
+    stroke: #7DD3FC !important;
+}
+
+html.dark .nx-date-pill {
+    background: #1E3A8A !important;
+    color: #F1F5F9 !important;
+    border: 1px solid #3B82F6 !important;
+    box-shadow: 0 4px 14px rgba(30, 58, 138, 0.3) !important;
+}
+
+/* ==========================================================================
+   6. CARDS, PANELS, CONTAINERS & STAT CARDS
+   ========================================================================== */
+html.dark .card,
+html.dark .nx-card,
+html.dark .card-body {
+    background-color: #131B2E !important;
+    border-color: #1E2D4A !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .card-header,
+html.dark .nx-card-header {
+    background-color: #0F172A !important;
+    border-bottom: 1px solid #1E2D4A !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .card-footer {
+    background-color: #0F172A !important;
+    border-top: 1px solid #1E2D4A !important;
+}
+
+/* 4 Stat Cards in Dashboard */
+html.dark .nx-stat-card {
+    border-color: #1E2D4A !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35) !important;
+}
+
+html.dark .nx-stat-green {
+    background: linear-gradient(135deg, #0D281E 0%, #123528 100%) !important;
+    border: 1px solid rgba(52, 211, 153, 0.22) !important;
+}
+
+html.dark .nx-stat-green .nx-stat-icon {
+    background: rgba(52, 211, 153, 0.16) !important;
+    color: #34D399 !important;
+}
+
+html.dark .nx-stat-blue {
+    background: linear-gradient(135deg, #0F2038 0%, #152C4E 100%) !important;
+    border: 1px solid rgba(56, 189, 248, 0.22) !important;
+}
+
+html.dark .nx-stat-blue .nx-stat-icon {
+    background: rgba(56, 189, 248, 0.16) !important;
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-stat-value {
+    color: #F1F5F9 !important;
+}
+
+html.dark .nx-stat-label {
+    color: #94A3B8 !important;
+}
+
+html.dark .nx-stat-pill {
+    background: #17223B !important;
+    border: 1px solid #243454 !important;
+    color: #93C5FD !important;
+}
+
+/* Generic / Component Stat Cards (<x-stat-card>) */
+html.dark .stat-card,
+html.dark .nx-stat-box {
+    background-color: #17223B !important;
+    border: 1px solid #243454 !important;
+    color: #F1F5F9 !important;
+}
+
+/* Override utility light backgrounds */
+html.dark .bg-white,
+html.dark .bg-light,
+html.dark .bg-slate-50,
+html.dark .bg-gray-50,
+html.dark .bg-slate-100,
+html.dark .bg-gray-100 {
+    background-color: #131B2E !important;
+    color: #F1F5F9 !important;
+    border-color: #1E2D4A !important;
+}
+
+html.dark .border-slate-200,
+html.dark .border-gray-200,
+html.dark .border-slate-100,
+html.dark .border-gray-100 {
+    border-color: #1E2D4A !important;
+}
+
+/* ==========================================================================
+   7. STANDARISASI TOTAL SEMUA TABEL (ANTI BELANG-BELENTONG)
+   ========================================================================== */
+html.dark .table,
+html.dark table {
+    color: #F1F5F9 !important;
+    border-color: #1E293B !important;
+    background-color: transparent !important;
+}
+
+html.dark thead,
+html.dark thead tr,
+html.dark thead th {
+    background-color: #0F172A !important;
+    color: #94A3B8 !important;
+    border-bottom: 2px solid #1E2D4A !important;
+    text-transform: uppercase;
+    font-size: 0.76rem !important;
+    letter-spacing: 0.04em !important;
+    font-weight: 700 !important;
+}
+
+html.dark tbody tr {
+    background-color: #131B2E !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark tbody tr:nth-of-type(even),
+html.dark .table-striped > tbody > tr:nth-of-type(odd),
+html.dark .table-striped > tbody > tr:nth-of-type(even) {
+    background-color: #151F36 !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark tbody tr:hover,
+html.dark .table-hover > tbody > tr:hover {
+    background-color: #1A2744 !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark td,
+html.dark th {
+    border-color: #1E293B !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .table-responsive {
+    background-color: #131B2E !important;
+    border: 1px solid #1E2D4A !important;
+    border-radius: 16px;
+}
+
+/* Pagination */
+html.dark .pagination {
+    border-color: #243454 !important;
+}
+
+html.dark .page-item .page-link {
+    background-color: #0F172A !important;
+    border-color: #243454 !important;
+    color: #94A3B8 !important;
+}
+
+html.dark .page-item .page-link:hover {
+    background-color: #17223B !important;
+    color: #38BDF8 !important;
+    border-color: #38BDF8 !important;
+}
+
+html.dark .page-item.active .page-link {
+    background-color: #2563EB !important;
+    border-color: #2563EB !important;
+    color: #FFFFFF !important;
+}
+
+html.dark .page-item.disabled .page-link {
+    background-color: #0D1426 !important;
+    border-color: #1E293B !important;
+    color: #475569 !important;
+}
+
+/* Empty State Component */
+html.dark .nx-empty-state {
+    background-color: #131B2E !important;
+    border: 1px dashed #243454 !important;
+    color: #94A3B8 !important;
+}
+
+/* ==========================================================================
+   8. FORMS, INPUTS, SELECTS & FILTER BARS
+   ========================================================================== */
+html.dark input.form-control,
+html.dark select.form-select,
+html.dark textarea.form-control,
+html.dark .form-control,
+html.dark .form-select {
+    background-color: #0F172A !important;
+    border: 1px solid #273654 !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+    color: #64748B !important;
+}
+
+html.dark input:focus,
+html.dark select:focus,
+html.dark textarea:focus,
+html.dark .form-control:focus,
+html.dark .form-select:focus {
+    background-color: #0F172A !important;
+    border-color: #38BDF8 !important;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18) !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark select option {
+    background-color: #0F172A !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .input-group-text {
+    background-color: #17223B !important;
+    border: 1px solid #273654 !important;
+    color: #94A3B8 !important;
+}
+
+html.dark .form-label,
+html.dark label {
+    color: #CBD5E1 !important;
+}
+
+html.dark .form-check-label {
+    color: #CBD5E1 !important;
+}
+
+html.dark .form-check-input {
+    background-color: #0F172A !important;
+    border-color: #273654 !important;
+}
+
+html.dark .form-check-input:checked {
+    background-color: #2563EB !important;
+    border-color: #2563EB !important;
+}
+
+/* Quick Filter Bars */
+html.dark .nx-filter-bar,
+html.dark .nx-quick-filter {
+    background-color: #131B2E !important;
+    border: 1px solid #1E2D4A !important;
+}
+
+/* ==========================================================================
+   9. MODALS, DROPDOWNS & COMMAND PALETTE
+   ========================================================================== */
+html.dark .modal-content {
+    background-color: #131B2E !important;
+    border: 1px solid #1E2D4A !important;
+    color: #F1F5F9 !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7) !important;
+}
+
+html.dark .modal-header {
+    background-color: #0F172A !important;
+    border-bottom: 1px solid #1E2D4A !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .modal-footer {
+    background-color: #0F172A !important;
+    border-top: 1px solid #1E2D4A !important;
+}
+
+html.dark .modal-body {
+    background-color: #131B2E !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%) !important;
+}
+
+/* Dropdowns */
+html.dark .dropdown-menu {
+    background-color: #131B2E !important;
+    border: 1px solid #1E2D4A !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6) !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .dropdown-item {
+    color: #F1F5F9 !important;
+}
+
+html.dark .dropdown-item:hover,
+html.dark .dropdown-item:focus {
+    background-color: #1E2D4A !important;
+    color: #38BDF8 !important;
+}
+
+html.dark .dropdown-divider {
+    border-color: #1E293B !important;
+}
+
+/* Command Palette (Ctrl+K) */
+html.dark #nxSearchResults,
+html.dark .nx-search-results {
+    background-color: #131B2E !important;
+    border: 1px solid #1E2D4A !important;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.6) !important;
+}
+
+html.dark .nx-search-item {
+    color: #F1F5F9 !important;
+    border-color: #1E293B !important;
+}
+
+html.dark .nx-search-item:hover {
+    background-color: #1E2D4A !important;
+    color: #38BDF8 !important;
+}
+
+/* ==========================================================================
+   10. BADGES, ALERTS & STATUS INDICATORS
+   ========================================================================== */
+html.dark .badge {
+    border: 1px solid transparent;
+}
+
+html.dark .bg-success,
+html.dark .bg-emerald-50,
+html.dark .badge-success,
+html.dark .nx-badge-success {
+    background: rgba(16, 185, 129, 0.18) !important;
+    color: #34D399 !important;
+    border-color: rgba(16, 185, 129, 0.35) !important;
+}
+
+html.dark .bg-danger,
+html.dark .bg-rose-50,
+html.dark .badge-danger,
+html.dark .nx-badge-danger {
+    background: rgba(244, 63, 94, 0.18) !important;
+    color: #FB7185 !important;
+    border-color: rgba(244, 63, 94, 0.35) !important;
+}
+
+html.dark .bg-warning,
+html.dark .bg-amber-50,
+html.dark .badge-warning,
+html.dark .nx-badge-warning {
+    background: rgba(245, 158, 11, 0.18) !important;
+    color: #FBBF24 !important;
+    border-color: rgba(245, 158, 11, 0.35) !important;
+}
+
+html.dark .bg-info,
+html.dark .bg-sky-50,
+html.dark .badge-info,
+html.dark .nx-badge-info {
+    background: rgba(56, 189, 248, 0.18) !important;
+    color: #38BDF8 !important;
+    border-color: rgba(56, 189, 248, 0.35) !important;
+}
+
+html.dark .bg-primary,
+html.dark .bg-blue-50,
+html.dark .badge-primary {
+    background: rgba(59, 130, 246, 0.18) !important;
+    color: #60A5FA !important;
+    border-color: rgba(59, 130, 246, 0.35) !important;
+}
+
+html.dark .bg-secondary,
+html.dark .badge-secondary {
+    background: rgba(148, 163, 184, 0.18) !important;
+    color: #CBD5E1 !important;
+    border-color: rgba(148, 163, 184, 0.35) !important;
+}
+
+/* Alerts */
+html.dark .alert {
+    background-color: #17223B !important;
+    border: 1px solid #243454 !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .alert-success {
+    background: rgba(16, 185, 129, 0.14) !important;
+    border-color: rgba(16, 185, 129, 0.35) !important;
+    color: #6EE7B7 !important;
+}
+
+html.dark .alert-warning {
+    background: rgba(245, 158, 11, 0.14) !important;
+    border-color: rgba(245, 158, 11, 0.35) !important;
+    color: #FCD34D !important;
+}
+
+html.dark .alert-danger {
+    background: rgba(239, 68, 68, 0.14) !important;
+    border-color: rgba(239, 68, 68, 0.35) !important;
+    color: #FCA5A5 !important;
+}
+
+html.dark .alert-info {
+    background: rgba(56, 189, 248, 0.14) !important;
+    border-color: rgba(56, 189, 248, 0.35) !important;
+    color: #7DD3FC !important;
+}
+
+/* ==========================================================================
+   11. TOAST NOTIFICATIONS (NEXA-TOAST)
+   ========================================================================== */
+html.dark .nexa-toast-card {
+    background: #131B2E !important;
+    border: 1px solid #1E2D4A !important;
+    color: #F1F5F9 !important;
+    box-shadow: 0 16px 44px rgba(0, 0, 0, 0.65) !important;
+}
+
+html.dark .nexa-toast-title {
+    color: #F1F5F9 !important;
+}
+
+html.dark .nexa-toast-message {
+    color: #94A3B8 !important;
+}
+
+html.dark .nexa-toast-close {
+    color: #64748B !important;
+}
+
+html.dark .nexa-toast-close:hover {
+    color: #F1F5F9 !important;
+}
+
+/* ==========================================================================
+   12. TABS & PILLS NAVIGATION
+   ========================================================================== */
+html.dark .nav-pills .nav-link {
+    color: #94A3B8 !important;
+    background: transparent !important;
+}
+
+html.dark .nav-pills .nav-link:hover {
+    background: #17223B !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .nav-pills .nav-link.active {
+    background: #2563EB !important;
+    color: #FFFFFF !important;
+}
+
+html.dark .nav-tabs {
+    border-bottom-color: #1E2D4A !important;
+}
+
+html.dark .nav-tabs .nav-link {
+    color: #94A3B8 !important;
+}
+
+html.dark .nav-tabs .nav-link:hover {
+    border-color: #1E2D4A #1E2D4A transparent !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .nav-tabs .nav-link.active {
+    background: #131B2E !important;
+    border-color: #1E2D4A #1E2D4A transparent !important;
+    color: #38BDF8 !important;
+}
+
+/* ==========================================================================
+   13. OVERRIDE INLINE LIGHT STYLES IN BLADE VIEWS
+   ========================================================================== */
+html.dark [style*="background: #fff"],
+html.dark [style*="background:#fff"],
+html.dark [style*="background: #FFFFFF"],
+html.dark [style*="background:#FFFFFF"],
+html.dark [style*="background: white"],
+html.dark [style*="background-color: #fff"],
+html.dark [style*="background-color:#fff"],
+html.dark [style*="background-color: white"],
+html.dark [style*="background: rgb(255, 255, 255)"] {
+    background-color: #131B2E !important;
+    color: #F1F5F9 !important;
+    border-color: #1E2D4A !important;
+}
+
+html.dark [style*="background: var(--nx-white)"],
+html.dark [style*="background:var(--nx-white)"] {
+    background: #131B2E !important;
+    color: #F1F5F9 !important;
+    border-color: #1E2D4A !important;
+}
+
+html.dark [style*="background: var(--nx-bg)"],
+html.dark [style*="background:var(--nx-bg)"] {
+    background: #0A0F1E !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark [style*="background: var(--nx-mint-soft)"],
+html.dark [style*="background:var(--nx-mint-soft)"] {
+    background: rgba(16, 185, 129, 0.12) !important;
+    color: #6EE7B7 !important;
+}
+
+html.dark [style*="background: var(--nx-powder-soft)"],
+html.dark [style*="background:var(--nx-powder-soft)"] {
+    background: rgba(56, 189, 248, 0.12) !important;
+    color: #7DD3FC !important;
+}
+
+html.dark [style*="background: var(--nx-danger-soft)"],
+html.dark [style*="background:var(--nx-danger-soft)"] {
+    background: rgba(244, 63, 94, 0.14) !important;
+    color: #FB7185 !important;
+}
+
+html.dark [style*="background: #FEF3C7"],
+html.dark [style*="background: #FEF3DF"],
+html.dark [style*="background: var(--nx-warning-soft)"] {
+    background: rgba(245, 158, 11, 0.14) !important;
+    color: #FCD34D !important;
+}
+
+html.dark [style*="background: rgba(255, 255, 255"],
+html.dark [style*="background:rgba(255, 255, 255"],
+html.dark [style*="background: rgba(255,255,255"] {
+    background: #17223B !important;
+    color: #F1F5F9 !important;
+    border-color: #243454 !important;
+}
+
+html.dark [style*="color: var(--nx-forest)"],
+html.dark [style*="color:var(--nx-forest)"] {
+    color: #38BDF8 !important;
+}
+
+html.dark [style*="color: var(--nx-text)"],
+html.dark [style*="color:var(--nx-text)"] {
+    color: #F1F5F9 !important;
+}
+
+/* Buttons */
+html.dark .btn-outline-secondary {
+    border-color: #273654 !important;
+    color: #CBD5E1 !important;
+}
+
+html.dark .btn-outline-secondary:hover {
+    background-color: #1E2D4A !important;
+    color: #FFFFFF !important;
+    border-color: #38BDF8 !important;
+}
+
+html.dark .btn-outline-success {
+    border-color: #059669 !important;
+    color: #34D399 !important;
+}
+
+html.dark .btn-outline-success:hover {
+    background-color: #059669 !important;
+    color: #FFFFFF !important;
+}
+
+html.dark .btn-light {
+    background-color: #17223B !important;
+    border-color: #243454 !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .btn-light:hover {
+    background-color: #1E2D4A !important;
+    color: #38BDF8 !important;
+}
+
+/* ==========================================================================
+   14. MODULE-SPECIFIC CUSTOM COMPONENT OVERRIDES
+   ========================================================================== */
+/* Database Warga RW & RT Detail */
+html.dark .dbw-header,
+html.dark .rt-summary-card,
+html.dark .profil-header-card {
+    background: linear-gradient(135deg, #0F172A 0%, #172554 55%, #1E3A8A 100%) !important;
+    border: 1px solid rgba(30, 58, 138, 0.6) !important;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45) !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .dbw-stat-card,
+html.dark .dbw-rt-card,
+html.dark .rt-filter-card {
+    background: #131B2E !important;
+    border-color: #1E2D4A !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .dbw-rt-card:hover {
+    background: #17223B !important;
+    border-color: #38BDF8 !important;
+    transform: translateY(-2px);
+}
+
+html.dark .rt-breadcrumb,
+html.dark .profil-breadcrumb {
+    color: #94A3B8 !important;
+}
+
+html.dark .rt-breadcrumb a,
+html.dark .profil-breadcrumb a {
+    color: #38BDF8 !important;
+}
+
+html.dark .profil-avatar {
+    border-color: #38BDF8 !important;
+}
+
+html.dark .nav-tabs-profil {
+    border-bottom: 2px solid #1E2D4A !important;
+}
+
+html.dark .nav-tabs-profil .nav-link {
+    color: #94A3B8 !important;
+}
+
+html.dark .nav-tabs-profil .nav-link.active {
+    color: #38BDF8 !important;
+    border-bottom: 2px solid #38BDF8 !important;
+}
+
+/* Monitoring Wilayah */
+html.dark .mon-filter .form-select {
+    background-color: #0F172A !important;
+    border-color: #273654 !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .mon-reminder {
+    background: #17223B !important;
+    border-color: #243454 !important;
+}
+
+html.dark .mon-reminder-head h6 {
+    color: #F1F5F9 !important;
+}
+
+html.dark .mon-reminder-head .ic {
+    background: #1E2D4A !important;
+    color: #FBBF24 !important;
+}
+
+html.dark .mon-reminder-head .count {
+    background: #1E2D4A !important;
+    color: #FDE047 !important;
+}
+
+html.dark .mon-reminder-item {
+    background: #131B2E !important;
+    border-color: #1E2D4A !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .mon-reminder-item:hover {
+    background: #1A2744 !important;
+    border-color: #38BDF8 !important;
+}
+
+/* Kalender Kegiatan */
+html.dark .nx-calendar-table {
+    border-color: #1E293B !important;
+    background-color: #131B2E !important;
+}
+
+html.dark .nx-cal-cell {
+    border-color: #1E293B !important;
+    background-color: #131B2E !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .nx-cal-cell:hover {
+    background-color: #1A2744 !important;
+}
+
+html.dark .nx-cal-day-num {
+    color: #F1F5F9 !important;
+}
+
+html.dark .nx-cal-dimmed {
+    opacity: 0.28 !important;
+}
+
+html.dark .nx-event-chip {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Role Switcher Cards */
+html.dark .role-card,
+html.dark .mode-card {
+    background-color: #17223B !important;
+    border-color: #243454 !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .role-card:hover,
+html.dark .mode-card:hover {
+    background-color: #1E2D4A !important;
+    border-color: #38BDF8 !important;
+}
+
+html.dark .role-card:has(input:checked),
+html.dark .mode-card:has(input:checked) {
+    background-color: rgba(56, 189, 248, 0.16) !important;
+    border-color: #38BDF8 !important;
+}
+
+/* Bank Sampah & Posyandu timeline dots and cards */
+html.dark .border-success,
+html.dark .border-primary {
+    border-color: #243454 !important;
+}
+
+html.dark [style*="border-color: var(--nx-border)"] {
+    border-color: #1E2D4A !important;
+}
+
+html.dark [style*="border: 1px solid var(--nx-border)"] {
+    border-color: #1E2D4A !important;
+}
+
+html.dark [style*="border: 1px dashed var(--nx-border)"] {
+    border-color: #243454 !important;
+}
+
+/* Super Admin Layout & Components */
+html.dark .sa-shell,
+html.dark .sa-main {
+    background-color: #0A0F1E !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .sa-sidebar,
+html.dark .sa-topbar {
+    background: #0D1426 !important;
+    border-color: #1E293B !important;
+}
+
+html.dark .sa-kpi-card,
+html.dark .sa-card,
+html.dark .sa-table-card {
+    background: #131B2E !important;
+    border-color: #1E2D4A !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .sa-card-header {
+    border-bottom-color: #1E2D4A !important;
+}
+
+html.dark .sa-card-title {
+    color: #F1F5F9 !important;
+}
+
+html.dark .sa-table th {
+    background: #0F172A !important;
+    border-bottom-color: #1E2D4A !important;
+    color: #94A3B8 !important;
+}
+
+html.dark .sa-table td {
+    border-bottom-color: #1E2D4A !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .sa-table tr:hover td {
+    background: #17223B !important;
+}
+
+html.dark .sa-topbar-title h1 {
+    color: #F1F5F9 !important;
+}
+
+html.dark .sa-system-pill {
+    background: #17223B !important;
+    border-color: #243454 !important;
+    color: #94A3B8 !important;
+}
+
+html.dark .sa-nav-link {
+    color: #94A3B8 !important;
+}
+
+html.dark .sa-nav-link:hover {
+    background: #17223B !important;
+    color: #38BDF8 !important;
+}
+
+html.dark .sa-nav-link.active {
+    background: rgba(56, 189, 248, 0.16) !important;
+    color: #38BDF8 !important;
+}
+
+/* ==========================================================================
+   15. AUTH PAGES (LOGIN, REGISTER, FORGOT PASSWORD)
+   ========================================================================== */
+html.dark .nx-auth-page,
+html.dark .nx-reg-wrap {
+    background: radial-gradient(circle at 10% 15%, #0F172A 0%, #0A0F1E 48%, #172554 100%) !important;
+}
+
+html.dark .nx-auth-shell,
+html.dark .nx-reg-card {
+    background: #131B2E !important;
+    border-color: #1E2D4A !important;
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.7) !important;
+}
+
+html.dark .nx-auth-visual {
+    background: linear-gradient(150deg, #0F172A 0%, #172554 52%, #1E3A8A 100%) !important;
+    border-color: #1E2D4A !important;
+}
+
+html.dark .nx-auth-form-panel {
+    background: #131B2E !important;
+}
+
+html.dark .nx-input-box input,
+html.dark .nx-input-box select {
+    background-color: #0F172A !important;
+    border-color: #273654 !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .nx-field-icon {
+    color: #64748B !important;
+}
+
+html.dark .nx-back-home,
+html.dark .nx-outline-btn {
+    background: #17223B !important;
+    border-color: #243454 !important;
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-back-home:hover,
+html.dark .nx-outline-btn:hover {
+    background: #1E2D4A !important;
+    color: #FFFFFF !important;
+}
+
+html.dark .nx-illustration-box {
+    background: rgba(19, 27, 46, 0.7) !important;
+    border-color: #1E2D4A !important;
+}
+
+html.dark .nx-reg-hero {
+    background: linear-gradient(135deg, #0F172A 0%, #172554 55%, #1E3A8A 100%) !important;
+    border-color: rgba(30, 58, 138, 0.6) !important;
+}
+
+html.dark .nx-reg-hero-title {
+    color: #F1F5F9 !important;
+}
+
+html.dark .nx-reg-hero-desc {
+    color: #CBD5E1 !important;
+}
+
+html.dark .nx-section-box {
+    background-color: #17223B !important;
+    border-color: #243454 !important;
+}
+
+/* ==========================================================================
+   16. LANDING PAGE (COVER.BLADE.PHP)
+   ========================================================================== */
+html.dark .nx-landing-wrap {
+    background-color: #0A0F1E !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .nx-topbar-landing {
+    background: #0D1426 !important;
+    border-bottom: 1px solid #1E293B !important;
+}
+
+html.dark .nx-nav-link-landing {
+    color: #94A3B8 !important;
+}
+
+html.dark .nx-nav-link-landing:hover {
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-search-box input {
+    background-color: #0F172A !important;
+    border-color: #273654 !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .nx-hero-section {
+    background-color: #0F172A !important;
+    background-image: linear-gradient(90deg, rgba(15, 23, 42, 0.95) 0%, rgba(23, 37, 84, 0.88) 42%, rgba(30, 58, 138, 0.50) 72%, rgba(30, 58, 138, 0.25) 100%), url("/images/hero-community.jpg") !important;
+}
+
+html.dark .nx-hero-title {
+    color: #F1F5F9 !important;
+}
+
+html.dark .nx-hero-title .line-green {
+    color: #34D399 !important;
+}
+
+html.dark .nx-hero-title .line-blue {
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-hero-desc {
+    color: #CBD5E1 !important;
+}
+
+html.dark .nx-kalam-floating .nx-kalam-line {
+    color: #7DD3FC !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.9) !important;
+}
+
+html.dark .nx-kalam-floating .nx-kalam-curve path {
+    stroke: #7DD3FC !important;
+}
+
+html.dark .nx-feature-card,
+html.dark .nx-service-card,
+html.dark .nx-stat-banner,
+html.dark .nx-faq-item,
+html.dark .nx-testimonial-card {
+    background: #131B2E !important;
+    border-color: #1E2D4A !important;
+    color: #F1F5F9 !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35) !important;
+}
+
+html.dark .nx-feature-title,
+html.dark .nx-service-title,
+html.dark .nx-faq-question {
+    color: #F1F5F9 !important;
+}
+
+html.dark .nx-feature-desc,
+html.dark .nx-service-desc,
+html.dark .nx-faq-answer {
+    color: #94A3B8 !important;
+}
+
+html.dark .nx-footer {
+    background: #070B14 !important;
+    border-top: 1px solid #1E293B !important;
+    color: #94A3B8 !important;
+}
+
+html.dark .nx-wave-divider path {
+    fill: #0A0F1E !important;
+}
+
+/* ==========================================================================
+   21. DASHBOARD, MONITORING, DATABASE WARGA & GLOBAL PASTEL SWEEP
+   ========================================================================== */
+
+/* --- A. DASHBOARD: PENGUMUMAN & EXPENSE CONTRAST --- */
+html.dark .nx-badge-kesehatan,
+html.dark .nx-announce-icon.nx-badge-kesehatan,
+html.dark .nx-category-pill.nx-badge-kesehatan {
+    background: rgba(244, 63, 94, 0.16) !important;
+    color: #FDA4AF !important;
+    border: 1px solid rgba(244, 63, 94, 0.3) !important;
+}
+
+html.dark .nx-announce-icon.nx-badge-kesehatan i {
+    color: #FDA4AF !important;
+}
+
+html.dark .nx-stat-expense-val,
+html.dark [style*="color: #2B5F8E"] {
+    color: #F87171 !important;
+}
+
+/* --- B. PUSAT MONITORING WILAYAH (monitoring/index.blade.php) --- */
+/* Card Aktivitas Bank Sampah */
+html.dark [style*="background: #FAF8EA"],
+html.dark [style*="background:#FAF8EA"] {
+    background: #131B2E !important;
+    border-color: #1E3A5F !important;
+}
+
+html.dark [style*="background: #FAF8EA"] h3,
+html.dark [style*="color: #6C5B17"] {
+    color: #34D399 !important;
+}
+
+html.dark [style*="background: #F6EDC2"],
+html.dark [style*="background:#F6EDC2"] {
+    background: rgba(16, 185, 129, 0.16) !important;
+    color: #34D399 !important;
+}
+
+/* Card Pengaduan Warga Aktif Icon Circle */
+html.dark [style*="background: #FCE8BF"],
+html.dark [style*="background:#FCE8BF"] {
+    background: rgba(245, 158, 11, 0.16) !important;
+    color: #FBBF24 !important;
+}
+
+/* Badge Belum Diserahkan & Status Abu-abu */
+html.dark [style*="background: #E9ECEF"],
+html.dark [style*="background:#E9ECEF"] {
+    background: #1E293B !important;
+    border: 1px solid #334155 !important;
+    color: #CBD5E1 !important;
+}
+
+/* Table: Status Operasional & Monitoring Seluruh RT */
+html.dark .table-hover > tbody > tr:hover,
+html.dark .table > tbody > tr:hover > * {
+    background-color: #1B2947 !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .table > tbody > tr > td {
+    background-color: #131B2E !important;
+    color: #F1F5F9 !important;
+    border-color: #1E2D4A !important;
+}
+
+html.dark .table-striped > tbody > tr:nth-of-type(odd) > *,
+html.dark .table > tbody > tr:nth-of-type(odd) > td {
+    background-color: #131B2E !important;
+}
+
+html.dark .table-striped > tbody > tr:nth-of-type(even) > *,
+html.dark .table > tbody > tr:nth-of-type(even) > td {
+    background-color: #162038 !important;
+}
+
+html.dark .table td .text-dark,
+html.dark .table td strong.text-dark {
+    color: #F1F5F9 !important;
+}
+
+/* --- C. DATABASE WARGA (warga/rw_database.blade.php & index.blade.php) --- */
+/* Kotak Ikon Card Terverifikasi */
+html.dark [style*="background: #E8F5E9"],
+html.dark [style*="background:#E8F5E9"] {
+    background: rgba(16, 185, 129, 0.16) !important;
+    color: #34D399 !important;
+}
+
+html.dark [style*="color: #2E7D32"] {
+    color: #34D399 !important;
+}
+
+html.dark [style*="color: #1b7a43"] {
+    color: #34D399 !important;
+}
+
+/* Card Perempuan (Gender Composition) */
+html.dark [style*="background: #FDF2F4"],
+html.dark [style*="background:#FDF2F4"] {
+    background: #1E162B !important;
+    border-color: rgba(244, 114, 182, 0.35) !important;
+    color: #F9A8D4 !important;
+}
+
+html.dark [style*="color: #c2527a"] {
+    color: #F9A8D4 !important;
+}
+
+/* Card Anak (0-17) (Age Composition) */
+html.dark [style*="background: #ECFDF5"],
+html.dark [style*="background:#ECFDF5"] {
+    background: #11222B !important;
+    border-color: rgba(52, 211, 153, 0.35) !important;
+    color: #FFFFFF !important;
+}
+
+html.dark [style*="background: #ECFDF5"] h5,
+html.dark [style*="background: #ECFDF5"] .text-success {
+    color: #34D399 !important;
+}
+
+/* Tombol Tab Filter Non-Aktif */
+html.dark .dbw-tab-btn:not(.active),
+html.dark .tab-btn:not(.active),
+html.dark .filter-btn:not(.active) {
+    background: #17223B !important;
+    border: 1px solid #273654 !important;
+    color: #CBD5E1 !important;
+}
+
+html.dark .dbw-tab-btn:not(.active):hover,
+html.dark .tab-btn:not(.active):hover,
+html.dark .filter-btn:not(.active):hover {
+    background: #1E2E4F !important;
+    border-color: #38BDF8 !important;
+    color: #FFFFFF !important;
+}
+
+/* --- D. GLOBAL PASTEL & UTILITY SWEEP --- */
+html.dark .bg-white {
+    background-color: #131B2E !important;
+}
+
+html.dark .bg-light,
+html.dark .bg-slate-50,
+html.dark .bg-gray-50,
+html.dark .bg-gray-100,
+html.dark .bg-slate-100 {
+    background-color: #0F172A !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .bg-emerald-50,
+html.dark .bg-green-50,
+html.dark .bg-emerald-100,
+html.dark .bg-green-100,
+html.dark .bg-emerald-200,
+html.dark .bg-green-200 {
+    background-color: rgba(16, 185, 129, 0.16) !important;
+    color: #34D399 !important;
+}
+
+html.dark .bg-rose-50,
+html.dark .bg-red-50,
+html.dark .bg-pink-50,
+html.dark .bg-rose-100,
+html.dark .bg-red-100,
+html.dark .bg-pink-100,
+html.dark .bg-rose-200,
+html.dark .bg-red-200,
+html.dark .bg-pink-200 {
+    background-color: rgba(244, 63, 94, 0.16) !important;
+    color: #FDA4AF !important;
+}
+
+html.dark .bg-amber-50,
+html.dark .bg-yellow-50,
+html.dark .bg-orange-50,
+html.dark .bg-amber-100,
+html.dark .bg-yellow-100,
+html.dark .bg-orange-100,
+html.dark .bg-amber-200,
+html.dark .bg-yellow-200,
+html.dark .bg-orange-200 {
+    background-color: rgba(245, 158, 11, 0.16) !important;
+    color: #FBBF24 !important;
+}
+
+html.dark .bg-teal-50,
+html.dark .bg-cyan-50,
+html.dark .bg-teal-100,
+html.dark .bg-cyan-100,
+html.dark .bg-teal-200,
+html.dark .bg-cyan-200 {
+    background-color: rgba(20, 184, 166, 0.16) !important;
+    color: #2DD4BF !important;
+}
+
+html.dark .bg-blue-50,
+html.dark .bg-indigo-50,
+html.dark .bg-sky-50,
+html.dark .bg-blue-100,
+html.dark .bg-indigo-100,
+html.dark .bg-sky-100,
+html.dark .bg-blue-200,
+html.dark .bg-indigo-200,
+html.dark .bg-sky-200 {
+    background-color: rgba(56, 189, 248, 0.16) !important;
+    color: #38BDF8 !important;
+}
+
+html.dark .bg-purple-50,
+html.dark .bg-violet-50,
+html.dark .bg-fuchsia-50,
+html.dark .bg-purple-100,
+html.dark .bg-violet-100,
+html.dark .bg-fuchsia-100 {
+    background-color: rgba(168, 85, 247, 0.16) !important;
+    color: #C084FC !important;
+}
+
+/* Gradients with light sources */
+html.dark [class*="from-white"],
+html.dark [class*="to-white"],
+html.dark [class*="via-white"],
+html.dark [class*="from-slate-50"],
+html.dark [class*="to-slate-50"],
+html.dark [class*="from-gray-50"],
+html.dark [class*="to-gray-50"],
+html.dark [class*="from-emerald-50"],
+html.dark [class*="from-green-50"],
+html.dark [class*="from-blue-50"],
+html.dark [class*="from-sky-50"],
+html.dark [class*="bg-[#f"],
+html.dark [class*="bg-[#e"],
+html.dark [class*="bg-[#fff"] {
+    background-color: #131B2E !important;
+    background-image: none !important;
+}
+
+/* ==========================================================================
+   22. TOTAL ATTRIBUTE & INLINE STYLE SHIELD (ZERO BELANG)
+   Overrides any inline style light backgrounds & dark text colors across ALL blade files
+   ========================================================================== */
+
+/* 1. White & Soft Light Surface Containers */
+html.dark [style*="background: #fff" i],
+html.dark [style*="background:#fff" i],
+html.dark [style*="background: #ffffff" i],
+html.dark [style*="background:#ffffff" i],
+html.dark [style*="background: #FFFFFF" i],
+html.dark [style*="background:#FFFFFF" i],
+html.dark [style*="background: white" i],
+html.dark [style*="background:white" i],
+html.dark [style*="background-color: #fff" i],
+html.dark [style*="background-color:#fff" i],
+html.dark [style*="background-color: white" i],
+html.dark [style*="background-color:white" i],
+html.dark [style*="background: #fafafa" i],
+html.dark [style*="background:#fafafa" i],
+html.dark [style*="background: #fbfbfb" i],
+html.dark [style*="background:#fbfbfb" i],
+html.dark [style*="background: #f8fafc" i],
+html.dark [style*="background:#f8fafc" i],
+html.dark [style*="background: #F7F9F7" i],
+html.dark [style*="background:#F7F9F7" i],
+html.dark [style*="background: #FAFCFA" i],
+html.dark [style*="background:#FAFCFA" i],
+html.dark [style*="background: #F8FAF8" i],
+html.dark [style*="background:#F8FAF8" i],
+html.dark [style*="background: #F8FBF9" i],
+html.dark [style*="background:#F8FBF9" i],
+html.dark [style*="background: #F4F7F5" i],
+html.dark [style*="background:#F4F7F5" i],
+html.dark [style*="background: #F4F8F5" i],
+html.dark [style*="background:#F4F8F5" i],
+html.dark [style*="background: #EEF2F6" i],
+html.dark [style*="background:#EEF2F6" i],
+html.dark [style*="background: #E5EBE6" i],
+html.dark [style*="background:#E5EBE6" i],
+html.dark [style*="background: #e2e8f0" i],
+html.dark [style*="background:#e2e8f0" i],
+html.dark [style*="background: rgba(255, 255, 255" i],
+html.dark [style*="background:rgba(255, 255, 255" i],
+html.dark [style*="background: rgba(255,255,255" i],
+html.dark [style*="background:rgba(255,255,255" i],
+html.dark [style*="background: rgba(247, 249, 247" i],
+html.dark [style*="background:rgba(247, 249, 247" i] {
+    background-color: #131B2E !important;
+    background-image: none !important;
+    border-color: #1E2D4A !important;
+    color: #F1F5F9 !important;
+}
+
+/* 2. Green / Emerald / Sage Pastel Inlines */
+html.dark [style*="background: #E8F5E9" i],
+html.dark [style*="background:#E8F5E9" i],
+html.dark [style*="background: #ecfdf5" i],
+html.dark [style*="background:#ecfdf5" i],
+html.dark [style*="background: #ECFDF5" i],
+html.dark [style*="background:#ECFDF5" i],
+html.dark [style*="background: #EBF3EE" i],
+html.dark [style*="background:#EBF3EE" i],
+html.dark [style*="background: #ccfbf1" i],
+html.dark [style*="background:#ccfbf1" i],
+html.dark [style*="background: #f0fdfa" i],
+html.dark [style*="background:#f0fdfa" i],
+html.dark [style*="background: #F0FDF4" i],
+html.dark [style*="background:#F0FDF4" i],
+html.dark [style*="background: #F0F7F2" i],
+html.dark [style*="background:#F0F7F2" i],
+html.dark [style*="background: #EAF4EE" i],
+html.dark [style*="background:#EAF4EE" i],
+html.dark [style*="background: #D1FAE5" i],
+html.dark [style*="background:#D1FAE5" i],
+html.dark [style*="background: #E8F4EC" i],
+html.dark [style*="background:#E8F4EC" i] {
+    background-color: rgba(16, 185, 129, 0.16) !important;
+    background-image: none !important;
+    color: #34D399 !important;
+    border-color: rgba(52, 211, 153, 0.3) !important;
+}
+
+/* 3. Yellow / Amber / Gold / Orange Pastel Inlines */
+html.dark [style*="background: #FEF3C7" i],
+html.dark [style*="background:#FEF3C7" i],
+html.dark [style*="background: #FFFBEB" i],
+html.dark [style*="background:#FFFBEB" i],
+html.dark [style*="background: #fefce8" i],
+html.dark [style*="background:#fefce8" i],
+html.dark [style*="background: #fef9c3" i],
+html.dark [style*="background:#fef9c3" i],
+html.dark [style*="background: #FFFDF0" i],
+html.dark [style*="background:#FFFDF0" i],
+html.dark [style*="background: #FAF8EA" i],
+html.dark [style*="background:#FAF8EA" i],
+html.dark [style*="background: #FCE8BF" i],
+html.dark [style*="background:#FCE8BF" i],
+html.dark [style*="background: #F6EDC2" i],
+html.dark [style*="background:#F6EDC2" i],
+html.dark [style*="background: #FFFBEF" i],
+html.dark [style*="background:#FFFBEF" i],
+html.dark [style*="background: #FFE082" i],
+html.dark [style*="background:#FFE082" i],
+html.dark [style*="background: #ffedd5" i],
+html.dark [style*="background:#ffedd5" i],
+html.dark [style*="background: #fed7aa" i],
+html.dark [style*="background:#fed7aa" i],
+html.dark [style*="background: #fffaf0" i],
+html.dark [style*="background:#fffaf0" i] {
+    background-color: rgba(245, 158, 11, 0.16) !important;
+    background-image: none !important;
+    color: #FBBF24 !important;
+    border-color: rgba(245, 158, 11, 0.3) !important;
+}
+
+/* 4. Red / Rose / Pink Pastel Inlines */
+html.dark [style*="background: #fef2f2" i],
+html.dark [style*="background:#fef2f2" i],
+html.dark [style*="background: #fee2e2" i],
+html.dark [style*="background:#fee2e2" i],
+html.dark [style*="background: #FFF5F5" i],
+html.dark [style*="background:#FFF5F5" i],
+html.dark [style*="background: #FFF1F2" i],
+html.dark [style*="background:#FFF1F2" i],
+html.dark [style*="background: #FDF2F4" i],
+html.dark [style*="background:#FDF2F4" i],
+html.dark [style*="background: #fbd5d5" i],
+html.dark [style*="background:#fbd5d5" i],
+html.dark [style*="background: #ffe4e6" i],
+html.dark [style*="background:#ffe4e6" i],
+html.dark [style*="background: #FDE8E8" i],
+html.dark [style*="background:#FDE8E8" i],
+html.dark [style*="background: #fecaca" i],
+html.dark [style*="background:#fecaca" i],
+html.dark [style*="background: #fecdd3" i],
+html.dark [style*="background:#fecdd3" i] {
+    background-color: rgba(244, 63, 94, 0.16) !important;
+    background-image: none !important;
+    color: #FDA4AF !important;
+    border-color: rgba(244, 63, 94, 0.3) !important;
+}
+
+/* 5. Blue / Sky / Indigo Pastel Inlines */
+html.dark [style*="background: #eff6ff" i],
+html.dark [style*="background:#eff6ff" i],
+html.dark [style*="background: #DBEAFE" i],
+html.dark [style*="background:#DBEAFE" i],
+html.dark [style*="background: #E0F2FE" i],
+html.dark [style*="background:#E0F2FE" i],
+html.dark [style*="background: #e0e7ff" i],
+html.dark [style*="background:#e0e7ff" i],
+html.dark [style*="background: #EEF2FF" i],
+html.dark [style*="background:#EEF2FF" i],
+html.dark [style*="background: #EBF4FC" i],
+html.dark [style*="background:#EBF4FC" i],
+html.dark [style*="background: #E3F2FD" i],
+html.dark [style*="background:#E3F2FD" i],
+html.dark [style*="background: #EDE7F6" i],
+html.dark [style*="background:#EDE7F6" i],
+html.dark [style*="background: #DCEAF5" i],
+html.dark [style*="background:#DCEAF5" i],
+html.dark [style*="background: #F0F4F8" i],
+html.dark [style*="background:#F0F4F8" i],
+html.dark [style*="background: #E9ECEF" i],
+html.dark [style*="background:#E9ECEF" i],
+html.dark [style*="background: #f0f0f0" i],
+html.dark [style*="background:#f0f0f0" i] {
+    background-color: rgba(56, 189, 248, 0.16) !important;
+    background-image: none !important;
+    color: #38BDF8 !important;
+    border-color: rgba(56, 189, 248, 0.3) !important;
+}
+
+/* 6. Hardcoded Dark Text Colors to High Contrast */
+/* Greens */
+html.dark [style*="color: #285943" i],
+html.dark [style*="color:#285943" i],
+html.dark [style*="color: #2e7d32" i],
+html.dark [style*="color:#2e7d32" i],
+html.dark [style*="color: #2E7D32" i],
+html.dark [style*="color:#2E7D32" i],
+html.dark [style*="color: #1b7a43" i],
+html.dark [style*="color:#1b7a43" i],
+html.dark [style*="color: #1E6B37" i],
+html.dark [style*="color:#1E6B37" i],
+html.dark [style*="color: #047857" i],
+html.dark [style*="color:#047857" i],
+html.dark [style*="color: #059669" i],
+html.dark [style*="color:#059669" i],
+html.dark [style*="color: #065f46" i],
+html.dark [style*="color:#065f46" i],
+html.dark [style*="color: #0f766e" i],
+html.dark [style*="color:#0f766e" i] {
+    color: #34D399 !important;
+}
+
+/* Blues */
+html.dark [style*="color: #2B5F8E" i],
+html.dark [style*="color:#2B5F8E" i],
+html.dark [style*="color: #1E4B6D" i],
+html.dark [style*="color:#1E4B6D" i],
+html.dark [style*="color: #1F567A" i],
+html.dark [style*="color:#1F567A" i],
+html.dark [style*="color: #2b567a" i],
+html.dark [style*="color:#2b567a" i],
+html.dark [style*="color: #1E4F7D" i],
+html.dark [style*="color:#1E4F7D" i],
+html.dark [style*="color: #1F517F" i],
+html.dark [style*="color:#1F517F" i],
+html.dark [style*="color: #1D4ED8" i],
+html.dark [style*="color:#1D4ED8" i],
+html.dark [style*="color: #1E3A8A" i],
+html.dark [style*="color:#1E3A8A" i],
+html.dark [style*="color: #0369A1" i],
+html.dark [style*="color:#0369A1" i],
+html.dark [style*="color: #0369a1" i],
+html.dark [style*="color:#0369a1" i],
+html.dark [style*="color: #0284c7" i],
+html.dark [style*="color:#0284c7" i],
+html.dark [style*="color: #1565C0" i],
+html.dark [style*="color:#1565C0" i],
+html.dark [style*="color: #4338CA" i],
+html.dark [style*="color:#4338CA" i],
+html.dark [style*="color: #4338ca" i],
+html.dark [style*="color:#4338ca" i] {
+    color: #38BDF8 !important;
+}
+
+/* Ambers / Browns / Oranges */
+html.dark [style*="color: #92400E" i],
+html.dark [style*="color:#92400E" i],
+html.dark [style*="color: #B7791F" i],
+html.dark [style*="color:#B7791F" i],
+html.dark [style*="color: #8a5a12" i],
+html.dark [style*="color:#8a5a12" i],
+html.dark [style*="color: #B45309" i],
+html.dark [style*="color:#B45309" i],
+html.dark [style*="color: #b45309" i],
+html.dark [style*="color:#b45309" i],
+html.dark [style*="color: #452600" i],
+html.dark [style*="color:#452600" i],
+html.dark [style*="color: #ca8a04" i],
+html.dark [style*="color:#ca8a04" i],
+html.dark [style*="color: #ea580c" i],
+html.dark [style*="color:#ea580c" i] {
+    color: #FBBF24 !important;
+}
+
+/* Purples */
+html.dark [style*="color: #512DA8" i],
+html.dark [style*="color:#512DA8" i] {
+    color: #C084FC !important;
+}
+
+/* Neutrals / Grays / Slates */
+html.dark [style*="color: #475569" i],
+html.dark [style*="color:#475569" i],
+html.dark [style*="color: #495057" i],
+html.dark [style*="color:#495057" i],
+html.dark [style*="color: #555" i],
+html.dark [style*="color:#555" i],
+html.dark [style*="color: #263449" i],
+html.dark [style*="color:#263449" i],
+html.dark [style*="color: #212529" i],
+html.dark [style*="color:#212529" i],
+html.dark [style*="color: #333" i],
+html.dark [style*="color:#333" i] {
+    color: #CBD5E1 !important;
+}
+
+/* Utility Text Classes */
+html.dark .text-dark,
+html.dark .text-black,
+html.dark .text-slate-900,
+html.dark .text-slate-800,
+html.dark .text-slate-700,
+html.dark .text-gray-900,
+html.dark .text-gray-800,
+html.dark .text-gray-700,
+html.dark .text-zinc-900,
+html.dark .text-zinc-800,
+html.dark .text-zinc-700,
+html.dark .text-neutral-900,
+html.dark .text-neutral-800,
+html.dark .text-neutral-700 {
+    color: #F1F5F9 !important;
+}
+
+/* 7. Modal & Component Specifics */
+html.dark .modal-content {
+    background-color: #131B2E !important;
+    border-color: #1E2D4A !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .modal-header {
+    border-bottom-color: #1E2D4A !important;
+}
+
+html.dark .modal-footer {
+    background-color: #0D1426 !important;
+    border-top-color: #1E2D4A !important;
+}
+
+html.dark .modal-body {
+    background-color: #131B2E !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .role-card,
+html.dark .mode-card {
+    border-color: #1E2D4A !important;
+    background: #17223B !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .role-card:hover,
+html.dark .mode-card:hover {
+    border-color: #38BDF8 !important;
+    background: #1E2E4F !important;
+}
+
+html.dark .role-card:has(input:checked),
+html.dark .mode-card:has(input:checked) {
+    border-color: #38BDF8 !important;
+    background: rgba(56, 189, 248, 0.15) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark .profil-info-group {
+    background: #17223B !important;
+    border-color: #273654 !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .profil-info-label {
+    color: #94A3B8 !important;
+}
+
+html.dark .nx-nav-pill-bar {
+    background: #0D1426 !important;
+    border-color: #1E2D4A !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark .nx-brand-tagline {
+    color: #94A3B8 !important;
+}
+
+html.dark .nx-brand-logo-text {
+    color: #F1F5F9 !important;
+}
+
+/* FullCalendar Component Dark Theming */
+html.dark .fc,
+html.dark .fc-theme-standard td,
+html.dark .fc-theme-standard th {
+    border-color: #1E2D4A !important;
+}
+
+html.dark .fc-theme-standard .fc-scrollgrid {
+    border-color: #1E2D4A !important;
+}
+
+html.dark .fc-col-header-cell {
+    background: #0F172A !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .fc-daygrid-day {
+    background: #131B2E !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .fc-daygrid-day.fc-day-today {
+    background: rgba(56, 189, 248, 0.08) !important;
+}
+
+html.dark .fc-daygrid-day-number {
+    color: #F1F5F9 !important;
+}
+
+html.dark .fc-toolbar-title {
+    color: #F1F5F9 !important;
+}
+
+html.dark .fc-button-primary {
+    background-color: #17223B !important;
+    border-color: #273654 !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .fc-button-primary:hover,
+html.dark .fc-button-primary.fc-button-active {
+    background-color: #0284C7 !important;
+    border-color: #38BDF8 !important;
+    color: #FFFFFF !important;
+}
+
+/* Bank Sampah Warga Button in Dashboard (Dark Mode) */
+html.dark .nx-btn-bank-sampah-warga,
+html.dark a[href*="bank_sampah"].btn-outline-success {
+    background: rgba(16, 185, 129, 0.16) !important;
+    border: 1px solid rgba(52, 211, 153, 0.35) !important;
+    color: #6EE7B7 !important;
+}
+
+html.dark .nx-btn-bank-sampah-warga:hover,
+html.dark a[href*="bank_sampah"].btn-outline-success:hover {
+    background: rgba(16, 185, 129, 0.28) !important;
+    border-color: #34D399 !important;
+    color: #FFFFFF !important;
+}
+
+/* ==========================================================================
+   LANDING PAGE (COVER) DARK MODE OVERRIDES (DARK NAVY -> DEEP INDIGO)
+   ========================================================================== */
+html.dark body:has(.nx-landing),
+html.dark body:has(#fiturUnggulan),
+html.dark .nx-landing {
+    background: #0A0F1E !important;
+    color: #F1F5F9 !important;
+}
+
+/* 1. Global NexaNest Brand Logo Dark Mode */
+html.dark .nexanest-brand-logo .nx-brand-title {
+    color: #F8FAFC !important;
+}
+
+html.dark .nexanest-brand-logo .nx-brand-sub {
+    color: #94A3B8 !important;
+}
+
+html.dark .nexanest-brand-logo .nx-logo-house {
+    stroke: #38BDF8 !important;
+}
+
+html.dark .nexanest-brand-logo .nx-logo-leaf-1 {
+    fill: #10B981 !important;
+    stroke: #059669 !important;
+}
+
+html.dark .nexanest-brand-logo .nx-logo-leaf-2 {
+    fill: #34D399 !important;
+    stroke: #10B981 !important;
+}
+
+html.dark .nexanest-brand-logo .nx-logo-leaf-vein {
+    stroke: #D1FAE5 !important;
+}
+
+/* 2. Top Navbar Landing Page */
+html.dark .nx-navbar-wrap {
+    background: rgba(13, 20, 38, 0.92) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid #1E293B !important;
+}
+
+html.dark .nx-nav-pill-bar {
+    background: #0D1426 !important;
+    border: 1px solid #1E2D4A !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45) !important;
+}
+
+html.dark .nx-nav-item-link {
+    color: #CBD5E1 !important;
+}
+
+html.dark .nx-nav-item-link:hover {
+    background: rgba(56, 189, 248, 0.12) !important;
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-nav-item-link.active {
+    background: #172554 !important;
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-brand-tagline {
+    color: #94A3B8 !important;
+}
+
+html.dark .nx-search-box input {
+    background: #0F172A !important;
+    border: 1px solid #273654 !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .nx-search-box input:focus {
+    border-color: #38BDF8 !important;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2) !important;
+}
+
+html.dark .nx-search-box i {
+    color: #64748B !important;
+}
+
+/* 3. Hero Section */
+html.dark .nx-hero-section {
+    background-color: #0A0F1E !important;
+    background-image: linear-gradient(90deg, rgba(10, 15, 30, 0.96) 0%, rgba(10, 15, 30, 0.88) 42%, rgba(10, 15, 30, 0.45) 72%, rgba(10, 15, 30, 0.2) 100%), url("/images/hero-community.jpg") !important;
+}
+
+html.dark .nx-welcome-badge {
+    background: rgba(16, 185, 129, 0.16) !important;
+    color: #34D399 !important;
+    border: 1px solid rgba(52, 211, 153, 0.3) !important;
+}
+
+html.dark .nx-hero-heading .line-green {
+    color: #F8FAFC !important;
+}
+
+html.dark .nx-hero-heading .line-blue {
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-hero-desc {
+    color: #94A3B8 !important;
+}
+
+html.dark .nx-btn-outline {
+    background: rgba(19, 27, 46, 0.75) !important;
+    border: 1.5px solid #38BDF8 !important;
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-btn-outline:hover {
+    background: rgba(56, 189, 248, 0.2) !important;
+    color: #FFFFFF !important;
+    border-color: #38BDF8 !important;
+}
+
+html.dark .nx-kalam-line {
+    color: #34D399 !important;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85) !important;
+}
+
+html.dark .nx-kalam-curve path {
+    stroke: #34D399 !important;
+}
+
+/* 4. Lekukan Wave Bawah Hero */
+html.dark .nx-wave-divider svg path {
+    fill: #0A0F1E !important;
+}
+
+/* 5. Section "Jelajahi Fitur Unggulan" */
+html.dark .nx-features-section {
+    background: #0A0F1E !important;
+    background-color: #0A0F1E !important;
+}
+
+html.dark .nx-section-title {
+    color: #F1F5F9 !important;
+}
+
+html.dark .nx-section-subtitle {
+    color: #94A3B8 !important;
+}
+
+html.dark .nx-section-title-line {
+    background: #1E3A5F !important;
+}
+
+html.dark .nx-section-header i.fa-seedling {
+    color: #34D399 !important;
+}
+
+/* 6. 6 Feature Cards Grid */
+html.dark .nx-feature-card {
+    background: #131B2E !important;
+    border: 1px solid #1E2D4A !important;
+    color: #F1F5F9 !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35) !important;
+}
+
+html.dark .nx-feature-card:hover {
+    border-color: #3B82F6 !important;
+    box-shadow: 0 16px 34px rgba(59, 130, 246, 0.18) !important;
+    transform: translateY(-5px);
+    color: #F1F5F9 !important;
+}
+
+html.dark .nx-feature-title {
+    color: #F1F5F9 !important;
+}
+
+html.dark .nx-feature-desc {
+    color: #94A3B8 !important;
+}
+
+/* Kotak Ikon Translucent Gelap Sesuai Warna Masing-Masing */
+html.dark .nx-accent-green .nx-feature-icon {
+    background: rgba(16, 185, 129, 0.16) !important;
+    color: #34D399 !important;
+}
+
+html.dark .nx-accent-blue .nx-feature-icon {
+    background: rgba(56, 189, 248, 0.16) !important;
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-accent-red .nx-feature-icon {
+    background: rgba(239, 68, 68, 0.16) !important;
+    color: #F87171 !important;
+}
+
+/* Tombol Panah Bulat #1E293B dengan Ikon #38BDF8 */
+html.dark .nx-feature-arrow,
+html.dark .nx-accent-green .nx-feature-arrow,
+html.dark .nx-accent-blue .nx-feature-arrow,
+html.dark .nx-accent-red .nx-feature-arrow {
+    background: #1E293B !important;
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-feature-card:hover .nx-feature-arrow,
+html.dark .nx-accent-green:hover .nx-feature-arrow,
+html.dark .nx-accent-blue:hover .nx-feature-arrow,
+html.dark .nx-accent-red:hover .nx-feature-arrow {
+    background: #2563EB !important;
+    color: #FFFFFF !important;
+}
+
+/* 7. Footer Pill */
+html.dark .nx-footer-pill {
+    background: #131B2E !important;
+    border: 1px solid #1E2D4A !important;
+    color: #CBD5E1 !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+html.dark .nx-footer-pill i {
+    color: #34D399 !important;
+}
+
+/* 8. Modals & Dropdown on Landing Page */
+html.dark .modal-content {
+    background: #131B2E !important;
+    color: #F1F5F9 !important;
+    border: 1px solid #1E2D4A !important;
+}
+
+html.dark .modal-header,
+html.dark .modal-footer {
+    border-color: #1E2D4A !important;
+}
+
+html.dark .modal-title {
+    color: #F1F5F9 !important;
+}
+
+html.dark .modal-body,
+html.dark .modal-body p {
+    color: #CBD5E1 !important;
+}
+
+html.dark .modal-body .text-muted {
+    color: #94A3B8 !important;
+}
+
+html.dark .modal-content .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+html.dark .dropdown-menu {
+    background-color: #131B2E !important;
+    border: 1px solid #1E2D4A !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45) !important;
+}
+
+html.dark .dropdown-item {
+    color: #E2E8F0 !important;
+}
+
+html.dark .dropdown-item:hover {
+    background-color: #1A2744 !important;
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-corner-leaf-left,
+html.dark .nx-corner-leaf-right {
+    opacity: 0.35 !important;
+    filter: brightness(0.65) contrast(1.2);
+}
+
+/* ==========================================================================
+   PRIMARY BUTTONS STANDARDIZATION & BANNER ACTION BUTTONS
+   ========================================================================== */
+html.dark .btn-primary,
+html.dark button.btn-primary,
+html.dark a.btn-primary,
+html.dark .btn[style*="background: var(--nx-forest)"],
+html.dark button[style*="background: var(--nx-forest)"],
+html.dark a[style*="background: var(--nx-forest)"],
+html.dark .btn[style*="background:var(--nx-forest)"],
+html.dark button[style*="background:var(--nx-forest)"],
+html.dark a[style*="background:var(--nx-forest)"],
+html.dark [type="submit"].btn-primary,
+html.dark button[type="submit"]:not(.btn-outline-secondary):not(.btn-outline-danger):not(.btn-outline-success):not(.btn-outline-primary):not(.btn-danger):not(.btn-link):not(.btn-light) {
+    background: #2563EB !important;
+    background-color: #2563EB !important;
+    border-color: #1D4ED8 !important;
+    color: #FFFFFF !important;
+}
+
+html.dark .btn-primary:hover,
+html.dark button.btn-primary:hover,
+html.dark a.btn-primary:hover,
+html.dark .btn[style*="background: var(--nx-forest)"]:hover,
+html.dark button[style*="background: var(--nx-forest)"]:hover,
+html.dark a[style*="background: var(--nx-forest)"]:hover,
+html.dark .btn[style*="background:var(--nx-forest)"]:hover,
+html.dark button[style*="background:var(--nx-forest)"]:hover,
+html.dark a[style*="background:var(--nx-forest)"]:hover,
+html.dark [type="submit"].btn-primary:hover,
+html.dark button[type="submit"]:not(.btn-outline-secondary):not(.btn-outline-danger):not(.btn-outline-success):not(.btn-outline-primary):not(.btn-danger):not(.btn-link):not(.btn-light):hover {
+    background: #1D4ED8 !important;
+    background-color: #1D4ED8 !important;
+    border-color: #1E40AF !important;
+    color: #FFFFFF !important;
+}
+
+html.dark .btn-primary *,
+html.dark .btn-primary span,
+html.dark .btn-primary i,
+html.dark .btn-primary svg,
+html.dark .btn[style*="background: var(--nx-forest)"] *,
+html.dark .btn[style*="background: var(--nx-forest)"] span,
+html.dark .btn[style*="background: var(--nx-forest)"] i,
+html.dark .btn[style*="background: var(--nx-forest)"] svg,
+html.dark .btn[style*="background:var(--nx-forest)"] *,
+html.dark .btn[style*="background:var(--nx-forest)"] span,
+html.dark .btn[style*="background:var(--nx-forest)"] i,
+html.dark .btn[style*="background:var(--nx-forest)"] svg {
+    color: #FFFFFF !important;
+}
+
+/* Secondary Banner Buttons: Posyandu & Ronda */
+html.dark a[href*="posyandu.petugas"],
+html.dark a[href*="posyandu/petugas"],
+html.dark a.btn-outline-dark:has(.fa-users-gear) {
+    background: rgba(255, 255, 255, 0.10) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    color: #E2E8F0 !important;
+}
+
+html.dark a[href*="posyandu.petugas"]:hover,
+html.dark a[href*="posyandu/petugas"]:hover,
+html.dark a.btn-outline-dark:has(.fa-users-gear):hover {
+    background: rgba(255, 255, 255, 0.18) !important;
+    border-color: rgba(255, 255, 255, 0.40) !important;
+    color: #FFFFFF !important;
+}
+
+html.dark a[href*="posyandu.petugas"] *,
+html.dark a[href*="posyandu/petugas"] * {
+    color: inherit !important;
+}
+
+html.dark button[data-bs-target="#modalLaporKeamanan"],
+html.dark .btn-outline-danger:has(.fa-triangle-exclamation) {
+    background: rgba(244, 63, 94, 0.18) !important;
+    border: 1px solid rgba(244, 63, 94, 0.40) !important;
+    color: #FDA4AF !important;
+}
+
+html.dark button[data-bs-target="#modalLaporKeamanan"]:hover,
+html.dark .btn-outline-danger:has(.fa-triangle-exclamation):hover {
+    background: rgba(244, 63, 94, 0.28) !important;
+    border-color: #F43F5E !important;
+    color: #FFE4E6 !important;
+}
+
+html.dark button[data-bs-target="#modalLaporKeamanan"] *,
+html.dark .btn-outline-danger:has(.fa-triangle-exclamation) * {
+    color: inherit !important;
+}
+
+/* ==========================================================================
+   STAT CARD ICON BOXES & STATUS BADGES (TRANSLUCENT DARK)
+   ========================================================================== */
+html.dark .nx-stat-icon--forest,
+html.dark .nx-stat-icon--success,
+html.dark .stat-icon-success,
+html.dark .kpi-icon-success {
+    background: rgba(16, 185, 129, 0.16) !important;
+    color: #34D399 !important;
+}
+
+html.dark .nx-stat-icon--primary,
+html.dark .stat-icon-primary,
+html.dark .kpi-icon-primary {
+    background: rgba(59, 130, 246, 0.16) !important;
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-stat-icon--warning,
+html.dark .stat-icon-warning,
+html.dark .kpi-icon-warning {
+    background: rgba(245, 158, 11, 0.16) !important;
+    color: #FBBF24 !important;
+}
+
+html.dark .nx-stat-icon--danger,
+html.dark .stat-icon-danger,
+html.dark .kpi-icon-danger {
+    background: rgba(244, 63, 94, 0.16) !important;
+    color: #F87171 !important;
+}
+
+html.dark .nx-stat-icon--indigo,
+html.dark .stat-icon-indigo,
+html.dark .kpi-icon-indigo {
+    background: rgba(139, 92, 246, 0.16) !important;
+    color: #A78BFA !important;
+}
+
+/* Badge Status: Tersedia, Normal, Stunting, Bumil, etc. */
+html.dark .badge.bg-success-subtle,
+html.dark .badge-success-subtle,
+html.dark .bg-success-subtle {
+    background: rgba(16, 185, 129, 0.16) !important;
+    border: 1px solid rgba(52, 211, 153, 0.35) !important;
+    color: #6EE7B7 !important;
+}
+html.dark .badge.bg-success-subtle *,
+html.dark .bg-success-subtle.text-success {
+    color: #6EE7B7 !important;
+}
+
+html.dark .badge.bg-danger-subtle,
+html.dark .bg-danger-subtle {
+    background: rgba(244, 63, 94, 0.16) !important;
+    border: 1px solid rgba(244, 63, 94, 0.35) !important;
+    color: #FDA4AF !important;
+}
+html.dark .badge.bg-danger-subtle *,
+html.dark .bg-danger-subtle.text-danger {
+    color: #FDA4AF !important;
+}
+
+html.dark .badge.bg-warning-subtle,
+html.dark .bg-warning-subtle {
+    background: rgba(245, 158, 11, 0.16) !important;
+    border: 1px solid rgba(245, 158, 11, 0.35) !important;
+    color: #FCD34D !important;
+}
+html.dark .badge.bg-warning-subtle *,
+html.dark .bg-warning-subtle.text-dark,
+html.dark .bg-warning-subtle.text-warning {
+    color: #FCD34D !important;
+}
+
+html.dark .badge.bg-primary-subtle,
+html.dark .bg-primary-subtle {
+    background: rgba(59, 130, 246, 0.16) !important;
+    border: 1px solid rgba(59, 130, 246, 0.35) !important;
+    color: #93C5FD !important;
+}
+html.dark .badge.bg-primary-subtle * {
+    color: #93C5FD !important;
+}
+
+html.dark .badge.bg-warning.text-dark {
+    background: rgba(245, 158, 11, 0.2) !important;
+    border: 1px solid rgba(245, 158, 11, 0.4) !important;
+    color: #FCD34D !important;
+}
+
+/* ==========================================================================
+   KEGIATAN MENDATANG & LAPORAN BULANAN CARDS
+   ========================================================================== */
+html.dark .nx-event-box {
+    background: #17223B !important;
+    border: 1px solid rgba(37, 99, 235, 0.40) !important;
+    color: #F8FAFC !important;
+}
+
+html.dark .nx-event-box h5,
+html.dark .nx-event-box .fw-bold {
+    color: #F8FAFC !important;
+}
+
+html.dark .nx-event-box .text-muted,
+html.dark .nx-event-box .text-muted div {
+    color: #94A3B8 !important;
+}
+
+html.dark .nx-event-box .nx-date-badge {
+    background: #1E3A8A !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark .nx-event-box .btn {
+    background: #2563EB !important;
+    color: #FFFFFF !important;
+    border: none !important;
+}
+
+/* Laporan Bulanan: Status Laporan Pertanggungjawaban (Perlu Revisi) */
+html.dark [style*="background: #FCE8E9"],
+html.dark [style*="background:#FCE8E9"],
+html.dark [style*="background: #fce8e9"],
+html.dark [style*="background:#fce8e9"] {
+    background: rgba(244, 63, 94, 0.14) !important;
+    border-color: rgba(244, 63, 94, 0.35) !important;
+}
+
+html.dark [style*="background: #FCE8E9"] span,
+html.dark [style*="background:#FCE8E9"] span,
+html.dark [style*="background: #FCE8E9"] strong,
+html.dark [style*="background:#FCE8E9"] strong,
+html.dark [style*="background: #FCE8E9"] .text-danger,
+html.dark [style*="background:#FCE8E9"] .text-danger {
+    color: #FDA4AF !important;
+}
+
+/* KPI Compact Stat Card (Laporan Bulanan) in Dark Mode */
+html.dark .nx-stat-card-kpi {
+    background: #131B2E !important;
+    border-color: #1E2D4A !important;
+}
+
+/* ==========================================================================
+   AUTH PAGES (LOGIN & REGISTER) DARK MODE
+   ========================================================================== */
+html.dark body:has(.nx-auth-page),
+html.dark .nx-auth-page {
+    background: #0A0F1E !important;
+}
+
+html.dark .nx-auth-shell {
+    background: #0D1426 !important;
+    border-color: #1E293B !important;
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.55) !important;
+}
+
+html.dark .nx-auth-visual {
+    background: linear-gradient(150deg, #0A0F1E 0%, #10192E 52%, #131E38 100%) !important;
+    border-right-color: #1E293B !important;
+    border-bottom-color: #1E293B !important;
+}
+
+html.dark .nx-auth-visual::before {
+    background: rgba(255, 255, 255, 0.03) !important;
+}
+
+html.dark .nx-back-home,
+html.dark .nx-outline-btn {
+    background: rgba(19, 27, 46, 0.85) !important;
+    border-color: #1E293B !important;
+    color: #CBD5E1 !important;
+}
+
+html.dark .nx-back-home:hover,
+html.dark .nx-outline-btn:hover {
+    background: #1E2D4A !important;
+    color: #38BDF8 !important;
+    border-color: #38BDF8 !important;
+}
+
+html.dark .nx-auth-theme-btn {
+    background: #17223B !important;
+    border-color: #243454 !important;
+    color: #FDE047 !important;
+}
+
+html.dark .nx-auth-theme-btn:hover {
+    background: #1E2D4A !important;
+    border-color: #38BDF8 !important;
+}
+
+html.dark .nx-img-frame {
+    border-color: rgba(30, 45, 74, 0.8) !important;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45) !important;
+}
+
+html.dark .nx-img-overlay {
+    display: block !important;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.25) 0%, rgba(15, 23, 42, 0.55) 100%) !important;
+}
+
+html.dark .nx-visual-pill {
+    background: rgba(16, 185, 129, 0.16) !important;
+    color: #34D399 !important;
+}
+
+html.dark .nx-visual-title {
+    color: #F8FAFC !important;
+}
+
+html.dark .nx-visual-desc {
+    color: #94A3B8 !important;
+}
+
+html.dark .nx-chip {
+    background: rgba(15, 23, 42, 0.45) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(148, 163, 184, 0.25) !important;
+    color: #E2E8F0 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
+}
+
+html.dark .nx-chip i {
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-auth-form-panel {
+    background: #0D1426 !important;
+}
+
+html.dark .nx-form-badge {
+    background: rgba(56, 189, 248, 0.16) !important;
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-form-title {
+    color: #F8FAFC !important;
+}
+
+html.dark .nx-form-subtitle {
+    color: #94A3B8 !important;
+}
+
+html.dark .nx-label {
+    color: #E2E8F0 !important;
+}
+
+html.dark .nx-input {
+    background: #131B2E !important;
+    border-color: #1E2D4A !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .nx-input:focus {
+    background: #17223B !important;
+    border-color: #3B82F6 !important;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2) !important;
+}
+
+html.dark .nx-input-wrap:focus-within .nx-input-icon {
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-eye-btn {
+    color: #94A3B8 !important;
+}
+
+html.dark .nx-eye-btn:hover {
+    background: #1E2D4A !important;
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-remember {
+    color: #94A3B8 !important;
+}
+
+html.dark .nx-remember input {
+    accent-color: #2563EB !important;
+}
+
+html.dark .nx-forgot-link {
+    color: #38BDF8 !important;
+}
+
+html.dark .nx-forgot-link:hover {
+    color: #60A5FA !important;
+}
+
+html.dark .nx-submit-btn {
+    background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+    border: 1px solid rgba(59, 130, 246, 0.4) !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.35) !important;
+}
+
+html.dark .nx-submit-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%) !important;
+    box-shadow: 0 14px 28px rgba(37, 99, 235, 0.45) !important;
+    color: #FFFFFF !important;
+}
+
+html.dark .nx-submit-btn *,
+html.dark .nx-submit-btn span,
+html.dark .nx-submit-btn i {
+    color: #FFFFFF !important;
+}
+
+html.dark .nx-auth-footer {
+    border-top-color: #1E293B !important;
+    color: #94A3B8 !important;
+}
+
+html.dark .nx-auth-footer a {
+    color: #38BDF8 !important;
+}
+
+/* Register Page Dark Mode */
+html.dark body:has(.nx-reg-wrap),
+html.dark .nx-reg-wrap {
+    background: #0A0F1E !important;
+}
+
+html.dark .nx-reg-hero {
+    background: linear-gradient(135deg, #0F172A 0%, #172554 55%, #1E3A8A 100%) !important;
+    border-color: #1E2D4A !important;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45) !important;
+}
+
+html.dark .nx-reg-hero-title {
+    color: #F8FAFC !important;
+}
+
+html.dark .nx-reg-hero-sub {
+    color: #94A3B8 !important;
+}
+
+html.dark .nx-reg-card {
+    background: #0D1426 !important;
+    border-color: #1E293B !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45) !important;
+}
+
+html.dark .nx-control,
+html.dark .nx-select {
+    background: #131B2E !important;
+    border-color: #1E2D4A !important;
+    color: #F1F5F9 !important;
+}
+
+html.dark .nx-control:focus,
+html.dark .nx-select:focus {
+    background: #17223B !important;
+    border-color: #3B82F6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* Auth Illustrations Day & Night Mode Instant Switching */
+.nx-img-day {
+    display: block;
+}
+.nx-img-night {
+    display: none;
+}
+html.dark .nx-img-day {
+    display: none !important;
+}
+html.dark .nx-img-night {
+    display: block !important;
+}
+html.dark .nx-img-frame {
+    border: 1px solid rgba(148, 163, 184, 0.2) !important;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35) !important;
+}
+html.dark .nx-img-overlay {
+    display: none !important;
+}
+
+/* ==========================================================================
+   ROLE SWITCHER TOP BAR & DASHBOARD WARGA DARK MODE POLISHING
+   ========================================================================== */
+
+/* 1. Kontras Tombol Kembali ke Super Admin & Gold Button di Banner Switcher */
+.nx-role-switcher-banner .btn-exit-switcher,
+.nx-role-switcher-banner .btn-gold,
+html.dark .nx-role-switcher-banner .btn-exit-switcher,
+html.dark .nx-role-switcher-banner .btn-gold {
+    background: linear-gradient(135deg, #FFE082 0%, #FFB300 100%) !important;
+    border: 1px solid #FFD54F !important;
+    color: #0F172A !important;
+}
+.nx-role-switcher-banner .btn-exit-switcher *,
+.nx-role-switcher-banner .btn-gold *,
+html.dark .nx-role-switcher-banner .btn-exit-switcher *,
+html.dark .nx-role-switcher-banner .btn-gold * {
+    color: #0F172A !important;
+}
+.nx-role-switcher-banner .btn-exit-switcher.btn-primary,
+html.dark .nx-role-switcher-banner .btn-exit-switcher.btn-primary {
+    background: #2563EB !important;
+    border-color: #1D4ED8 !important;
+    color: #FFFFFF !important;
+}
+.nx-role-switcher-banner .btn-exit-switcher.btn-primary *,
+html.dark .nx-role-switcher-banner .btn-exit-switcher.btn-primary * {
+    color: #FFFFFF !important;
+}
+
+/* 2. Kartu TOTAL TUNGGAKAN Dashboard Warga */
+html.dark .nx-card-tunggakan-warga.has-tunggakan {
+    background: rgba(244, 63, 94, 0.14) !important;
+    border: 1px solid rgba(244, 63, 94, 0.35) !important;
+}
+html.dark .nx-card-tunggakan-warga.has-tunggakan .nx-tunggakan-label {
+    color: #FDA4AF !important;
+}
+html.dark .nx-card-tunggakan-warga.has-tunggakan .nx-tunggakan-nominal {
+    color: #FB7185 !important;
+}
+html.dark .nx-card-tunggakan-warga.has-tunggakan .nx-tunggakan-subtext {
+    color: #CBD5E1 !important;
+}
+
+/* 3. Badge Status Terlambat & Bahaya pada Riwayat Iuran */
+html.dark .nx-badge-status-danger,
+html.dark .table .badge[style*="var(--nx-soft-red)"],
+html.dark .table .badge[style*="#FEE2E2"] {
+    background: rgba(244, 63, 94, 0.16) !important;
+    border: 1px solid rgba(244, 63, 94, 0.38) !important;
+    color: #FDA4AF !important;
+}
+html.dark .nx-badge-status-danger *,
+html.dark .table .badge[style*="var(--nx-soft-red)"] *,
+html.dark .table .badge[style*="#FEE2E2"] * {
+    color: #FDA4AF !important;
+}
+
+/* 4. Bar Tabungan Bank Sampah Keluarga & Tombol */
+html.dark .nx-bar-bank-sampah-warga {
+    background: linear-gradient(90deg, rgba(14, 165, 233, 0.14) 0%, rgba(16, 185, 129, 0.14) 100%) !important;
+    border: 1px solid rgba(56, 189, 248, 0.28) !important;
+}
+html.dark .nx-bar-bank-sampah-warga .nx-bar-sampah-title {
+    color: #6EE7B7 !important;
+}
+html.dark .nx-bar-bank-sampah-warga .nx-bar-sampah-desc {
+    color: #94A3B8 !important;
+}
+html.dark .nx-bar-bank-sampah-warga .nx-bar-sampah-desc strong {
+    color: #F1F5F9 !important;
+}
+html.dark .nx-bar-bank-sampah-warga .nx-bar-sampah-icon {
+    background: rgba(16, 185, 129, 0.25) !important;
+    color: #34D399 !important;
+    border: 1px solid rgba(52, 211, 153, 0.3) !important;
+}
+html.dark .nx-btn-bank-sampah-warga {
+    background: rgba(16, 185, 129, 0.18) !important;
+    border: 1px solid rgba(52, 211, 153, 0.40) !important;
+    color: #6EE7B7 !important;
+}
+html.dark .nx-btn-bank-sampah-warga * {
+    color: #6EE7B7 !important;
+}
+html.dark .nx-btn-bank-sampah-warga:hover {
+    background: #10B981 !important;
+    border-color: #10B981 !important;
+    color: #FFFFFF !important;
+}
+html.dark .nx-btn-bank-sampah-warga:hover * {
+    color: #FFFFFF !important;
+}
+
+/* ==========================================================================
+   SUPER ADMIN MONITORING SISTEM DARK MODE POLISHING
+   ========================================================================== */
+
+/* 1. Header & Tombol Perbarui */
+html.dark .sa-btn-refresh,
+html.dark #btnRefreshMonitoring {
+    background: #17223B !important;
+    border: 1px solid #273654 !important;
+    color: #E2E8F0 !important;
+}
+html.dark .sa-btn-refresh:hover,
+html.dark #btnRefreshMonitoring:hover {
+    background: #1E2E4F !important;
+    border-color: #3B82F6 !important;
+    color: #FFFFFF !important;
+}
+html.dark .sa-badge-core-indicators,
+html.dark .sa-badge-cpu-na {
+    background: #1E293B !important;
+    border: 1px solid #334155 !important;
+    color: #CBD5E1 !important;
+}
+
+/* 2. Kartu Diagnostik Database & 8 Tabel Utama */
+html.dark .sa-db-tables-box {
+    background: #0F172A !important;
+    border-color: #1E2D4A !important;
+}
+html.dark .sa-db-tables-box span.text-muted,
+html.dark .sa-db-tables-box .small.fw-bold {
+    color: #CBD5E1 !important;
+}
+html.dark .sa-table-item-box {
+    background: #17223B !important;
+    border-color: #273654 !important;
+    color: #CBD5E1 !important;
+}
+html.dark .sa-table-item-box .text-truncate {
+    color: #CBD5E1 !important;
+}
+
+/* 3. Kartu Runtime & Ekstensi PHP */
+html.dark .sa-php-runtime-box {
+    background: #0F172A !important;
+    border-color: #273654 !important;
+}
+html.dark .sa-php-runtime-box .text-muted {
+    color: #94A3B8 !important;
+}
+html.dark .sa-php-runtime-box strong,
+html.dark .sa-php-runtime-box .text-dark {
+    color: #F1F5F9 !important;
+}
+
+/* 4. Kartu Monitoring Perangkat IoT & RFID Akses */
+html.dark .sa-badge-iot-status {
+    background: #1E293B !important;
+    border: 1px solid #334155 !important;
+    color: #CBD5E1 !important;
+}
+html.dark .sa-iot-spec-item {
+    background: #17223B !important;
+    border-color: #273654 !important;
+    color: #E2E8F0 !important;
+}
+html.dark .sa-iot-spec-item .text-dark,
+html.dark .sa-iot-spec-item span {
+    color: #E2E8F0 !important;
+}
+html.dark .sa-iot-schema-box {
+    background: #17223B !important;
+    border-color: #273654 !important;
+    color: #CBD5E1 !important;
+}
+
+/* 5. Tabel Pemantauan Keamanan & Audit Percobaan Akses */
+html.dark .sa-badge-info {
+    background: rgba(59, 130, 246, 0.18) !important;
+    color: #93C5FD !important;
+    border: 1px solid rgba(59, 130, 246, 0.35) !important;
+}
+html.dark .sa-badge-warning {
+    background: rgba(245, 158, 11, 0.18) !important;
+    color: #FCD34D !important;
+    border: 1px solid rgba(245, 158, 11, 0.35) !important;
+}
+html.dark .sa-event-text {
+    color: #F1F5F9 !important;
+}
+
+/* ==========================================================================
+   6. SUPER ADMIN — MANAJEMEN WILAYAH (DARK MODE SCOPING)
+   ========================================================================== */
+html.dark .sa-badge-tenant-readonly {
+    background: #1E293B !important;
+    border: 1px solid #334155 !important;
+    color: #CBD5E1 !important;
+}
+
+html.dark .sa-badge-env-local {
+    background: rgba(59, 130, 246, 0.16) !important;
+    color: #60A5FA !important;
+    border: 1px solid rgba(59, 130, 246, 0.3) !important;
+}
+
+html.dark .sa-badge-env-staging {
+    background: rgba(245, 158, 11, 0.16) !important;
+    color: #FBBF24 !important;
+    border: 1px solid rgba(245, 158, 11, 0.3) !important;
+}
+
+html.dark .sa-badge-env-production {
+    background: rgba(16, 185, 129, 0.16) !important;
+    color: #34D399 !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+
+@media (min-width: 992px) {
+    .sa-matriks-rt-list,
+    .sa-struktur-rt-list {
+        max-height: none !important;
+    }
+}
+
+/* ==========================================================================
+   7. SUPER ADMIN — PENGATURAN PLATFORM (DARK MODE SCOPING)
+   ========================================================================== */
+html.dark .sa-badge-db-driver {
+    background: #1E293B !important;
+    border: 1px solid #334155 !important;
+    color: #CBD5E1 !important;
+}
+
+html.dark .module-filter-btn.active,
+html.dark .btn-outline-secondary.active.module-filter-btn {
+    background-color: #2563EB !important;
+    border-color: #2563EB !important;
+    color: #FFFFFF !important;
+}
+
+html.dark .notif-filter-maintenance {
+    border: 1px solid #64748B !important;
+    color: #CBD5E1 !important;
+}
+
+html.dark .notif-filter-maintenance:hover,
+html.dark .notif-filter-maintenance.btn-dark {
+    background-color: #334155 !important;
+    border-color: #94A3B8 !important;
+    color: #F8FAFC !important;
+}
+
+html.dark .sa-badge-notif-info {
+    background: rgba(56, 189, 248, 0.16) !important;
+    border: 1px solid rgba(56, 189, 248, 0.35) !important;
+    color: #7DD3FC !important;
+}
+
+html.dark .sa-audit-event-badge {
+    background: #1E293B !important;
+    border: 1px solid #334155 !important;
+    color: #93C5FD !important;
+}
+
+/* ==========================================================================
+   8. SUPER ADMIN — PROFIL (DARK MODE & CONTRAST SCOPING)
+   ========================================================================== */
+.sa-badge-superadmin-crown {
+    color: #0F172A !important;
+}
+
+.sa-badge-superadmin-crown i {
+    color: #0F172A !important;
+}
+
+html.dark .sa-badge-superadmin-crown,
+html.dark .sa-badge-superadmin-crown i {
+    color: #0F172A !important;
+}
+
+html.dark .sa-file-input::file-selector-button {
+    background: #1E293B !important;
+    color: #E2E8F0 !important;
+    border-right: 1px solid #334155 !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    padding: 0.375rem 0.75rem !important;
+    cursor: pointer !important;
+    transition: background 0.15s ease-in-out !important;
+}
+
+html.dark .sa-file-input::file-selector-button:hover {
+    background: #334155 !important;
+    color: #FFFFFF !important;
+}
+
+/* Day Mode Event Badges */
+.sa-badge-event-blue {
+    background: #EFF6FF !important;
+    color: #2563EB !important;
+    border: 1px solid #BFDBFE !important;
+}
+
+.sa-badge-event-amber {
+    background: #FFFBEB !important;
+    color: #D97706 !important;
+    border: 1px solid #FDE68A !important;
+}
+
+.sa-badge-event-slate {
+    background: #F1F5F9 !important;
+    color: #475569 !important;
+    border: 1px solid #CBD5E1 !important;
+}
+
+/* Dark Mode Event Badges */
+html.dark .sa-badge-event-blue {
+    background: rgba(59, 130, 246, 0.16) !important;
+    color: #93C5FD !important;
+    border: 1px solid rgba(59, 130, 246, 0.35) !important;
+}
+
+html.dark .sa-badge-event-amber {
+    background: rgba(245, 158, 11, 0.16) !important;
+    color: #FCD34D !important;
+    border: 1px solid rgba(245, 158, 11, 0.35) !important;
+}
+
+html.dark .sa-badge-event-slate {
+    background: #1E293B !important;
+    color: #94A3B8 !important;
+    border: 1px solid #334155 !important;
+}
+
+html.dark .sa-badge-module {
+    background: #1E293B !important;
+    color: #CBD5E1 !important;
+    border-color: #334155 !important;
+}
+
+html.dark .sa-icon-email-login {
+    background: rgba(244, 114, 182, 0.18) !important;
+    color: #F472B6 !important;
+}
+
+html.dark .sa-icon-security-history {
+    background: rgba(56, 189, 248, 0.18) !important;
+    color: #38BDF8 !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+

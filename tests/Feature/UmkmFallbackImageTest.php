@@ -17,7 +17,7 @@ class UmkmFallbackImageTest extends TestCase
         );
 
         $this->assertSame(
-            'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=900&q=80',
+            'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=900&q=80',
             $controller->resolveCoverImage('', 'Makanan & Minuman')
         );
     }

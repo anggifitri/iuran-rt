@@ -11,8 +11,20 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->trustProxies(at: '*');
+
         $middleware->validateCsrfTokens(except: [
             'api/rfid/*',
+            'api/auth/*',
+        ]);
+
+        $middleware->alias([
+            'super_admin' => \App\Http\Middleware\SuperAdminMiddleware::class,
+        ]);
+
+        $middleware->web(append: [
+            \App\Http\Middleware\EnforceSessionTimeoutMiddleware::class,
+            \App\Http\Middleware\RoleSwitchContextMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -77,10 +77,259 @@
         width: 300px;
         height: 300px;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.45);
+        background: rgba(255, 255, 255, 0.35);
         top: -90px;
         right: -90px;
         pointer-events: none;
+    }
+
+    html.dark .nx-auth-visual::before {
+        background: rgba(255, 255, 255, 0.03) !important;
+    }
+
+    .nx-auth-theme-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.85);
+        border: 1px solid rgba(40, 89, 67, 0.15);
+        color: var(--nx-forest);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 0.85rem;
+    }
+
+    .nx-auth-theme-btn:hover {
+        background: var(--nx-white);
+        transform: translateY(-1px);
+    }
+
+    html.dark .nx-auth-theme-btn {
+        background: #17223B !important;
+        border-color: #243454 !important;
+        color: #FDE047 !important;
+    }
+
+    html.dark .nx-auth-theme-btn:hover {
+        background: #1E2D4A !important;
+        border-color: #38BDF8 !important;
+    }
+
+    .nx-illustration-box {
+        margin: 18px 0;
+        position: relative;
+        z-index: 2;
+    }
+
+    .nx-img-frame {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 12px 30px rgba(40, 89, 67, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        max-height: 220px;
+    }
+
+    .nx-community-img {
+        width: 100%;
+        height: 210px;
+        object-fit: cover;
+        transition: transform 0.35s ease;
+    }
+
+    .nx-img-day {
+        display: block;
+    }
+
+    .nx-img-night {
+        display: none;
+    }
+
+    .nx-img-frame:hover .nx-community-img {
+        transform: scale(1.03);
+    }
+
+    .nx-img-overlay {
+        display: none !important;
+    }
+
+    html.dark .nx-img-frame {
+        border: 1px solid rgba(148, 163, 184, 0.2) !important;
+        box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35) !important;
+    }
+
+    html.dark .nx-img-day {
+        display: none !important;
+    }
+
+    html.dark .nx-img-night {
+        display: block !important;
+    }
+
+    .nx-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.85);
+        border: 1px solid rgba(168, 201, 181, 0.4);
+        color: #1E3A2F;
+        font-size: 0.76rem;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(40, 89, 67, 0.05);
+    }
+
+    .nx-chip i {
+        color: var(--nx-forest);
+    }
+
+    html.dark .nx-chip {
+        background: rgba(15, 23, 42, 0.45) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+        border: 1px solid rgba(148, 163, 184, 0.25) !important;
+        color: #E2E8F0 !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35) !important;
+    }
+
+    html.dark .nx-chip i {
+        color: #38BDF8 !important;
+    }
+
+    /* Dark Mode Shell & Form Overrides */
+    html.dark body:has(.nx-auth-page),
+    html.dark .nx-auth-page {
+        background: #0A0F1E !important;
+    }
+
+    html.dark .nx-auth-shell {
+        background: #0D1426 !important;
+        border-color: #1E293B !important;
+        box-shadow: 0 22px 60px rgba(0, 0, 0, 0.55) !important;
+    }
+
+    html.dark .nx-auth-visual {
+        background: linear-gradient(150deg, #0A0F1E 0%, #10192E 52%, #131E38 100%) !important;
+        border-right-color: #1E293B !important;
+        border-bottom-color: #1E293B !important;
+    }
+
+    html.dark .nx-back-home {
+        background: rgba(19, 27, 46, 0.85) !important;
+        border-color: #1E293B !important;
+        color: #CBD5E1 !important;
+    }
+
+    html.dark .nx-back-home:hover {
+        background: #1E2D4A !important;
+        color: #38BDF8 !important;
+    }
+
+    html.dark .nx-visual-pill {
+        background: rgba(16, 185, 129, 0.16) !important;
+        color: #34D399 !important;
+    }
+
+    html.dark .nx-visual-title {
+        color: #F8FAFC !important;
+    }
+
+    html.dark .nx-visual-desc {
+        color: #94A3B8 !important;
+    }
+
+    html.dark .nx-auth-form-panel {
+        background: #0D1426 !important;
+    }
+
+    html.dark .nx-form-badge {
+        background: rgba(56, 189, 248, 0.16) !important;
+        color: #38BDF8 !important;
+    }
+
+    html.dark .nx-form-title {
+        color: #F8FAFC !important;
+    }
+
+    html.dark .nx-form-subtitle {
+        color: #94A3B8 !important;
+    }
+
+    html.dark .nx-label {
+        color: #E2E8F0 !important;
+    }
+
+    html.dark .nx-input {
+        background: #131B2E !important;
+        border-color: #1E2D4A !important;
+        color: #F1F5F9 !important;
+    }
+
+    html.dark .nx-input:focus {
+        background: #17223B !important;
+        border-color: #3B82F6 !important;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2) !important;
+    }
+
+    html.dark .nx-input-wrap:focus-within .nx-input-icon {
+        color: #38BDF8 !important;
+    }
+
+    html.dark .nx-eye-btn {
+        color: #94A3B8 !important;
+    }
+
+    html.dark .nx-eye-btn:hover {
+        background: #1E2D4A !important;
+        color: #38BDF8 !important;
+    }
+
+    html.dark .nx-remember {
+        color: #94A3B8 !important;
+    }
+
+    html.dark .nx-remember input {
+        accent-color: #2563EB !important;
+    }
+
+    html.dark .nx-forgot-link {
+        color: #38BDF8 !important;
+    }
+
+    html.dark .nx-forgot-link:hover {
+        color: #60A5FA !important;
+    }
+
+    html.dark .nx-submit-btn {
+        background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+        border: 1px solid rgba(59, 130, 246, 0.4) !important;
+        color: #FFFFFF !important;
+        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.35) !important;
+    }
+
+    html.dark .nx-submit-btn:hover:not(:disabled) {
+        background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%) !important;
+        box-shadow: 0 14px 28px rgba(37, 99, 235, 0.45) !important;
+        color: #FFFFFF !important;
+    }
+
+    html.dark .nx-submit-btn *,
+    html.dark .nx-submit-btn span,
+    html.dark .nx-submit-btn i {
+        color: #FFFFFF !important;
+    }
+
+    html.dark .nx-auth-footer {
+        border-top-color: #1E293B !important;
+        color: #94A3B8 !important;
+    }
+
+    html.dark .nx-auth-footer a {
+        color: #38BDF8 !important;
     }
 
     .nx-auth-top {
@@ -473,75 +722,33 @@
         <!-- KOLOM KIRI: VISUAL BRANDING PANEL -->
         <div class="nx-auth-visual">
             <div class="nx-auth-top">
-                <a href="{{ url('/') }}" class="nx-brand-badge">
-                    <span class="nx-brand-icon">
-                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-                            <path d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V10.5Z" stroke="#285943" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M9 21V14C9 12.8954 9.89543 12 11 12H13C14.1046 12 15 12.8954 15 14V21" stroke="#285943" stroke-width="2"/>
-                            <path d="M13.5 8.5C15.5 7 18 8 18 10.5C16 11.5 13.5 10.5 13.5 8.5Z" fill="#285943"/>
-                        </svg>
-                    </span>
-                    <div>
-                        <h1 class="nx-brand-name">NexaNest</h1>
-                        <p class="nx-brand-tagline">Smart &amp; Green Community</p>
-                    </div>
+                <a href="{{ url('/') }}" class="text-decoration-none">
+                    <x-nexanest-logo size="md" />
                 </a>
 
-                <a href="{{ url('/') }}" class="nx-back-home">
-                    <i class="fas fa-arrow-left"></i> Beranda
-                </a>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" class="nx-theme-toggle-btn nx-auth-theme-btn" id="nxAuthThemeToggle" title="Beralih Tema (Dark/Light)">
+                        <i class="far fa-moon dark-icon-moon"></i>
+                        <i class="far fa-sun dark-icon-sun"></i>
+                    </button>
+
+                    <a href="{{ url('/') }}" class="nx-back-home">
+                        <i class="fas fa-arrow-left"></i> Beranda
+                    </a>
+                </div>
             </div>
 
-            <!-- Flat Vector Illustration: Sustainable Green Neighborhood -->
+            <!-- Ilustrasi Komunitas NexaNest Asli (Day & Night Mode Otomatis) -->
             <div class="nx-illustration-box" aria-hidden="true">
-                <svg viewBox="0 0 460 230" width="100%" height="auto" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect width="460" height="230" rx="16" fill="#EBF5EE"/>
-                    <!-- Sun & Clouds -->
-                    <circle cx="385" cy="48" r="22" fill="#FBE5A2"/>
-                    <path d="M70 52C70 44 77 38 85 38C91 38 96 41 98 46C100 45 103 44 106 44C112 44 117 49 117 55C117 56 117 57 116 58H71C70 56 70 54 70 52Z" fill="#FFFFFF" fill-opacity="0.85"/>
-                    <path d="M270 38C270 32 275 27 282 27C287 27 291 30 293 34C295 33 297 32 299 32C304 32 308 36 308 41H271C270 40 270 39 270 38Z" fill="#FFFFFF" fill-opacity="0.8"/>
-
-                    <!-- Rolling Pastel Hills -->
-                    <path d="M0 168C95 140 190 148 290 165C355 176 415 160 460 150V230H0V168Z" fill="#C4DFC8"/>
-                    <path d="M0 186C120 168 250 172 460 192V230H0V186Z" fill="#9EC6A8"/>
-
-                    <!-- River / Eco Stream -->
-                    <path d="M180 182C215 194 250 205 295 230H225C205 212 182 198 158 184L180 182Z" fill="#A9C9E8"/>
-
-                    <!-- Eco House 1 (Left) with Solar Roof -->
-                    <rect x="64" y="114" width="82" height="58" rx="4" fill="#FFFFFF"/>
-                    <polygon points="56,116 105,78 154,116" fill="#285943"/>
-                    <!-- Solar Panel on Roof -->
-                    <polygon points="88,92 122,92 132,108 94,108" fill="#6AA6D8" stroke="#FFFFFF" stroke-width="1.5"/>
-                    <rect x="94" y="138" width="22" height="34" rx="3" fill="#A8C9B5"/>
-                    <rect x="74" y="126" width="14" height="14" rx="2" fill="#DCEAF5"/>
-                    <rect x="122" y="126" width="14" height="14" rx="2" fill="#DCEAF5"/>
-
-                    <!-- Eco House 2 (Center-Right) -->
-                    <rect x="234" y="102" width="104" height="68" rx="5" fill="#F7F9F7"/>
-                    <polygon points="224,104 286,62 348,104" fill="#3B7A5E"/>
-                    <polygon points="268,78 308,78 318,96 274,96" fill="#A9C9E8" stroke="#FFFFFF" stroke-width="1.5"/>
-                    <rect x="275" y="132" width="24" height="38" rx="3" fill="#285943"/>
-                    <rect x="248" y="118" width="18" height="18" rx="3" fill="#A9C9E8"/>
-                    <rect x="308" y="118" width="18" height="18" rx="3" fill="#A9C9E8"/>
-
-                    <!-- Trees & Greenery -->
-                    <rect x="184" y="138" width="6" height="32" rx="3" fill="#6D5446"/>
-                    <circle cx="187" cy="126" r="20" fill="#4C8C6A"/>
-                    <circle cx="177" cy="134" r="14" fill="#68A883"/>
-
-                    <rect x="382" y="126" width="7" height="38" rx="3" fill="#6D5446"/>
-                    <circle cx="385" cy="112" r="23" fill="#285943"/>
-                    <circle cx="397" cy="122" r="16" fill="#5B9E7B"/>
-
-                    <circle cx="40" cy="144" r="16" fill="#5B9E7B"/>
-                    <rect x="38" y="154" width="5" height="20" fill="#6D5446"/>
-                </svg>
+                <div class="nx-img-frame">
+                    <img src="{{ asset('images/login-community-day.jpg') }}" alt="NexaNest Community Day" class="nx-community-img nx-img-day">
+                    <img src="{{ asset('images/login-community-night.jpg') }}" alt="NexaNest Community Night" class="nx-community-img nx-img-night">
+                </div>
             </div>
 
             <div class="nx-visual-copy">
                 <span class="nx-visual-pill">
-                    <i class="fas fa-seedling"></i> Smart &amp; Sustainable Neighborhood
+                    <i class="fas fa-seedling"></i> Smart & Sustainable Neighborhood
                 </span>
                 <h2 class="nx-visual-title">Selamat Datang Kembali!</h2>
                 <p class="nx-visual-desc">
@@ -550,7 +757,7 @@
                 <div class="nx-visual-chips">
                     <span class="nx-chip"><i class="fas fa-shield-halved"></i> Akses Aman RT/RW</span>
                     <span class="nx-chip"><i class="fas fa-wallet"></i> Kas Transparan</span>
-                    <span class="nx-chip"><i class="fas fa-file-signature"></i> E-Surat &amp; TTE</span>
+                    <span class="nx-chip"><i class="fas fa-file-signature"></i> E-Surat & TTE</span>
                 </div>
             </div>
         </div>
@@ -571,6 +778,13 @@
                 <div class="nx-alert-status" role="alert">
                     <i class="fas fa-check-circle"></i>
                     <span>{{ session('status') }}</span>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="nx-alert-error" role="alert" style="margin-bottom: 16px;">
+                    <i class="fas fa-triangle-exclamation mt-0.5"></i>
+                    <div>{{ session('error') }}</div>
                 </div>
             @endif
 

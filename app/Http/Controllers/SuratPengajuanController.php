@@ -72,7 +72,11 @@ class SuratPengajuanController extends Controller
             $targetUser = \App\Models\User::findOrFail($validated['target_user_id']);
             $rtNumber = $targetUser->rt_number ?? '006';
 
-            if ($user->rt_number === '000') {
+            if ($user->isAdminRt() && $targetUser->rt_number !== $user->rt_number) {
+                abort(403, 'Akses ditolak: Anda hanya dapat membuat surat atas nama warga di wilayah RT ' . $user->rt_number . '.');
+            }
+
+            if ($user->isAdminRw()) {
                 // Admin RW creates it: starts finished with TTE
                 $tteHash = hash('sha256', Str::random(10) . '|' . $validated['jenis_surat'] . '|' . now()->toDateTimeString());
                 $surat = SuratPengajuan::create([
@@ -120,8 +124,16 @@ class SuratPengajuanController extends Controller
     public function approveRt(SuratPengajuan $surat)
     {
         $user = Auth::user();
-        if (!$user->isAdmin() || $user->rt_number === '000') {
-            abort(403, 'Hanya Admin RT yang dapat menyetujui permohonan ini.');
+        if (!$user->isAdminRt()) {
+            abort(403, 'Hanya Admin RT yang dapat menyetujui permohonan surat tingkat RT.');
+        }
+
+        if ($surat->rt_number !== $user->rt_number) {
+            abort(403, 'Akses ditolak: Surat ini milik warga RT ' . $surat->rt_number . ', bukan wilayah wewenang RT Anda.');
+        }
+
+        if ($surat->status !== 'pending_rt') {
+            return redirect()->route('surat.index')->with('error', 'Status surat tidak dalam antrean persetujuan RT.');
         }
 
         $surat->update([
@@ -156,8 +168,17 @@ class SuratPengajuanController extends Controller
             abort(403, 'Surat belum selesai diproses.');
         }
 
+        $currentUser = Auth::user();
+        if ($currentUser->isWarga() && $surat->user_id !== $currentUser->id) {
+            abort(403, 'Akses ditolak: Anda hanya berhak mengunduh berkas surat milik Anda sendiri.');
+        }
+
+        if ($currentUser->isAdminRt() && $surat->rt_number !== $currentUser->rt_number) {
+            abort(403, 'Akses ditolak: Surat ini milik warga di luar wilayah RT Anda.');
+        }
+
         $user = $surat->user;
-        $warga = $user->warga;
+        $warga = $user ? $user->warga : null;
 
         return view('surat.pdf', compact('surat', 'user', 'warga'));
     }

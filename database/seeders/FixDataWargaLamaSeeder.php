@@ -12,9 +12,9 @@ class FixDataWargaLamaSeeder extends Seeder
         Warga::query()->update([
             'is_kk' => true,
             'kk_id' => null,
-            'rt_number' => '006', 
-            'rw_number' => '018', 
-            'alamat' => 'KOTA BANDUNG, Provinsi JAWA BARAT' 
+            'rt_number' => '006',
+            'rw_number' => '018',
+            'alamat' => 'KOTA BANDUNG, Provinsi JAWA BARAT'
         ]);
     }
 }

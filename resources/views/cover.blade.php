@@ -3,7 +3,7 @@
 @section('title', 'NexaNest — Smart & Green Community')
 
 @section('content')
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
     :root {
@@ -206,8 +206,42 @@
     /* ============ 4. HERO SECTION ============ */
     .nx-hero-section {
         position: relative;
-        padding: 34px 0 68px;
+        padding: 56px 0 86px;
+        min-height: 520px;
+        background-color: #F1F7F3;
+        background-image: linear-gradient(90deg, rgba(240, 249, 255, 0.95) 0%, rgba(240, 249, 255, 0.82) 42%, rgba(240, 249, 255, 0.25) 72%, rgba(240, 249, 255, 0) 100%), url("{{ asset('images/hero-community.jpg') }}");
+        background-size: cover;
+        background-position: right bottom;
+        background-repeat: no-repeat;
         overflow: hidden;
+        display: flex;
+        align-items: center;
+    }
+
+    .nx-kalam-floating {
+        position: absolute;
+        top: 36px;
+        right: 48px;
+        z-index: 5;
+        transform: rotate(-4deg);
+        text-align: center;
+        pointer-events: none;
+    }
+
+    .nx-kalam-line {
+        font-family: 'Kalam', cursive !important;
+        font-size: 1.7rem;
+        font-weight: 700;
+        color: #1B4332;
+        line-height: 1.15;
+        letter-spacing: -0.01em;
+        text-shadow: 0 2px 14px rgba(255, 255, 255, 0.95);
+    }
+
+    .nx-kalam-curve {
+        display: block;
+        margin: 3px auto 0;
+        filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.9));
     }
 
     .nx-welcome-badge {
@@ -545,6 +579,283 @@
             justify-content: center;
         }
     }
+
+    /* ==========================================================================
+       LANDING PAGE (COVER) DARK MODE OVERRIDES (DARK NAVY -> DEEP INDIGO)
+       ========================================================================== */
+    html.dark body {
+        background: #0A0F1E !important;
+        color: #F1F5F9 !important;
+    }
+
+    html.dark .nx-landing {
+        background: #0A0F1E !important;
+        color: #F1F5F9 !important;
+    }
+
+    /* 1. Global NexaNest Brand Logo Dark Mode */
+    html.dark .nexanest-brand-logo .nx-brand-title {
+        color: #F8FAFC !important;
+    }
+
+    html.dark .nexanest-brand-logo .nx-brand-sub {
+        color: #94A3B8 !important;
+    }
+
+    html.dark .nexanest-brand-logo .nx-logo-house {
+        stroke: #38BDF8 !important;
+    }
+
+    html.dark .nexanest-brand-logo .nx-logo-leaf-1 {
+        fill: #10B981 !important;
+        stroke: #059669 !important;
+    }
+
+    html.dark .nexanest-brand-logo .nx-logo-leaf-2 {
+        fill: #34D399 !important;
+        stroke: #10B981 !important;
+    }
+
+    html.dark .nexanest-brand-logo .nx-logo-leaf-vein {
+        stroke: #D1FAE5 !important;
+    }
+
+    /* 2. Top Navbar Landing Page */
+    html.dark .nx-navbar-wrap {
+        background: rgba(13, 20, 38, 0.92) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border-bottom: 1px solid #1E293B !important;
+    }
+
+    html.dark .nx-nav-pill-bar {
+        background: #0D1426 !important;
+        border: 1px solid #1E2D4A !important;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45) !important;
+    }
+
+    html.dark .nx-nav-item-link {
+        color: #CBD5E1 !important;
+    }
+
+    html.dark .nx-nav-item-link:hover {
+        background: rgba(56, 189, 248, 0.12) !important;
+        color: #38BDF8 !important;
+    }
+
+    html.dark .nx-nav-item-link.active {
+        background: #172554 !important;
+        color: #38BDF8 !important;
+    }
+
+    html.dark .nx-brand-tagline {
+        color: #94A3B8 !important;
+    }
+
+    html.dark .nx-search-box input {
+        background: #0F172A !important;
+        border: 1px solid #273654 !important;
+        color: #F1F5F9 !important;
+    }
+
+    html.dark .nx-search-box input:focus {
+        border-color: #38BDF8 !important;
+        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2) !important;
+    }
+
+    html.dark .nx-search-box i {
+        color: #64748B !important;
+    }
+
+    /* 3. Hero Section */
+    html.dark .nx-hero-section {
+        background-color: #0A0F1E !important;
+        background-image: linear-gradient(90deg, rgba(10, 15, 30, 0.96) 0%, rgba(10, 15, 30, 0.88) 42%, rgba(10, 15, 30, 0.45) 72%, rgba(10, 15, 30, 0.2) 100%), url("{{ asset('images/hero-community.jpg') }}") !important;
+    }
+
+    html.dark .nx-welcome-badge {
+        background: rgba(16, 185, 129, 0.16) !important;
+        color: #34D399 !important;
+        border: 1px solid rgba(52, 211, 153, 0.3) !important;
+    }
+
+    html.dark .nx-hero-heading .line-green {
+        color: #F8FAFC !important;
+    }
+
+    html.dark .nx-hero-heading .line-blue {
+        color: #38BDF8 !important;
+    }
+
+    html.dark .nx-hero-desc {
+        color: #94A3B8 !important;
+    }
+
+    html.dark .nx-btn-outline {
+        background: rgba(19, 27, 46, 0.75) !important;
+        border: 1.5px solid #38BDF8 !important;
+        color: #38BDF8 !important;
+    }
+
+    html.dark .nx-btn-outline:hover {
+        background: rgba(56, 189, 248, 0.2) !important;
+        color: #FFFFFF !important;
+        border-color: #38BDF8 !important;
+    }
+
+    html.dark .nx-kalam-line {
+        color: #34D399 !important;
+        text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85) !important;
+    }
+
+    html.dark .nx-kalam-curve path {
+        stroke: #34D399 !important;
+    }
+
+    /* 4. Lekukan Wave Bawah Hero */
+    html.dark .nx-wave-divider svg path {
+        fill: #0A0F1E !important;
+    }
+
+    /* 5. Section "Jelajahi Fitur Unggulan" */
+    html.dark .nx-features-section {
+        background: #0A0F1E !important;
+        background-color: #0A0F1E !important;
+    }
+
+    html.dark .nx-section-title {
+        color: #F1F5F9 !important;
+    }
+
+    html.dark .nx-section-subtitle {
+        color: #94A3B8 !important;
+    }
+
+    html.dark .nx-section-title-line {
+        background: #1E3A5F !important;
+    }
+
+    html.dark .nx-section-header i.fa-seedling {
+        color: #34D399 !important;
+    }
+
+    /* 6. 6 Feature Cards Grid */
+    html.dark .nx-feature-card {
+        background: #131B2E !important;
+        border: 1px solid #1E2D4A !important;
+        color: #F1F5F9 !important;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35) !important;
+    }
+
+    html.dark .nx-feature-card:hover {
+        border-color: #3B82F6 !important;
+        box-shadow: 0 16px 34px rgba(59, 130, 246, 0.18) !important;
+        transform: translateY(-5px);
+        color: #F1F5F9 !important;
+    }
+
+    html.dark .nx-feature-title {
+        color: #F1F5F9 !important;
+    }
+
+    html.dark .nx-feature-desc {
+        color: #94A3B8 !important;
+    }
+
+    /* Kotak Ikon Translucent Gelap Sesuai Warna Masing-Masing */
+    html.dark .nx-accent-green .nx-feature-icon {
+        background: rgba(16, 185, 129, 0.16) !important;
+        color: #34D399 !important;
+    }
+
+    html.dark .nx-accent-blue .nx-feature-icon {
+        background: rgba(56, 189, 248, 0.16) !important;
+        color: #38BDF8 !important;
+    }
+
+    html.dark .nx-accent-red .nx-feature-icon {
+        background: rgba(239, 68, 68, 0.16) !important;
+        color: #F87171 !important;
+    }
+
+    /* Tombol Panah Bulat #1E293B dengan Ikon #38BDF8 */
+    html.dark .nx-feature-arrow,
+    html.dark .nx-accent-green .nx-feature-arrow,
+    html.dark .nx-accent-blue .nx-feature-arrow,
+    html.dark .nx-accent-red .nx-feature-arrow {
+        background: #1E293B !important;
+        color: #38BDF8 !important;
+    }
+
+    html.dark .nx-feature-card:hover .nx-feature-arrow,
+    html.dark .nx-accent-green:hover .nx-feature-arrow,
+    html.dark .nx-accent-blue:hover .nx-feature-arrow,
+    html.dark .nx-accent-red:hover .nx-feature-arrow {
+        background: #2563EB !important;
+        color: #FFFFFF !important;
+    }
+
+    /* 7. Footer Pill */
+    html.dark .nx-footer-pill {
+        background: #131B2E !important;
+        border: 1px solid #1E2D4A !important;
+        color: #CBD5E1 !important;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35) !important;
+    }
+
+    html.dark .nx-footer-pill i {
+        color: #34D399 !important;
+    }
+
+    /* 8. Modals & Dropdown on Landing Page */
+    html.dark .modal-content {
+        background: #131B2E !important;
+        color: #F1F5F9 !important;
+        border: 1px solid #1E2D4A !important;
+    }
+
+    html.dark .modal-header,
+    html.dark .modal-footer {
+        border-color: #1E2D4A !important;
+    }
+
+    html.dark .modal-title {
+        color: #F1F5F9 !important;
+    }
+
+    html.dark .modal-body,
+    html.dark .modal-body p {
+        color: #CBD5E1 !important;
+    }
+
+    html.dark .modal-body .text-muted {
+        color: #94A3B8 !important;
+    }
+
+    html.dark .modal-content .btn-close {
+        filter: invert(1) grayscale(100%) brightness(200%);
+    }
+
+    html.dark .dropdown-menu {
+        background-color: #131B2E !important;
+        border: 1px solid #1E2D4A !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45) !important;
+    }
+
+    html.dark .dropdown-item {
+        color: #E2E8F0 !important;
+    }
+
+    html.dark .dropdown-item:hover {
+        background-color: #1A2744 !important;
+        color: #38BDF8 !important;
+    }
+
+    html.dark .nx-corner-leaf-left,
+    html.dark .nx-corner-leaf-right {
+        opacity: 0.35 !important;
+        filter: brightness(0.65) contrast(1.2);
+    }
 </style>
 
 <div class="nx-landing">
@@ -553,20 +864,8 @@
     <header class="nx-navbar-wrap">
         <div class="container">
             <div class="nx-navbar-inner">
-                <!-- Left: Logo + Brand NexaNest + Tagline -->
-                <a href="{{ url('/') }}" class="nx-brand">
-                    <span class="nx-brand-icon">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                            <path d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V10.5Z" stroke="#285943" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M9 21V14C9 12.8954 9.89543 12 11 12H13C14.1046 12 15 12.8954 15 14V21" stroke="#285943" stroke-width="2"/>
-                            <path d="M13.5 8.5C15.5 7 18 8 18 10.5C16 11.5 13.5 10.5 13.5 8.5Z" fill="#285943"/>
-                        </svg>
-                    </span>
-                    <div>
-                        <h1 class="nx-brand-name">NexaNest</h1>
-                        <p class="nx-brand-tagline">Smart &amp; Green Community</p>
-                    </div>
-                </a>
+                <!-- Left: Logo + Brand NexaNest + Tagline (Vector Resmi Tanpa Kotak Hijau) -->
+                <x-nexanest-logo size="md" />
 
                 <!-- Center: Pill Navigation (Beranda, Fitur Dropdown, Tentang Kami, Bantuan Dropdown) -->
                 <nav class="nx-nav-pill-bar" aria-label="Navigasi Utama">
@@ -610,6 +909,11 @@
                         <input type="text" id="landingSearchInput" placeholder="Cari fitur..." aria-label="Cari fitur">
                     </div>
 
+                    <button type="button" class="nx-theme-toggle-btn me-2" id="nxThemeToggleBtnLanding" title="Beralih Tema (Dark/Light)">
+                        <i class="far fa-moon dark-icon-moon"></i>
+                        <i class="far fa-sun dark-icon-sun"></i>
+                    </button>
+
                     @auth
                         <a href="{{ route('dashboard') }}" class="nx-btn-login">
                             <i class="fas fa-gauge-high"></i> Dashboard
@@ -625,7 +929,15 @@
     </header>
 
     <!-- ==================== 4. HERO SECTION ==================== -->
-    <section class="nx-hero-section">
+    <section class="nx-hero-section" id="beranda">
+        <!-- Floating Handwritten Motto Callout -->
+        <div class="nx-kalam-floating d-none d-md-block">
+            <div class="nx-kalam-line">Bersama Jaga</div>
+            <div class="nx-kalam-line">Lingkungan Kita</div>
+            <svg class="nx-kalam-curve" width="145" height="14" viewBox="0 0 145 14" fill="none">
+                <path d="M4 10C45 3 98 3 141 9" stroke="#1B4332" stroke-width="2.6" stroke-linecap="round"/>
+            </svg>
+        </div>
         <div class="container">
             <div class="row align-items-center g-4">
                 <!-- Left Column: Copywriting & CTA -->
@@ -666,113 +978,8 @@
                     </div>
                 </div>
 
-                <!-- Right Column: Sustainable Neighborhood Landscape Illustration -->
-                <div class="col-lg-6">
-                    <div class="nx-hero-illustration-wrap">
-                        <div class="nx-motto-floating">
-                            <span>Bersama Jaga</span>
-                            <span>Lingkungan Kita</span>
-                            <svg width="140" height="12" viewBox="0 0 140 12" fill="none">
-                                <path d="M4 9C45 2 95 2 136 8" stroke="#285943" stroke-width="2.5" stroke-linecap="round"/>
-                            </svg>
-                        </div>
-
-                        <!-- Integrated Vector Landscape SVG (Houses, Solar/Eco Roofs, Trees, Winding Road, Sun, Clouds) -->
-                        <svg viewBox="0 0 680 400" width="100%" height="100%" aria-label="Ilustrasi Lingkungan Asri NexaNest">
-                            <defs>
-                                <linearGradient id="skyGlow" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stop-color="#DCEAF5" stop-opacity="0.7"/>
-                                    <stop offset="100%" stop-color="#F7F9F7" stop-opacity="0"/>
-                                </linearGradient>
-                                <linearGradient id="hillGrad1" x1="0" y1="0" x2="1" y2="1">
-                                    <stop offset="0%" stop-color="#B9D8C2"/>
-                                    <stop offset="100%" stop-color="#8AB599"/>
-                                </linearGradient>
-                                <linearGradient id="hillGrad2" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stop-color="#9AC2A7"/>
-                                    <stop offset="100%" stop-color="#6A9B7B"/>
-                                </linearGradient>
-                            </defs>
-
-                            <!-- Soft Sun & Clouds -->
-                            <circle cx="215" cy="74" r="26" fill="#FCE592" opacity="0.85"/>
-                            <g fill="#FFFFFF" opacity="0.85">
-                                <ellipse cx="130" cy="78" rx="45" ry="15"/>
-                                <circle cx="112" cy="70" r="18"/>
-                                <circle cx="144" cy="68" r="22"/>
-                                <ellipse cx="430" cy="58" rx="38" ry="12"/>
-                                <circle cx="415" cy="52" r="15"/>
-                                <circle cx="442" cy="50" r="17"/>
-                            </g>
-
-                            <!-- Distant Eco City Skyline Silhouette -->
-                            <g fill="#CFE2EE" opacity="0.65">
-                                <rect x="140" y="150" width="28" height="90" rx="3"/>
-                                <rect x="174" y="132" width="34" height="108" rx="3"/>
-                                <rect x="214" y="162" width="24" height="78" rx="3"/>
-                                <rect x="465" y="140" width="32" height="100" rx="3"/>
-                                <rect x="504" y="156" width="26" height="84" rx="3"/>
-                            </g>
-
-                            <!-- Rolling Green Hills -->
-                            <path d="M10 340 Q180 220 390 255 T670 235 L670 375 L10 375 Z" fill="url(#hillGrad1)"/>
-                            <path d="M60 365 Q280 245 485 275 T675 265 L675 385 L60 385 Z" fill="url(#hillGrad2)"/>
-
-                            <!-- Left Neighborhood House -->
-                            <g transform="translate(230, 178)">
-                                <rect x="10" y="38" width="76" height="58" rx="4" fill="#F4F1EA"/>
-                                <polygon points="2,40 48,6 94,40" fill="#7D98A6"/>
-                                <rect x="38" y="60" width="18" height="36" rx="2" fill="#6B8290"/>
-                                <rect x="18" y="50" width="14" height="16" rx="2" fill="#A9C9E8"/>
-                                <rect x="62" y="50" width="14" height="16" rx="2" fill="#A9C9E8"/>
-                            </g>
-
-                            <!-- Center Main Modern Sustainable Home -->
-                            <g transform="translate(318, 146)">
-                                <rect x="12" y="48" width="118" height="82" rx="5" fill="#FFFFFF"/>
-                                <rect x="12" y="48" width="46" height="82" rx="4" fill="#EBF3F9"/>
-                                <polygon points="4,52 71,4 138,52" fill="#5D7B93"/>
-                                <!-- Solar Panel Accent on Roof -->
-                                <polygon points="75,18 118,46 92,46 56,18" fill="#82A8C9" opacity="0.75"/>
-                                <rect x="26" y="84" width="22" height="46" rx="3" fill="#527261"/>
-                                <rect x="68" y="68" width="22" height="24" rx="3" fill="#A9C9E8"/>
-                                <rect x="98" y="68" width="22" height="24" rx="3" fill="#A9C9E8"/>
-                            </g>
-
-                            <!-- Right Cozy Home -->
-                            <g transform="translate(465, 174)">
-                                <rect x="8" y="36" width="74" height="56" rx="4" fill="#F9F6F0"/>
-                                <polygon points="0,38 45,6 90,38" fill="#8C6D58"/>
-                                <rect x="36" y="58" width="16" height="34" rx="2" fill="#6E5240"/>
-                                <rect x="16" y="48" width="14" height="14" rx="2" fill="#A9C9E8"/>
-                                <rect x="58" y="48" width="14" height="14" rx="2" fill="#A9C9E8"/>
-                            </g>
-
-                            <!-- Lush Green Trees -->
-                            <g transform="translate(155, 142)">
-                                <rect x="34" y="72" width="10" height="48" rx="3" fill="#7C5A43"/>
-                                <circle cx="39" cy="48" r="34" fill="#77AA85"/>
-                                <circle cx="19" cy="62" r="24" fill="#8FBE9C"/>
-                                <circle cx="57" cy="60" r="25" fill="#619470"/>
-                            </g>
-                            <g transform="translate(418, 124)">
-                                <rect x="32" y="78" width="10" height="52" rx="3" fill="#70513C"/>
-                                <circle cx="37" cy="50" r="36" fill="#6B9E7B"/>
-                                <circle cx="18" cy="64" r="25" fill="#86B694"/>
-                                <circle cx="56" cy="62" r="26" fill="#568967"/>
-                            </g>
-
-                            <!-- Winding Neighborhood Road -->
-                            <path d="M355 276 Q395 315 340 385 L465 385 Q475 315 395 276 Z" fill="#E3E9EE"/>
-                            <path d="M374 282 Q405 320 395 380" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="8 8" fill="none"/>
-
-                            <!-- Foreground Bushes & Flowers -->
-                            <circle cx="255" cy="285" r="18" fill="#5E916D"/>
-                            <circle cx="278" cy="292" r="14" fill="#79AC88"/>
-                            <circle cx="515" cy="285" r="22" fill="#5E916D"/>
-                            <circle cx="542" cy="292" r="16" fill="#79AC88"/>
-                        </svg>
-                    </div>
+                <!-- Right Column: Visual Spacer allowing hero-community illustration to shine -->
+                <div class="col-lg-6 d-none d-lg-block position-relative" style="min-height: 380px;">
                 </div>
             </div>
         </div>

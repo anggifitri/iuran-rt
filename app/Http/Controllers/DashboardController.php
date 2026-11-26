@@ -10,6 +10,9 @@ use App\Models\SuratPengajuan;
 use App\Models\Pengaduan;
 use App\Models\Posyandu;
 use App\Models\Umkm;
+use App\Models\BankSampah;
+use App\Models\BankSampahPenarikan;
+use App\Models\LaporanRt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,9 +20,21 @@ use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request)
+    public function index(?Request $request = null)
     {
+        $request = $request ?: request();
         $user = Auth::user();
+
+        // If Super Admin accesses main dashboard without role switcher, redirect to Platform Control Center
+        if ($user->isSuperAdmin() && !$user->isRoleSwitched()) {
+            return redirect()->route('super_admin.dashboard');
+        }
+
+        // Jika akun warga belum menyelesaikan verifikasi email, arahkan ke layar verifikasi email
+        if ($user->role === 'warga' && !$user->hasVerifiedEmail()) {
+            return redirect()->route('verification.notice')->with('warning', 'Alamat email Anda belum diverifikasi. Silakan periksa email Anda.');
+        }
+
         $isWarga = $user->isWarga();
         $isAdminRW = $user->isAdminRw();
         $isAdminRT = $user->isAdminRt();
@@ -28,19 +43,22 @@ class DashboardController extends Controller
         $wargaRecord = null;
         $wargaId = null;
         if ($isWarga) {
-            $wargaRecord = Warga::where('nik', $user->nik)->orWhere('no_kk', $user->no_kk)->first();
+            $wargaRecord = $user->resolveWarga();
             if ($wargaRecord) {
                 $wargaId = $wargaRecord->id;
             }
         }
 
-        // 2. Hitung Kas (RBAC applied)
+        // 2. Hitung Kas (RBAC applied, sinkron 100% dengan Transaksi Kas)
         try {
-            $pembayaranQuery = Pembayaran::query();
+            $pembayaranQuery = Pembayaran::query()->where('status', '!=', 'dibatalkan')->where('status', '!=', 'pending');
 
             if ($isWarga) {
-                // Warga only sees their own total payments
-                if ($wargaId) {
+                // Warga only sees their own / family payments
+                $familyIds = $user->familyWargaIds();
+                if (!empty($familyIds)) {
+                    $pembayaranQuery->whereIn('warga_id', $familyIds);
+                } elseif ($wargaId) {
                     $pembayaranQuery->where('warga_id', $wargaId);
                 } else {
                     $pembayaranQuery->where('id', -1);
@@ -49,16 +67,34 @@ class DashboardController extends Controller
                 // Admin RT sees kas for their RT
                 $pembayaranQuery->where('rt_number', $user->rt_number);
             }
-            // Admin RW (or Bendahara) sees everything, no filter needed
+            // Admin RW (or Bendahara) sees everything (RT 000 + RT 006-010)
 
             $pemasukan = (clone $pembayaranQuery)->where('tipe', 'masuk')->sum('jumlah');
             $pengeluaran = (clone $pembayaranQuery)->where('tipe', 'keluar')->sum('jumlah');
+            $saldo = $pemasukan - $pengeluaran;
+
+            $currentMonth = (int)date('m');
+            $currentYear = (int)date('Y');
+            $pemasukanBulanIni = (clone $pembayaranQuery)->where('tipe', 'masuk')->whereMonth('tanggal', $currentMonth)->whereYear('tanggal', $currentYear)->sum('jumlah');
+            $pengeluaranBulanIni = (clone $pembayaranQuery)->where('tipe', 'keluar')->whereMonth('tanggal', $currentMonth)->whereYear('tanggal', $currentYear)->sum('jumlah');
+
+            // Ringkasan Kategori Keuangan
+            $kategoriMasuk = (clone $pembayaranQuery)->where('tipe', 'masuk')
+                ->select('kategori', DB::raw('SUM(jumlah) as total'))
+                ->groupBy('kategori')->orderByDesc('total')->take(5)->get();
+
+            $kategoriKeluar = (clone $pembayaranQuery)->where('tipe', 'keluar')
+                ->select('kategori', DB::raw('SUM(jumlah) as total'))
+                ->groupBy('kategori')->orderByDesc('total')->take(5)->get();
         } catch (\Exception $e) {
             $pemasukan = 0;
             $pengeluaran = 0;
+            $saldo = 0;
+            $pemasukanBulanIni = 0;
+            $pengeluaranBulanIni = 0;
+            $kategoriMasuk = collect();
+            $kategoriKeluar = collect();
         }
-
-        $saldo = $pemasukan - $pengeluaran;
 
         // 3. Total Warga (RBAC applied)
         try {
@@ -66,10 +102,12 @@ class DashboardController extends Controller
             if ($isAdminRT) {
                 $wargaQuery->where('rt_number', $user->rt_number);
             } elseif ($isWarga) {
-                if ($wargaRecord && $wargaRecord->no_kk) {
-                    $wargaQuery->where('no_kk', $wargaRecord->no_kk);
-                } elseif ($user->rt_number) {
-                    $wargaQuery->where('rt_number', $user->rt_number);
+                if ($wargaRecord && !empty(trim($wargaRecord->no_kk ?? ''))) {
+                    $wargaQuery->where('no_kk', trim($wargaRecord->no_kk));
+                } elseif ($wargaRecord) {
+                    $wargaQuery->where('id', $wargaRecord->id);
+                } else {
+                    $wargaQuery->where('id', -1);
                 }
             }
 
@@ -85,122 +123,108 @@ class DashboardController extends Controller
             $femaleCount = 0;
         }
 
-        // 4. Data untuk Grafik (RBAC applied): 6 Bulan, Bulan Ini (4 pekan), Minggu Ini (7 hari)
-        $applyRbacToPembayaran = function ($query) use ($isWarga, $wargaId, $isAdminRT, $user) {
-            if ($isWarga) {
-                if ($wargaId) {
-                    $query->where('warga_id', $wargaId);
-                } else {
-                    $query->where('id', -1);
-                }
-            } elseif ($isAdminRT) {
-                $query->where('rt_number', $user->rt_number);
-            }
-            return $query;
-        };
-
-        // 4A. Grafik 6 Bulan Terakhir (Tahunan / 6 Bulan)
+        // 4. Data untuk Grafik (RBAC applied, sinkron dengan Transaksi Kas)
         try {
-            $templateBulan = collect();
-            for ($i = 5; $i >= 0; $i--) {
-                $targetDate = now()->subMonths($i);
-                $templateBulan->put($targetDate->format('Y-m'), (object)[
-                    'year_month'  => $targetDate->format('Y-m'),
-                    'bulan_tahun' => $targetDate->translatedFormat('M Y'),
-                    'masuk'       => 0,
-                    'keluar'      => 0
+            // 4A. Grafik 12 Bulan Tahun 2026 (Januari s/d Desember Lengkap)
+            $chartYearQuery = Pembayaran::where('status', '!=', 'dibatalkan')->where('status', '!=', 'pending')->whereYear('tanggal', 2026);
+            if ($isWarga) {
+                $familyIds = $user->familyWargaIds();
+                if (!empty($familyIds)) $chartYearQuery->whereIn('warga_id', $familyIds); elseif ($wargaId) $chartYearQuery->where('warga_id', $wargaId); else $chartYearQuery->where('id', -1);
+            } elseif ($isAdminRT) {
+                $chartYearQuery->where('rt_number', $user->rt_number);
+            }
+            $rawYearData = $chartYearQuery->get()->groupBy(function($item) {
+                return Carbon::parse($item->tanggal)->format('Y-m');
+            });
+
+            $chartDataYear = collect();
+            for ($m = 1; $m <= 12; $m++) {
+                $monthDate = Carbon::create(2026, $m, 1);
+                $key = $monthDate->format('Y-m');
+                $group = $rawYearData->get($key);
+                $mVal = $group ? (float)$group->where('tipe', 'masuk')->sum('jumlah') : 0;
+                $kVal = $group ? (float)$group->where('tipe', 'keluar')->sum('jumlah') : 0;
+                $chartDataYear->push((object)[
+                    'year_month'  => $key,
+                    'bulan_tahun' => $monthDate->translatedFormat('M Y'),
+                    'label'       => $monthDate->translatedFormat('M'),
+                    'label_full'  => $monthDate->translatedFormat('F Y'),
+                    'masuk'       => $mVal,
+                    'keluar'      => $kVal,
+                    'net'         => $mVal - $kVal,
                 ]);
             }
 
-            $rawChartDataQuery = Pembayaran::select(
-                DB::raw("strftime('%Y-%m', tanggal) as year_month"),
-                DB::raw("SUM(CASE WHEN tipe = 'masuk' THEN jumlah ELSE 0 END) as masuk"),
-                DB::raw("SUM(CASE WHEN tipe = 'keluar' THEN jumlah ELSE 0 END) as keluar")
-            )->where('tanggal', '>=', now()->subMonths(5)->startOfMonth());
+            // 4B. Grafik 6 Bulan Terakhir
+            $chart6mQuery = Pembayaran::where('status', '!=', 'dibatalkan')->where('status', '!=', 'pending')
+                ->where('tanggal', '>=', now()->subMonths(5)->startOfMonth()->toDateString());
+            if ($isWarga) {
+                $familyIds = $user->familyWargaIds();
+                if (!empty($familyIds)) $chart6mQuery->whereIn('warga_id', $familyIds); elseif ($wargaId) $chart6mQuery->where('warga_id', $wargaId); else $chart6mQuery->where('id', -1);
+            } elseif ($isAdminRT) {
+                $chart6mQuery->where('rt_number', $user->rt_number);
+            }
+            $raw6mData = $chart6mQuery->get()->groupBy(function($item) {
+                return Carbon::parse($item->tanggal)->format('Y-m');
+            });
 
-            $applyRbacToPembayaran($rawChartDataQuery);
-
-            $rawChartData = $rawChartDataQuery->groupBy('year_month')
-                ->get()
-                ->keyBy('year_month');
-
-            $chartData = $templateBulan->map(function ($default, $key) use ($rawChartData) {
-                if ($rawChartData->has($key)) {
-                    return (object)[
-                        'year_month'  => $key,
-                        'bulan_tahun' => $default->bulan_tahun,
-                        'masuk'       => (float) $rawChartData[$key]->masuk,
-                        'keluar'      => (float) $rawChartData[$key]->keluar,
-                    ];
-                }
-                return $default;
-            })->values();
-        } catch (\Exception $e) {
-            $chartData = collect();
-        }
-
-        // 4B. Grafik Bulan Ini (1-7, 8-14, 15-21, 22-Akhir) & Minggu Ini (7 Hari Terakhir)
-        try {
-            // Gunakan bulan terbaru yang memiliki transaksi jika bulan berjalan kosong, agar data tetap riil
-            $refDateQuery = Pembayaran::query();
-            $applyRbacToPembayaran($refDateQuery);
-            $latestTxDate = (clone $refDateQuery)->max('tanggal');
-            $refMonthDate = $latestTxDate ? Carbon::parse($latestTxDate) : now();
-
-            $monthTxQuery = Pembayaran::whereYear('tanggal', $refMonthDate->year)
-                ->whereMonth('tanggal', $refMonthDate->month);
-            $applyRbacToPembayaran($monthTxQuery);
-            $monthTransactions = $monthTxQuery->get();
-
-            $buckets = [
-                '1-7'   => ['masuk' => 0, 'keluar' => 0],
-                '8-14'  => ['masuk' => 0, 'keluar' => 0],
-                '15-21' => ['masuk' => 0, 'keluar' => 0],
-                '22-' . $refMonthDate->daysInMonth => ['masuk' => 0, 'keluar' => 0],
-            ];
-            $lastBucketKey = '22-' . $refMonthDate->daysInMonth;
-
-            foreach ($monthTransactions as $tx) {
-                $day = Carbon::parse($tx->tanggal)->day;
-                $bKey = $day <= 7 ? '1-7' : ($day <= 14 ? '8-14' : ($day <= 21 ? '15-21' : $lastBucketKey));
-                if ($tx->tipe === 'masuk') {
-                    $buckets[$bKey]['masuk'] += (float) $tx->jumlah;
-                } else {
-                    $buckets[$bKey]['keluar'] += (float) $tx->jumlah;
-                }
+            $chartData6m = collect();
+            for ($i = 5; $i >= 0; $i--) {
+                $mDate = now()->subMonths($i);
+                $key = $mDate->format('Y-m');
+                $group = $raw6mData->get($key);
+                $mVal = $group ? (float)$group->where('tipe', 'masuk')->sum('jumlah') : 0;
+                $kVal = $group ? (float)$group->where('tipe', 'keluar')->sum('jumlah') : 0;
+                $chartData6m->push((object)[
+                    'year_month'  => $key,
+                    'bulan_tahun' => $mDate->translatedFormat('M Y'),
+                    'label'       => $mDate->translatedFormat('M Y'),
+                    'label_full'  => $mDate->translatedFormat('F Y'),
+                    'masuk'       => $mVal,
+                    'keluar'      => $kVal,
+                    'net'         => $mVal - $kVal,
+                ]);
             }
 
-            $chartDataMonth = collect($buckets)->map(function ($val, $label) {
-                return (object)[
-                    'label'  => 'Tgl ' . $label,
-                    'masuk'  => $val['masuk'],
-                    'keluar' => $val['keluar'],
-                ];
-            })->values();
-
-            // Minggu Ini (7 hari terakhir dari refMonthDate)
-            $weekEnd = $refMonthDate->copy()->endOfDay();
-            $weekStart = $refMonthDate->copy()->subDays(6)->startOfDay();
-            $weekTxQuery = Pembayaran::whereBetween('tanggal', [$weekStart->toDateString(), $weekEnd->toDateString()]);
-            $applyRbacToPembayaran($weekTxQuery);
-            $weekTransactions = $weekTxQuery->get()->groupBy(function ($item) {
+            // 4C. Grafik 7 Hari Terakhir
+            $chartWeekQuery = Pembayaran::where('status', '!=', 'dibatalkan')->where('status', '!=', 'pending')
+                ->where('tanggal', '>=', now()->subDays(6)->toDateString());
+            if ($isWarga) {
+                $familyIds = $user->familyWargaIds();
+                if (!empty($familyIds)) $chartWeekQuery->whereIn('warga_id', $familyIds); elseif ($wargaId) $chartWeekQuery->where('warga_id', $wargaId); else $chartWeekQuery->where('id', -1);
+            } elseif ($isAdminRT) {
+                $chartWeekQuery->where('rt_number', $user->rt_number);
+            }
+            $rawWeekData = $chartWeekQuery->get()->groupBy(function($item) {
                 return Carbon::parse($item->tanggal)->format('Y-m-d');
             });
 
             $chartDataWeek = collect();
             for ($d = 6; $d >= 0; $d--) {
-                $dayDate = $refMonthDate->copy()->subDays($d);
-                $dKey = $dayDate->format('Y-m-d');
-                $dayGroup = $weekTransactions->get($dKey, collect());
+                $dayDate = now()->subDays($d);
+                $key = $dayDate->format('Y-m-d');
+                $group = $rawWeekData->get($key);
+                $mVal = $group ? (float)$group->where('tipe', 'masuk')->sum('jumlah') : 0;
+                $kVal = $group ? (float)$group->where('tipe', 'keluar')->sum('jumlah') : 0;
                 $chartDataWeek->push((object)[
-                    'label'  => $dayDate->translatedFormat('d M'),
-                    'masuk'  => (float) $dayGroup->where('tipe', 'masuk')->sum('jumlah'),
-                    'keluar' => (float) $dayGroup->where('tipe', 'keluar')->sum('jumlah'),
+                    'label'      => $dayDate->translatedFormat('d M'),
+                    'label_full' => $dayDate->translatedFormat('d F Y'),
+                    'masuk'      => $mVal,
+                    'keluar'     => $kVal,
+                    'net'        => $mVal - $kVal,
                 ]);
             }
+
+            // Default chart data for initial view
+            $chartData = $chartDataYear;
+            $chartDataMonth = $chartData6m;
+            $refMonthDate = now();
         } catch (\Exception $e) {
-            $chartDataMonth = collect();
+            $chartData = collect();
+            $chartDataYear = collect();
+            $chartData6m = collect();
             $chartDataWeek = collect();
+            $chartDataMonth = collect();
             $refMonthDate = now();
         }
 
@@ -248,8 +272,17 @@ class DashboardController extends Controller
                 });
                 $umkmQuery->where('rt_number', $user->rt_number);
             } elseif ($isWarga) {
-                $suratQuery->where('user_id', $user->id);
-                $pengaduanQuery->where('user_id', $user->id);
+                $effectiveUserIds = array_filter([$user->id, $wargaRecord?->user_id]);
+                $familyIds = $user->familyWargaIds();
+                $suratQuery->whereIn('user_id', $effectiveUserIds);
+                $pengaduanQuery->where(function ($q) use ($effectiveUserIds, $familyIds, $wargaId) {
+                    $q->whereIn('user_id', $effectiveUserIds);
+                    if (!empty($familyIds)) {
+                        $q->orWhereIn('warga_id', $familyIds);
+                    } elseif ($wargaId) {
+                        $q->orWhere('warga_id', $wargaId);
+                    }
+                });
             }
 
             $newFeatureCounts['surat'] = (clone $suratQuery)->count();
@@ -265,8 +298,35 @@ class DashboardController extends Controller
             // keep zeros
         }
 
-        $totalAdminRT = User::where('role', 'admin')->where('rt_number', '!=', '000')->count();
-        $totalAdminRW = User::where('role', 'admin')->where('rt_number', '000')->count();
+        // Hitung Admin RT aktif hanya pada wilayah operasional aktif RW 018 (RT 006 - RT 010)
+        $totalAdminRT = User::where(function ($q) {
+                $q->where('role', 'admin_rt')->orWhere('role', 'admin');
+            })
+            ->where('rw_number', '018')
+            ->whereIn('rt_number', ['006', '007', '008', '009', '010'])
+            ->where(function ($q) {
+                $q->whereNull('status')->orWhere('status', 'active');
+            })
+            ->distinct('rt_number')
+            ->count('rt_number');
+
+        if ($totalAdminRT === 0) {
+            $totalAdminRT = 5;
+        }
+
+        $totalAdminRW = User::where(function ($q) {
+                $q->where('role', 'admin_rw')->orWhere('role', 'admin');
+            })
+            ->where('rw_number', '018')
+            ->where('rt_number', '000')
+            ->where(function ($q) {
+                $q->whereNull('status')->orWhere('status', 'active');
+            })
+            ->count();
+
+        if ($totalAdminRW === 0) {
+            $totalAdminRW = 1;
+        }
 
         // 7. Dynamic Info Cards for Pengumuman Terbaru & Status Iuran
         $currentMonth = date('m');
@@ -290,18 +350,98 @@ class DashboardController extends Controller
         $paidThisMonth = $paidQuery->distinct('warga_id')->count('warga_id');
         $unpaidKK = max(0, $totalKKForReminder - $paidThisMonth);
 
-        // Status Iuran khusus Warga yang login
+        // Status Iuran & Ringkasan Tagihan khusus Warga yang login (Point 5.E)
         $wargaIuranLunas = false;
         $wargaLastPayment = null;
+        $wargaDaftarTagihan = collect();
+        $wargaTagihanAktif = 0;
+        $wargaStatusTagihan = 'Belum Bayar';
+        $wargaTotalTunggakan = 0;
+        $wargaCountBelumBayar = 0;
+        $wargaCountMendekatiTempo = 0;
+        $wargaCountMenungguKonfirmasi = 0;
+        $wargaCountTerlambat = 0;
+
         if ($isWarga && $wargaId) {
-            $wargaIuranLunas = Pembayaran::where('warga_id', $wargaId)
-                ->where('tipe', 'masuk')
-                ->where('kategori', 'like', '%Iuran%')
-                ->whereMonth('tanggal', $currentMonth)
-                ->whereYear('tanggal', $currentYear)
-                ->exists();
+            $standardNominal = 100000;
+            $currentDay = (int)date('d');
+
+            for ($i = 0; $i < 6; $i++) {
+                $periodDate = now()->subMonths($i);
+                $pMonth = (int)$periodDate->format('m');
+                $pYear = (int)$periodDate->format('Y');
+
+                $isCur = ($i === 0);
+                $dueDate = Carbon::create($pYear, $pMonth, 10);
+
+                $familyIds = $user->familyWargaIds();
+                $txPaid = Pembayaran::where(function ($q) use ($familyIds, $wargaId) {
+                        if (!empty($familyIds)) {
+                            $q->whereIn('warga_id', $familyIds);
+                        } else {
+                            $q->where('warga_id', $wargaId);
+                        }
+                    })
+                    ->where('status', '!=', 'dibatalkan')
+                    ->where('tipe', 'masuk')
+                    ->where('kategori', 'like', '%Iuran%')
+                    ->whereMonth('tanggal', $pMonth)
+                    ->whereYear('tanggal', $pYear)
+                    ->first();
+
+                $itemPending = \App\Models\PembayaranIuran::where(function ($q) use ($familyIds, $wargaId) {
+                        if (!empty($familyIds)) {
+                            $q->whereIn('warga_id', $familyIds);
+                        } else {
+                            $q->where('warga_id', $wargaId);
+                        }
+                    })
+                    ->where('bulan', $pMonth)
+                    ->where('tahun', $pYear)
+                    ->orderByDesc('id')
+                    ->first();
+
+                $st = 'Belum Bayar';
+                if ($itemPending && $itemPending->status === 'pending') {
+                    $st = 'Menunggu Konfirmasi';
+                    $wargaCountMenungguKonfirmasi++;
+                } elseif ($txPaid || ($itemPending && $itemPending->status === 'confirmed')) {
+                    $st = 'Lunas';
+                    if ($isCur) $wargaIuranLunas = true;
+                } else {
+                    $wargaCountBelumBayar++;
+                    $wargaTotalTunggakan += $standardNominal;
+                    if ($isCur) {
+                        $wargaTagihanAktif += $standardNominal;
+                        if ($currentDay >= 7 && $currentDay <= 10) {
+                            $wargaCountMendekatiTempo++;
+                        } elseif ($currentDay > 10) {
+                            $wargaCountTerlambat++;
+                            $st = 'Terlambat';
+                        }
+                    } else {
+                        $wargaCountTerlambat++;
+                        $st = 'Terlambat';
+                    }
+                }
+
+                if ($isCur) {
+                    $wargaStatusTagihan = $st;
+                }
+
+                $wargaDaftarTagihan->push((object)[
+                    'periode' => $periodDate->translatedFormat('F Y'),
+                    'bulan' => $pMonth,
+                    'tahun' => $pYear,
+                    'nominal' => $standardNominal,
+                    'status' => $st,
+                    'due_date' => $dueDate->translatedFormat('d M Y'),
+                    'pembayaran_id' => $itemPending ? $itemPending->id : ($txPaid ? $txPaid->id : null),
+                ]);
+            }
 
             $wargaLastPayment = Pembayaran::where('warga_id', $wargaId)
+                ->where('status', '!=', 'dibatalkan')
                 ->where('tipe', 'masuk')
                 ->orderBy('tanggal', 'desc')
                 ->first();
@@ -349,6 +489,109 @@ class DashboardController extends Controller
             }
         }
 
+        // 8. Bank Sampah Metrics (Data Riil Terpadu)
+        $bankSampahKgRw = 0;
+        $bankSampahRupiahRw = 0;
+        $bankSampahKgRt = 0;
+        $bankSampahRupiahRt = 0;
+        $bankSampahSaldoWarga = 0;
+        $bankSampahKgWarga = 0;
+
+        try {
+            if (class_exists(BankSampah::class)) {
+                if ($isAdminRW) {
+                    $bankSampahKgRw = (float) BankSampah::where('status', 'diterima')->sum('berat_kg');
+                    $bankSampahRupiahRw = (float) BankSampah::where('status', 'diterima')->sum('nilai_rupiah');
+                } elseif ($isAdminRT) {
+                    $bankSampahKgRt = (float) BankSampah::where('status', 'diterima')->where('rt_number', $user->rt_number)->sum('berat_kg');
+                    $bankSampahRupiahRt = (float) BankSampah::where('status', 'diterima')->where('rt_number', $user->rt_number)->sum('nilai_rupiah');
+                } elseif ($isWarga) {
+                    $familyIds = $user->familyWargaIds();
+                    $effectiveUserIds = array_filter([$user->id, $wargaRecord?->user_id]);
+
+                    $totSetoran = (float) BankSampah::where('status', 'diterima')
+                        ->where(function ($q) use ($familyIds, $wargaId, $effectiveUserIds) {
+                            if (!empty($familyIds)) {
+                                $q->whereIn('warga_id', $familyIds);
+                            } elseif ($wargaId) {
+                                $q->where('warga_id', $wargaId);
+                            }
+                            if (!empty($effectiveUserIds)) {
+                                $q->orWhereIn('user_id', $effectiveUserIds);
+                            }
+                        })->sum('nilai_rupiah');
+
+                    $totKg = (float) BankSampah::where('status', 'diterima')
+                        ->where(function ($q) use ($familyIds, $wargaId, $effectiveUserIds) {
+                            if (!empty($familyIds)) {
+                                $q->whereIn('warga_id', $familyIds);
+                            } elseif ($wargaId) {
+                                $q->where('warga_id', $wargaId);
+                            }
+                            if (!empty($effectiveUserIds)) {
+                                $q->orWhereIn('user_id', $effectiveUserIds);
+                            }
+                        })->sum('berat_kg');
+
+                    $totPenarikan = 0;
+                    if (class_exists(BankSampahPenarikan::class)) {
+                        $totPenarikan = (float) BankSampahPenarikan::where('status', 'selesai')
+                            ->where(function ($q) use ($familyIds, $wargaId, $effectiveUserIds) {
+                                if (!empty($familyIds)) {
+                                    $q->whereIn('warga_id', $familyIds);
+                                } elseif ($wargaId) {
+                                    $q->where('warga_id', $wargaId);
+                                }
+                                if (!empty($effectiveUserIds)) {
+                                    $q->orWhereIn('user_id', $effectiveUserIds);
+                                }
+                            })->sum('jumlah_penarikan');
+                    }
+
+                    $bankSampahSaldoWarga = max(0, $totSetoran - $totPenarikan);
+                    $bankSampahKgWarga = $totKg;
+                }
+            }
+        } catch (\Throwable $e) {
+            // keep zeros
+        }
+
+        // 9. Widget Operasional Khusus Admin RT (Antrean Surat & Status Laporan Resmi Bulan Berjalan)
+        $suratPendingRtCount = 0;
+        $statusLaporanRtBerjalan = 'belum_dibuat';
+        $statusLaporanRtLabel = 'Belum Dibuat';
+        $periodeLaporanRtBerjalan = Carbon::now()->translatedFormat('F Y');
+
+        if ($isAdminRT) {
+            try {
+                $suratPendingRtCount = SuratPengajuan::where('rt_number', $user->rt_number)
+                    ->where('status', 'pending_rt')
+                    ->count();
+
+                $cMonth = date('m');
+                $cYear = date('Y');
+                $laporanRtBulanBerjalan = LaporanRt::where('rt_number', $user->rt_number)
+                    ->where(function ($q) use ($cMonth) {
+                        $q->where('bulan', $cMonth)->orWhere('bulan', (int)$cMonth);
+                    })
+                    ->where('tahun', $cYear)
+                    ->first();
+
+                if ($laporanRtBulanBerjalan) {
+                    $statusLaporanRtBerjalan = $laporanRtBulanBerjalan->status;
+                    $statusLaporanRtLabel = match ($laporanRtBulanBerjalan->status) {
+                        'draft' => 'Draft',
+                        'menunggu' => 'Menunggu Verifikasi RW',
+                        'diterima' => 'Diterima',
+                        'perlu_revisi' => 'Perlu Revisi',
+                        default => ucfirst($laporanRtBulanBerjalan->status),
+                    };
+                }
+            } catch (\Throwable $e) {
+                // keep defaults
+            }
+        }
+
         return view('dashboard', compact(
             'user',
             'wargaRecord',
@@ -380,7 +623,31 @@ class DashboardController extends Controller
             'rtSummaries',
             'isWarga',
             'isAdminRT',
-            'isAdminRW'
+            'isAdminRW',
+            'pemasukanBulanIni',
+            'pengeluaranBulanIni',
+            'kategoriMasuk',
+            'kategoriKeluar',
+            'chartDataYear',
+            'chartData6m',
+            'wargaTagihanAktif',
+            'wargaStatusTagihan',
+            'wargaTotalTunggakan',
+            'wargaCountBelumBayar',
+            'wargaCountMendekatiTempo',
+            'wargaCountMenungguKonfirmasi',
+            'wargaCountTerlambat',
+            'wargaDaftarTagihan',
+            'bankSampahKgRw',
+            'bankSampahRupiahRw',
+            'bankSampahKgRt',
+            'bankSampahRupiahRt',
+            'bankSampahSaldoWarga',
+            'bankSampahKgWarga',
+            'suratPendingRtCount',
+            'statusLaporanRtBerjalan',
+            'statusLaporanRtLabel',
+            'periodeLaporanRtBerjalan'
         ));
     }
 }

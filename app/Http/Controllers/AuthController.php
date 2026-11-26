@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PlatformSetting;
 use App\Models\User;
 use App\Models\Pembayaran;
+use App\Services\AuditLogger;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -24,22 +31,125 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required|string|min:6|confirmed',
+        ], [
+            'email.required' => 'Alamat email wajib diisi.',
+            'email.email' => 'Format alamat email tidak valid.',
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $status = Password::broker()->sendResetLink(
+            $request->only('email')
+        );
 
-        if (! $user) {
-            return back()->withErrors(['email' => 'Email tidak ditemukan.'])->withInput();
+        if ($status === Password::RESET_LINK_SENT) {
+            return back()->with('status', 'Kami telah mengirimkan tautan pemulihan kata sandi ke email Anda. Silakan periksa kotak masuk atau spam.');
         }
 
-        $user->password = Hash::make($request->password);
-        $user->save();
+        return back()->withErrors(['email' => 'Alamat email tidak terdaftar dalam sistem NexaNest.'])->withInput();
+    }
 
-        // Auto login after password reset so they go straight to dashboard
-        Auth::login($user, true);
+    public function showResetPassword(Request $request, $token = null)
+    {
+        return view('auth.reset-password', [
+            'token' => $token,
+            'email' => $request->email,
+        ]);
+    }
 
-        return redirect()->route('dashboard')->with('success', 'Password berhasil diperbarui. Anda telah otomatis masuk ke dashboard!');
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|string|min:8|confirmed',
+        ], [
+            'token.required' => 'Token pemulihan kata sandi tidak valid atau telah kedaluwarsa.',
+            'email.required' => 'Alamat email wajib diisi.',
+            'email.email' => 'Format alamat email tidak valid.',
+            'password.required' => 'Kata sandi baru wajib diisi.',
+            'password.min' => 'Kata sandi minimal terdiri dari 8 karakter.',
+            'password.confirmed' => 'Konfirmasi kata sandi baru tidak cocok.',
+        ]);
+
+        $status = Password::broker()->reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password),
+                    'remember_token' => Str::random(60),
+                ])->save();
+
+                AuditLogger::logPasswordChange($user);
+                event(new PasswordReset($user));
+            }
+        );
+
+        if ($status === Password::PASSWORD_RESET) {
+            return redirect()->route('login')->with('success', 'Kata sandi Anda berhasil diperbarui! Silakan masuk dengan kata sandi baru Anda.');
+        }
+
+        $errorMessage = match($status) {
+            Password::INVALID_USER => 'Alamat email tidak ditemukan dalam sistem NexaNest.',
+            Password::INVALID_TOKEN => 'Tautan pemulihan kata sandi tidak valid atau telah kedaluwarsa.',
+            default => 'Gagal memperbarui kata sandi. Silakan coba kembali.'
+        };
+
+        return back()->withErrors(['email' => $errorMessage])->withInput($request->only('email'));
+    }
+
+    public function showVerificationNotice(Request $request)
+    {
+        if ($request->user() && $request->user()->hasVerifiedEmail()) {
+            return redirect()->route('dashboard');
+        }
+
+        return view('auth.verify-email');
+    }
+
+    public function verifyEmail(Request $request, $id, $hash)
+    {
+        $user = User::findOrFail($id);
+
+        if (!hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+            abort(403, 'Tautan verifikasi email tidak valid atau telah kedaluwarsa.');
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            return redirect()->route('dashboard')->with('info', 'Alamat email Anda sudah terverifikasi sebelumnya.');
+        }
+
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($user));
+
+            AuditLogger::log(
+                'EMAIL_VERIFIED',
+                'Autentikasi & Keamanan',
+                $user->id,
+                "Warga {$user->name} ({$user->email}) berhasil menyelesaikan verifikasi email.",
+                null,
+                ['email' => $user->email, 'verified_at' => now()->toDateTimeString()],
+                $user->rt_number,
+                'success',
+                'VERIFIKASI'
+            );
+        }
+
+        return redirect()->route('dashboard')->with('success', 'Selamat! Alamat email Anda berhasil diverifikasi. Akun NexaNest Anda kini aktif sepenuhnya.');
+    }
+
+    public function resendVerificationEmail(Request $request)
+    {
+        $user = $request->user();
+
+        if ($user && $user->hasVerifiedEmail()) {
+            return redirect()->route('dashboard');
+        }
+
+        if ($user) {
+            $user->sendEmailVerificationNotification();
+        }
+
+        return back()->with('status', 'verification-link-sent')
+                     ->with('success', 'Tautan verifikasi email yang baru telah dikirimkan ke alamat email Anda.');
     }
 
     public function login(Request $request)
@@ -49,12 +159,57 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
-        if (Auth::attempt($credentials, true)) {
+        $allowRememberMe = PlatformSetting::get('allow_remember_me', '1') === '1';
+        $remember = $request->boolean('remember') && $allowRememberMe;
+
+        if (Auth::attempt($credentials, $remember)) {
+            $user = Auth::user();
+
+            if (isset($user->status) && $user->status === 'suspended') {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return back()->withErrors(['email' => 'Akun Anda sedang ditangguhkan. Silakan hubungi pengelola platform.']);
+            }
+
+            $now = now()->timestamp;
+            $tokenLifetime = (int) PlatformSetting::get('api_token_lifetime_minutes', 15);
+
             $request->session()->regenerate();
-            return redirect()->intended(route('dashboard'))->with('success', 'Selamat datang kembali!');
+            session([
+                'login_time' => $now,
+                'last_activity_time' => $now,
+                'remember_me' => $remember,
+                'access_token' => Str::random(64),
+                'access_token_expires_at' => now()->addMinutes($tokenLifetime)->timestamp,
+                'refresh_token' => Str::random(64),
+            ]);
+
+            $user->update([
+                'last_active_at' => now(),
+                'last_login_at' => now(),
+            ]);
+
+            $rememberNote = $remember ? ' (Ingat Saya: Aktif)' : ' (Sesi Standar)';
+            AuditLogger::logLogin($user, true, 'Autentikasi kredensial berhasil' . $rememberNote);
+
+            // Cek verifikasi email untuk pendaftar baru warga
+            if ($user->role === 'warga' && !$user->hasVerifiedEmail()) {
+                return redirect()->route('verification.notice')->with('warning', 'Alamat email Anda belum diverifikasi. Silakan periksa email Anda atau kirim ulang tautan verifikasi.');
+            }
+
+            if ($user->isSuperAdmin() && !$user->isRoleSwitched()) {
+                return redirect()->route('super_admin.dashboard')->with('success', 'Selamat datang kembali, ' . $user->name . '! Platform Control Center siap digunakan.');
+            }
+
+            return redirect()->intended(route('dashboard'))->with('success', 'Selamat datang kembali, ' . $user->name . '!');
         }
 
-        return back()->withErrors(['email' => 'Email atau password salah.']);
+        // Log failed login attempt
+        $targetUser = User::where('email', $request->email)->first();
+        AuditLogger::logLogin($targetUser, false, "Email sasaran: {$request->email}");
+
+        return back()->withErrors(['email' => 'Email atau kata sandi tidak cocok. Silakan periksa kembali data Anda.'])->withInput();
     }
 
     public function showRegister()
@@ -81,7 +236,14 @@ class AuthController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                'unique:users',
+                'regex:/^[a-zA-Z0-9._%+-]+@gmail\.com$/i',
+            ],
             'password' => 'required|string|min:6|confirmed',
             'blok_rumah' => 'required|string|max:50',
             'phone' => 'nullable|string|max:20',
@@ -95,6 +257,10 @@ class AuthController extends Controller
             'is_kk' => 'required|boolean',
             'kk_id' => 'nullable|exists:wargas,id',
             'address' => 'required|string',
+        ], [
+            'email.regex' => 'Alamat email wajib menggunakan domain @gmail.com (contoh: nama@gmail.com).',
+            'email.email' => 'Format alamat email tidak valid.',
+            'email.unique' => 'Alamat email ini sudah terdaftar. Silakan gunakan email lain atau masuk ke akun Anda.',
         ]);
 
         $profilePhotoPath = null;
@@ -102,7 +268,7 @@ class AuthController extends Controller
             $profilePhotoPath = $request->file('profile_photo')->store('warga_photos', 'public');
         }
 
-        // 1. Create login account (User)
+        // 1. Create login account (User) — pendaftar baru mandiri wajib verifikasi email (email_verified_at = null)
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -114,6 +280,7 @@ class AuthController extends Controller
             'no_kk' => $request->no_kk,
             'nik' => $request->nik,
             'profile_photo' => $profilePhotoPath,
+            'email_verified_at' => null,
         ]);
 
         // 2. Create profile record (Warga)
@@ -133,15 +300,40 @@ class AuthController extends Controller
             'alamat' => $request->address,
         ]);
 
+        // 3. Picu pengiriman notifikasi email verifikasi akun baru
+        event(new Registered($user));
+
+        // 4. Autentikasi sesi pendaftar
         Auth::login($user, true);
-        return redirect()->route('dashboard')->with('success', 'Pendaftaran berhasil!');
+
+        $now = now()->timestamp;
+        $tokenLifetime = (int) PlatformSetting::get('api_token_lifetime_minutes', 15);
+        $request->session()->regenerate();
+        session([
+            'login_time' => $now,
+            'last_activity_time' => $now,
+            'remember_me' => true,
+            'access_token' => Str::random(64),
+            'access_token_expires_at' => now()->addMinutes($tokenLifetime)->timestamp,
+            'refresh_token' => Str::random(64),
+        ]);
+
+        return redirect()->route('verification.notice')->with('success', 'Pendaftaran berhasil! Tautan verifikasi email telah dikirimkan ke ' . $user->email . '. Silakan periksa kotak masuk atau folder spam email Anda.');
     }
 
     public function logout(Request $request)
     {
+        $user = Auth::user();
+        if ($user) {
+            AuditLogger::logLogout($user);
+            // Invalidate persistent remember token so it cannot be re-used
+            $user->setRememberToken(null);
+            $user->save();
+        }
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/')->with('success', 'Anda telah logout.');
+        return redirect('/')->with('success', 'Anda telah keluar dari akun. Sampai jumpa kembali!');
     }
 }

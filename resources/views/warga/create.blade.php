@@ -54,6 +54,11 @@
                 <input type="text" name="nomor_hp" value="{{ old('nomor_hp') }}" class="form-control" required placeholder="0812...">
             </div>
             <div class="col-md-4">
+                <label class="form-label">Alamat Email Akun (@gmail.com)</label>
+                <input type="email" name="email" value="{{ old('email') }}" class="form-control" placeholder="contoh: nama@gmail.com">
+                <small class="text-muted d-block mt-1" style="font-size: 0.72rem;"><i class="fas fa-info-circle me-1"></i> Opsional untuk akun login warga. Wajib domain @gmail.com.</small>
+            </div>
+            <div class="col-md-4">
                 <label class="form-label">Jenis Kelamin <span class="text-danger">*</span></label>
                 <select name="gender" class="form-select" required>
                     <option value="">Pilih Gender...</option>

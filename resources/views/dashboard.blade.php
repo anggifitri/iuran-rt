@@ -3,11 +3,17 @@
 @section('title', 'Dashboard — NexaNest Smart & Green Community')
 
 @section('content')
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Kalam:wght@700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 @php
-    $firstName = explode(' ', trim($user->name))[0] ?? $user->name;
+    $isSimulated = $user->isSuperAdmin() && $user->isRoleSwitched();
+    $simCtx = $isSimulated ? $user->getRoleSwitchContext() : null;
+    $simulatedTargetName = $simCtx['target_user_name'] ?? null;
+    $dashboardDisplayName = $simulatedTargetName ?: $user->name;
+    $firstName = explode(' ', trim($dashboardDisplayName))[0] ?? $dashboardDisplayName;
+    $dashboardProfilePhotoUrl = $user->profile_photo_url;
+
     $roleLabel = $isAdminRW
         ? 'Admin RW 018'
         : ($isAdminRT
@@ -279,27 +285,61 @@
         position: relative;
     }
 
-    .nx-emergency-btn {
-        width: 100%;
-        background: var(--nx-danger-soft);
-        color: var(--nx-danger);
-        border: 1px solid rgba(224, 83, 83, 0.22);
-        border-radius: 14px;
-        padding: 11px 14px;
-        font-weight: 700;
-        font-size: 0.86rem;
-        display: flex;
+    /* ============ TOPBAR EMERGENCY BUTTON & THEME TOGGLE ============ */
+    .nx-topbar-emergency-btn {
+        display: inline-flex;
         align-items: center;
-        justify-content: center;
-        gap: 10px;
+        gap: 6px;
+        padding: 7px 15px;
+        border-radius: 999px;
+        background: #FFF1F2;
+        color: #E11D48;
+        border: 1px solid #FECDD3;
+        font-size: 0.82rem;
+        font-weight: 700;
         transition: all 0.2s ease;
         cursor: pointer;
-        margin-bottom: 10px;
+        box-shadow: 0 2px 8px rgba(225, 29, 72, 0.12);
+        text-decoration: none;
+        white-space: nowrap;
+    }
+    .nx-topbar-emergency-btn:hover {
+        background: #E11D48;
+        color: #FFFFFF;
+        border-color: #E11D48;
+        box-shadow: 0 4px 14px rgba(225, 29, 72, 0.28);
+        transform: translateY(-1px);
+    }
+    .nx-topbar-emergency-btn i {
+        font-size: 0.95rem;
     }
 
-    .nx-emergency-btn:hover {
-        background: #fbd5d5;
+    .nx-theme-toggle-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: var(--nx-bg);
+        border: 1px solid var(--nx-border);
+        color: var(--nx-forest);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        padding: 0;
+        flex-shrink: 0;
+    }
+    .nx-theme-toggle-btn:hover {
+        background: var(--nx-mint-soft);
+        color: var(--nx-forest-dark);
         transform: translateY(-1px);
+    }
+    .dark-icon-sun {
+        display: none !important;
+    }
+    .dark-icon-moon {
+        display: inline-block !important;
     }
 
     .nx-logout-btn {
@@ -495,7 +535,11 @@
 
     /* ============ 6. WELCOME BANNER / HERO SECTION ============ */
     .nx-hero {
-        background: linear-gradient(125deg, #DCEAF5 0%, #E7F3EC 48%, #DCEBDD 100%);
+        background-color: #E8F3EE;
+        background-image: linear-gradient(90deg, rgba(232, 246, 240, 0.96) 0%, rgba(232, 246, 240, 0.75) 45%, rgba(232, 246, 240, 0.35) 75%, rgba(232, 246, 240, 0.15) 100%), url("{{ asset('images/dashboard-banner.jpg') }}");
+        background-size: cover;
+        background-position: right center;
+        background-repeat: no-repeat;
         border-radius: 22px;
         padding: 26px 30px;
         position: relative;
@@ -508,10 +552,79 @@
         justify-content: space-between;
     }
 
+    html.dark .nx-hero {
+        background-color: #0F172A !important;
+        background-image: linear-gradient(90deg, rgba(15, 23, 42, 0.90) 0%, rgba(23, 37, 84, 0.75) 45%, rgba(30, 58, 138, 0.50) 75%, rgba(30, 58, 138, 0.35) 100%), url("{{ asset('images/dashboard-banner.jpg') }}") !important;
+        border-color: rgba(30, 58, 138, 0.6) !important;
+    }
+
+    /* ============ DARK MODE: DASHBOARD WARGA IURAN & BANK SAMPAH ============ */
+    html.dark .nx-card-tunggakan-warga.has-tunggakan {
+        background: rgba(244, 63, 94, 0.14) !important;
+        border: 1px solid rgba(244, 63, 94, 0.35) !important;
+    }
+    html.dark .nx-card-tunggakan-warga.has-tunggakan .nx-tunggakan-label {
+        color: #FDA4AF !important;
+    }
+    html.dark .nx-card-tunggakan-warga.has-tunggakan .nx-tunggakan-nominal {
+        color: #FB7185 !important;
+    }
+    html.dark .nx-card-tunggakan-warga.has-tunggakan .nx-tunggakan-subtext {
+        color: #CBD5E1 !important;
+    }
+
+    html.dark .nx-badge-status-danger,
+    html.dark .table .badge[style*="var(--nx-soft-red)"],
+    html.dark .table .badge[style*="#FEE2E2"] {
+        background: rgba(244, 63, 94, 0.16) !important;
+        border: 1px solid rgba(244, 63, 94, 0.38) !important;
+        color: #FDA4AF !important;
+    }
+    html.dark .nx-badge-status-danger *,
+    html.dark .table .badge[style*="var(--nx-soft-red)"] *,
+    html.dark .table .badge[style*="#FEE2E2"] * {
+        color: #FDA4AF !important;
+    }
+
+    html.dark .nx-bar-bank-sampah-warga {
+        background: linear-gradient(90deg, rgba(14, 165, 233, 0.14) 0%, rgba(16, 185, 129, 0.14) 100%) !important;
+        border: 1px solid rgba(56, 189, 248, 0.28) !important;
+    }
+    html.dark .nx-bar-bank-sampah-warga .nx-bar-sampah-title {
+        color: #6EE7B7 !important;
+    }
+    html.dark .nx-bar-bank-sampah-warga .nx-bar-sampah-desc {
+        color: #94A3B8 !important;
+    }
+    html.dark .nx-bar-bank-sampah-warga .nx-bar-sampah-desc strong {
+        color: #F1F5F9 !important;
+    }
+    html.dark .nx-bar-bank-sampah-warga .nx-bar-sampah-icon {
+        background: rgba(16, 185, 129, 0.25) !important;
+        color: #34D399 !important;
+        border: 1px solid rgba(52, 211, 153, 0.3) !important;
+    }
+    html.dark .nx-btn-bank-sampah-warga {
+        background: rgba(16, 185, 129, 0.18) !important;
+        border: 1px solid rgba(52, 211, 153, 0.40) !important;
+        color: #6EE7B7 !important;
+    }
+    html.dark .nx-btn-bank-sampah-warga * {
+        color: #6EE7B7 !important;
+    }
+    html.dark .nx-btn-bank-sampah-warga:hover {
+        background: #10B981 !important;
+        border-color: #10B981 !important;
+        color: #FFFFFF !important;
+    }
+    html.dark .nx-btn-bank-sampah-warga:hover * {
+        color: #FFFFFF !important;
+    }
+
     .nx-hero-content {
         position: relative;
         z-index: 3;
-        max-width: 520px;
+        max-width: 540px;
     }
 
     .nx-hero-title {
@@ -542,43 +655,36 @@
         box-shadow: 0 4px 12px rgba(40, 89, 67, 0.18);
     }
 
-    .nx-hero-art {
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        top: 0;
-        width: 58%;
-        pointer-events: none;
-        z-index: 1;
-        display: flex;
-        align-items: flex-end;
-        justify-content: flex-end;
-    }
-
     .nx-hero-motto {
-        position: relative;
+        position: absolute;
+        top: 20px;
+        right: 32px;
         z-index: 3;
-        background: rgba(255, 255, 255, 0.82);
-        backdrop-filter: blur(6px);
-        border: 1px solid rgba(168, 201, 181, 0.45);
-        padding: 12px 18px;
-        border-radius: 18px;
-        text-align: right;
-        box-shadow: 0 6px 20px rgba(40, 89, 67, 0.08);
+        transform: rotate(-4deg);
+        text-align: center;
+        pointer-events: none;
     }
 
-    .nx-hero-motto span {
+    .nx-hero-motto .nx-kalam-line {
+        font-family: 'Kalam', cursive !important;
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: #1B4332;
+        line-height: 1.15;
+        letter-spacing: -0.01em;
+        text-shadow: 0 2px 10px rgba(255, 255, 255, 0.95);
+    }
+
+    .nx-hero-motto .nx-kalam-curve {
         display: block;
-        font-weight: 800;
-        font-size: 1.02rem;
-        color: var(--nx-forest);
-        line-height: 1.25;
+        margin: 2px auto 0;
+        filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.9));
     }
 
     /* ============ 7. STATISTIK UTAMA (4 PASTEL CARDS) ============ */
     .nx-stat-card {
         border-radius: 18px;
-        padding: 20px 22px;
+        padding: 18px 20px;
         position: relative;
         overflow: hidden;
         border: 1px solid rgba(255, 255, 255, 0.8);
@@ -586,8 +692,8 @@
         transition: transform 0.24s ease, box-shadow 0.24s ease;
         height: 100%;
         display: flex;
-        align-items: center;
-        gap: 16px;
+        align-items: flex-start;
+        gap: 14px;
         text-decoration: none;
     }
 
@@ -607,14 +713,15 @@
     }
 
     .nx-stat-icon {
-        width: 52px;
-        height: 52px;
-        border-radius: 16px;
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.35rem;
+        font-size: 1.25rem;
         flex-shrink: 0;
+        margin-top: 2px;
     }
 
     .nx-stat-green .nx-stat-icon {
@@ -627,31 +734,50 @@
         color: #2B5F8E;
     }
 
+    .nx-stat-info {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
     .nx-stat-value {
-        font-size: 1.45rem;
+        font-size: 1.35rem;
         font-weight: 800;
         color: var(--nx-text);
         line-height: 1.2;
         margin-bottom: 2px;
+        word-break: break-word;
     }
 
     .nx-stat-label {
-        font-size: 0.8rem;
+        font-size: 0.78rem;
         font-weight: 600;
         color: #54667A;
         margin: 0;
+        line-height: 1.3;
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        word-break: normal !important;
     }
 
     .nx-stat-pill {
-        position: absolute;
-        right: 16px;
-        bottom: 14px;
-        background: rgba(255, 255, 255, 0.78);
-        padding: 3px 9px;
+        display: inline-flex;
+        align-items: center;
+        align-self: flex-start;
+        margin-top: 8px;
+        background: rgba(255, 255, 255, 0.85);
+        padding: 3px 10px;
         border-radius: 999px;
         font-size: 0.7rem;
         font-weight: 700;
         color: var(--nx-forest);
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+        white-space: nowrap;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     /* ============ WHITE SURFACE CARDS ============ */
@@ -914,26 +1040,32 @@
     <aside class="nx-sidebar" aria-label="Sidebar Navigasi NexaNest">
         <div class="nx-brand">
             <a href="{{ route('dashboard') }}" class="nx-brand-link">
-                <span class="nx-brand-logo">
-                    <!-- Eco House + Leaf SVG Icon -->
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
-                        <path d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V10.5Z" stroke="#285943" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M9 21V14C9 12.8954 9.89543 12 11 12H13C14.1046 12 15 12.8954 15 14V21" stroke="#285943" stroke-width="2"/>
-                        <path d="M13.5 8.5C15.5 7 18 8 18 10.5C16 11.5 13.5 10.5 13.5 8.5Z" fill="#285943"/>
-                    </svg>
-                </span>
-                <div class="nx-brand-text">
-                    <h1 class="nx-brand-title">NexaNest</h1>
-                    <p class="nx-brand-sub">Smart &amp; Green Community</p>
-                </div>
+                <x-nexanest-logo size="md" />
             </a>
             <button type="button" class="nx-collapse-btn d-none d-lg-inline-flex" id="nxCollapseBtn" title="Perkecil / Perlebar Sidebar">
                 <i class="fas fa-angles-left"></i>
             </button>
         </div>
 
-        <!-- KELOMPOK 1: MENU UTAMA -->
-        <div class="nx-menu-group-label">Menu Utama</div>
+        @if($user && $user->isSuperAdmin())
+        <div class="p-2 mb-3 rounded-3 text-white" style="background: linear-gradient(135deg, #1E4633 0%, #285943 60%, #785310 100%); border: 1.5px solid #D4AF37;">
+            <div class="d-flex align-items-center justify-content-between mb-1">
+                <span class="badge" style="background: #FFE082; color: #452600; font-size: 0.68rem; font-weight: 800;">
+                    <i class="fas fa-crown"></i> SUPER ADMIN
+                </span>
+                <a href="{{ route('super_admin.dashboard') }}" class="text-white-50 text-decoration-none small" style="font-size: 0.70rem;">
+                    HQ &rarr;
+                </a>
+            </div>
+            <button type="button" class="btn btn-sm w-100 py-1 px-2 text-dark fw-bold d-flex align-items-center justify-content-between shadow-sm" style="background: linear-gradient(135deg, #FFE082 0%, #FFB300 100%); font-size: 0.74rem; border-radius: 8px;" data-bs-toggle="modal" data-bs-target="#modalGlobalRoleSwitcher">
+                <span><i class="fas fa-arrow-right-arrow-left me-1"></i> Role Switcher</span>
+                <i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i>
+            </button>
+        </div>
+        @endif
+
+        <!-- KELOMPOK 1: DASHBOARD -->
+        <div class="nx-menu-group-label">Dashboard</div>
         <ul class="nx-nav-list">
             <li class="nx-nav-item">
                 <a href="{{ route('dashboard') }}" class="nx-nav-link active">
@@ -941,13 +1073,54 @@
                     <span class="nx-nav-text">Dashboard</span>
                 </a>
             </li>
-            @if(!$isWarga)
+            @if($isAdminRW)
+            <li class="nx-nav-item">
+                <a href="{{ route('monitoring.index') }}" class="nx-nav-link">
+                    <i class="fas fa-tower-observation"></i>
+                    <span class="nx-nav-text">Monitoring Wilayah</span>
+                </a>
+            </li>
+            @endif
+        </ul>
+
+        <!-- KELOMPOK 2: ADMINISTRASI WARGA -->
+        @if(!$isWarga)
+        <div class="nx-menu-group-label">Administrasi Warga</div>
+        <ul class="nx-nav-list">
+            @if($isAdminRW)
+            <li class="nx-nav-item">
+                <a href="{{ route('warga.index') }}" class="nx-nav-link">
+                    <i class="fas fa-users-gear"></i>
+                    <span class="nx-nav-text">Database Warga</span>
+                </a>
+            </li>
+            @else
             <li class="nx-nav-item">
                 <a href="{{ route('warga.index') }}" class="nx-nav-link">
                     <i class="fas fa-users"></i>
                     <span class="nx-nav-text">Data Warga</span>
                 </a>
             </li>
+            <li class="nx-nav-item">
+                <a href="{{ route('verifikasi.index') }}" class="nx-nav-link">
+                    <i class="fas fa-user-check"></i>
+                    <span class="nx-nav-text">Verifikasi Warga</span>
+                </a>
+            </li>
+            @endif
+            <li class="nx-nav-item">
+                <a href="{{ route('mutasi.index') }}" class="nx-nav-link">
+                    <i class="fas fa-arrows-split-up-and-left"></i>
+                    <span class="nx-nav-text">Mutasi Warga</span>
+                </a>
+            </li>
+        </ul>
+        @endif
+
+        <!-- KELOMPOK 3: KEUANGAN DAN PELAYANAN -->
+        <div class="nx-menu-group-label">Keuangan &amp; Pelayanan</div>
+        <ul class="nx-nav-list">
+            @if(!$isWarga)
             <li class="nx-nav-item">
                 <a href="{{ route('pembayaran.index') }}" class="nx-nav-link">
                     <i class="fas fa-wallet"></i>
@@ -964,14 +1137,17 @@
             <li class="nx-nav-item">
                 <a href="{{ route('laporan.iuran') }}" class="nx-nav-link">
                     <i class="fas fa-file-invoice-dollar"></i>
-                    <span class="nx-nav-text">{{ $isWarga ? 'Riwayat Iuran Saya' : 'Laporan Iuran' }}</span>
+                    <span class="nx-nav-text">{{ $isWarga ? 'Iuran Warga Saya' : 'Iuran Warga' }}</span>
                 </a>
             </li>
-        </ul>
-
-        <!-- KELOMPOK 2: LAYANAN WARGA -->
-        <div class="nx-menu-group-label">Layanan Warga</div>
-        <ul class="nx-nav-list">
+            @if(!$isWarga)
+            <li class="nx-nav-item">
+                <a href="{{ route('laporan_rt.index') }}" class="nx-nav-link">
+                    <i class="fas fa-clipboard-check"></i>
+                    <span class="nx-nav-text">{{ $isAdminRW ? 'Pemeriksaan Laporan RT' : 'Laporan Resmi RT' }}</span>
+                </a>
+            </li>
+            @endif
             <li class="nx-nav-item">
                 <a href="{{ route('surat.index') }}" class="nx-nav-link">
                     <i class="fas fa-file-signature"></i>
@@ -983,17 +1159,59 @@
             </li>
             <li class="nx-nav-item">
                 <a href="{{ route('pengaduan.index') }}" class="nx-nav-link">
-                    <i class="fas fa-comment-dots"></i>
-                    <span class="nx-nav-text">Pengaduan Warga</span>
+                    <i class="{{ $isWarga ? 'fas fa-comment-dots' : 'fas fa-boxes-stacked' }}"></i>
+                    <span class="nx-nav-text">{{ $isWarga ? 'Pengaduan Warga' : 'Manajemen Aset & Pengaduan' }}</span>
                     @if(($newFeatureCounts['pengaduan_baru'] ?? 0) > 0)
                         <span class="nx-nav-badge">{{ $newFeatureCounts['pengaduan_baru'] }}</span>
                     @endif
                 </a>
             </li>
+        </ul>
+
+        <!-- KELOMPOK 4: LINGKUNGAN DAN KEAMANAN -->
+        <div class="nx-menu-group-label">Lingkungan &amp; Keamanan</div>
+        <ul class="nx-nav-list">
+            @if(!$isWarga)
             <li class="nx-nav-item">
-                <a href="{{ route('posyandu.index') }}" class="nx-nav-link">
-                    <i class="fas fa-heart"></i>
-                    <span class="nx-nav-text">Info Posyandu</span>
+                <a href="{{ route('lingkungan.index') }}" class="nx-nav-link">
+                    <i class="fas fa-leaf"></i>
+                    <span class="nx-nav-text">Laporan Lingkungan</span>
+                </a>
+            </li>
+            @endif
+            <li class="nx-nav-item">
+                <a href="{{ route('bank_sampah.index') }}" class="nx-nav-link">
+                    <i class="fas fa-recycle"></i>
+                    <span class="nx-nav-text">Edukasi &amp; Bank Sampah</span>
+                </a>
+            </li>
+            <li class="nx-nav-item">
+                <a href="{{ route('ronda.index') }}" class="nx-nav-link">
+                    <i class="fas fa-shield-halved"></i>
+                    <span class="nx-nav-text">Ronda &amp; Keamanan</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- KELOMPOK 5: FASILITAS DAN KEGIATAN -->
+        <div class="nx-menu-group-label">Fasilitas &amp; Kegiatan</div>
+        <ul class="nx-nav-list">
+            <li class="nx-nav-item">
+                <a href="{{ route('fasilitas.index') }}" class="nx-nav-link">
+                    <i class="fas fa-building-circle-check"></i>
+                    <span class="nx-nav-text">Peminjaman Fasilitas</span>
+                </a>
+            </li>
+            <li class="nx-nav-item">
+                <a href="{{ route('agenda.index') }}" class="nx-nav-link">
+                    <i class="fas fa-handshake"></i>
+                    <span class="nx-nav-text">Agenda &amp; Rapat</span>
+                </a>
+            </li>
+            <li class="nx-nav-item">
+                <a href="{{ route('kalender.index') }}" class="nx-nav-link">
+                    <i class="fas fa-calendar-check"></i>
+                    <span class="nx-nav-text">Kalender Kegiatan</span>
                 </a>
             </li>
             <li class="nx-nav-item">
@@ -1002,38 +1220,46 @@
                     <span class="nx-nav-text">Direktori UMKM</span>
                 </a>
             </li>
+            <li class="nx-nav-item">
+                <a href="{{ route('posyandu.index') }}" class="nx-nav-link">
+                    <i class="fas fa-heart"></i>
+                    <span class="nx-nav-text">Info Posyandu</span>
+                </a>
+            </li>
         </ul>
 
-        <!-- KELOMPOK 3: LINGKUNGAN -->
-        <div class="nx-menu-group-label">Lingkungan</div>
+        <!-- KELOMPOK 6: INFORMASI -->
+        <div class="nx-menu-group-label">Informasi</div>
         <ul class="nx-nav-list">
             <li class="nx-nav-item">
-                <a href="{{ route('pengaduan.create', ['scan' => 1]) }}" class="nx-nav-link">
-                    <i class="fas fa-leaf"></i>
-                    <span class="nx-nav-text">Laporan Lingkungan (QR)</span>
-                </a>
-            </li>
-            <li class="nx-nav-item">
-                <a href="#sectionKegiatan" class="nx-nav-link">
-                    <i class="fas fa-calendar-check"></i>
-                    <span class="nx-nav-text">Kalender Kegiatan</span>
-                </a>
-            </li>
-            <li class="nx-nav-item">
-                <a href="#modalEdukasiLingkungan" data-bs-toggle="modal" class="nx-nav-link">
-                    <i class="fas fa-seedling"></i>
-                    <span class="nx-nav-text">Edukasi &amp; Bank Sampah</span>
+                <a href="{{ route('pengumuman.index') }}" class="nx-nav-link">
+                    <i class="fas fa-bullhorn"></i>
+                    <span class="nx-nav-text">Pusat Pengumuman</span>
                 </a>
             </li>
         </ul>
 
-        <!-- FOOTER SIDEBAR: TOMBOL DARURAT & KELUAR -->
-        <div class="nx-sidebar-footer">
-            <button type="button" class="nx-emergency-btn" data-bs-toggle="modal" data-bs-target="#modalDarurat">
-                <i class="fas fa-bell"></i>
-                <span class="nx-emergency-text">Tombol Darurat</span>
-            </button>
+        <!-- KELOMPOK 7: PENGELOLAAN SISTEM -->
+        <div class="nx-menu-group-label">Pengelolaan Sistem</div>
+        <ul class="nx-nav-list">
+            @if(!$isWarga)
+            <li class="nx-nav-item">
+                <a href="{{ route('audit.index') }}" class="nx-nav-link">
+                    <i class="fas fa-clock-rotate-left"></i>
+                    <span class="nx-nav-text">{{ $isAdminRW ? 'Audit & Aktivitas' : 'Audit & Aktivitas RT' }}</span>
+                </a>
+            </li>
+            @endif
+            <li class="nx-nav-item">
+                <a href="{{ route('profile.edit') }}" class="nx-nav-link">
+                    <i class="fas fa-user-gear"></i>
+                    <span class="nx-nav-text">Profil Saya</span>
+                </a>
+            </li>
+        </ul>
 
+        <!-- FOOTER SIDEBAR: KELUAR -->
+        <div class="nx-sidebar-footer">
             <a href="{{ route('logout') }}" class="nx-logout-btn"
                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class="fas fa-arrow-right-from-bracket"></i>
@@ -1097,7 +1323,19 @@
             </div>
 
             <div class="nx-topbar-actions">
-                <!-- Notification Bell Dropdown -->
+                <!-- 1. Tombol Darurat -->
+                <button type="button" class="nx-topbar-emergency-btn" data-bs-toggle="modal" data-bs-target="#modalDarurat" title="Tombol Darurat RW 018">
+                    <i class="fas fa-triangle-exclamation"></i>
+                    <span class="d-none d-sm-inline ms-1">Darurat</span>
+                </button>
+
+                <!-- 2. Toggle Mode Dark / Light -->
+                <button type="button" class="nx-theme-toggle-btn" id="nxThemeToggleBtnDash" title="Beralih Tema (Dark/Light)">
+                    <i class="far fa-moon dark-icon-moon"></i>
+                    <i class="far fa-sun dark-icon-sun"></i>
+                </button>
+
+                <!-- 3. Notification Bell Dropdown -->
                 <div class="dropdown">
                     <button class="nx-icon-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Notifikasi">
                         <i class="far fa-bell"></i>
@@ -1142,7 +1380,7 @@
                 <!-- User Profile Dropdown -->
                 <div class="dropdown">
                     <a href="#" class="nx-profile-btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{ $user->profile_photo_url }}" alt="{{ $user->name }}" class="nx-profile-avatar">
+                        <img src="{{ $dashboardProfilePhotoUrl }}" alt="{{ $dashboardDisplayName }}" class="nx-profile-avatar">
                         <div class="d-none d-sm-block text-start me-1">
                             <div class="fw-bold" style="font-size: 0.85rem; line-height: 1.15; color: var(--nx-text);">
                                 Hello, {{ $firstName }}!
@@ -1154,9 +1392,28 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2" style="border-radius: 16px; background: #fff; min-width: 210px;">
                         <li class="px-3 py-2 border-bottom mb-1">
-                            <div class="fw-bold small" style="color: var(--nx-text);">{{ $user->name }}</div>
-                            <div class="text-muted" style="font-size: 0.73rem;">{{ $user->email }}</div>
+                            <div class="fw-bold small" style="color: var(--nx-text);">{{ $dashboardDisplayName }}</div>
+                            @if($isSimulated)
+                                <div class="badge bg-warning-subtle text-dark border border-warning-subtle mt-1" style="font-size: 0.68rem; color: #0F172A !important;">
+                                    👑 Sesi Super Admin: {{ $user->name }}
+                                </div>
+                            @else
+                                <div class="text-muted" style="font-size: 0.73rem;">{{ $user->email }}</div>
+                            @endif
                         </li>
+                        @if($user && $user->isSuperAdmin())
+                        <li>
+                            <a class="dropdown-item rounded-3 py-2 small fw-bold text-dark" href="{{ route('super_admin.dashboard') }}" style="background: #FEF3C7;">
+                                <i class="fas fa-crown me-2 text-warning"></i>Platform Control Center
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-3 py-2 small fw-semibold" href="#" data-bs-toggle="modal" data-bs-target="#modalGlobalRoleSwitcher">
+                                <i class="fas fa-arrow-right-arrow-left me-2 text-success"></i>Buka Role Switcher
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        @endif
                         <li>
                             <a class="dropdown-item rounded-3 py-2 small fw-semibold" href="{{ route('profile.edit') }}" style="color: var(--nx-text);">
                                 <i class="fas fa-user-pen me-2 text-success"></i>Pengaturan Profil
@@ -1184,7 +1441,7 @@
         <!-- 6. WELCOME BANNER / HERO SECTION -->
         <section class="nx-hero">
             <div class="nx-hero-content">
-                <h2 class="nx-hero-title">👋 Selamat Datang, {{ $firstName }}!</h2>
+                <h2 class="nx-hero-title">👋 Selamat Datang, {{ $dashboardDisplayName }}!</h2>
                 <p class="nx-hero-subtitle">
                     @if($isAdminRW)
                         Bersama Membangun Lingkungan RW 018 yang Transparan, Asri, dan Berkelanjutan 💚
@@ -1197,7 +1454,7 @@
                 <div class="d-flex flex-wrap align-items-center gap-2">
                     <span class="nx-date-pill">
                         <i class="far fa-calendar-alt"></i>
-                        {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}
+                        {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('l, d F Y') }}
                     </span>
                     @if($isAdminRW)
                         <span class="badge rounded-pill px-3 py-2" style="background: rgba(255,255,255,0.85); color: var(--nx-forest); font-weight: 700;">
@@ -1209,64 +1466,24 @@
                         </span>
                     @elseif($wargaRecord)
                         <span class="badge rounded-pill px-3 py-2" style="background: rgba(255,255,255,0.85); color: var(--nx-forest); font-weight: 700;">
-                            <i class="fas fa-location-dot me-1"></i>Blok {{ $wargaRecord->blok_rumah }} • RT {{ $wargaRecord->rt_number }}
+                            <i class="fas fa-location-dot me-1"></i>{{ preg_match('/^blok\s+/i', trim($wargaRecord->blok_rumah ?? '')) ? trim($wargaRecord->blok_rumah) : 'Blok ' . trim($wargaRecord->blok_rumah ?? '-') }} • RT {{ $wargaRecord->rt_number }}
                         </span>
+                        @if($user->isRoleSwitched())
+                            <span class="badge rounded-pill px-3 py-2" style="background: rgba(251, 191, 36, 0.2); color: #B45309; border: 1px solid rgba(245, 158, 11, 0.4); font-weight: 700;">
+                                <i class="fas fa-eye me-1"></i>Simulasi Warga: {{ $wargaRecord->nama }} (RT {{ $wargaRecord->rt_number }})
+                            </span>
+                        @endif
                     @endif
                 </div>
             </div>
 
-            <!-- Flat Vector Sustainable Neighborhood SVG Illustration -->
-            <div class="nx-hero-art" aria-hidden="true">
-                <svg viewBox="0 0 620 190" width="100%" height="100%" preserveAspectRatio="xMaxYMax slice">
-                    <!-- Soft Clouds -->
-                    <g fill="#FFFFFF" opacity="0.65">
-                        <ellipse cx="140" cy="42" rx="34" ry="12"/>
-                        <circle cx="128" cy="36" r="14"/>
-                        <circle cx="150" cy="34" r="16"/>
-                        <ellipse cx="420" cy="32" rx="28" ry="10"/>
-                        <circle cx="412" cy="26" r="12"/>
-                    </g>
-                    <!-- Rolling Pastel Green Hills -->
-                    <path d="M40 190 Q190 115 360 155 T620 135 L620 190 Z" fill="#B7D7C2" opacity="0.7"/>
-                    <path d="M120 190 Q310 130 470 160 T620 150 L620 190 Z" fill="#8FB99E" opacity="0.85"/>
-                    <!-- Trees Left -->
-                    <g transform="translate(215, 92)">
-                        <rect x="16" y="45" width="6" height="26" fill="#7D5A44"/>
-                        <circle cx="19" cy="34" r="22" fill="#76A886"/>
-                        <circle cx="9" cy="42" r="15" fill="#8AB898"/>
-                        <circle cx="29" cy="40" r="16" fill="#639673"/>
-                    </g>
-                    <!-- House 1 (Warm Pastel) -->
-                    <g transform="translate(265, 96)">
-                        <rect x="6" y="30" width="58" height="44" rx="3" fill="#F6EFE6"/>
-                        <polygon points="0,32 35,4 70,32" fill="#9E6B55"/>
-                        <rect x="26" y="46" width="14" height="28" rx="2" fill="#8C5A45"/>
-                        <rect x="12" y="40" width="10" height="12" rx="2" fill="#A9C9E8"/>
-                        <rect x="46" y="40" width="10" height="12" rx="2" fill="#A9C9E8"/>
-                    </g>
-                    <!-- House 2 (Center Two-Storey Sustainable Home) -->
-                    <g transform="translate(345, 76)">
-                        <rect x="8" y="34" width="74" height="60" rx="4" fill="#EBF3FA"/>
-                        <polygon points="2,36 45,2 88,36" fill="#6A8EAE"/>
-                        <rect x="36" y="62" width="18" height="32" rx="2" fill="#54738E"/>
-                        <rect x="18" y="44" width="14" height="14" rx="2" fill="#FFFFFF"/>
-                        <rect x="58" y="44" width="14" height="14" rx="2" fill="#FFFFFF"/>
-                    </g>
-                    <!-- Lush Tree Right -->
-                    <g transform="translate(442, 68)">
-                        <rect x="24" y="60" width="8" height="38" fill="#6E4F3A"/>
-                        <circle cx="28" cy="42" r="30" fill="#6D9F7C"/>
-                        <circle cx="12" cy="52" r="22" fill="#86B694"/>
-                        <circle cx="44" cy="50" r="22" fill="#598B68"/>
-                    </g>
-                    <!-- Winding Path -->
-                    <path d="M355 170 Q380 180 340 190 L405 190 Q415 178 385 170 Z" fill="#E6D9C8"/>
-                </svg>
-            </div>
-
+            <!-- Floating Handwritten Motto Callout -->
             <div class="nx-hero-motto d-none d-md-block">
-                <span>Bersama Jaga</span>
-                <span>Lingkungan Kita 🌱</span>
+                <div class="nx-kalam-line">Bersama Jaga</div>
+                <div class="nx-kalam-line">Lingkungan Kita</div>
+                <svg class="nx-kalam-curve" width="120" height="12" viewBox="0 0 120 12" fill="none">
+                    <path d="M4 9C38 3 82 3 116 8" stroke="#1B4332" stroke-width="2.4" stroke-linecap="round"/>
+                </svg>
             </div>
         </section>
 
@@ -1279,7 +1496,7 @@
                         <div class="nx-stat-icon">
                             <i class="fas fa-users"></i>
                         </div>
-                        <div>
+                        <div class="nx-stat-info">
                             <div class="nx-stat-value">{{ number_format($totalJiwa, 0, ',', '.') }}</div>
                             <p class="nx-stat-label">
                                 @if($isAdminRW)
@@ -1287,13 +1504,13 @@
                                 @elseif($isAdminRT)
                                     Warga RT {{ $user->rt_number }}
                                 @else
-                                    Anggota Keluarga ({{ $totalKK }} KK)
+                                    Anggota Keluarga
                                 @endif
                             </p>
+                            <span class="nx-stat-pill">
+                                {{ $totalKK }} KK
+                            </span>
                         </div>
-                        <span class="nx-stat-pill">
-                            {{ $totalKK }} KK
-                        </span>
                     </a>
                 </div>
 
@@ -1303,7 +1520,7 @@
                         <div class="nx-stat-icon">
                             <i class="fas fa-wallet"></i>
                         </div>
-                        <div>
+                        <div class="nx-stat-info">
                             <div class="nx-stat-value">Rp {{ number_format($saldo, 0, ',', '.') }}</div>
                             <p class="nx-stat-label">
                                 @if($isAdminRW)
@@ -1311,35 +1528,53 @@
                                 @elseif($isAdminRT)
                                     Saldo Kas RT {{ $user->rt_number }}
                                 @else
-                                    Total Iuran Tercatat Saya
+                                    Total Iuran Keluarga
                                 @endif
                             </p>
+                            @if($isWarga)
+                                <span class="nx-stat-pill" style="color: {{ $wargaIuranLunas ? '#285943' : '#B84343' }};">
+                                    {{ $wargaIuranLunas ? 'Iuran ' . \Carbon\Carbon::now()->locale('id')->translatedFormat('M') . ': Lunas ✓' : 'Iuran ' . \Carbon\Carbon::now()->locale('id')->translatedFormat('M') . ': Belum Lunas' }}
+                                </span>
+                            @else
+                                <span class="nx-stat-pill" style="color: #2B5F8E;">
+                                    RT {{ $isAdminRT ? $user->rt_number : '006-010' }}
+                                </span>
+                            @endif
                         </div>
-                        @if($isWarga)
-                            <span class="nx-stat-pill" style="color: {{ $wargaIuranLunas ? '#285943' : '#B84343' }};">
-                                {{ $wargaIuranLunas ? 'Bulan Ini Lunas' : 'Cek Tagihan' }}
-                            </span>
-                        @else
-                            <span class="nx-stat-pill" style="color: #2B5F8E;">
-                                RT {{ $isAdminRT ? $user->rt_number : '006-010' }}
-                            </span>
-                        @endif
                     </a>
                 </div>
 
-                <!-- Kartu 3: Bank Sampah (Empty State Jujur karena tabel belum ada) -->
+                <!-- Kartu 3: Bank Sampah (Data Riil Terpadu) -->
                 <div class="col-12 col-sm-6 col-xl-3">
-                    <a href="#modalEdukasiLingkungan" data-bs-toggle="modal" class="nx-stat-card nx-stat-green">
+                    <a href="{{ route('bank_sampah.index') }}" class="nx-stat-card nx-stat-green">
                         <div class="nx-stat-icon">
                             <i class="fas fa-recycle"></i>
                         </div>
-                        <div>
-                            <div class="nx-stat-value" style="font-size: 1.15rem;">Belum Tercatat</div>
-                            <p class="nx-stat-label">Sampah Terkumpul (Bank Sampah)</p>
+                        <div class="nx-stat-info">
+                            @if($isWarga)
+                                <div class="nx-stat-value">Rp {{ number_format($bankSampahSaldoWarga ?? 0, 0, ',', '.') }}</div>
+                                <p class="nx-stat-label">Tabungan Bank Sampah</p>
+                            @elseif($isAdminRT)
+                                <div class="nx-stat-value">{{ number_format($bankSampahKgRt ?? 0, 1, ',', '.') }} kg</div>
+                                <p class="nx-stat-label">Sampah Terpilah RT {{ $user->rt_number }}</p>
+                            @else
+                                <div class="nx-stat-value">{{ number_format($bankSampahKgRw ?? 0, 1, ',', '.') }} kg</div>
+                                <p class="nx-stat-label">Sampah Terkumpul RW 018</p>
+                            @endif
+                            @if($isWarga)
+                                <span class="nx-stat-pill" style="color: #285943;">
+                                    <i class="fas fa-weight-hanging me-1"></i>{{ number_format($bankSampahKgWarga ?? 0, 1, ',', '.') }} kg terpilah
+                                </span>
+                            @elseif($isAdminRT)
+                                <span class="nx-stat-pill" style="color: #285943;">
+                                    Rp {{ number_format($bankSampahRupiahRt ?? 0, 0, ',', '.') }}
+                                </span>
+                            @else
+                                <span class="nx-stat-pill" style="color: #285943;">
+                                    <i class="fas fa-leaf me-1"></i>Ekonomi Hijau
+                                </span>
+                            @endif
                         </div>
-                        <span class="nx-stat-pill">
-                            <i class="fas fa-leaf me-1"></i>Info
-                        </span>
                     </a>
                 </div>
 
@@ -1349,19 +1584,162 @@
                         <div class="nx-stat-icon">
                             <i class="fas fa-triangle-exclamation"></i>
                         </div>
-                        <div>
+                        <div class="nx-stat-info">
                             <div class="nx-stat-value">{{ $newFeatureCounts['pengaduan_baru'] ?? 0 }}</div>
                             <p class="nx-stat-label">
                                 {{ $isWarga ? 'Laporan Saya Diproses' : 'Laporan Baru (Pending)' }}
                             </p>
+                            <span class="nx-stat-pill" style="color: #2B5F8E;">
+                                Rincian <i class="fas fa-arrow-right ms-1"></i>
+                            </span>
                         </div>
-                        <span class="nx-stat-pill" style="color: #2B5F8E;">
-                            <i class="fas fa-arrow-right"></i>
-                        </span>
                     </a>
                 </div>
             </div>
         </section>
+
+        @if($isWarga)
+        <!-- SECTION KHUSUS WARGA: RINGKASAN TAGIHAN IURAN KELUARGA (POINT 5.E) -->
+        <section class="mb-4">
+            <div class="nx-card p-4">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="rounded-3 d-inline-flex align-items-center justify-content-center"
+                              style="width: 36px; height: 36px; background: var(--nx-mint); color: var(--nx-forest);">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                        </span>
+                        <div>
+                            <h4 class="fw-bold mb-0" style="font-size: 1.05rem;">Ringkasan Tagihan Iuran Keluarga</h4>
+                            <small class="text-muted">Kewajiban iuran bulanan kebersihan &amp; keamanan lingkungan RT {{ $user->rt_number }}</small>
+                        </div>
+                    </div>
+                    <a href="{{ route('laporan.iuran') }}" class="btn btn-sm btn-primary">
+                        Lihat Semua Tagihan <i class="fas fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+
+                <!-- 4 KARTU STATUS TAGIHAN -->
+                <div class="row g-2.5 mb-3">
+                    <div class="col-6 col-md-3">
+                        <div class="p-3 rounded-3 h-100" style="background: var(--nx-bg); border: 1px solid var(--nx-border);">
+                            <span class="text-muted small fw-bold text-uppercase d-block" style="font-size: 0.68rem;">Tagihan Bulan Ini</span>
+                            <h5 class="fw-bold my-1" style="color: var(--nx-forest);">Rp {{ number_format($wargaTagihanAktif ?? 100000, 0, ',', '.') }}</h5>
+                            <span class="badge rounded-pill {{ ($wargaStatusTagihan ?? '') === 'Lunas' ? 'bg-success' : 'bg-warning text-dark' }}" style="font-size: 0.7rem;">
+                                {{ $wargaStatusTagihan ?? 'Belum Bayar' }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="p-3 rounded-3 h-100 nx-card-tunggakan-warga {{ ($wargaTotalTunggakan ?? 0) > 0 ? 'has-tunggakan' : 'no-tunggakan' }}" style="background: {{ ($wargaTotalTunggakan ?? 0) > 0 ? 'var(--nx-soft-red)' : 'var(--nx-mint-soft)' }}; border: 1px solid {{ ($wargaTotalTunggakan ?? 0) > 0 ? '#F8B4B7' : 'var(--nx-sage)' }};">
+                            <span class="text-muted small fw-bold text-uppercase d-block nx-tunggakan-label" style="font-size: 0.68rem;">Total Tunggakan</span>
+                            <h5 class="fw-bold my-1 nx-tunggakan-nominal" style="color: {{ ($wargaTotalTunggakan ?? 0) > 0 ? 'var(--nx-danger)' : 'var(--nx-forest)' }};">
+                                Rp {{ number_format($wargaTotalTunggakan ?? 0, 0, ',', '.') }}
+                            </h5>
+                            <small class="text-muted nx-tunggakan-subtext" style="font-size: 0.7rem;">
+                                {{ ($wargaTotalTunggakan ?? 0) > 0 ? ($wargaCountBelumBayar ?? 0) . ' periode tertunda' : 'Semua periode lunas ✓' }}
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="p-3 rounded-3 h-100" style="background: var(--nx-bg); border: 1px solid var(--nx-border);">
+                            <span class="text-muted small fw-bold text-uppercase d-block" style="font-size: 0.68rem;">Status Verifikasi</span>
+                            <h5 class="fw-bold my-1" style="color: #2B5F8E;">{{ $wargaCountMenungguKonfirmasi ?? 0 }} Pengajuan</h5>
+                            <small class="text-muted" style="font-size: 0.7rem;">Menunggu diperiksa pengurus</small>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="p-3 rounded-3 h-100" style="background: var(--nx-bg); border: 1px solid var(--nx-border);">
+                            <span class="text-muted small fw-bold text-uppercase d-block" style="font-size: 0.68rem;">Jatuh Tempo</span>
+                            <h5 class="fw-bold my-1" style="color: var(--nx-text);">Tgl 10 / Bulan</h5>
+                            <small class="text-muted" style="font-size: 0.7rem;">
+                                @if(($wargaCountTerlambat ?? 0) > 0)
+                                    <span class="text-danger fw-bold"><i class="fas fa-exclamation-circle me-1"></i>{{ $wargaCountTerlambat }} Tagihan Lewat Tempo</span>
+                                @else
+                                    <span class="text-success"><i class="fas fa-check-circle me-1"></i>Tepat Waktu</span>
+                                @endif
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TABEL 4 PERIODE TERBARU -->
+                @if(isset($wargaDaftarTagihan) && $wargaDaftarTagihan->count() > 0)
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0 small">
+                            <thead>
+                                <tr class="bg-light">
+                                    <th class="ps-3" style="width: 30%;">Periode Iuran</th>
+                                    <th style="width: 25%;">Nominal</th>
+                                    <th style="width: 25%;">Status</th>
+                                    <th class="pe-3 text-end" style="width: 20%;">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($wargaDaftarTagihan->take(4) as $wdt)
+                                    <tr>
+                                        <td class="ps-3">
+                                            <strong style="color: var(--nx-text);">{{ $wdt->periode }}</strong>
+                                            <small class="text-muted d-block">Tempo: {{ $wdt->due_date }}</small>
+                                        </td>
+                                        <td>
+                                            <span class="fw-bold">Rp {{ number_format($wdt->nominal, 0, ',', '.') }}</span>
+                                        </td>
+                                        <td>
+                                            @if($wdt->status === 'Lunas')
+                                                <span class="badge rounded-pill px-2.5 py-1" style="background: var(--nx-mint); color: var(--nx-forest);">
+                                                    <i class="fas fa-check-circle me-1"></i>Lunas
+                                                </span>
+                                            @elseif($wdt->status === 'Menunggu Konfirmasi')
+                                                <span class="badge rounded-pill px-2.5 py-1 bg-warning text-dark">
+                                                    <i class="fas fa-clock me-1"></i>Menunggu
+                                                </span>
+                                            @else
+                                                <span class="badge rounded-pill px-2.5 py-1 nx-badge-status-danger" style="background: var(--nx-soft-red); color: var(--nx-danger);">
+                                                    <i class="fas fa-exclamation-triangle me-1"></i>{{ $wdt->status }}
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <td class="pe-3 text-end">
+                                            @if($wdt->status === 'Lunas' && $wdt->pembayaran_id)
+                                                <a href="{{ route('iuran.kuitansi', $wdt->pembayaran_id) }}" target="_blank" class="btn btn-xs btn-outline-success py-1 px-2.5">
+                                                    <i class="fas fa-receipt me-1"></i>Kuitansi
+                                                </a>
+                                            @else
+                                                <a href="{{ route('laporan.iuran') }}" class="btn btn-xs btn-primary py-1 px-2.5">
+                                                    <i class="fas fa-upload me-1"></i>Bayar
+                                                </a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
+
+                <!-- KARTU KELUARGA: TABUNGAN BANK SAMPAH & EKONOMI SIRKULAR -->
+                <div class="p-3 rounded-3 mt-3 d-flex flex-wrap align-items-center justify-content-between gap-3 nx-bar-bank-sampah-warga"
+                     style="background: linear-gradient(135deg, var(--nx-mint-soft) 0%, #E8F5E9 100%); border: 1px solid var(--nx-sage);">
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="rounded-3 d-inline-flex align-items-center justify-content-center nx-bar-sampah-icon"
+                              style="width: 42px; height: 42px; background: var(--nx-forest); color: #fff; font-size: 1.1rem;">
+                            <i class="fas fa-recycle"></i>
+                        </span>
+                        <div>
+                            <h6 class="fw-bold mb-0 nx-bar-sampah-title" style="color: var(--nx-forest);">Tabungan Bank Sampah Keluarga: Rp {{ number_format($bankSampahSaldoWarga ?? 0, 0, ',', '.') }}</h6>
+                            <small class="text-muted nx-bar-sampah-desc">
+                                Total sampah terpilah yang telah disetorkan: <strong>{{ number_format($bankSampahKgWarga ?? 0, 1, ',', '.') }} kg</strong>. Saldo tabungan dapat ditarik tunai atau dialokasikan untuk iuran warga.
+                            </small>
+                        </div>
+                    </div>
+                    <a href="{{ route('bank_sampah.index') }}" class="btn btn-sm btn-outline-success nx-btn-bank-sampah-warga d-inline-flex align-items-center gap-1.5" style="border-radius: 8px; font-weight: 600; font-size: 0.8rem;">
+                        <span>Buka Buku Tabungan Sampah</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+        @endif
 
         <!-- 8 & 9. GRAFIK KEUANGAN + PENGUMUMAN TERBARU -->
         <section>
@@ -1383,8 +1761,8 @@
 
                                 <select id="nxChartPeriod" class="form-select form-select-sm fw-semibold"
                                         style="width: auto; border-radius: 999px; border-color: var(--nx-border); background-color: var(--nx-bg); color: var(--nx-text); font-size: 0.78rem; padding-right: 28px;">
-                                    <option value="6months" selected>6 Bulan Terakhir</option>
-                                    <option value="month">Bulan ({{ $refMonthDate->translatedFormat('M Y') }})</option>
+                                    <option value="year" selected>Tahun 2026 (Jan - Des)</option>
+                                    <option value="6months">6 Bulan Terakhir</option>
                                     <option value="week">7 Hari Terakhir</option>
                                 </select>
                             </div>
@@ -1392,30 +1770,38 @@
 
                         <!-- Ringkasan Total Pemasukan & Pengeluaran -->
                         <div class="row g-2 mb-3">
-                            <div class="col-6 col-sm-4">
-                                <div class="p-2 px-3 rounded-3" style="background: var(--nx-mint-soft); border: 1px solid var(--nx-border);">
-                                    <small class="d-block text-muted" style="font-size: 0.7rem;">Total Pemasukan</small>
-                                    <span class="fw-bold" style="color: var(--nx-forest); font-size: 0.92rem;">
-                                        Rp {{ number_format($pemasukan, 0, ',', '.') }}
+                            <div class="col-6 col-sm-3">
+                                <div class="p-2 px-2.5 rounded-3" style="background: var(--nx-mint-soft); border: 1px solid var(--nx-border);">
+                                    <small class="d-block text-muted" style="font-size: 0.68rem;">Total Pemasukan</small>
+                                    <span class="fw-bold" style="color: var(--nx-forest); font-size: 0.88rem;">
+                                        +Rp {{ number_format($pemasukan, 0, ',', '.') }}
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-6 col-sm-4">
-                                <div class="p-2 px-3 rounded-3" style="background: var(--nx-powder-soft); border: 1px solid #D5E5F2;">
-                                    <small class="d-block text-muted" style="font-size: 0.7rem;">Total Pengeluaran</small>
-                                    <span class="fw-bold" style="color: #2B5F8E; font-size: 0.92rem;">
-                                        Rp {{ number_format($pengeluaran, 0, ',', '.') }}
+                            <div class="col-6 col-sm-3">
+                                <div class="p-2 px-2.5 rounded-3" style="background: var(--nx-powder-soft); border: 1px solid #D5E5F2;">
+                                    <small class="d-block text-muted" style="font-size: 0.68rem;">Total Pengeluaran</small>
+                                    <span class="fw-bold nx-stat-expense-val" style="color: #2B5F8E; font-size: 0.88rem;">
+                                        -Rp {{ number_format($pengeluaran, 0, ',', '.') }}
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-4">
-                                <div class="p-2 px-3 rounded-3" style="background: var(--nx-bg); border: 1px solid var(--nx-border);">
-                                    <small class="d-block text-muted" style="font-size: 0.7rem;">
-                                        {{ $isWarga ? 'Status Bulan Ini' : 'Kepatuhan Iuran KK' }}
+                            <div class="col-6 col-sm-3">
+                                <div class="p-2 px-2.5 rounded-3" style="background: var(--nx-bg); border: 1px solid var(--nx-border);">
+                                    <small class="d-block text-muted" style="font-size: 0.68rem;">Bulan Berjalan</small>
+                                    <span class="fw-bold" style="color: var(--nx-text); font-size: 0.82rem;">
+                                        <span class="text-success">+{{ number_format(($pemasukanBulanIni ?? 0)/1000000, 1) }}Jt</span> / <span class="text-danger">-{{ number_format(($pengeluaranBulanIni ?? 0)/1000000, 1) }}Jt</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-6 col-sm-3">
+                                <div class="p-2 px-2.5 rounded-3" style="background: var(--nx-bg); border: 1px solid var(--nx-border);">
+                                    <small class="d-block text-muted" style="font-size: 0.68rem;">
+                                        {{ $isWarga ? 'Status Bulan Ini' : 'Kepatuhan KK' }}
                                     </small>
-                                    <span class="fw-bold" style="color: var(--nx-text); font-size: 0.92rem;">
+                                    <span class="fw-bold" style="color: var(--nx-text); font-size: 0.88rem;">
                                         @if($isWarga)
-                                            {{ $wargaIuranLunas ? 'Lunas ✓' : 'Belum Bayar' }}
+                                            {{ ($wargaStatusTagihan ?? '') === 'Lunas' ? 'Lunas ✓' : 'Belum Bayar' }}
                                         @else
                                             {{ $paidThisMonth }}/{{ $totalKKForReminder }} KK Lunas
                                         @endif
@@ -1438,7 +1824,7 @@
                                 <span class="nx-card-title-icon"><i class="fas fa-bullhorn"></i></span>
                                 Pengumuman Terbaru
                             </h3>
-                            <a href="{{ route('laporan.iuran') }}" class="nx-link-more">
+                            <a href="{{ route('pengumuman.index') }}" class="nx-link-more">
                                 Lihat Semua <i class="fas fa-arrow-right"></i>
                             </a>
                         </div>
@@ -1547,7 +1933,7 @@
                                 <span class="nx-card-title-icon"><i class="far fa-calendar-check"></i></span>
                                 Kegiatan Mendatang
                             </h3>
-                            <a href="{{ route('posyandu.index') }}" class="nx-link-more">
+                            <a href="{{ route('kalender.index') }}" class="nx-link-more">
                                 Lihat Semua <i class="fas fa-arrow-right"></i>
                             </a>
                         </div>
@@ -1763,6 +2149,78 @@
                     </div>
                 </div>
             @elseif($isAdminRT)
+                <!-- RINGKASAN OPERASIONAL ADMIN RT (SURAT PENDING & STATUS LAPORAN RT BULAN BERJALAN) -->
+                <div class="row g-4 mb-4">
+                    <div class="col-12 col-md-6">
+                        <div class="nx-card p-3.5 h-100" style="border-left: 4px solid #2B5F8E;">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="d-flex align-items-center gap-2 fw-bold" style="color: var(--nx-text); font-size: 0.95rem;">
+                                    <span class="rounded-3 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background: #E8F1F8; color: #2B5F8E;">
+                                        <i class="fas fa-file-signature"></i>
+                                    </span>
+                                    Antrean Surat Menunggu Persetujuan RT
+                                </span>
+                                <span class="badge {{ ($suratPendingRtCount ?? 0) > 0 ? 'bg-danger' : 'bg-success' }} px-2.5 py-1.5" style="border-radius: 8px;">
+                                    {{ $suratPendingRtCount ?? 0 }} Berkas
+                                </span>
+                            </div>
+                            <p class="text-muted small mb-3">
+                                @if(($suratPendingRtCount ?? 0) > 0)
+                                    Terdapat {{ $suratPendingRtCount }} pengajuan surat dari warga RT {{ $user->rt_number }} yang memerlukan verifikasi dan persetujuan pengantar Anda.
+                                @else
+                                    Tidak ada antrean surat pending. Seluruh permohonan surat warga RT {{ $user->rt_number }} telah selesai ditindaklanjuti.
+                                @endif
+                            </p>
+                            <a href="{{ route('surat.index', ['status' => 'pending_rt']) }}" class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1.5" style="border-radius: 8px; font-size: 0.78rem;">
+                                <span>Buka Antrean Surat RT</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <div class="nx-card p-3.5 h-100" style="border-left: 4px solid var(--nx-forest);">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="d-flex align-items-center gap-2 fw-bold" style="color: var(--nx-text); font-size: 0.95rem;">
+                                    <span class="rounded-3 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background: var(--nx-mint); color: var(--nx-forest);">
+                                        <i class="fas fa-clipboard-check"></i>
+                                    </span>
+                                    Status Laporan Resmi RT ({{ $periodeLaporanRtBerjalan ?? \Carbon\Carbon::now()->translatedFormat('F Y') }})
+                                </span>
+                                @php
+                                    $stBadge = match($statusLaporanRtBerjalan ?? 'belum_dibuat') {
+                                        'diterima' => 'bg-success',
+                                        'menunggu' => 'bg-info text-dark',
+                                        'draft' => 'bg-warning text-dark',
+                                        'perlu_revisi' => 'bg-danger',
+                                        default => 'bg-secondary',
+                                    };
+                                @endphp
+                                <span class="badge {{ $stBadge }} px-2.5 py-1.5" style="border-radius: 8px;">
+                                    {{ $statusLaporanRtLabel ?? 'Belum Dibuat' }}
+                                </span>
+                            </div>
+                            <p class="text-muted small mb-3">
+                                @if(($statusLaporanRtBerjalan ?? 'belum_dibuat') === 'belum_dibuat')
+                                    Laporan bulanan RT {{ $user->rt_number }} untuk periode {{ $periodeLaporanRtBerjalan ?? \Carbon\Carbon::now()->translatedFormat('F Y') }} belum dibuat. Segera susun laporan untuk diteruskan ke RW.
+                                @elseif($statusLaporanRtBerjalan === 'menunggu')
+                                    Laporan RT periode {{ $periodeLaporanRtBerjalan }} telah dikirim dan sedang menunggu verifikasi oleh Pengurus RW 018.
+                                @elseif($statusLaporanRtBerjalan === 'diterima')
+                                    Laporan RT periode {{ $periodeLaporanRtBerjalan }} telah disetujui dan diterima resmi oleh Pengurus RW 018.
+                                @elseif($statusLaporanRtBerjalan === 'perlu_revisi')
+                                    Laporan RT periode {{ $periodeLaporanRtBerjalan }} memerlukan perbaikan sesuai catatan dari Pengurus RW 018.
+                                @else
+                                    Laporan RT periode {{ $periodeLaporanRtBerjalan }} tersimpan sebagai draft dan belum dikirimkan ke RW.
+                                @endif
+                            </p>
+                            <a href="{{ route('laporan_rt.index') }}" class="btn btn-sm btn-outline-success d-inline-flex align-items-center gap-1.5" style="border-radius: 8px; font-size: 0.78rem;">
+                                <span>Kelola Laporan Resmi RT</span>
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- PANEL KHUSUS ADMIN RT: AKSI CEPAT PENGURUS RT & DEMOGRAFI RT -->
                 <div class="row g-4">
                     <div class="col-12 col-xl-8">
@@ -2012,24 +2470,32 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 3. Grafik Keuangan (Chart.js dengan Filter Periode Data Asli)
+    // 3. Grafik Keuangan (Chart.js dengan Filter Periode Data Asli Sinkron Transaksi Kas)
     const datasetsByPeriod = {
-        '6months': {
-            labels: {!! json_encode($chartData->pluck('bulan_tahun')) !!},
-            masuk: {!! json_encode($chartData->pluck('masuk')) !!},
-            keluar: {!! json_encode($chartData->pluck('keluar')) !!}
+        'year': {
+            labels: {!! json_encode($chartDataYear->pluck('label')) !!},
+            fullLabels: {!! json_encode($chartDataYear->pluck('label_full')) !!},
+            masuk: {!! json_encode($chartDataYear->pluck('masuk')) !!},
+            keluar: {!! json_encode($chartDataYear->pluck('keluar')) !!},
+            net: {!! json_encode($chartDataYear->pluck('net')) !!}
         },
-        'month': {
-            labels: {!! json_encode($chartDataMonth->pluck('label')) !!},
-            masuk: {!! json_encode($chartDataMonth->pluck('masuk')) !!},
-            keluar: {!! json_encode($chartDataMonth->pluck('keluar')) !!}
+        '6months': {
+            labels: {!! json_encode($chartData6m->pluck('label')) !!},
+            fullLabels: {!! json_encode($chartData6m->pluck('label_full')) !!},
+            masuk: {!! json_encode($chartData6m->pluck('masuk')) !!},
+            keluar: {!! json_encode($chartData6m->pluck('keluar')) !!},
+            net: {!! json_encode($chartData6m->pluck('net')) !!}
         },
         'week': {
             labels: {!! json_encode($chartDataWeek->pluck('label')) !!},
+            fullLabels: {!! json_encode($chartDataWeek->pluck('label')) !!},
             masuk: {!! json_encode($chartDataWeek->pluck('masuk')) !!},
-            keluar: {!! json_encode($chartDataWeek->pluck('keluar')) !!}
+            keluar: {!! json_encode($chartDataWeek->pluck('keluar')) !!},
+            net: {!! json_encode($chartDataWeek->pluck('net')) !!}
         }
     };
+
+    let currentPeriodKey = 'year';
 
     const ctx = document.getElementById('kasChart')?.getContext('2d');
     if (ctx) {
@@ -2044,11 +2510,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const kasChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: datasetsByPeriod['6months'].labels,
+                labels: datasetsByPeriod['year'].labels,
                 datasets: [
                     {
                         label: 'Pemasukan',
-                        data: datasetsByPeriod['6months'].masuk,
+                        data: datasetsByPeriod['year'].masuk,
                         borderColor: '#3D8B63',
                         backgroundColor: greenGrad,
                         borderWidth: 2.5,
@@ -2062,7 +2528,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     },
                     {
                         label: 'Pengeluaran',
-                        data: datasetsByPeriod['6months'].keluar,
+                        data: datasetsByPeriod['year'].keluar,
                         borderColor: '#4A89DC',
                         backgroundColor: blueGrad,
                         borderWidth: 2.5,
@@ -2092,6 +2558,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         padding: 12,
                         cornerRadius: 12,
                         callbacks: {
+                            title: function (items) {
+                                if (!items || !items.length) return '';
+                                const idx = items[0].dataIndex;
+                                const activeDataset = datasetsByPeriod[currentPeriodKey] || datasetsByPeriod['year'];
+                                return activeDataset.fullLabels[idx] || items[0].label;
+                            },
                             label: function (context) {
                                 const val = context.parsed.y || 0;
                                 return context.dataset.label + ': ' + new Intl.NumberFormat('id-ID', {
@@ -2099,6 +2571,15 @@ document.addEventListener('DOMContentLoaded', function () {
                                     currency: 'IDR',
                                     maximumFractionDigits: 0
                                 }).format(val);
+                            },
+                            afterBody: function (items) {
+                                if (!items || !items.length) return '';
+                                const idx = items[0].dataIndex;
+                                const activeDataset = datasetsByPeriod[currentPeriodKey] || datasetsByPeriod['year'];
+                                const net = (activeDataset.net && activeDataset.net[idx] !== undefined) ? activeDataset.net[idx] : 0;
+                                const netFormatted = (net >= 0 ? '+Rp ' : '-Rp ') + new Intl.NumberFormat('id-ID').format(Math.abs(net));
+                                const status = net >= 0 ? 'Surplus' : 'Defisit';
+                                return '\nArus Bersih (Net): ' + netFormatted + ' (' + status + ')';
                             }
                         }
                     }
@@ -2135,7 +2616,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const periodSelect = document.getElementById('nxChartPeriod');
         if (periodSelect) {
             periodSelect.addEventListener('change', function () {
-                const chosen = datasetsByPeriod[this.value] || datasetsByPeriod['6months'];
+                currentPeriodKey = this.value;
+                const chosen = datasetsByPeriod[currentPeriodKey] || datasetsByPeriod['year'];
                 kasChart.data.labels = chosen.labels;
                 kasChart.data.datasets[0].data = chosen.masuk;
                 kasChart.data.datasets[1].data = chosen.keluar;

@@ -82,6 +82,12 @@
             </div>
 
             <div class="col-md-4">
+                <label class="form-label">Alamat Email Akun (@gmail.com)</label>
+                <input type="email" name="email" value="{{ old('email', $warga->user?->email) }}" class="form-control" placeholder="contoh: nama@gmail.com">
+                <small class="text-muted d-block mt-1" style="font-size: 0.72rem;"><i class="fas fa-info-circle me-1"></i> Akun login warga. Wajib domain @gmail.com.</small>
+            </div>
+
+            <div class="col-md-4">
                 <label class="form-label">Blok Rumah <span class="text-danger">*</span></label>
                 <input type="text" name="blok_rumah" value="{{ old('blok_rumah', $warga->blok_rumah) }}" required class="form-control" placeholder="Contoh: A1/12">
             </div>
