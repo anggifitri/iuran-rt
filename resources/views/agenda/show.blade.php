@@ -255,7 +255,7 @@
         <!-- 3 Stat Counters Kehadiran -->
         <div class="row g-3 mb-4">
             <div class="col-md-3 col-6">
-                <div class="card p-3 shadow-xs h-100" style="border-radius: 12px; border-left: 4px solid var(--nx-forest); background: #ffffff;">
+                <div class="card p-3 shadow-xs h-100 border" style="border-radius: 14px; background: #F0F9F3; border-color: rgba(40, 89, 67, 0.2) !important;">
                     <small class="text-muted text-uppercase fw-bold" style="font-size: 0.7rem;">Peserta Hadir</small>
                     <div class="d-flex align-items-baseline gap-2 mt-1">
                         <h3 class="fw-bold text-dark mb-0">{{ $kehadiranSummary->hadir }}</h3>
@@ -265,7 +265,7 @@
                 </div>
             </div>
             <div class="col-md-3 col-6">
-                <div class="card p-3 shadow-xs h-100" style="border-radius: 12px; border-left: 4px solid #1F567A; background: #ffffff;">
+                <div class="card p-3 shadow-xs h-100 border" style="border-radius: 14px; background: #EBF4FA; border-color: rgba(31, 86, 122, 0.2) !important;">
                     <small class="text-muted text-uppercase fw-bold" style="font-size: 0.7rem;">Peserta Izin</small>
                     <div class="d-flex align-items-baseline gap-2 mt-1">
                         <h3 class="fw-bold text-dark mb-0" style="color: #1F567A;">{{ $kehadiranSummary->izin }}</h3>
@@ -274,7 +274,7 @@
                 </div>
             </div>
             <div class="col-md-3 col-6">
-                <div class="card p-3 shadow-xs h-100" style="border-radius: 12px; border-left: 4px solid var(--nx-danger); background: #ffffff;">
+                <div class="card p-3 shadow-xs h-100 border" style="border-radius: 14px; background: #FFF5F5; border-color: rgba(220, 53, 69, 0.2) !important;">
                     <small class="text-muted text-uppercase fw-bold" style="font-size: 0.7rem;">Tidak Hadir</small>
                     <div class="d-flex align-items-baseline gap-2 mt-1">
                         <h3 class="fw-bold text-dark mb-0" style="color: var(--nx-danger);">{{ $kehadiranSummary->tidak_hadir }}</h3>
@@ -283,7 +283,7 @@
                 </div>
             </div>
             <div class="col-md-3 col-6">
-                <div class="card p-3 shadow-xs h-100" style="border-radius: 12px; border-left: 4px solid #D97706; background: #ffffff;">
+                <div class="card p-3 shadow-xs h-100 border" style="border-radius: 14px; background: #FFFDF0; border-color: rgba(217, 119, 6, 0.2) !important;">
                     <small class="text-muted text-uppercase fw-bold" style="font-size: 0.7rem;">Total Undangan</small>
                     <div class="d-flex align-items-baseline gap-2 mt-1">
                         <h3 class="fw-bold text-dark mb-0" style="color: #D97706;">{{ $kehadiranSummary->total }}</h3>

@@ -272,6 +272,20 @@ Route::middleware(['auth'])->group(function () {
 
     // 12. Kalender Kegiatan Terpadu
     Route::get('/kalender', [App\Http\Controllers\KalenderKegiatanController::class, 'index'])->name('kalender.index');
+
+    // 13. Pengaturan API & IoT Smart Gate Terpusat
+    Route::get('/iot', [\App\Http\Controllers\IotSettingController::class, 'index'])->name('iot.index');
+    Route::put('/iot/settings', [\App\Http\Controllers\IotSettingController::class, 'update'])->name('iot.settings.update');
+    Route::post('/iot/generate-token', [\App\Http\Controllers\IotSettingController::class, 'generateToken'])->name('iot.token.generate');
+    Route::post('/iot/scan-mode', [\App\Http\Controllers\IotSettingController::class, 'setScanMode'])->name('iot.scan_mode');
+    Route::get('/iot/latest-scan', [\App\Http\Controllers\IotSettingController::class, 'getLatestScan'])->name('iot.latest_scan');
+    Route::get('/iot/logs', [\App\Http\Controllers\IotSettingController::class, 'logs'])->name('iot.logs');
+    Route::delete('/iot/logs/clear', [\App\Http\Controllers\IotSettingController::class, 'clearLogs'])->name('iot.logs.clear');
+
+    // 14. Monitoring Smart Gate & Buka Portal Darurat GPS
+    Route::get('/smart-gate', [\App\Http\Controllers\SmartGateController::class, 'index'])->name('smart_gate.index');
+    Route::get('/smart-gate/live-status', [\App\Http\Controllers\SmartGateController::class, 'liveStatus'])->name('smart_gate.live_status');
+    Route::post('/smart-gate/emergency-open', [\App\Http\Controllers\SmartGateController::class, 'emergencyOpen'])->name('smart_gate.emergency_open');
 });
 
 // =========================================================================
@@ -280,6 +294,12 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'super_admin'])->prefix('super-admin')->name('super_admin.')->group(function () {
     // 1. Platform Dashboard
     Route::get('/dashboard', [\App\Http\Controllers\SuperAdmin\SuperAdminDashboardController::class, 'index'])->name('dashboard');
+
+    // 1.1 Pengaturan API & IoT (Super Admin Alias)
+    Route::get('/iot', [\App\Http\Controllers\IotSettingController::class, 'index'])->name('iot.index');
+
+    // 1.2 Smart Gate Alias
+    Route::get('/smart-gate', [\App\Http\Controllers\SmartGateController::class, 'index'])->name('smart_gate.index');
 
     // 2. Role Switcher Engine (Prioritas Utama)
     Route::post('/role-switch', [\App\Http\Controllers\SuperAdmin\RoleSwitcherController::class, 'switch'])->name('role_switch.switch');

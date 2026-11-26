@@ -6,6 +6,8 @@ use App\Models\Warga;
 use App\Models\User;
 use App\Models\MutasiWarga;
 use App\Models\AuditLog;
+use App\Models\IotSetting;
+use App\Models\RfidLog;
 use App\Services\AuditLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -793,45 +795,152 @@ class WargaController extends Controller
     }
 
     /**
-     * Endpoint untuk menerima kiriman data UID E-KTP dari NodeMCU ESP32 + RFID RC522.
-     * Mendukung POST maupun GET: /api/rfid/scan?uid=A1B2C3D4
+     * Endpoint untuk menerima kiriman data UID E-KTP dari NodeMCU ESP32 + RFID RC522 & Smart Gate.
+     * Mendukung POST maupun GET: /api/rfid/scan?uid=A1B2C3D4&token=...
      */
     public function receiveRfidScan(Request $request)
     {
-        $rawUid = $request->input('uid') ?? $request->input('rfid_uid') ?? $request->input('card_uid');
+        // a. Ambil konfigurasi dari IotSetting (buat otomatis jika belum ada)
+        $setting = IotSetting::current();
 
-        if (!$rawUid) {
+        // b. Ambil UID dari JSON body atau query, normalisasi
+        $rawUid = $request->input('uid') 
+            ?? $request->input('rfid_uid') 
+            ?? $request->input('card_uid') 
+            ?? $request->query('uid');
+
+        if (!$rawUid || trim((string)$rawUid) === '') {
             return response()->json([
+                'success' => false,
                 'status' => 'error',
-                'message' => 'Parameter uid wajib dikirim oleh NodeMCU ESP32.',
+                'message' => 'Parameter UID wajib dikirim oleh perangkat RFID/ESP32.',
             ], 422);
         }
 
-        // Normalisasi UID (huruf besar, hanya karakter hex/alphanumeric tanpa spasi/titik dua)
-        $uid = strtoupper(preg_replace('/[^A-Za-z0-9]/', '', trim($rawUid)));
+        $uid = strtoupper(preg_replace('/[^A-Za-z0-9]/', '', trim((string) $rawUid)));
 
+        // c. Ambil token dari JSON body, query, header X-API-TOKEN, atau Bearer
+        $token = $request->input('token')
+            ?? $request->input('api_token')
+            ?? $request->query('token')
+            ?? $request->header('X-API-TOKEN')
+            ?? $request->bearerToken();
+
+        $isAdminSimulation = Auth::check() && in_array(Auth::user()->role, ['super_admin', 'admin_rw', 'admin_rt', 'admin'], true);
+
+        // Tahap 3: Baca mode aktif dari Cache (default: 'smart_gate')
+        $activeMode = Cache::get('rfid_active_mode', 'smart_gate');
+        if ($isAdminSimulation && $request->filled('context')) {
+            $context = $request->input('context');
+        } else {
+            $context = $activeMode;
+        }
+
+        $method = ($isAdminSimulation && $request->input('method') === 'simulation') ? 'simulation' : $request->input('method', 'rfid');
+        $deviceIp = $request->ip();
+
+        // d. Cek status aktif IoT Setting
+        if (!$setting->is_active && !$isAdminSimulation) {
+            RfidLog::create([
+                'uid' => $uid,
+                'status' => 'api_disabled',
+                'context' => $context,
+                'method' => $method,
+                'device_ip' => $deviceIp,
+                'message' => 'Penolakan scan: Penerimaan API IoT sedang dinonaktifkan oleh pengurus.',
+                'raw_payload' => $request->all(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'status' => 'api_disabled',
+                'message' => 'Penerimaan API IoT sedang dinonaktifkan oleh pengurus.',
+            ], 503);
+        }
+
+        // e. Validasi Token menggunakan hash_equals
+        $tokenValid = false;
+        if ($isAdminSimulation) {
+            $tokenValid = true;
+        } elseif (!empty($token) && hash_equals((string) $setting->api_token, (string) $token)) {
+            $tokenValid = true;
+        }
+
+        if (!$tokenValid) {
+            RfidLog::create([
+                'uid' => $uid,
+                'status' => 'rejected_token',
+                'context' => $context,
+                'method' => $method,
+                'device_ip' => $deviceIp,
+                'message' => 'Penolakan scan: Token API tidak valid atau tidak disertakan.',
+                'raw_payload' => $request->all(),
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'status' => 'rejected_token',
+                'message' => 'Token API tidak valid',
+            ], 401);
+        }
+
+        // f. Jika token valid:
         $existingWarga = Warga::where('rfid_uid', $uid)->first();
+        $status = $existingWarga ? 'registered' : 'unregistered';
+        $deviceId = $request->input('device_id', 'ESP32-RC522');
+
+        $logMessage = $existingWarga 
+            ? "Kartu terdaftar atas nama {$existingWarga->nama} (RT {$existingWarga->rt_number})"
+            : "Kartu belum terhubung ke warga manapun";
+
+        RfidLog::create([
+            'uid' => $uid,
+            'warga_id' => $existingWarga?->id,
+            'status' => $status,
+            'context' => $context,
+            'method' => $method,
+            'device_ip' => $deviceIp,
+            'message' => $logMessage,
+            'raw_payload' => $request->all(),
+        ]);
 
         $scanPayload = [
             'uid' => $uid,
-            'device_id' => $request->input('device_id', 'ESP32-RC522'),
+            'device_id' => $deviceId,
+            'context' => $context,
+            'status' => $status,
+            'registered' => (bool) $existingWarga,
             'scanned_at' => now()->toIso8601String(),
             'timestamp_ms' => round(microtime(true) * 1000),
             'registered_warga' => $existingWarga ? [
                 'id' => $existingWarga->id,
                 'nama' => $existingWarga->nama,
                 'rt_number' => $existingWarga->rt_number,
+                'blok_rumah' => $existingWarga->blok_rumah ?? null,
+                'nik' => $existingWarga->nik ?? null,
+                'no_kk' => $existingWarga->no_kk ?? null,
             ] : null,
         ];
 
-        // Simpan di cache selama 5 menit agar modal admin dapat mengambil hasil tap terbaru
+        // Simpan di cache global dan cache konteks aktif
         Cache::put('rfid_last_scan', $scanPayload, now()->addMinutes(5));
+        Cache::put('rfid_last_scan_' . $context, $scanPayload, now()->addSeconds(60));
 
         return response()->json([
+            'success' => true,
             'status' => 'success',
-            'message' => 'UID E-KTP berhasil diterima dari RC522.',
-            'data' => $scanPayload,
-        ]);
+            'registered' => (bool) $existingWarga,
+            'uid' => $uid,
+            'warga' => $existingWarga ? [
+                'id' => $existingWarga->id,
+                'nama' => $existingWarga->nama,
+                'rt_number' => $existingWarga->rt_number,
+                'blok_rumah' => $existingWarga->blok_rumah ?? null,
+            ] : null,
+            'message' => $existingWarga ? 'UID E-KTP berhasil dikenali.' : 'UID E-KTP berhasil diterima (Belum Terdaftar).',
+            'timestamp' => now()->toIso8601String(),
+            'data' => $scanPayload, // Backward compatibility modal admin
+        ], 200);
     }
 
     /**
@@ -900,8 +1009,10 @@ class WargaController extends Controller
 
         $warga->update($updateData);
 
-        // Bersihkan cache scan terakhir setelah berhasil direkam
+        // Bersihkan cache scan terakhir & kembalikan context ke default smart_gate setelah berhasil direkam
         Cache::forget('rfid_last_scan');
+        Cache::forget('rfid_last_scan_rekam_ktp');
+        Cache::forget('rfid_active_mode');
 
         return redirect()->back()->with('success', "E-KTP (UID: {$normalizedUid}) berhasil direkam untuk {$warga->nama}.");
     }

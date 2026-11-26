@@ -118,42 +118,42 @@
         <!-- ROLE ADMIN RW & RT: KARTU METRIK KESELURUHAN -->
         <div class="row g-3 mb-4">
             <div class="col-xl-2 col-md-4 col-6">
-                <div class="card p-3 h-100 border-0 shadow-xs" style="background: #F0F9F3; border-left: 3px solid #285943 !important;">
+                <div class="card p-3 h-100 border shadow-xs" style="background: #F0F9F3; border-color: rgba(40, 89, 67, 0.2) !important; border-radius: 14px;">
                     <span class="text-muted small fw-bold text-uppercase d-block mb-1" style="font-size: 0.68rem;">Total Terkumpul</span>
                     <h3 class="fw-bold mb-0" style="color: var(--nx-forest);">{{ number_format($totalBeratKg, 1) }} <span class="fs-6 text-muted fw-normal">Kg</span></h3>
                     <small class="text-muted" style="font-size: 0.72rem;">Limbah terpilah valid</small>
                 </div>
             </div>
             <div class="col-xl-2 col-md-4 col-6">
-                <div class="card p-3 h-100 border-0 shadow-xs" style="background: #EBF4FA; border-left: 3px solid #1F567A !important;">
+                <div class="card p-3 h-100 border shadow-xs" style="background: #EBF4FA; border-color: rgba(31, 86, 122, 0.2) !important; border-radius: 14px;">
                     <span class="text-muted small fw-bold text-uppercase d-block mb-1" style="font-size: 0.68rem;">Nilai Ekonomi</span>
                     <h3 class="fw-bold mb-0" style="color: #1F567A;">Rp {{ number_format($totalNilaiRupiah, 0, ',', '.') }}</h3>
                     <small class="text-muted" style="font-size: 0.72rem;">Tabungan sah warga</small>
                 </div>
             </div>
             <div class="col-xl-2 col-md-4 col-6">
-                <div class="card p-3 h-100 border-0 shadow-xs" style="background: #FAF8EA; border-left: 3px solid #8C6A05 !important;">
+                <div class="card p-3 h-100 border shadow-xs" style="background: #FAF8EA; border-color: rgba(140, 106, 5, 0.2) !important; border-radius: 14px;">
                     <span class="text-muted small fw-bold text-uppercase d-block mb-1" style="font-size: 0.68rem;">Total Transaksi</span>
                     <h3 class="fw-bold mb-0" style="color: #8C6A05;">{{ number_format($totalTransaksi) }} <span class="fs-6 text-muted fw-normal">Kali</span></h3>
                     <small class="text-muted" style="font-size: 0.72rem;">Setoran terverifikasi</small>
                 </div>
             </div>
             <div class="col-xl-2 col-md-4 col-6">
-                <div class="card p-3 h-100 border-0 shadow-xs" style="background: #F8FAF8; border-left: 3px solid #3E4657 !important;">
+                <div class="card p-3 h-100 border shadow-xs" style="background: #F8FAF8; border-color: rgba(62, 70, 87, 0.2) !important; border-radius: 14px;">
                     <span class="text-muted small fw-bold text-uppercase d-block mb-1" style="font-size: 0.68rem;">Warga Aktif</span>
                     <h3 class="fw-bold mb-0 text-dark">{{ $wargaAktifCount }} <span class="fs-6 text-muted fw-normal">Warga</span></h3>
                     <small class="text-muted" style="font-size: 0.72rem;">Nasabah bank sampah</small>
                 </div>
             </div>
             <div class="col-xl-2 col-md-4 col-6">
-                <div class="card p-3 h-100 border-0 shadow-xs" style="background: #FDF9F3; border-left: 3px solid #A8C9B5 !important;">
+                <div class="card p-3 h-100 border shadow-xs" style="background: #FDF9F3; border-color: rgba(168, 201, 181, 0.3) !important; border-radius: 14px;">
                     <span class="text-muted small fw-bold text-uppercase d-block mb-1" style="font-size: 0.68rem;">RT Berpartisipasi</span>
                     <h3 class="fw-bold mb-0" style="color: var(--nx-forest);">{{ $rtAktifCount }} <span class="fs-6 text-muted fw-normal">/ 5 RT</span></h3>
                     <small class="text-muted" style="font-size: 0.72rem;">Partisipasi wilayah</small>
                 </div>
             </div>
             <div class="col-xl-2 col-md-4 col-6">
-                <div class="card p-3 h-100 border-0 shadow-xs" style="background: #FFFDF0; border-left: 3px solid #E2A03F !important;">
+                <div class="card p-3 h-100 border shadow-xs" style="background: #FFFDF0; border-color: rgba(226, 160, 63, 0.25) !important; border-radius: 14px;">
                     <span class="text-muted small fw-bold text-uppercase d-block mb-1" style="font-size: 0.68rem;">Menunggu Verifikasi</span>
                     <h3 class="fw-bold mb-0 text-warning">{{ $menungguKonfirmasiCount }}</h3>
                     <small class="text-muted" style="font-size: 0.72rem;">Perlu dicek timbang</small>

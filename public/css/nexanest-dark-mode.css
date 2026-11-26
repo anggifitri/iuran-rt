@@ -392,15 +392,47 @@ html.dark .card-footer {
     border-top: 1px solid #1E2D4A !important;
 }
 
+/* Super Admin Dashboard Hero Badges Contrast in Dark Mode */
+html.dark .sa-badge-hq {
+    background: rgba(245, 158, 11, 0.22) !important;
+    border-color: #FBBF24 !important;
+    color: #FDE68A !important;
+}
+
+html.dark .sa-badge-hq i {
+    color: #FBBF24 !important;
+}
+
+html.dark .sa-badge-modules {
+    background: rgba(245, 158, 11, 0.20) !important;
+    border-color: rgba(245, 158, 11, 0.45) !important;
+    color: #FDE68A !important;
+}
+
+html.dark .sa-badge-modules i {
+    color: #FBBF24 !important;
+}
+
+html.dark .sa-badge-multi-rw {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #F1F5F9 !important;
+}
+
 /* 4 Stat Cards in Dashboard */
 html.dark .nx-stat-card {
     border-color: #1E2D4A !important;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35) !important;
 }
 
+html.dark .nx-stat-card::before,
+html.dark .nx-stat-card::after {
+    display: none !important;
+    content: none !important;
+}
+
 html.dark .nx-stat-green {
-    background: linear-gradient(135deg, #0D281E 0%, #123528 100%) !important;
-    border: 1px solid rgba(52, 211, 153, 0.22) !important;
+    background: #131B2E !important;
+    border: 1px solid rgba(52, 211, 153, 0.28) !important;
 }
 
 html.dark .nx-stat-green .nx-stat-icon {
@@ -409,13 +441,18 @@ html.dark .nx-stat-green .nx-stat-icon {
 }
 
 html.dark .nx-stat-blue {
-    background: linear-gradient(135deg, #0F2038 0%, #152C4E 100%) !important;
-    border: 1px solid rgba(56, 189, 248, 0.22) !important;
+    background: #131B2E !important;
+    border: 1px solid rgba(56, 189, 248, 0.28) !important;
 }
 
 html.dark .nx-stat-blue .nx-stat-icon {
     background: rgba(56, 189, 248, 0.16) !important;
     color: #38BDF8 !important;
+}
+
+html.dark .nx-rt-summary-card {
+    background: #131B2E !important;
+    border-color: #1E2D4A !important;
 }
 
 html.dark .nx-stat-value {
@@ -3081,6 +3118,25 @@ html.dark .sa-icon-security-history {
     background: rgba(56, 189, 248, 0.18) !important;
     color: #38BDF8 !important;
 }
+
+/* ==========================================================================
+   9. IOT & SMART GATE (DARK MODE SCOPING)
+   ========================================================================== */
+html.dark .form-range::-webkit-slider-runnable-track {
+    background-color: #334155 !important;
+}
+
+html.dark .form-range::-moz-range-track {
+    background-color: #334155 !important;
+}
+
+html.dark #endpointUrl,
+html.dark #inputApiToken {
+    background: #0B1120 !important;
+    color: #38BDF8 !important;
+    border-color: #1E293B !important;
+}
+
 
 
 

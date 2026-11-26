@@ -18,34 +18,124 @@ use Carbon\Carbon;
 class ProfileController extends Controller
 {
     /**
+     * Resolusi akun pengguna dan data kependudukan aktif (mendukung Role Switcher).
+     * Mengembalikan array: [User $displayUser, ?Warga $warga, bool $isRoleSwitched, bool $isPreviewMode]
+     */
+    protected function resolveCurrentProfileContext(User $authUser): array
+    {
+        $isRoleSwitched = $authUser->isRoleSwitched();
+        $isPreviewMode = $authUser->isRoleSwitchPreview();
+
+        if (!$isRoleSwitched) {
+            $warga = $authUser->warga
+                ?? Warga::where('nik', $authUser->nik)->first()
+                ?? Warga::where('nama', $authUser->name)->first();
+            return [$authUser, $warga, false, false];
+        }
+
+        $ctx = $authUser->getRoleSwitchContext() ?? [];
+        $targetRole = $ctx['target_role'] ?? 'warga';
+        $targetRt = $ctx['target_rt'] ?? null;
+        $targetUserId = $ctx['target_user_id'] ?? null;
+        $targetWargaId = $ctx['target_warga_id'] ?? null;
+
+        $simulatedUser = null;
+        $warga = null;
+
+        // 1. Coba dari target_user_id
+        if (!empty($targetUserId)) {
+            $simulatedUser = User::find($targetUserId);
+        }
+
+        // 2. Coba dari target_warga_id
+        if (!empty($targetWargaId)) {
+            $warga = Warga::find($targetWargaId);
+            if ($warga && $warga->user_id && !$simulatedUser) {
+                $simulatedUser = User::find($warga->user_id);
+            }
+        }
+
+        // 3. Fallback pencarian sesuai role jika belum ditemukan
+        if (!$simulatedUser) {
+            if ($targetRole === 'admin_rt') {
+                $simulatedUser = User::where(function ($q) {
+                    $q->where('role', 'admin_rt')->orWhere('role', 'admin');
+                })->where('rt_number', $targetRt)->first();
+            } elseif ($targetRole === 'admin_rw') {
+                $simulatedUser = User::where(function ($q) {
+                    $q->where('role', 'admin_rw')->orWhere('role', 'admin');
+                })->where('rt_number', '000')->first();
+            } elseif ($targetRole === 'warga') {
+                if (!$warga) {
+                    $warga = $authUser->resolveWarga();
+                }
+                if ($warga && $warga->user_id) {
+                    $simulatedUser = User::find($warga->user_id);
+                }
+            }
+        }
+
+        // 4. Jika tetap tidak ada user account (misal warga tanpa akun login), buat instance User virtual
+        if (!$simulatedUser && $warga) {
+            $simulatedUser = new User([
+                'name' => $warga->nama,
+                'email' => $warga->email ?? (strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $warga->nama)) . '@warga.nexanest.test'),
+                'role' => 'warga',
+                'rt_number' => $warga->rt_number,
+                'rw_number' => $warga->rw_number ?? '018',
+                'nik' => $warga->nik,
+                'no_kk' => $warga->no_kk,
+                'phone' => $warga->nomor_hp ?? $warga->phone ?? null,
+                'address' => $warga->alamat,
+                'profile_photo' => $warga->profile_photo,
+            ]);
+            $simulatedUser->id = $warga->id;
+            $simulatedUser->exists = false;
+        }
+
+        if (!$simulatedUser) {
+            $simulatedUser = $authUser;
+        }
+
+        if (!$warga) {
+            $warga = $simulatedUser->warga
+                ?? Warga::where('nik', $simulatedUser->nik)->first()
+                ?? Warga::where('nama', $simulatedUser->name)->first();
+        }
+
+        return [$simulatedUser, $warga, true, $isPreviewMode];
+    }
+
+    /**
      * Show User Profile Page with 6 Integrated Tabs
      */
     public function edit(Request $request)
     {
-        $user = Auth::user();
-        if (!$user) {
+        $authUser = Auth::user();
+        if (!$authUser) {
             return redirect()->route('login');
         }
+
+        [$user, $warga, $isRoleSwitched, $isPreviewMode] = $this->resolveCurrentProfileContext($authUser);
 
         $activeTab = $request->get('tab', 'personal');
         if (!in_array($activeTab, ['personal', 'account', 'security', 'notifications', 'activity', 'preferences'])) {
             $activeTab = 'personal';
         }
 
-        // 1. Resolve Linked Warga Data (if any)
-        $warga = $user->warga;
-        if (!$warga) {
-            $warga = Warga::where(function ($q) use ($user) {
-                if ($user->nik) $q->where('nik', $user->nik);
-                if ($user->no_kk) $q->orWhere('no_kk', $user->no_kk);
-            })->first();
+        // 2. Fetch User Activities (Scoped ke akun yang sedang dilihat)
+        $targetUserId = $user->id;
+        $actQuery = AuditLog::query();
+        if ($targetUserId) {
+            $actQuery->where(function ($q) use ($targetUserId, $warga) {
+                $q->where('user_id', $targetUserId);
+                if ($warga) {
+                    $q->orWhere('record_id', $warga->id);
+                }
+            });
+        } elseif ($warga) {
+            $actQuery->where('record_id', $warga->id);
         }
-        if (!$warga) {
-            $warga = Warga::where('nama', $user->name)->first();
-        }
-
-        // 2. Fetch User Activities (Scoped strictly to this user)
-        $actQuery = AuditLog::where('user_id', $user->id);
 
         if ($request->filled('act_category') && $request->act_category !== 'semua') {
             $cat = $request->act_category;
@@ -71,11 +161,11 @@ class ProfileController extends Controller
         $activities = (clone $actQuery)->latest('created_at')->paginate(12, ['*'], 'act_page')->withQueryString();
 
         // 3. User Login Sessions (Last 8 login/logout events)
-        $loginHistory = AuditLog::where('user_id', $user->id)
+        $loginHistory = $targetUserId ? AuditLog::where('user_id', $targetUserId)
             ->whereIn('event', ['login', 'logout', 'login_failed'])
             ->latest('created_at')
             ->take(8)
-            ->get();
+            ->get() : collect();
 
         // 4. Current Device & Network Metadata
         $currentIp = $request->ip();
@@ -83,9 +173,15 @@ class ProfileController extends Controller
         $currentDevice = AuditLogger::parseUserAgent($currentUserAgent);
 
         // 5. Account Summary Statistics
-        $totalActivities = AuditLog::where('user_id', $user->id)->count();
-        $totalSurat = Surat::where('user_id', $user->id)->count();
-        $totalPembayaran = Pembayaran::where('user_id', $user->id)->count();
+        $totalActivities = (clone $actQuery)->count();
+        $totalSurat = Surat::where(function ($q) use ($targetUserId, $warga) {
+            if ($targetUserId) $q->where('user_id', $targetUserId);
+            if ($warga) $q->orWhere('warga_id', $warga->id);
+        })->count();
+        $totalPembayaran = Pembayaran::where(function ($q) use ($targetUserId, $warga) {
+            if ($targetUserId) $q->where('user_id', $targetUserId);
+            if ($warga) $q->orWhere('warga_id', $warga->id);
+        })->count();
 
         // 6. Resolved Preferences
         $notifPrefs = $user->resolved_notification_preferences;
@@ -103,7 +199,10 @@ class ProfileController extends Controller
             'totalSurat',
             'totalPembayaran',
             'notifPrefs',
-            'privacyPrefs'
+            'privacyPrefs',
+            'isRoleSwitched',
+            'isPreviewMode',
+            'authUser'
         ));
     }
 
@@ -112,7 +211,12 @@ class ProfileController extends Controller
      */
     public function updatePersonal(Request $request)
     {
-        $user = Auth::user();
+        $authUser = Auth::user();
+        if ($authUser->isRoleSwitchPreview()) {
+            return redirect()->back()->with('error', 'Aksi ditolak: Anda sedang dalam Mode Preview (Hanya Lihat). Form profil tidak dapat diubah.');
+        }
+
+        [$user, $warga] = $this->resolveCurrentProfileContext($authUser);
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
@@ -146,10 +250,14 @@ class ProfileController extends Controller
 
         $user->name = $validated['name'];
         $user->address = $validated['address'];
-        $user->save();
+        if ($user->exists) {
+            $user->save();
+        }
 
         // Sync or Create Warga record
-        $warga = $user->warga ?? Warga::where('nik', $user->nik)->first() ?? Warga::where('nama', $user->name)->first();
+        if (!$warga) {
+            $warga = $user->warga ?? Warga::where('nik', $user->nik)->first() ?? Warga::where('nama', $user->name)->first();
+        }
         if ($warga) {
             $warga->update([
                 'nama' => $validated['name'],
@@ -187,7 +295,12 @@ class ProfileController extends Controller
      */
     public function updateAccount(Request $request)
     {
-        $user = Auth::user();
+        $authUser = Auth::user();
+        if ($authUser->isRoleSwitchPreview()) {
+            return redirect()->back()->with('error', 'Aksi ditolak: Anda sedang dalam Mode Preview (Hanya Lihat). Informasi akun tidak dapat diubah.');
+        }
+
+        [$user, $warga] = $this->resolveCurrentProfileContext($authUser);
 
         $validated = $request->validate([
             'email' => [
@@ -206,7 +319,7 @@ class ProfileController extends Controller
             'email.unique' => 'Alamat email ini sudah digunakan oleh akun lain.',
         ]);
 
-        if (!Hash::check($validated['current_password'], $user->password)) {
+        if (!Hash::check($validated['current_password'], $authUser->password) && !Hash::check($validated['current_password'], $user->password)) {
             return back()->withErrors(['current_password' => 'Kata sandi saat ini yang Anda masukkan tidak sesuai.'])->withInput();
         }
 
@@ -222,17 +335,19 @@ class ProfileController extends Controller
         $user->phone = $validated['phone'];
 
         if ($emailChanged) {
-            $user->email_verified_at = now(); // auto verify on validated password
+            $user->email_verified_at = now();
         }
         if ($phoneChanged) {
             $user->phone_verified_at = now();
         }
 
-        $user->save();
+        if ($user->exists) {
+            $user->save();
+        }
 
         // Update phone on linked warga
-        if ($user->warga) {
-            $user->warga->update(['nomor_hp' => $user->phone]);
+        if ($warga) {
+            $warga->update(['nomor_hp' => $user->phone]);
         }
 
         // Audit Log
@@ -257,19 +372,26 @@ class ProfileController extends Controller
      */
     public function updatePassword(Request $request)
     {
-        $user = Auth::user();
+        $authUser = Auth::user();
+        if ($authUser->isRoleSwitchPreview()) {
+            return redirect()->back()->with('error', 'Aksi ditolak: Anda sedang dalam Mode Preview (Hanya Lihat). Kata sandi akun tidak dapat diubah.');
+        }
+
+        [$user] = $this->resolveCurrentProfileContext($authUser);
 
         $validated = $request->validate([
             'current_password' => 'required|string',
             'password' => 'required|string|min:6|confirmed',
         ]);
 
-        if (!Hash::check($validated['current_password'], $user->password)) {
+        if (!Hash::check($validated['current_password'], $authUser->password) && !Hash::check($validated['current_password'], $user->password)) {
             return back()->withErrors(['current_password' => 'Kata sandi lama yang Anda masukkan tidak sesuai.']);
         }
 
         $user->password = Hash::make($validated['password']);
-        $user->save();
+        if ($user->exists) {
+            $user->save();
+        }
 
         AuditLogger::logPasswordChange($user);
 
@@ -282,7 +404,12 @@ class ProfileController extends Controller
      */
     public function updateNotifications(Request $request)
     {
-        $user = Auth::user();
+        $authUser = Auth::user();
+        if ($authUser->isRoleSwitchPreview()) {
+            return redirect()->back()->with('error', 'Aksi ditolak: Anda sedang dalam Mode Preview (Hanya Lihat). Preferensi notifikasi tidak dapat diubah.');
+        }
+
+        [$user] = $this->resolveCurrentProfileContext($authUser);
 
         $prefs = [
             'pengumuman' => $request->has('notif_pengumuman'),
@@ -296,7 +423,9 @@ class ProfileController extends Controller
         ];
 
         $user->notification_preferences = $prefs;
-        $user->save();
+        if ($user->exists) {
+            $user->save();
+        }
 
         AuditLogger::log(
             event: 'update',
@@ -317,7 +446,12 @@ class ProfileController extends Controller
      */
     public function updatePreferences(Request $request)
     {
-        $user = Auth::user();
+        $authUser = Auth::user();
+        if ($authUser->isRoleSwitchPreview()) {
+            return redirect()->back()->with('error', 'Aksi ditolak: Anda sedang dalam Mode Preview (Hanya Lihat). Pengaturan preferensi tidak dapat diubah.');
+        }
+
+        [$user] = $this->resolveCurrentProfileContext($authUser);
 
         $validated = $request->validate([
             'theme_preference' => 'required|in:light,dark,system',
@@ -328,7 +462,9 @@ class ProfileController extends Controller
             'hide_phone' => $request->has('hide_phone'),
             'profile_visible' => $request->has('profile_visible'),
         ];
-        $user->save();
+        if ($user->exists) {
+            $user->save();
+        }
 
         AuditLogger::log(
             event: 'update',
@@ -349,9 +485,16 @@ class ProfileController extends Controller
      */
     public function verifyPhone(Request $request)
     {
-        $user = Auth::user();
+        $authUser = Auth::user();
+        if ($authUser->isRoleSwitchPreview()) {
+            return redirect()->back()->with('error', 'Aksi ditolak: Anda sedang dalam Mode Preview (Hanya Lihat).');
+        }
+
+        [$user] = $this->resolveCurrentProfileContext($authUser);
         $user->phone_verified_at = now();
-        $user->save();
+        if ($user->exists) {
+            $user->save();
+        }
 
         AuditLogger::log(
             event: 'verify',
@@ -372,12 +515,16 @@ class ProfileController extends Controller
      */
     public function logoutOtherDevices(Request $request)
     {
+        $authUser = Auth::user();
+        if ($authUser->isRoleSwitchPreview()) {
+            return redirect()->back()->with('error', 'Aksi ditolak: Anda sedang dalam Mode Preview (Hanya Lihat).');
+        }
+
         $request->validate([
             'confirm_password' => 'required|string',
         ]);
 
-        $user = Auth::user();
-        if (!Hash::check($request->confirm_password, $user->password)) {
+        if (!Hash::check($request->confirm_password, $authUser->password)) {
             return back()->withErrors(['confirm_password' => 'Kata sandi konfirmasi tidak valid.']);
         }
 
@@ -386,9 +533,9 @@ class ProfileController extends Controller
         AuditLogger::log(
             event: 'security_alert',
             module: 'Autentikasi & Keamanan',
-            recordId: $user->id,
-            description: "Pengguna '{$user->name}' mengakhiri seluruh sesi login dari perangkat lain.",
-            rtNumber: $user->rt_number,
+            recordId: $authUser->id,
+            description: "Pengguna '{$authUser->name}' mengakhiri seluruh sesi login dari perangkat lain.",
+            rtNumber: $authUser->rt_number,
             status: 'success',
             actionType: 'LOGOUT'
         );
@@ -402,19 +549,26 @@ class ProfileController extends Controller
      */
     public function requestDeactivation(Request $request)
     {
+        $authUser = Auth::user();
+        if ($authUser->isRoleSwitchPreview()) {
+            return redirect()->back()->with('error', 'Aksi ditolak: Anda sedang dalam Mode Preview (Hanya Lihat).');
+        }
+
         $request->validate([
             'reason' => 'required|string|max:1000',
             'auth_password' => 'required|string',
         ]);
 
-        $user = Auth::user();
-        if (!Hash::check($request->auth_password, $user->password)) {
+        [$user] = $this->resolveCurrentProfileContext($authUser);
+        if (!Hash::check($request->auth_password, $authUser->password) && !Hash::check($request->auth_password, $user->password)) {
             return back()->withErrors(['auth_password' => 'Kata sandi konfirmasi tidak sesuai.']);
         }
 
         $user->deactivation_requested_at = now();
         $user->deactivation_reason = $request->reason;
-        $user->save();
+        if ($user->exists) {
+            $user->save();
+        }
 
         AuditLogger::log(
             event: 'update',

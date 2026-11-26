@@ -503,28 +503,28 @@
     <!-- RINGKASAN CCTV (4 KARTU) -->
     <div class="row g-3 mb-4">
         <div class="col-lg-3 col-6">
-            <div class="card p-3 shadow-xs border-0 h-100" style="border-radius: 12px; background: #fff; border-left: 3px solid #285943 !important;">
+            <div class="card p-3 shadow-xs border h-100" style="border-radius: 14px; background: #fff; border-color: var(--nx-border) !important;">
                 <span class="text-muted small fw-bold text-uppercase d-block mb-1" style="font-size: 0.68rem;">Total Titik Kamera</span>
                 <h4 class="fw-bold mb-0 text-dark">{{ $totalCctv }} Kamera</h4>
                 <small class="text-muted" style="font-size: 0.72rem;">Terpasang di area publik RW</small>
             </div>
         </div>
         <div class="col-lg-3 col-6">
-            <div class="card p-3 shadow-xs border-0 h-100" style="border-radius: 12px; background: #fff; border-left: 3px solid #2e7d32 !important;">
+            <div class="card p-3 shadow-xs border h-100" style="border-radius: 14px; background: #F0F9F3; border-color: rgba(46, 125, 50, 0.2) !important;">
                 <span class="text-muted small fw-bold text-uppercase d-block mb-1" style="font-size: 0.68rem;">Kamera Online</span>
                 <h4 class="fw-bold mb-0 text-success">{{ $totalCctvOnline }} Kamera</h4>
                 <small class="text-muted" style="font-size: 0.72rem;">Feed aktif terhubung</small>
             </div>
         </div>
         <div class="col-lg-3 col-6">
-            <div class="card p-3 shadow-xs border-0 h-100" style="border-radius: 12px; background: #fff; border-left: 3px solid #64748b !important;">
+            <div class="card p-3 shadow-xs border h-100" style="border-radius: 14px; background: #F8FAF8; border-color: rgba(100, 116, 139, 0.2) !important;">
                 <span class="text-muted small fw-bold text-uppercase d-block mb-1" style="font-size: 0.68rem;">Kamera Offline</span>
                 <h4 class="fw-bold mb-0 text-secondary">{{ $totalCctvOffline }} Kamera</h4>
                 <small class="text-muted" style="font-size: 0.72rem;">Daya / jaringan terputus</small>
             </div>
         </div>
         <div class="col-lg-3 col-6">
-            <div class="card p-3 shadow-xs border-0 h-100" style="border-radius: 12px; background: #fff; border-left: 3px solid #c93b2b !important;">
+            <div class="card p-3 shadow-xs border h-100" style="border-radius: 14px; background: #FFF5F5; border-color: rgba(201, 59, 43, 0.2) !important;">
                 <span class="text-muted small fw-bold text-uppercase d-block mb-1" style="font-size: 0.68rem;">Mengalami Gangguan</span>
                 <h4 class="fw-bold mb-0 text-danger">{{ $totalCctvGangguan }} Kamera</h4>
                 <small class="text-muted" style="font-size: 0.72rem;">Perlu perbaikan teknisi</small>

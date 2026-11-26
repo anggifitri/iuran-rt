@@ -5,36 +5,36 @@
 
 @section('content')
 <!-- HERO WELCOME BANNER (CHAMPAGNE GOLD + FOREST GREEN GRADIENT) -->
-<div class="sa-card p-4 border-0 position-relative overflow-hidden shadow-sm mb-4" style="background: linear-gradient(135deg, #132E21 0%, #1E4633 55%, #594312 95%); border-radius: 22px; color: #FFFFFF;">
+<div class="sa-card p-3 p-sm-4 border-0 position-relative overflow-hidden shadow-sm mb-4 sa-hero-banner" style="background: linear-gradient(135deg, #132E21 0%, #1E4633 55%, #594312 95%); border-radius: 22px; color: #FFFFFF;">
     <div class="position-absolute end-0 top-50 translate-middle-y me-4 opacity-25 d-none d-lg-block pointer-events-none">
         <i class="fas fa-crown text-warning" style="font-size: 11rem;"></i>
     </div>
 
     <div class="position-relative" style="z-index: 2; max-width: 820px;">
-        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-            <span class="d-inline-flex align-items-center gap-1.5 px-3 py-1 rounded-pill" style="background: rgba(255, 215, 0, 0.22); border: 1.5px solid #FFD54F; font-size: 0.76rem; font-weight: 800; color: #FFE082;">
+        <div class="d-flex flex-wrap align-items-center gap-1.5 gap-sm-2 mb-2.5 mb-sm-3 sa-hero-badges">
+            <span class="d-inline-flex align-items-center gap-1.5 px-2.5 py-1 rounded-pill sa-badge-hq" style="background: rgba(255, 215, 0, 0.22); border: 1.5px solid #FFD54F; font-size: 0.72rem; font-weight: 800; color: #FFE082;">
                 <i class="fas fa-crown text-warning"></i> PLATFORM OWNER HQ
             </span>
-            <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1" style="font-size: 0.74rem;">
-                <i class="fas fa-circle-check me-1"></i> Operasional Aktif: RW 018
+            <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1" style="font-size: 0.70rem;">
+                <i class="fas fa-circle-check me-1"></i> Operasional: RW 018
             </span>
-            <span class="badge" style="background: rgba(255, 255, 255, 0.15); font-size: 0.74rem; color: #E2E8F0;">
-                <i class="fas fa-cubes me-1"></i> Multi-RW Ready Architecture
+            <span class="badge sa-badge-multi-rw" style="background: rgba(255, 255, 255, 0.15); font-size: 0.70rem; color: #E2E8F0;">
+                <i class="fas fa-cubes me-1"></i> Multi-RW Ready
             </span>
-            <span class="badge" style="background: rgba(255, 215, 0, 0.18); border: 1px solid rgba(255, 215, 0, 0.4); font-size: 0.74rem; color: #FFE082;">
+            <span class="badge sa-badge-modules" style="background: rgba(255, 215, 0, 0.18); border: 1px solid rgba(255, 215, 0, 0.4); font-size: 0.70rem; color: #FFE082;">
                 <i class="fas fa-cube me-1 text-warning"></i> {{ $activeModules }}/{{ $totalModules }} Modul Fitur Aktif
             </span>
         </div>
 
-        <h2 class="fw-bold mb-2 text-white" style="font-size: 1.65rem;">
+        <h2 class="fw-bold mb-2 text-white sa-hero-title" style="font-size: 1.65rem;">
             NexaNest Platform Control Center — Wilayah RW 018
         </h2>
-        <p class="text-white-50 mb-4" style="font-size: 0.88rem; line-height: 1.55;">
+        <p class="text-white-50 mb-3 mb-sm-4 sa-hero-desc" style="font-size: 0.88rem; line-height: 1.55;">
             Super Admin memiliki kewenangan tertinggi atas seluruh tata kelola ekosistem NexaNest RW 018 (RT 006–010). Fondasi arsitektur telah dipersiapkan mendukung ekspansi multi-RW di masa depan dengan pemisahan tenant dan perlindungan data yang ketat.
         </p>
 
-        <div class="d-flex flex-wrap align-items-center gap-3">
-            <button type="button" class="btn btn-warning px-3.5 py-2 fw-bold text-dark d-inline-flex align-items-center gap-2 shadow" style="background: linear-gradient(135deg, #FFE082 0%, #FFB300 100%); border: 1px solid #FFD54F; border-radius: 12px; font-size: 0.86rem;" data-bs-toggle="modal" data-bs-target="#modalGlobalRoleSwitcher">
+        <div class="d-flex flex-wrap align-items-center gap-2 gap-sm-3 sa-hero-actions">
+            <button type="button" class="btn btn-warning px-3 py-2 fw-bold text-dark d-inline-flex align-items-center gap-1.5 shadow" style="background: linear-gradient(135deg, #FFE082 0%, #FFB300 100%); border: 1px solid #FFD54F; border-radius: 12px; font-size: 0.82rem;" data-bs-toggle="modal" data-bs-target="#modalGlobalRoleSwitcher">
                 <i class="fas fa-crown"></i>
                 <span>Buka Role Switcher</span>
             </button>
@@ -46,13 +46,13 @@
                 <input type="hidden" name="target_rw" value="018">
                 <input type="hidden" name="target_rt" value="000">
                 <input type="hidden" name="mode" value="preview">
-                <button type="submit" class="btn btn-outline-light px-3.5 py-2 fw-semibold d-inline-flex align-items-center gap-2" style="border-radius: 12px; font-size: 0.86rem;" title="Simulasi langsung sebagai Admin RW 018">
+                <button type="submit" class="btn btn-outline-light px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1.5" style="border-radius: 12px; font-size: 0.82rem;" title="Simulasi langsung sebagai Admin RW 018">
                     <i class="fas fa-building-columns"></i>
-                    <span>Simulasi Admin RW 018 (Preview)</span>
+                    <span>Simulasi RW 018</span>
                 </button>
             </form>
 
-            <a href="{{ route('super_admin.modules.index') }}" class="btn btn-outline-light px-3.5 py-2 fw-semibold d-inline-flex align-items-center gap-2" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.28); border-radius: 12px; font-size: 0.86rem; color: #FFFFFF;" title="Konfigurasi Modul Fitur RW 018">
+            <a href="{{ route('super_admin.modules.index') }}" class="btn btn-outline-light px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1.5" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.28); border-radius: 12px; font-size: 0.82rem; color: #FFFFFF;" title="Konfigurasi Modul Fitur RW 018">
                 <i class="fas fa-sliders"></i>
                 <span>Konfigurasi 22 Modul &rarr;</span>
             </a>
@@ -61,9 +61,9 @@
 </div>
 
 <!-- 4 OPERATIONAL KPI CARDS (RW 018) -->
-<div class="row g-3 mb-4">
+<div class="row g-2 g-sm-3 mb-4">
     <!-- KPI 1: Wilayah Operasional -->
-    <div class="col-sm-6 col-xl-3">
+    <div class="col-6 col-xl-3">
         <div class="sa-kpi-card h-100">
             <div class="d-flex align-items-center justify-content-between">
                 <span class="sa-kpi-label">Wilayah Operasional</span>
@@ -73,62 +73,62 @@
             </div>
             <div>
                 <h3 class="sa-kpi-val fs-4">RW 018</h3>
-                <small class="text-success fw-bold d-flex align-items-center gap-1 mt-1" style="font-size: 0.76rem;">
-                    <i class="fas fa-house-chimney"></i> 5 Rukun Tetangga (RT 006 - 010)
+                <small class="text-success fw-bold d-flex align-items-center gap-1 mt-1 sa-kpi-sub" style="font-size: 0.76rem;">
+                    <i class="fas fa-house-chimney"></i> 5 RT (006 - 010)
                 </small>
             </div>
         </div>
     </div>
 
     <!-- KPI 2: Total Pengguna Terdaftar -->
-    <div class="col-sm-6 col-xl-3">
+    <div class="col-6 col-xl-3">
         <div class="sa-kpi-card h-100">
             <div class="d-flex align-items-center justify-content-between">
-                <span class="sa-kpi-label">Akun Pengguna RW 018</span>
+                <span class="sa-kpi-label">Akun Pengguna</span>
                 <div class="sa-kpi-icon" style="background: #E3F2FD; color: #1565C0;">
                     <i class="fas fa-users-gear"></i>
                 </div>
             </div>
             <div>
                 <h3 class="sa-kpi-val">{{ $totalUsers }} <span class="fs-6 fw-semibold text-muted">Akun</span></h3>
-                <small class="text-primary fw-bold d-flex align-items-center gap-1 mt-1" style="font-size: 0.76rem;">
-                    <i class="fas fa-user-shield"></i> {{ $totalAdminRw }} Admin RW &bull; {{ $totalAdminRt }} Admin RT
+                <small class="text-primary fw-bold d-flex align-items-center gap-1 mt-1 sa-kpi-sub" style="font-size: 0.76rem;">
+                    <i class="fas fa-user-shield"></i> {{ $totalAdminRw }} RW &bull; {{ $totalAdminRt }} RT
                 </small>
             </div>
         </div>
     </div>
 
     <!-- KPI 3: Populasi Warga -->
-    <div class="col-sm-6 col-xl-3">
+    <div class="col-6 col-xl-3">
         <div class="sa-kpi-card h-100">
             <div class="d-flex align-items-center justify-content-between">
-                <span class="sa-kpi-label">Populasi Warga RW 018</span>
+                <span class="sa-kpi-label">Populasi Warga</span>
                 <div class="sa-kpi-icon" style="background: #FFF3E0; color: #E65100;">
                     <i class="fas fa-people-roof"></i>
                 </div>
             </div>
             <div>
                 <h3 class="sa-kpi-val">{{ $totalWargaData }} <span class="fs-6 fw-semibold text-muted">Jiwa</span></h3>
-                <small class="text-secondary fw-semibold d-flex align-items-center gap-1 mt-1" style="font-size: 0.76rem;">
-                    <i class="fas fa-folder-tree"></i> {{ $totalKk }} Kepala Keluarga (KK)
+                <small class="text-secondary fw-semibold d-flex align-items-center gap-1 mt-1 sa-kpi-sub" style="font-size: 0.76rem;">
+                    <i class="fas fa-folder-tree"></i> {{ $totalKk }} KK
                 </small>
             </div>
         </div>
     </div>
 
     <!-- KPI 4: Kas Terkelola -->
-    <div class="col-sm-6 col-xl-3">
+    <div class="col-6 col-xl-3">
         <div class="sa-kpi-card h-100">
             <div class="d-flex align-items-center justify-content-between">
-                <span class="sa-kpi-label">Kas Terkelola RW 018</span>
+                <span class="sa-kpi-label">Kas Terkelola</span>
                 <div class="sa-kpi-icon" style="background: #EDE7F6; color: #512DA8;">
                     <i class="fas fa-sack-dollar"></i>
                 </div>
             </div>
             <div>
-                <h3 class="sa-kpi-val fs-5">Rp {{ number_format($totalKasGlobal, 0, ',', '.') }}</h3>
-                <small class="text-success fw-bold d-flex align-items-center gap-1 mt-1" style="font-size: 0.76rem;">
-                    <i class="fas fa-scale-balanced me-1"></i> Saldo bersih gabungan RT 006–010
+                <h3 class="sa-kpi-val fs-5 text-break">Rp {{ number_format($totalKasGlobal, 0, ',', '.') }}</h3>
+                <small class="text-success fw-bold d-flex align-items-center gap-1 mt-1 sa-kpi-sub" style="font-size: 0.76rem;">
+                    <i class="fas fa-scale-balanced me-1"></i> Saldo gabungan RT
                 </small>
             </div>
         </div>

@@ -93,7 +93,7 @@
         <div class="row g-3">
             <!-- 1. Server Status -->
             <div class="col-md-4 col-xl-2">
-                <div class="sa-health-card p-3 h-100 border-start border-4 border-{{ $health['server_level'] == 'normal' ? 'success' : 'danger' }}">
+                <div class="sa-health-card p-3 h-100 border rounded-4" style="border-color: rgba(16, 185, 129, 0.3) !important;">
                     <div class="d-flex justify-content-between align-items-start mb-2">
                         <span class="sa-kpi-label">Server Status</span>
                         <i class="fas fa-server text-muted"></i>
@@ -110,7 +110,7 @@
 
             <!-- 2. Database Health -->
             <div class="col-md-4 col-xl-2">
-                <div class="sa-health-card p-3 h-100 border-start border-4 border-{{ $health['db_level'] == 'normal' ? 'success' : ($health['db_level'] == 'warning' ? 'warning' : 'danger') }}">
+                <div class="sa-health-card p-3 h-100 border rounded-4" style="border-color: rgba(16, 185, 129, 0.3) !important;">
                     <div class="d-flex justify-content-between align-items-start mb-2">
                         <span class="sa-kpi-label">Database Health</span>
                         <i class="fas fa-database text-muted"></i>
@@ -132,7 +132,7 @@
 
             <!-- 3. Active Users -->
             <div class="col-md-4 col-xl-2">
-                <div class="sa-health-card p-3 h-100 border-start border-4 border-primary">
+                <div class="sa-health-card p-3 h-100 border rounded-4" style="border-color: rgba(59, 130, 246, 0.3) !important;">
                     <div class="d-flex justify-content-between align-items-start mb-2">
                         <span class="sa-kpi-label">Active Users</span>
                         <i class="fas fa-users-viewfinder text-primary"></i>
@@ -152,7 +152,7 @@
 
             <!-- 4. Storage Usage -->
             <div class="col-md-4 col-xl-2">
-                <div class="sa-health-card p-3 h-100 border-start border-4 border-{{ $health['storage_level'] == 'normal' ? 'success' : ($health['storage_level'] == 'warning' ? 'warning' : 'danger') }}">
+                <div class="sa-health-card p-3 h-100 border rounded-4" style="border-color: rgba(16, 185, 129, 0.3) !important;">
                     <div class="d-flex justify-content-between align-items-start mb-2">
                         <span class="sa-kpi-label">Storage Usage</span>
                         <i class="fas fa-hard-drive text-muted"></i>
@@ -174,7 +174,7 @@
 
             <!-- 5. API & Services -->
             <div class="col-md-4 col-xl-2">
-                <div class="sa-health-card p-3 h-100 border-start border-4 border-{{ $health['api_level'] == 'normal' ? 'success' : 'warning' }}">
+                <div class="sa-health-card p-3 h-100 border rounded-4" style="border-color: rgba(16, 185, 129, 0.3) !important;">
                     <div class="d-flex justify-content-between align-items-start mb-2">
                         <span class="sa-kpi-label">API &amp; Services</span>
                         <i class="fas fa-network-wired text-muted"></i>
@@ -196,7 +196,7 @@
                 @php
                     $backupBorder = ($health['backup_level'] === 'normal') ? 'success' : (($health['backup_level'] === 'warning') ? 'warning' : (($health['backup_level'] === 'critical') ? 'danger' : 'secondary'));
                 @endphp
-                <div class="sa-health-card p-3 h-100 border-start border-4 border-{{ $backupBorder }}">
+                <div class="sa-health-card p-3 h-100 border rounded-4" style="border-color: rgba(100, 116, 139, 0.3) !important;">
                     <div class="d-flex justify-content-between align-items-start mb-2">
                         <span class="sa-kpi-label">Backup Status</span>
                         <i class="fas fa-box-archive text-muted"></i>

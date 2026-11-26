@@ -99,7 +99,7 @@
 <div class="row g-3 mb-4">
     <!-- 1. Skrining LiLA (KEK) -->
     <div class="col-md-4">
-        <div class="card p-3.5 h-100 border-0 shadow-sm" style="border-radius: 16px; border-left: 4px solid {{ $bumil->lila < 23.5 ? 'var(--nx-danger)' : 'var(--nx-forest)' }} !important;">
+        <div class="card p-3.5 h-100 border shadow-sm" style="border-radius: 16px; background: {{ $bumil->lila < 23.5 ? '#FFF5F5' : '#F0F9F3' }}; border-color: {{ $bumil->lila < 23.5 ? 'rgba(239, 68, 68, 0.25)' : 'rgba(40, 89, 67, 0.25)' }} !important;">
             <div class="d-flex justify-content-between align-items-center mb-1">
                 <small class="fw-bold text-muted" style="font-size: 0.72rem;">SKRINING GIZI (LiLA)</small>
                 <i class="fas {{ $bumil->lila < 23.5 ? 'fa-triangle-exclamation text-danger' : 'fa-circle-check text-success' }}"></i>
@@ -115,7 +115,7 @@
 
     <!-- 2. Tekanan Darah (Preeklamsia) -->
     <div class="col-md-4">
-        <div class="card p-3.5 h-100 border-0 shadow-sm" style="border-radius: 16px; border-left: 4px solid #3B82F6 !important;">
+        <div class="card p-3.5 h-100 border shadow-sm" style="border-radius: 16px; background: #EBF4FA; border-color: rgba(59, 130, 246, 0.25) !important;">
             <div class="d-flex justify-content-between align-items-center mb-1">
                 <small class="fw-bold text-muted" style="font-size: 0.72rem;">TEKANAN DARAH</small>
                 <i class="fas fa-heart-pulse text-primary"></i>
@@ -131,7 +131,7 @@
 
     <!-- 3. Tablet Tambah Darah (TTD) -->
     <div class="col-md-4">
-        <div class="card p-3.5 h-100 border-0 shadow-sm" style="border-radius: 16px; border-left: 4px solid #6366F1 !important;">
+        <div class="card p-3.5 h-100 border shadow-sm" style="border-radius: 16px; background: #EEF2FF; border-color: rgba(99, 102, 241, 0.25) !important;">
             <div class="d-flex justify-content-between align-items-center mb-1">
                 <small class="fw-bold text-muted" style="font-size: 0.72rem;">TABLET TAMBAH DARAH (TTD)</small>
                 <i class="fas fa-pills text-indigo"></i>

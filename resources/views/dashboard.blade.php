@@ -697,6 +697,12 @@
         text-decoration: none;
     }
 
+    .nx-stat-card::before,
+    .nx-stat-card::after {
+        display: none !important;
+        content: none !important;
+    }
+
     .nx-stat-card:hover {
         transform: translateY(-4px);
         box-shadow: var(--nx-shadow-hover);
@@ -1031,6 +1037,136 @@
             text-align: left;
         }
     }
+
+    /* ============ MOBILE-SPECIFIC (< 640px) OPTIMIZATIONS ============ */
+    @media (max-width: 639.98px) {
+        .nx-main {
+            padding: 12px !important;
+        }
+        .nx-topbar {
+            padding: 8px 12px !important;
+            margin-bottom: 16px !important;
+            border-radius: 14px !important;
+        }
+        .nx-topbar-actions {
+            gap: 8px !important;
+        }
+        .nx-icon-btn {
+            width: 36px !important;
+            height: 36px !important;
+            font-size: 0.9rem !important;
+        }
+        .nx-theme-toggle-btn {
+            width: 36px !important;
+            height: 36px !important;
+            border-radius: 10px !important;
+            font-size: 0.85rem !important;
+        }
+        .nx-topbar-emergency-btn {
+            padding: 6px 10px !important;
+            font-size: 0.78rem !important;
+            border-radius: 10px !important;
+        }
+        .nx-profile-avatar {
+            width: 32px !important;
+            height: 32px !important;
+        }
+        .nx-profile-btn {
+            padding: 3px !important;
+            border-radius: 50% !important;
+        }
+
+        /* Banner Hero Compact on Mobile */
+        .nx-hero {
+            padding: 16px !important;
+            border-radius: 18px !important;
+            min-height: auto !important;
+            gap: 10px !important;
+            margin-bottom: 16px !important;
+        }
+        .nx-hero-title {
+            font-size: 1.18rem !important;
+            margin-bottom: 4px !important;
+        }
+        .nx-hero-subtitle {
+            font-size: 0.78rem !important;
+            line-height: 1.4 !important;
+            margin-bottom: 10px !important;
+        }
+        .nx-date-pill {
+            padding: 4px 10px !important;
+            font-size: 0.70rem !important;
+        }
+        .nx-hero .badge {
+            font-size: 0.68rem !important;
+            padding: 4px 8px !important;
+        }
+
+        /* Stat Cards: Compact 2-column Grid */
+        .nx-stat-grid {
+            margin-bottom: 16px !important;
+        }
+        .nx-stat-card {
+            padding: 12px 10px !important;
+            gap: 8px !important;
+            border-radius: 14px !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+        }
+        .nx-stat-icon {
+            width: 32px !important;
+            height: 32px !important;
+            border-radius: 10px !important;
+            font-size: 0.95rem !important;
+            margin-top: 0 !important;
+        }
+        .nx-stat-value {
+            font-size: 1.10rem !important;
+            line-height: 1.15 !important;
+            margin-bottom: 2px !important;
+            word-break: break-all !important;
+        }
+        .nx-stat-label {
+            font-size: 0.68rem !important;
+            line-height: 1.25 !important;
+        }
+        .nx-stat-pill {
+            margin-top: 6px !important;
+            padding: 2px 7px !important;
+            font-size: 0.64rem !important;
+        }
+
+        /* Cards & Tables on Mobile */
+        .nx-card {
+            padding: 14px !important;
+            border-radius: 16px !important;
+        }
+        .nx-card-title {
+            font-size: 0.90rem !important;
+        }
+        .nx-card-title-icon {
+            width: 28px !important;
+            height: 28px !important;
+            font-size: 0.85rem !important;
+        }
+        .nx-link-more {
+            font-size: 0.72rem !important;
+        }
+        .nx-rt-summary-table th,
+        .nx-rt-summary-table td {
+            font-size: 0.75rem !important;
+            padding: 8px 6px !important;
+        }
+        .nx-rt-summary-card {
+            padding: 12px !important;
+            border-radius: 14px !important;
+        }
+        .nx-rt-summary-card p {
+            font-size: 0.74rem !important;
+            line-height: 1.4 !important;
+            margin-bottom: 8px !important;
+        }
+    }
 </style>
 
 <div class="nx-shell" id="nxShell">
@@ -1276,16 +1412,17 @@
 
         <!-- B. TOP NAVIGATION BAR -->
         <header class="nx-topbar">
-            <div class="d-flex align-items-center gap-2 flex-grow-1">
+            <div class="d-flex align-items-center gap-1.5 gap-sm-2 flex-grow-1 overflow-hidden">
                 <button type="button" class="nx-icon-btn d-lg-none" id="nxMobileMenuBtn" aria-label="Buka Menu">
                     <i class="fas fa-bars"></i>
                 </button>
 
-                <div class="nx-search-wrap">
+                <!-- Search Wrap for Desktop / Tablet -->
+                <div class="nx-search-wrap d-none d-sm-block">
                     <i class="fas fa-search nx-search-icon"></i>
                     <input type="text" id="nxQuickSearch" class="nx-search-input"
                            placeholder="Cari fitur atau informasi... (Ctrl + K)" autocomplete="off">
-                    <span class="nx-search-kbd d-none d-sm-inline-block">Ctrl + K</span>
+                    <span class="nx-search-kbd d-none d-md-inline-block">Ctrl + K</span>
 
                     <!-- Quick Search Dropdown -->
                     <div class="nx-search-results" id="nxSearchResults">
@@ -1320,6 +1457,11 @@
                         </a>
                     </div>
                 </div>
+
+                <!-- Mobile Quick Search Trigger Icon Button -->
+                <button type="button" class="nx-icon-btn d-sm-none" id="nxMobileSearchToggleBtn" aria-label="Buka Pencarian" data-bs-toggle="collapse" data-bs-target="#nxMobileSearchCollapse">
+                    <i class="fas fa-search"></i>
+                </button>
             </div>
 
             <div class="nx-topbar-actions">
@@ -1438,6 +1580,16 @@
             </div>
         </header>
 
+        <!-- Mobile Search Dropdown Bar (Collapsible on Mobile) -->
+        <div class="collapse mb-3 d-sm-none" id="nxMobileSearchCollapse">
+            <div class="nx-card p-2.5">
+                <div class="position-relative">
+                    <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                    <input type="text" id="nxMobileQuickSearch" class="form-control ps-5 rounded-pill border" placeholder="Cari layanan, surat, iuran..." style="font-size: 0.85rem;">
+                </div>
+            </div>
+        </div>
+
         <!-- 6. WELCOME BANNER / HERO SECTION -->
         <section class="nx-hero">
             <div class="nx-hero-content">
@@ -1489,9 +1641,9 @@
 
         <!-- 7. EMPAT KARTU STATISTIK UTAMA -->
         <section aria-label="Statistik Utama">
-            <div class="row g-3">
+            <div class="row g-2 g-sm-3 nx-stat-grid">
                 <!-- Kartu 1: Total Warga / Anggota Keluarga -->
-                <div class="col-12 col-sm-6 col-xl-3">
+                <div class="col-6 col-xl-3">
                     <a href="{{ $isWarga ? route('profile.edit') : route('warga.index') }}" class="nx-stat-card nx-stat-green">
                         <div class="nx-stat-icon">
                             <i class="fas fa-users"></i>
@@ -1515,7 +1667,7 @@
                 </div>
 
                 <!-- Kartu 2: Saldo Kas RT/RW atau Total Iuran Warga -->
-                <div class="col-12 col-sm-6 col-xl-3">
+                <div class="col-6 col-xl-3">
                     <a href="{{ $isWarga ? route('laporan.iuran') : route('pembayaran.index') }}" class="nx-stat-card nx-stat-blue">
                         <div class="nx-stat-icon">
                             <i class="fas fa-wallet"></i>
@@ -1524,11 +1676,11 @@
                             <div class="nx-stat-value">Rp {{ number_format($saldo, 0, ',', '.') }}</div>
                             <p class="nx-stat-label">
                                 @if($isAdminRW)
-                                    Saldo Kas Gabungan RW
+                                    Saldo Kas RW
                                 @elseif($isAdminRT)
                                     Saldo Kas RT {{ $user->rt_number }}
                                 @else
-                                    Total Iuran Keluarga
+                                    Total Iuran
                                 @endif
                             </p>
                             @if($isWarga)
@@ -1545,7 +1697,7 @@
                 </div>
 
                 <!-- Kartu 3: Bank Sampah (Data Riil Terpadu) -->
-                <div class="col-12 col-sm-6 col-xl-3">
+                <div class="col-6 col-xl-3">
                     <a href="{{ route('bank_sampah.index') }}" class="nx-stat-card nx-stat-green">
                         <div class="nx-stat-icon">
                             <i class="fas fa-recycle"></i>
@@ -1553,17 +1705,17 @@
                         <div class="nx-stat-info">
                             @if($isWarga)
                                 <div class="nx-stat-value">Rp {{ number_format($bankSampahSaldoWarga ?? 0, 0, ',', '.') }}</div>
-                                <p class="nx-stat-label">Tabungan Bank Sampah</p>
+                                <p class="nx-stat-label">Tabungan Sampah</p>
                             @elseif($isAdminRT)
                                 <div class="nx-stat-value">{{ number_format($bankSampahKgRt ?? 0, 1, ',', '.') }} kg</div>
-                                <p class="nx-stat-label">Sampah Terpilah RT {{ $user->rt_number }}</p>
+                                <p class="nx-stat-label">Sampah RT {{ $user->rt_number }}</p>
                             @else
                                 <div class="nx-stat-value">{{ number_format($bankSampahKgRw ?? 0, 1, ',', '.') }} kg</div>
-                                <p class="nx-stat-label">Sampah Terkumpul RW 018</p>
+                                <p class="nx-stat-label">Sampah RW 018</p>
                             @endif
                             @if($isWarga)
                                 <span class="nx-stat-pill" style="color: #285943;">
-                                    <i class="fas fa-weight-hanging me-1"></i>{{ number_format($bankSampahKgWarga ?? 0, 1, ',', '.') }} kg terpilah
+                                    <i class="fas fa-weight-hanging me-1"></i>{{ number_format($bankSampahKgWarga ?? 0, 1, ',', '.') }} kg
                                 </span>
                             @elseif($isAdminRT)
                                 <span class="nx-stat-pill" style="color: #285943;">
@@ -1579,7 +1731,7 @@
                 </div>
 
                 <!-- Kartu 4: Laporan Baru (Pengaduan Warga) -->
-                <div class="col-12 col-sm-6 col-xl-3">
+                <div class="col-6 col-xl-3">
                     <a href="{{ route('pengaduan.index') }}" class="nx-stat-card nx-stat-blue">
                         <div class="nx-stat-icon">
                             <i class="fas fa-triangle-exclamation"></i>
@@ -1587,7 +1739,7 @@
                         <div class="nx-stat-info">
                             <div class="nx-stat-value">{{ $newFeatureCounts['pengaduan_baru'] ?? 0 }}</div>
                             <p class="nx-stat-label">
-                                {{ $isWarga ? 'Laporan Saya Diproses' : 'Laporan Baru (Pending)' }}
+                                {{ $isWarga ? 'Laporan Diproses' : 'Laporan Baru' }}
                             </p>
                             <span class="nx-stat-pill" style="color: #2B5F8E;">
                                 Rincian <i class="fas fa-arrow-right ms-1"></i>
@@ -2086,17 +2238,17 @@
                 <div class="row g-4">
                     <div class="col-12 col-xl-8">
                         <div class="nx-card">
-                            <div class="nx-card-header">
-                                <h3 class="nx-card-title">
+                            <div class="nx-card-header d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-2">
+                                <h3 class="nx-card-title mb-0">
                                     <span class="nx-card-title-icon"><i class="fas fa-building-user"></i></span>
-                                    Rekapitulasi Wilayah RT 006 – RT 010 (Khusus Admin RW)
+                                    <span>Rekapitulasi Wilayah RT 006 – RT 010 (Admin RW)</span>
                                 </h3>
-                                <a href="{{ route('laporan.iuran') }}" class="nx-link-more">
-                                    Filter per RT <i class="fas fa-arrow-right"></i>
+                                <a href="{{ route('laporan.iuran') }}" class="nx-link-more text-nowrap">
+                                    <span>Filter per RT</span> <i class="fas fa-arrow-right"></i>
                                 </a>
                             </div>
                             <div class="table-responsive">
-                                <table class="table align-middle mb-0" style="font-size: 0.85rem;">
+                                <table class="table align-middle mb-0 nx-rt-summary-table" style="font-size: 0.85rem;">
                                     <thead style="background: var(--nx-mint-soft);">
                                         <tr>
                                             <th class="py-2 ps-3 rounded-start">Wilayah RT</th>
@@ -2150,12 +2302,12 @@
                 </div>
             @elseif($isAdminRT)
                 <!-- RINGKASAN OPERASIONAL ADMIN RT (SURAT PENDING & STATUS LAPORAN RT BULAN BERJALAN) -->
-                <div class="row g-4 mb-4">
+                <div class="row g-3 g-md-4 mb-4">
                     <div class="col-12 col-md-6">
-                        <div class="nx-card p-3.5 h-100" style="border-left: 4px solid #2B5F8E;">
+                        <div class="nx-card p-3 p-sm-3.5 h-100 nx-rt-summary-card" style="background: linear-gradient(135deg, #F0F6FC 0%, #E8F1F8 100%); border: 1px solid rgba(43, 95, 142, 0.18);">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <span class="d-flex align-items-center gap-2 fw-bold" style="color: var(--nx-text); font-size: 0.95rem;">
-                                    <span class="rounded-3 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background: #E8F1F8; color: #2B5F8E;">
+                                    <span class="rounded-3 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background: rgba(43, 95, 142, 0.15); color: #2B5F8E;">
                                         <i class="fas fa-file-signature"></i>
                                     </span>
                                     Antrean Surat Menunggu Persetujuan RT
@@ -2179,10 +2331,10 @@
                     </div>
 
                     <div class="col-12 col-md-6">
-                        <div class="nx-card p-3.5 h-100" style="border-left: 4px solid var(--nx-forest);">
+                        <div class="nx-card p-3 p-sm-3.5 h-100 nx-rt-summary-card" style="background: linear-gradient(135deg, #EDF7F1 0%, #E2EFE7 100%); border: 1px solid rgba(40, 89, 67, 0.18);">
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <span class="d-flex align-items-center gap-2 fw-bold" style="color: var(--nx-text); font-size: 0.95rem;">
-                                    <span class="rounded-3 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background: var(--nx-mint); color: var(--nx-forest);">
+                                    <span class="rounded-3 d-inline-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background: rgba(40, 89, 67, 0.15); color: var(--nx-forest);">
                                         <i class="fas fa-clipboard-check"></i>
                                     </span>
                                     Status Laporan Resmi RT ({{ $periodeLaporanRtBerjalan ?? \Carbon\Carbon::now()->translatedFormat('F Y') }})

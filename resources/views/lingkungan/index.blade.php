@@ -137,42 +137,42 @@
     <!-- SUMMARY STATISTIC CARDS -->
     <div class="row g-3 mb-4">
         <div class="col-xl-2 col-md-4 col-6">
-            <div class="card p-3 h-100 border-0 shadow-xs" style="background: #F8FAF8; border-left: 3px solid #285943 !important;">
+            <div class="card p-3 h-100 border shadow-xs" style="background: #F8FAF8; border-color: rgba(40, 89, 67, 0.2) !important; border-radius: 14px;">
                 <span class="text-muted small fw-bold text-uppercase d-block mb-1" style="font-size: 0.68rem;">Total Wilayah RT</span>
                 <h3 class="fw-bold mb-0 text-dark">{{ $totalRt }} <span class="fs-6 text-muted fw-normal">RT</span></h3>
                 <small class="text-muted" style="font-size: 0.72rem;">Wilayah aktif RW 018</small>
             </div>
         </div>
         <div class="col-xl-2 col-md-4 col-6">
-            <div class="card p-3 h-100 border-0 shadow-xs" style="background: #F0F9F3; border-left: 3px solid #285943 !important;">
+            <div class="card p-3 h-100 border shadow-xs" style="background: #F0F9F3; border-color: rgba(40, 89, 67, 0.2) !important; border-radius: 14px;">
                 <span class="text-muted small fw-bold text-uppercase d-block mb-1" style="font-size: 0.68rem;">Sudah Mengirim</span>
                 <h3 class="fw-bold mb-0" style="color: var(--nx-forest);">{{ $rtSubmittedCount }} <span class="fs-6 text-muted fw-normal">/ {{ $totalRt }}</span></h3>
                 <small class="text-success fw-semibold" style="font-size: 0.72rem;">{{ round(($rtSubmittedCount / $totalRt) * 100) }}% partisipasi</small>
             </div>
         </div>
         <div class="col-xl-2 col-md-4 col-6">
-            <div class="card p-3 h-100 border-0 shadow-xs" style="background: #FBFBFB; border-left: 3px solid #718096 !important;">
+            <div class="card p-3 h-100 border shadow-xs" style="background: #FBFBFB; border-color: rgba(113, 128, 150, 0.2) !important; border-radius: 14px;">
                 <span class="text-muted small fw-bold text-uppercase d-block mb-1" style="font-size: 0.68rem;">Belum Mengirim</span>
                 <h3 class="fw-bold mb-0 text-secondary">{{ $rtBelumKirimCount }} <span class="fs-6 text-muted fw-normal">RT</span></h3>
                 <small class="text-muted" style="font-size: 0.72rem;">Menunggu submission</small>
             </div>
         </div>
         <div class="col-xl-2 col-md-4 col-6">
-            <div class="card p-3 h-100 border-0 shadow-xs" style="background: #FFFDF0; border-left: 3px solid #E2A03F !important;">
+            <div class="card p-3 h-100 border shadow-xs" style="background: #FFFDF0; border-color: rgba(226, 160, 63, 0.25) !important; border-radius: 14px;">
                 <span class="text-muted small fw-bold text-uppercase d-block mb-1" style="font-size: 0.68rem;">Menunggu Evaluasi</span>
                 <h3 class="fw-bold mb-0 text-warning">{{ $rtMenungguCount }} <span class="fs-6 text-muted fw-normal">Laporan</span></h3>
                 <small class="text-muted" style="font-size: 0.72rem;">Perlu ditinjau RW</small>
             </div>
         </div>
         <div class="col-xl-2 col-md-4 col-6">
-            <div class="card p-3 h-100 border-0 shadow-xs" style="background: #EBF8F2; border-left: 3px solid #1E7E34 !important;">
+            <div class="card p-3 h-100 border shadow-xs" style="background: #EBF8F2; border-color: rgba(30, 126, 52, 0.2) !important; border-radius: 14px;">
                 <span class="text-muted small fw-bold text-uppercase d-block mb-1" style="font-size: 0.68rem;">Laporan Diterima</span>
                 <h3 class="fw-bold mb-0 text-success">{{ $rtDiterimaCount }} <span class="fs-6 text-muted fw-normal">Laporan</span></h3>
                 <small class="text-success" style="font-size: 0.72rem;">Disetujui resmi RW</small>
             </div>
         </div>
         <div class="col-xl-2 col-md-4 col-6">
-            <div class="card p-3 h-100 border-0 shadow-xs" style="background: #FFF5F5; border-left: 3px solid #DC3545 !important;">
+            <div class="card p-3 h-100 border shadow-xs" style="background: #FFF5F5; border-color: rgba(220, 53, 69, 0.2) !important; border-radius: 14px;">
                 <span class="text-muted small fw-bold text-uppercase d-block mb-1" style="font-size: 0.68rem;">Perlu Revisi</span>
                 <h3 class="fw-bold mb-0 text-danger">{{ $rtRevisiCount }} <span class="fs-6 text-muted fw-normal">Laporan</span></h3>
                 <small class="text-danger" style="font-size: 0.72rem;">Proses tindak lanjut</small>

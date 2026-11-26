@@ -446,12 +446,20 @@
 
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="nx-label">Nomor Kartu Keluarga (No. KK - 16 Digit) <span class="text-danger">*</span></label>
-                        <input type="text" name="no_kk" value="{{ old('no_kk') }}" class="nx-control" maxlength="16" pattern="\d{16}" title="Harus 16 digit angka" placeholder="3201xxxxxxxxxxxx" required>
+                        <label class="nx-label">Nomor Kartu Keluarga (No. KK - Wajib 16 Digit) <span class="text-danger">*</span></label>
+                        <input type="text" name="no_kk" id="inputNoKk" value="{{ old('no_kk') }}" class="nx-control" maxlength="16" placeholder="3201xxxxxxxxxxxx" required autocomplete="off">
+                        <div class="d-flex justify-content-between align-items-center mt-1">
+                            <small id="kkFeedback" class="small fw-semibold text-muted" style="font-size: 0.76rem;">Masukkan 16 digit No. KK resmi</small>
+                            <span id="kkCounter" class="badge rounded-pill bg-secondary bg-opacity-10 text-secondary" style="font-size: 0.72rem;">0 / 16 digit</span>
+                        </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="nx-label">Nomor Induk Kependudukan (NIK - 16 Digit) <span class="text-danger">*</span></label>
-                        <input type="text" name="nik" value="{{ old('nik') }}" class="nx-control" maxlength="16" pattern="\d{16}" title="Harus 16 digit angka" placeholder="3201xxxxxxxxxxxx" required>
+                        <label class="nx-label">Nomor Induk Kependudukan (NIK - Wajib 16 Digit) <span class="text-danger">*</span></label>
+                        <input type="text" name="nik" id="inputNik" value="{{ old('nik') }}" class="nx-control" maxlength="16" placeholder="3201xxxxxxxxxxxx" required autocomplete="off">
+                        <div class="d-flex justify-content-between align-items-center mt-1">
+                            <small id="nikFeedback" class="small fw-semibold text-muted" style="font-size: 0.76rem;">Masukkan 16 digit NIK resmi</small>
+                            <span id="nikCounter" class="badge rounded-pill bg-secondary bg-opacity-10 text-secondary" style="font-size: 0.72rem;">0 / 16 digit</span>
+                        </div>
                     </div>
                     <div class="col-md-4">
                         <label class="nx-label">Jenis Kelamin <span class="text-danger">*</span></label>
@@ -483,25 +491,42 @@
                 </div>
 
                 <div class="row g-3">
-                    <div class="col-md-4">
-                        <label class="nx-label">Blok / Nomor Rumah <span class="text-danger">*</span></label>
-                        <input type="text" name="blok_rumah" value="{{ old('blok_rumah') }}" class="nx-control" placeholder="Contoh: A1 No. 10" required>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="nx-label">Pilih RT <span class="text-danger">*</span></label>
-                        <select name="rt_number" class="nx-select" required>
-                            <option value="">-- Pilih RT --</option>
-                            @for($i=1; $i<=5; $i++)
-                                @php $rtVal = str_pad($i, 3, '0', STR_PAD_LEFT); @endphp
-                                <option value="{{ $rtVal }}" {{ old('rt_number') == $rtVal ? 'selected' : '' }}>RT {{ $rtVal }}</option>
-                            @endfor
-                        </select>
-                    </div>
-                    <div class="col-md-4">
+                    <!-- 1. Nomor RW (018 Readonly) -->
+                    <div class="col-md-3">
                         <label class="nx-label">Nomor RW <span class="text-danger">*</span></label>
-                        <input type="text" name="rw_number" value="{{ old('rw_number', '018') }}" class="nx-control" placeholder="Contoh: 018" maxlength="5" required>
+                        <input type="text" name="rw_number" id="inputRw" value="018" readonly class="nx-control bg-light" style="cursor: not-allowed; font-weight: 700;">
+                        <small class="text-muted d-block mt-1" style="font-size: 0.72rem;">Wilayah resmi RW 018</small>
                     </div>
 
+                    <!-- 2. Pilih RT (006 - 010) -->
+                    <div class="col-md-3">
+                        <label class="nx-label">Pilih RT <span class="text-danger">*</span></label>
+                        <select name="rt_number" id="selectRt" class="nx-select" required>
+                            <option value="">-- Pilih RT --</option>
+                            @foreach(['006', '007', '008', '009', '010'] as $rtOption)
+                                <option value="{{ $rtOption }}" {{ old('rt_number') == $rtOption ? 'selected' : '' }}>RT {{ $rtOption }}</option>
+                            @endforeach
+                        </select>
+                        <small class="text-muted d-block mt-1" style="font-size: 0.72rem;">RT 006 s/d RT 010</small>
+                    </div>
+
+                    <!-- 3. Pilih Blok (Dinamis dari RT) -->
+                    <div class="col-md-3">
+                        <label class="nx-label">Pilih Blok <span class="text-danger">*</span></label>
+                        <select name="blok" id="selectBlok" class="nx-select" required disabled>
+                            <option value="">Pilih RT terlebih dahulu</option>
+                        </select>
+                        <small class="text-muted d-block mt-1" style="font-size: 0.72rem;">Blok rumah di RT terpilih</small>
+                    </div>
+
+                    <!-- 4. Nomor Rumah -->
+                    <div class="col-md-3">
+                        <label class="nx-label">Nomor Rumah <span class="text-danger">*</span></label>
+                        <input type="text" name="nomor_rumah" id="inputNomorRumah" value="{{ old('nomor_rumah') }}" class="nx-control" placeholder="Contoh: 10 atau 12A" required>
+                        <small class="text-muted d-block mt-1" style="font-size: 0.72rem;">Nomor unit rumah</small>
+                    </div>
+
+                    <!-- Status dalam Keluarga -->
                     <div class="col-md-6">
                         <label class="nx-label">Status dalam Keluarga <span class="text-danger">*</span></label>
                         <select name="is_kk" id="statusKeluarga" class="nx-select" required>
@@ -510,13 +535,14 @@
                         </select>
                     </div>
 
+                    <!-- Pilih KK Terdaftar (Jika Anggota) -->
                     <div class="col-md-6" id="pilihKkContainer" style="display: {{ old('is_kk') == '0' ? 'block' : 'none' }};">
                         <label class="nx-label">Pilih Kepala Keluarga Terdaftar</label>
                         <select name="kk_id" id="kkSelect" class="nx-select">
                             <option value="">-- Cari / Pilih Kepala Keluarga --</option>
                             @foreach($kepalaKeluargas as $kk)
                                 <option value="{{ $kk->id }}" {{ old('kk_id') == $kk->id ? 'selected' : '' }}>
-                                    {{ $kk->nama }} — Blok {{ $kk->blok_rumah }} (No. KK: {{ $kk->no_kk }})
+                                    {{ $kk->nama }} — {{ $kk->blok_rumah }} (No. KK: {{ $kk->no_kk }})
                                 </option>
                             @endforeach
                         </select>
@@ -531,38 +557,31 @@
                     <span class="nx-section-num blue">04</span>
                     <div>
                         <h3 class="nx-section-title">Domisili Wilayah &amp; Alamat Lengkap</h3>
-                        <p class="nx-section-sub">Terhubung otomatis dengan referensi wilayah Indonesia</p>
+                        <p class="nx-section-sub">Wilayah administratif terstandarisasi RW 018 Kelurahan Braga, Kota Bandung</p>
                     </div>
                 </div>
 
                 <div class="row g-3">
                     <div class="col-md-3">
                         <label class="nx-label">Provinsi</label>
-                        <select id="provinsi" name="provinsi" class="nx-select">
-                            <option value="">Pilih Provinsi</option>
-                        </select>
+                        <input type="text" name="provinsi" value="Jawa Barat" readonly class="nx-control bg-light" style="cursor: not-allowed; font-weight: 600;">
                     </div>
                     <div class="col-md-3">
                         <label class="nx-label">Kabupaten / Kota</label>
-                        <select id="kabupaten" name="kabupaten" class="nx-select" disabled>
-                            <option value="">Pilih Kota/Kab</option>
-                        </select>
+                        <input type="text" name="kabupaten" value="Kota Bandung" readonly class="nx-control bg-light" style="cursor: not-allowed; font-weight: 600;">
                     </div>
                     <div class="col-md-3">
                         <label class="nx-label">Kecamatan</label>
-                        <select id="kecamatan" name="kecamatan" class="nx-select" disabled>
-                            <option value="">Pilih Kecamatan</option>
-                        </select>
+                        <input type="text" name="kecamatan" value="Sumur Bandung" readonly class="nx-control bg-light" style="cursor: not-allowed; font-weight: 600;">
                     </div>
                     <div class="col-md-3">
                         <label class="nx-label">Kelurahan / Desa</label>
-                        <select id="kelurahan" name="kelurahan" class="nx-select" disabled>
-                            <option value="">Pilih Kelurahan</option>
-                        </select>
+                        <input type="text" name="kelurahan" value="Braga" readonly class="nx-control bg-light" style="cursor: not-allowed; font-weight: 600;">
                     </div>
                     <div class="col-12">
                         <label class="nx-label">Detail Jalan / Alamat Lengkap <span class="text-danger">*</span></label>
-                        <textarea name="alamat" class="nx-control" rows="2" placeholder="Contoh: Perumahan Griya Asri Jl. Melati Blok A1 No. 10" required>{{ old('alamat') }}</textarea>
+                        <textarea name="alamat" id="textareaAlamat" class="nx-control" rows="2" placeholder="Contoh: Jl. Braga, Blok A No. 10, RT 006 / RW 018, Kel. Braga, Kec. Sumur Bandung, Kota Bandung" required>{{ old('alamat') }}</textarea>
+                        <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">Otomatis dibuat saat RT, Blok, dan Nomor Rumah diisi. Anda dapat menambahkan catatan tambahan seperti gang atau patokan rumah.</small>
                     </div>
                 </div>
             </div>
@@ -585,6 +604,7 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // 1. Logika Status Keluarga & KK Terdaftar
     const statusSelect = document.getElementById('statusKeluarga');
     const kkContainer = document.getElementById('pilihKkContainer');
     const kkSelect = document.getElementById('kkSelect');
@@ -602,71 +622,121 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    const apiBase = 'https://www.emsifa.com/api-wilayah-indonesia/api';
-    const provSelect = document.getElementById('provinsi');
-    const kabSelect = document.getElementById('kabupaten');
-    const kecSelect = document.getElementById('kecamatan');
-    const kelSelect = document.getElementById('kelurahan');
+    // 2. Real-time Digit Counter & Filter Angka untuk NIK & No. KK
+    function setupDigitCounter(inputId, counterId, feedbackId, fieldName) {
+        const input = document.getElementById(inputId);
+        const counter = document.getElementById(counterId);
+        const feedback = document.getElementById(feedbackId);
 
-    fetch(`${apiBase}/provinces.json`)
-        .then(res => res.json())
-        .then(data => {
-            data.forEach(p => {
-                let opt = new Option(p.name, p.name);
-                opt.dataset.id = p.id;
-                provSelect.add(opt);
-            });
-        }).catch(() => {});
+        if (!input || !counter || !feedback) return;
 
-    provSelect.addEventListener('change', function() {
-        kabSelect.length = 1; kecSelect.length = 1; kelSelect.length = 1;
-        kabSelect.disabled = true; kecSelect.disabled = true; kelSelect.disabled = true;
-        const id = this.options[this.selectedIndex]?.dataset?.id;
-        if (!id) return;
-        fetch(`${apiBase}/regencies/${id}.json`)
-            .then(res => res.json())
-            .then(data => {
-                data.forEach(k => {
-                    let opt = new Option(k.name, k.name);
-                    opt.dataset.id = k.id;
-                    kabSelect.add(opt);
-                });
-                kabSelect.disabled = false;
-            });
-    });
+        function updateState() {
+            // Hanya izinkan angka
+            input.value = input.value.replace(/[^0-9]/g, '');
+            const len = input.value.length;
 
-    kabSelect.addEventListener('change', function() {
-        kecSelect.length = 1; kelSelect.length = 1;
-        kecSelect.disabled = true; kelSelect.disabled = true;
-        const id = this.options[this.selectedIndex]?.dataset?.id;
-        if (!id) return;
-        fetch(`${apiBase}/districts/${id}.json`)
-            .then(res => res.json())
-            .then(data => {
-                data.forEach(k => {
-                    let opt = new Option(k.name, k.name);
-                    opt.dataset.id = k.id;
-                    kecSelect.add(opt);
-                });
-                kecSelect.disabled = false;
-            });
-    });
+            counter.textContent = `${len} / 16 digit`;
 
-    kecSelect.addEventListener('change', function() {
-        kelSelect.length = 1; kelSelect.disabled = true;
-        const id = this.options[this.selectedIndex]?.dataset?.id;
-        if (!id) return;
-        fetch(`${apiBase}/villages/${id}.json`)
-            .then(res => res.json())
-            .then(data => {
-                data.forEach(k => {
-                    let opt = new Option(k.name, k.name);
-                    opt.dataset.id = k.id;
-                    kelSelect.add(opt);
-                });
-                kelSelect.disabled = false;
-            });
-    });
+            if (len === 16) {
+                counter.className = 'badge rounded-pill bg-success text-white';
+                feedback.className = 'small fw-semibold text-success';
+                feedback.innerHTML = `<i class="fas fa-check-circle me-1"></i> ${fieldName} valid (16 digit)`;
+                input.style.borderColor = '#10B981';
+            } else if (len > 16) {
+                counter.className = 'badge rounded-pill bg-danger text-white';
+                feedback.className = 'small fw-semibold text-danger';
+                feedback.innerHTML = `<i class="fas fa-exclamation-circle me-1"></i> ${fieldName} harus tepat 16 digit, saat ini ${len} digit`;
+                input.style.borderColor = '#EF4444';
+            } else if (len > 0) {
+                counter.className = 'badge rounded-pill bg-warning text-dark';
+                feedback.className = 'small fw-semibold text-danger';
+                feedback.innerHTML = `<i class="fas fa-exclamation-circle me-1"></i> ${fieldName} harus tepat 16 digit, saat ini ${len} digit`;
+                input.style.borderColor = '#F59E0B';
+            } else {
+                counter.className = 'badge rounded-pill bg-secondary bg-opacity-10 text-secondary';
+                feedback.className = 'small fw-semibold text-muted';
+                feedback.textContent = `Masukkan 16 digit ${fieldName} resmi`;
+                input.style.borderColor = '';
+            }
+        }
+
+        input.addEventListener('input', updateState);
+        // Jalankan sekali saat load (misal bila ada old input)
+        updateState();
+    }
+
+    setupDigitCounter('inputNoKk', 'kkCounter', 'kkFeedback', 'No. KK');
+    setupDigitCounter('inputNik', 'nikCounter', 'nikFeedback', 'NIK');
+
+    // 3. Mapping Blok Per RT Dinamis
+    const blocksPerRt = @json($blocksPerRt ?? []);
+    const selectRt = document.getElementById('selectRt');
+    const selectBlok = document.getElementById('selectBlok');
+    const inputNomorRumah = document.getElementById('inputNomorRumah');
+    const textareaAlamat = document.getElementById('textareaAlamat');
+
+    const oldBlok = "{{ old('blok') }}";
+
+    function updateBlokOptions(selectedRt) {
+        selectBlok.innerHTML = '';
+        if (!selectedRt || !blocksPerRt[selectedRt]) {
+            selectBlok.disabled = true;
+            selectBlok.add(new Option('Pilih RT terlebih dahulu', ''));
+            return;
+        }
+
+        selectBlok.disabled = false;
+        selectBlok.add(new Option('-- Pilih Blok --', ''));
+        const bloks = blocksPerRt[selectedRt];
+        bloks.forEach(b => {
+            const opt = new Option('Blok ' + b, b);
+            if (oldBlok === b) opt.selected = true;
+            selectBlok.add(opt);
+        });
+    }
+
+    // 4. Auto-generate Detail Jalan / Alamat Lengkap
+    let addressManuallyEdited = false;
+    if (textareaAlamat) {
+        textareaAlamat.addEventListener('input', function() {
+            // Jika user sengaja mengetik sesuatu selain format bawaan
+            addressManuallyEdited = true;
+        });
+    }
+
+    function syncAddress() {
+        const rt = selectRt ? selectRt.value : '';
+        const blok = selectBlok ? selectBlok.value : '';
+        const nomor = inputNomorRumah ? inputNomorRumah.value.trim() : '';
+
+        if (!addressManuallyEdited || !textareaAlamat.value.trim()) {
+            if (rt || blok || nomor) {
+                const blokPart = blok ? `Blok ${blok}` : 'Blok [..]';
+                const noPart = nomor ? `No. ${nomor}` : 'No. [..]';
+                const rtPart = rt ? `RT ${rt}` : 'RT [...]';
+
+                textareaAlamat.value = `Jl. Braga, ${blokPart} ${noPart}, ${rtPart} / RW 018, Kel. Braga, Kec. Sumur Bandung, Kota Bandung`;
+            }
+        }
+    }
+
+    if (selectRt) {
+        selectRt.addEventListener('change', function() {
+            updateBlokOptions(this.value);
+            syncAddress();
+        });
+        if (selectRt.value) {
+            updateBlokOptions(selectRt.value);
+        }
+    }
+
+    if (selectBlok) {
+        selectBlok.addEventListener('change', syncAddress);
+    }
+
+    if (inputNomorRumah) {
+        inputNomorRumah.addEventListener('input', syncAddress);
+    }
 });
 </script>
 @endpush

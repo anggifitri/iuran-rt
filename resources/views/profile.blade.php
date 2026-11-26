@@ -185,6 +185,23 @@
 
     <!-- ==================== KOLOM KANAN (col-lg-8): KONTEN TAB FORM ==================== -->
     <div class="col-lg-8 col-12">
+        @if(isset($isPreviewMode) && $isPreviewMode)
+        <div class="alert alert-warning border-0 shadow-sm p-3.5 mb-4 d-flex align-items-center gap-3" style="border-radius: 16px; background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D !important;">
+            <div class="rounded-circle d-flex align-items-center justify-content-center text-white" style="width: 44px; height: 44px; background: #D97706; flex-shrink: 0;">
+                <i class="fas fa-eye fa-lg"></i>
+            </div>
+            <div class="flex-grow-1">
+                <div class="d-flex align-items-center gap-2 mb-0.5">
+                    <strong style="font-size: 0.95rem;">Mode Preview Aktif (Hanya Lihat)</strong>
+                    <span class="badge rounded-pill bg-warning text-dark px-2.5 py-0.5 fw-bold" style="font-size: 0.68rem;">SIMULASI AKUN</span>
+                </div>
+                <p class="mb-0 small" style="font-size: 0.8rem; line-height: 1.45;">
+                    Anda sedang meninjau profil akun <strong>{{ $user->name }}</strong> ({{ $user->role_label }}). Seluruh formulir bersifat <em>read-only</em> dan tombol simpan dinonaktifkan untuk melindungi keaslian data akun asli.
+                </p>
+            </div>
+        </div>
+        @endif
+
         <!-- ==================== TAB 1: INFORMASI PRIBADI ==================== -->
         @if($activeTab === 'personal')
         <div class="card p-4 border-0 shadow-sm" style="border-radius: 18px; border: 1px solid var(--nx-border) !important;">
@@ -203,6 +220,7 @@
             <form action="{{ route('profile.update_personal') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
+                <fieldset {{ (isset($isPreviewMode) && $isPreviewMode) ? 'disabled' : '' }}>
 
                 <!-- Upload Foto Profil -->
                 <div class="mb-4 p-3 rounded-4 bg-light border" style="border-color: var(--nx-border) !important;">
@@ -324,10 +342,11 @@
                 </div>
 
                 <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top" style="border-color: var(--nx-border) !important;">
-                    <button type="submit" class="btn btn-primary fw-bold px-4 py-2.5" style="border-radius: 12px; background: var(--nx-forest); border-color: var(--nx-forest);">
+                    <button type="submit" class="btn btn-primary fw-bold px-4 py-2.5" {{ (isset($isPreviewMode) && $isPreviewMode) ? 'disabled' : '' }} style="border-radius: 12px; background: var(--nx-forest); border-color: var(--nx-forest);">
                         <i class="fas fa-save me-1.5"></i> Simpan Perubahan Biodata
                     </button>
                 </div>
+                </fieldset>
             </form>
         </div>
 
@@ -349,6 +368,7 @@
             <form action="{{ route('profile.update_account') }}" method="POST">
                 @csrf
                 @method('PUT')
+                <fieldset {{ (isset($isPreviewMode) && $isPreviewMode) ? 'disabled' : '' }}>
 
                 <div class="row g-3">
                     <!-- Email Akun -->
@@ -389,7 +409,7 @@
                     <!-- Tanggal Bergabung -->
                     <div class="col-md-6 col-12">
                         <label class="form-label small fw-bold text-muted">Tanggal Pendaftaran Akun</label>
-                        <input type="text" value="{{ $user->created_at->translatedFormat('d F Y, H:i') }} WIB" readonly class="form-control bg-light" style="border-radius: 12px; font-size: 0.88rem;">
+                        <input type="text" value="{{ $user->created_at ? $user->created_at->translatedFormat('d F Y, H:i') . ' WIB' : '-' }}" readonly class="form-control bg-light" style="border-radius: 12px; font-size: 0.88rem;">
                     </div>
 
                     <!-- Password Saat Ini (Verifikasi Keamanan) -->
@@ -409,7 +429,7 @@
                     @if(!$user->phone_verified_at)
                     <form action="{{ route('profile.verify_phone') }}" method="POST" class="d-inline">
                         @csrf
-                        <button type="submit" class="btn btn-outline-success btn-sm fw-bold px-3" style="border-radius: 10px;">
+                        <button type="submit" class="btn btn-outline-success btn-sm fw-bold px-3" {{ (isset($isPreviewMode) && $isPreviewMode) ? 'disabled' : '' }} style="border-radius: 10px;">
                             <i class="fab fa-whatsapp me-1"></i> Verifikasi Nomor Telepon
                         </button>
                     </form>
@@ -417,10 +437,11 @@
                     <div></div>
                     @endif
 
-                    <button type="submit" class="btn btn-primary fw-bold px-4 py-2.5" style="border-radius: 12px; background: var(--nx-forest); border-color: var(--nx-forest);">
+                    <button type="submit" class="btn btn-primary fw-bold px-4 py-2.5" {{ (isset($isPreviewMode) && $isPreviewMode) ? 'disabled' : '' }} style="border-radius: 12px; background: var(--nx-forest); border-color: var(--nx-forest);">
                         <i class="fas fa-save me-1.5"></i> Perbarui Kredensial Kontak
                     </button>
                 </div>
+                </fieldset>
             </form>
         </div>
 
@@ -444,6 +465,7 @@
                 <form action="{{ route('profile.update_password') }}" method="POST">
                     @csrf
                     @method('PUT')
+                    <fieldset {{ (isset($isPreviewMode) && $isPreviewMode) ? 'disabled' : '' }}>
 
                     <div class="row g-3">
                         <div class="col-md-4 col-12">
@@ -464,10 +486,11 @@
                     </div>
 
                     <div class="d-flex justify-content-end mt-4 pt-3 border-top" style="border-color: var(--nx-border) !important;">
-                        <button type="submit" class="btn btn-danger fw-bold px-4 py-2.5" style="border-radius: 12px;">
+                        <button type="submit" class="btn btn-danger fw-bold px-4 py-2.5" {{ (isset($isPreviewMode) && $isPreviewMode) ? 'disabled' : '' }} style="border-radius: 12px;">
                             <i class="fas fa-shield-alt me-1.5"></i> Perbarui Kata Sandi
                         </button>
                     </div>
+                    </fieldset>
                 </form>
             </div>
 
@@ -505,8 +528,8 @@
                 <form action="{{ route('profile.logout_other_devices') }}" method="POST" class="d-flex align-items-center gap-2 flex-wrap">
                     @csrf
                     <input type="password" name="confirm_password" required placeholder="Ketik kata sandi untuk putuskan sesi lain"
-                           class="form-control form-control-sm" style="border-radius: 10px; max-width: 320px;">
-                    <button type="submit" class="btn btn-outline-danger btn-sm fw-bold px-3 py-1.5" style="border-radius: 10px;">
+                           class="form-control form-control-sm" {{ (isset($isPreviewMode) && $isPreviewMode) ? 'disabled' : '' }} style="border-radius: 10px; max-width: 320px;">
+                    <button type="submit" class="btn btn-outline-danger btn-sm fw-bold px-3 py-1.5" {{ (isset($isPreviewMode) && $isPreviewMode) ? 'disabled' : '' }} style="border-radius: 10px;">
                         <i class="fas fa-right-from-bracket me-1"></i> Logout Sesi Perangkat Lain
                     </button>
                 </form>
@@ -574,6 +597,7 @@
             <form action="{{ route('profile.update_notifications') }}" method="POST">
                 @csrf
                 @method('PUT')
+                <fieldset {{ (isset($isPreviewMode) && $isPreviewMode) ? 'disabled' : '' }}>
 
                 <h6 class="fw-bold text-uppercase mb-3" style="font-size: 0.8rem; color: var(--nx-forest); letter-spacing: 0.05em;">
                     Kategori Notifikasi Lingkungan
@@ -684,10 +708,11 @@
                 </div>
 
                 <div class="d-flex justify-content-end mt-4 pt-3 border-top" style="border-color: var(--nx-border) !important;">
-                    <button type="submit" class="btn btn-primary fw-bold px-4 py-2.5" style="border-radius: 12px; background: var(--nx-forest); border-color: var(--nx-forest);">
+                    <button type="submit" class="btn btn-primary fw-bold px-4 py-2.5" {{ (isset($isPreviewMode) && $isPreviewMode) ? 'disabled' : '' }} style="border-radius: 12px; background: var(--nx-forest); border-color: var(--nx-forest);">
                         <i class="fas fa-save me-1.5"></i> Simpan Preferensi Notifikasi
                     </button>
                 </div>
+                </fieldset>
             </form>
         </div>
 
@@ -809,6 +834,7 @@
                 <form action="{{ route('profile.update_preferences') }}" method="POST">
                     @csrf
                     @method('PUT')
+                    <fieldset {{ (isset($isPreviewMode) && $isPreviewMode) ? 'disabled' : '' }}>
 
                     <!-- Preferensi Tema -->
                     <div class="mb-4">
@@ -867,10 +893,11 @@
                     </div>
 
                     <div class="d-flex justify-content-end pt-3 border-top" style="border-color: var(--nx-border) !important;">
-                        <button type="submit" class="btn btn-primary fw-bold px-4 py-2.5" style="border-radius: 12px; background: var(--nx-forest); border-color: var(--nx-forest);">
+                        <button type="submit" class="btn btn-primary fw-bold px-4 py-2.5" {{ (isset($isPreviewMode) && $isPreviewMode) ? 'disabled' : '' }} style="border-radius: 12px; background: var(--nx-forest); border-color: var(--nx-forest);">
                             <i class="fas fa-save me-1.5"></i> Simpan Preferensi
                         </button>
                     </div>
+                    </fieldset>
                 </form>
             </div>
 

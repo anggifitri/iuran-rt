@@ -615,16 +615,10 @@
             box-shadow: var(--nx-shadow-hover) !important;
         }
 
-        /* Straight Inset Accent (No curved clipping) */
+        /* Full surface clean cards - no vertical bar */
         .nx-stat-card::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 14px;
-            bottom: 14px;
-            width: 4px;
-            border-radius: 0 4px 4px 0;
-            background: var(--stat-accent, var(--nx-forest));
+            display: none !important;
+            content: none !important;
         }
 
         .nx-stat-card--forest { --stat-accent: var(--nx-forest); }
@@ -640,7 +634,7 @@
         .nx-stat-content {
             flex: 1;
             min-width: 0;
-            padding-left: 6px;
+            padding-left: 0;
         }
 
         .nx-stat-label {
@@ -1608,6 +1602,12 @@
                             <span class="nx-nav-text">Ronda &amp; Keamanan</span>
                         </a>
                     </li>
+                    <li class="nx-nav-item">
+                        <a href="{{ route('smart_gate.index') }}" class="nx-nav-link {{ request()->routeIs('smart_gate.*') ? 'active' : '' }}">
+                            <i class="fas fa-torii-gate"></i>
+                            <span class="nx-nav-text">Smart Gate RW 018</span>
+                        </a>
+                    </li>
                 </ul>
 
                 <!-- KELOMPOK 5: FASILITAS DAN KEGIATAN -->
@@ -1672,6 +1672,14 @@
                             </span>
                         </a>
                     </li>
+                    @if($isAdminRWAuth || (auth()->check() && auth()->user()->isSuperAdmin()))
+                    <li class="nx-nav-item">
+                        <a href="{{ route('iot.index') }}" class="nx-nav-link {{ request()->routeIs('iot.*') ? 'active' : '' }}">
+                            <i class="fas fa-microchip"></i>
+                            <span class="nx-nav-text">Pengaturan API &amp; IoT</span>
+                        </a>
+                    </li>
+                    @endif
                     @endif
                     <li class="nx-nav-item">
                         <a href="{{ route('profile.edit') }}" class="nx-nav-link {{ request()->routeIs('profile.*') ? 'active' : '' }}">

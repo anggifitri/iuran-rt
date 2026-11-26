@@ -530,6 +530,70 @@
                 padding: 16px;
             }
         }
+
+        @media (max-width: 639.98px) {
+            .sa-topbar {
+                padding: 10px 14px;
+                gap: 8px;
+                border-radius: 14px;
+            }
+            .sa-topbar-title h1 {
+                font-size: 0.95rem !important;
+                max-width: 140px !important;
+            }
+            .sa-kpi-card {
+                padding: 12px;
+                gap: 8px;
+                border-radius: 14px;
+            }
+            .sa-kpi-icon {
+                width: 32px;
+                height: 32px;
+                border-radius: 10px;
+                font-size: 0.95rem;
+            }
+            .sa-kpi-label {
+                font-size: 0.68rem;
+                letter-spacing: 0.02em;
+            }
+            .sa-kpi-val {
+                font-size: 1.15rem !important;
+                line-height: 1.15;
+            }
+            .sa-kpi-sub {
+                font-size: 0.68rem !important;
+                line-height: 1.25;
+            }
+            .sa-hero-banner {
+                padding: 16px !important;
+                border-radius: 18px !important;
+            }
+            .sa-hero-title {
+                font-size: 1.15rem !important;
+            }
+            .sa-hero-desc {
+                font-size: 0.78rem !important;
+                line-height: 1.45 !important;
+            }
+            .sa-hero-badges span {
+                font-size: 0.65rem !important;
+                padding: 3px 8px !important;
+            }
+            .sa-hero-actions button,
+            .sa-hero-actions a {
+                padding: 6px 12px !important;
+                font-size: 0.75rem !important;
+                border-radius: 10px !important;
+            }
+            .sa-table th {
+                padding: 8px 10px;
+                font-size: 0.68rem;
+            }
+            .sa-table td {
+                padding: 10px;
+                font-size: 0.78rem;
+            }
+        }
     </style>
     @stack('styles')
     <link rel="stylesheet" href="{{ asset('css/nexanest-dark-mode.css') }}?v={{ filemtime(public_path('css/nexanest-dark-mode.css')) }}">
@@ -587,6 +651,13 @@
                         <span>Manajemen Akun &amp; Akses</span>
                     </a>
                 </li>
+                <li class="sa-nav-item">
+                    <a href="{{ route('smart_gate.index') }}" class="sa-nav-link {{ request()->routeIs('smart_gate.*') ? 'active' : '' }}">
+                        <i class="fas fa-torii-gate"></i>
+                        <span>Smart Gate RW 018</span>
+                        <span class="sa-nav-badge bg-info-subtle text-info">Live</span>
+                    </a>
+                </li>
             </ul>
 
             <!-- ==================== 3. SISTEM & PROFIL ==================== -->
@@ -596,6 +667,13 @@
                     <a href="{{ route('super_admin.settings.index') }}" class="sa-nav-link {{ request()->routeIs('super_admin.settings.*', 'super_admin.modules.*', 'super_admin.notifications.*', 'super_admin.backup.*') ? 'active' : '' }}">
                         <i class="fas fa-sliders"></i>
                         <span>Pengaturan Platform</span>
+                    </a>
+                </li>
+                <li class="sa-nav-item">
+                    <a href="{{ route('iot.index') }}" class="sa-nav-link {{ request()->routeIs('iot.*') ? 'active' : '' }}">
+                        <i class="fas fa-microchip"></i>
+                        <span>Pengaturan API &amp; IoT</span>
+                        <span class="sa-nav-badge bg-primary-subtle text-primary">Smart Gate</span>
                     </a>
                 </li>
                 <li class="sa-nav-item">
@@ -635,7 +713,7 @@
                         <i class="fas fa-bars"></i>
                     </button>
                     <div>
-                        <h1>@yield('page_title', 'Platform Control Center')</h1>
+                        <h1 class="text-truncate sa-page-title" style="max-width: 220px;">@yield('page_title', 'Platform Control Center')</h1>
                     </div>
                     <span class="badge-crown d-none d-sm-inline-flex">
                         <i class="fas fa-crown text-warning"></i> Super Admin

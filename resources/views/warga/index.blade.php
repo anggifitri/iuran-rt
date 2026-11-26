@@ -396,6 +396,15 @@
             <form id="formRekamKtp" method="POST" action="">
                 @csrf
                 <div class="modal-body p-4">
+                    <!-- Badge Status Mode Rekam E-KTP (Tahap 3 Isolasi Smart Gate) -->
+                    <div class="d-flex align-items-center gap-2 p-2 px-3 rounded-3 mb-3"
+                         style="background: rgba(43, 95, 142, 0.1); border: 1px solid rgba(43, 95, 142, 0.25); color: #1F517F;">
+                        <i class="fas fa-shield-halved"></i>
+                        <span class="small fw-semibold" style="font-size: 0.78rem;">
+                            Mode Rekam E-KTP Aktif — Tap kartu tidak akan membuka gerbang
+                        </span>
+                    </div>
+
                     <!-- Target Warga Info -->
                     <div class="p-3 rounded-4 mb-3 d-flex justify-content-between align-items-center"
                          style="background: var(--nx-mint-soft); border: 1px solid var(--nx-sage);">
@@ -496,8 +505,37 @@ document.addEventListener('DOMContentLoaded', function () {
     const btnResetUid = document.getElementById('btnResetUid');
 
     let pollInterval = null;
+    let modeKeepAliveInterval = null;
     let modalOpenedAt = 0;
     let currentWargaId = null;
+
+    function activateScanMode(mode) {
+        fetch(`{{ route('iot.scan_mode') }}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ mode: mode })
+        }).catch(() => {});
+    }
+
+    function startModeKeepAlive() {
+        if (modeKeepAliveInterval) clearInterval(modeKeepAliveInterval);
+        activateScanMode('rekam_ktp');
+        modeKeepAliveInterval = setInterval(function () {
+            activateScanMode('rekam_ktp');
+        }, 45000);
+    }
+
+    function stopModeKeepAlive() {
+        if (modeKeepAliveInterval) {
+            clearInterval(modeKeepAliveInterval);
+            modeKeepAliveInterval = null;
+        }
+        activateScanMode('smart_gate');
+    }
 
     function setScannerWaiting() {
         scannerBox.style.borderColor = 'var(--nx-sage)';
@@ -574,12 +612,19 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             bsModal.show();
+            startModeKeepAlive();
             startPolling();
         });
     });
 
     modalEl.addEventListener('hidden.bs.modal', function () {
         stopPolling();
+        stopModeKeepAlive();
+    });
+
+    formRekam.addEventListener('submit', function () {
+        stopPolling();
+        stopModeKeepAlive();
     });
 
     btnResetUid.addEventListener('click', function () {
@@ -598,11 +643,14 @@ document.addEventListener('DOMContentLoaded', function () {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
             },
             body: JSON.stringify({
                 uid: randomHex,
-                device_id: 'NODEMCU-ESP32-RC522'
+                device_id: 'NODEMCU-ESP32-RC522',
+                context: 'rekam_ktp',
+                method: 'simulation'
             })
         })
         .then(r => r.json())

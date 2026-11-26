@@ -19,6 +19,9 @@
         <p class="nx-page-subtitle">Pusat pengelolaan jenis iuran, penetapan tagihan, konfirmasi pembayaran, tunggakan, dan rekapitulasi kepatuhan warga.</p>
     </div>
     <div class="d-flex flex-wrap gap-2">
+        <button type="button" class="btn btn-outline-success" id="btnOpenScanEktp" data-bs-toggle="modal" data-bs-target="#modalScanEktpIuran">
+            <i class="fas fa-id-card me-1"></i> Scan E-KTP Warga
+        </button>
         <a href="{{ route('laporan.cetak_iuran', ['bulan' => $bulan, 'tahun' => $tahun, 'rt_number' => $rtFilter]) }}" target="_blank" class="btn btn-outline-secondary">
             <i class="fas fa-file-pdf me-1"></i> Cetak Rekap PDF
         </a>
@@ -651,10 +654,383 @@
     </div>
 </div>
 @endif
+
+<!-- MODAL IDENTIFIKASI CEPAT SETORAN VIA E-KTP (TAHAP 3 MULTI-FUNGSI RFID) -->
+<div class="modal fade" id="modalScanEktpIuran" tabindex="-1" aria-labelledby="modalScanEktpIuranLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4" style="background: var(--nx-card-bg); color: var(--nx-text);">
+            <!-- Modal Header -->
+            <div class="modal-header border-bottom py-3 px-4" style="border-color: var(--nx-border) !important;">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-circle d-flex align-items-center justify-content-center"
+                         style="width: 44px; height: 44px; background: rgba(40, 89, 67, 0.12); color: var(--nx-forest);">
+                        <i class="fas fa-id-card-clip fa-lg"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title fw-bold mb-0" id="modalScanEktpIuranLabel" style="color: var(--nx-text);">
+                            Identifikasi Cepat Setoran via E-KTP
+                        </h5>
+                        <small class="text-muted">NodeMCU ESP32 • Reader RFID RC522 (13.56 MHz)</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body p-4">
+                <!-- Status Mode Badge (Isolasi Smart Gate) -->
+                <div class="d-flex align-items-center justify-content-between p-2.5 px-3 rounded-3 mb-3"
+                     style="background: rgba(40, 89, 67, 0.08); border: 1px solid rgba(40, 89, 67, 0.2); color: var(--nx-forest);">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="fas fa-shield-halved"></i>
+                        <span class="small fw-semibold">Mode Pembayaran Iuran Aktif — Tap kartu tidak akan membuka gerbang</span>
+                    </div>
+                    <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle px-2.5 py-1" style="font-size: 0.72rem;">
+                        <i class="fas fa-circle-dot fa-fade me-1"></i> Sensor Siap
+                    </span>
+                </div>
+
+                <!-- STATE 1: SCANNER BOX (WAITING FOR TAP) -->
+                <div id="iuranScanWaitingBox" class="text-center p-4 rounded-4 border position-relative overflow-hidden mb-3"
+                     style="border: 2px dashed var(--nx-sage) !important; background: var(--nx-bg); transition: all 0.3s ease;">
+                    <div class="mx-auto mb-3 rounded-circle d-flex align-items-center justify-content-center"
+                         style="width: 72px; height: 72px; background: rgba(40, 89, 67, 0.12); color: var(--nx-forest);">
+                        <i class="fas fa-wifi fa-2x fa-beat-fade"></i>
+                    </div>
+                    <h6 class="fw-bold mb-1" style="color: var(--nx-text);">Menunggu Tempelan E-KTP Warga...</h6>
+                    <p class="text-muted small mb-0">
+                        Dekatkan fisik E-KTP warga pada sensor <strong>RFID RC522 (NodeMCU ESP32)</strong> untuk identifikasi profil dan tagihan instan.
+                    </p>
+                </div>
+
+                <!-- STATE 2: RESIDENT CARD PROFILE (REGISTERED) -->
+                <div id="iuranScanResultCard" class="d-none">
+                    <div class="card border rounded-4 overflow-hidden mb-3" style="background: var(--nx-card-bg); border-color: var(--nx-border) !important;">
+                        <div class="p-3.5 border-bottom d-flex align-items-center justify-content-between"
+                             style="background: rgba(40, 89, 67, 0.06); border-color: var(--nx-border) !important;">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold fs-5"
+                                     id="iuranResAvatar"
+                                     style="width: 48px; height: 48px; background: var(--nx-forest);">
+                                    W
+                                </div>
+                                <div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h5 class="fw-bold mb-0" id="iuranResNama" style="color: var(--nx-text);">-</h5>
+                                        <span class="badge rounded-pill" id="iuranResRoleBadge" style="background: var(--nx-forest); color: #fff; font-size: 0.68rem;">Kepala Keluarga</span>
+                                    </div>
+                                    <small class="text-muted" id="iuranResMeta">-</small>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-light text-dark border font-monospace px-2.5 py-1.5" id="iuranResUidBadge">
+                                    <i class="fas fa-id-card me-1 text-primary"></i>UID: -
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <div class="row g-3">
+                                <div class="col-sm-6">
+                                    <div class="p-3 rounded-3 h-100" style="background: var(--nx-bg); border: 1px solid var(--nx-border);">
+                                        <span class="small text-muted d-block mb-1 fw-semibold">Status Iuran Periode Ini</span>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="badge px-3 py-1.5" id="iuranResStatusBadge" style="font-size: 0.85rem;">-</span>
+                                            <span class="small fw-semibold text-muted" id="iuranResPeriode">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="p-3 rounded-3 h-100" style="background: var(--nx-bg); border: 1px solid var(--nx-border);">
+                                        <span class="small text-muted d-block mb-1 fw-semibold">Riwayat Pembayaran Terakhir</span>
+                                        <div class="fw-bold" id="iuranResLastPayment" style="color: var(--nx-text);">-</div>
+                                        <small class="text-muted" id="iuranResLastAmount">-</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STATE 3: UNREGISTERED CARD ALERT -->
+                <div id="iuranScanUnregisteredCard" class="d-none">
+                    <div class="alert alert-warning rounded-4 p-4 border-warning-subtle mb-0 d-flex align-items-start gap-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center text-warning"
+                             style="width: 44px; height: 44px; background: rgba(245, 158, 11, 0.15); flex-shrink: 0;">
+                            <i class="fas fa-exclamation-triangle fa-lg"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="fw-bold text-dark mb-1">Kartu E-KTP Belum Terdaftar</h6>
+                            <p class="small text-muted mb-3">
+                                Kartu dengan UID <strong id="unregisteredUid" class="font-monospace text-dark">-</strong> berhasil dibaca oleh reader RFID, namun belum terhubung ke data warga manapun di RT/RW. Silakan rekam E-KTP warga terlebih dahulu.
+                            </p>
+                            <div class="d-flex align-items-center gap-2">
+                                <a href="{{ route('warga.index') }}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-user-plus me-1"></i> Buka Data Warga
+                                </a>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="btnIuranScanAgainUnregistered">
+                                    <i class="fas fa-rotate me-1"></i> Scan Kartu Lain
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer border-top py-2.5 px-4" style="border-color: var(--nx-border) !important;">
+                <div class="d-flex align-items-center justify-content-between w-100">
+                    <div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="btnIuranSimulateTap" title="Simulasikan Tap E-KTP untuk pengujian tanpa perangkat fisik">
+                            <i class="fas fa-microchip me-1"></i> Simulasi Tap E-KTP
+                        </button>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Tutup</button>
+                        <button type="button" class="btn btn-sm btn-outline-primary d-none" id="btnIuranScanAgain">
+                            <i class="fas fa-rotate me-1"></i> Scan Ulang
+                        </button>
+                        <button type="button" class="btn btn-sm btn-success d-none" id="btnIuranProceedPay">
+                            <i class="fas fa-hand-holding-dollar me-1"></i> Catat Setoran untuk Warga Ini
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('scripts')
 <script>
+let iuranPollInterval = null;
+let iuranKeepAliveInterval = null;
+let iuranScanOpenedAt = 0;
+let currentScannedWarga = null;
+
+const modalScanIuranEl = document.getElementById('modalScanEktpIuran');
+const bsModalScanIuran = modalScanIuranEl ? new bootstrap.Modal(modalScanIuranEl) : null;
+const waitingBox = document.getElementById('iuranScanWaitingBox');
+const resultCard = document.getElementById('iuranScanResultCard');
+const unregisteredCard = document.getElementById('iuranScanUnregisteredCard');
+const btnProceedPay = document.getElementById('btnIuranProceedPay');
+const btnScanAgain = document.getElementById('btnIuranScanAgain');
+const btnScanAgainUnreg = document.getElementById('btnIuranScanAgainUnregistered');
+const btnSimulateIuran = document.getElementById('btnIuranSimulateTap');
+
+function setIuranScanWaiting() {
+    waitingBox.classList.remove('d-none');
+    resultCard.classList.add('d-none');
+    unregisteredCard.classList.add('d-none');
+    btnProceedPay.classList.add('d-none');
+    btnScanAgain.classList.add('d-none');
+    currentScannedWarga = null;
+}
+
+function activateIuranScanMode(mode) {
+    fetch(`{{ route('iot.scan_mode') }}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'Accept': 'application/json'
+        },
+        body: JSON.stringify({ mode: mode })
+    }).catch(() => {});
+}
+
+function startIuranScanEngine() {
+    stopIuranScanEngine();
+    setIuranScanWaiting();
+    iuranScanOpenedAt = Date.now() - 3000;
+
+    // 1. Kunci mode scan ke 'iuran'
+    activateIuranScanMode('iuran');
+    iuranKeepAliveInterval = setInterval(function () {
+        activateIuranScanMode('iuran');
+    }, 45000);
+
+    // 2. Polling ringan setiap 1.5 detik ke /iot/latest-scan?context=iuran
+    iuranPollInterval = setInterval(function () {
+        fetch(`{{ route('iot.latest_scan') }}?context=iuran&since=${iuranScanOpenedAt}`, {
+            headers: { 'Accept': 'application/json' }
+        })
+        .then(r => r.json())
+        .then(res => {
+            if (res.status === 'detected' && res.data && res.data.uid) {
+                iuranScanOpenedAt = res.data.timestamp_ms;
+                handleIuranScanDetected(res.data);
+            }
+        })
+        .catch(() => {});
+    }, 1500);
+}
+
+function stopIuranScanEngine() {
+    if (iuranPollInterval) {
+        clearInterval(iuranPollInterval);
+        iuranPollInterval = null;
+    }
+    if (iuranKeepAliveInterval) {
+        clearInterval(iuranKeepAliveInterval);
+        iuranKeepAliveInterval = null;
+    }
+    // Reset kembali ke smart_gate
+    activateIuranScanMode('smart_gate');
+}
+
+function handleIuranScanDetected(data) {
+    // Hentikan polling sementara setelah kartu terbaca
+    if (iuranPollInterval) {
+        clearInterval(iuranPollInterval);
+        iuranPollInterval = null;
+    }
+
+    if (data.registered && data.warga) {
+        currentScannedWarga = data.warga;
+
+        // Inisial Avatar
+        const initials = data.warga.nama ? data.warga.nama.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase() : 'W';
+        document.getElementById('iuranResAvatar').textContent = initials;
+        document.getElementById('iuranResNama').textContent = data.warga.nama;
+        document.getElementById('iuranResRoleBadge').textContent = data.warga.hubungan_keluarga || 'Warga';
+        document.getElementById('iuranResMeta').textContent = `RT ${data.warga.rt_number} / RW ${data.warga.rw_number || '018'} · Blok ${data.warga.blok_rumah || '-'}`;
+        document.getElementById('iuranResUidBadge').innerHTML = `<i class="fas fa-id-card me-1 text-primary"></i>UID: ${data.uid}`;
+
+        // Ringkasan Status Iuran
+        const summary = data.iuran_summary || {};
+        const statusBadge = document.getElementById('iuranResStatusBadge');
+        statusBadge.className = `badge px-3 py-1.5 ${summary.status_badge || 'bg-secondary-subtle text-secondary'}`;
+        statusBadge.textContent = summary.status_bulan_ini || 'Belum Bayar';
+
+        document.getElementById('iuranResPeriode').textContent = `Periode ${summary.periode_bulan || ''}`;
+        document.getElementById('iuranResLastPayment').textContent = summary.terakhir_bayar || 'Belum ada riwayat';
+        document.getElementById('iuranResLastAmount').textContent = summary.terakhir_nominal ? `Nominal: ${summary.terakhir_nominal}` : '-';
+
+        waitingBox.classList.add('d-none');
+        unregisteredCard.classList.add('d-none');
+        resultCard.classList.remove('d-none');
+        btnProceedPay.classList.remove('d-none');
+        btnScanAgain.classList.remove('d-none');
+    } else {
+        document.getElementById('unregisteredUid').textContent = data.uid || '-';
+        waitingBox.classList.add('d-none');
+        resultCard.classList.add('d-none');
+        unregisteredCard.classList.remove('d-none');
+        btnProceedPay.classList.add('d-none');
+        btnScanAgain.classList.remove('d-none');
+    }
+}
+
+if (modalScanIuranEl) {
+    modalScanIuranEl.addEventListener('show.bs.modal', function () {
+        startIuranScanEngine();
+    });
+
+    modalScanIuranEl.addEventListener('hidden.bs.modal', function () {
+        stopIuranScanEngine();
+    });
+}
+
+if (btnScanAgain) {
+    btnScanAgain.addEventListener('click', function () {
+        startIuranScanEngine();
+    });
+}
+
+if (btnScanAgainUnreg) {
+    btnScanAgainUnreg.addEventListener('click', function () {
+        startIuranScanEngine();
+    });
+}
+
+if (btnProceedPay) {
+    btnProceedPay.addEventListener('click', function () {
+        if (!currentScannedWarga) return;
+
+        // Tutup modal scan
+        bsModalScanIuran.hide();
+
+        // Buka modal pembayaran Quick Pay
+        const targetWargaId = currentScannedWarga.kk_id || currentScannedWarga.id;
+        const sel = document.getElementById('quickPayWargaId');
+
+        let found = false;
+        if (sel) {
+            for (let i = 0; i < sel.options.length; i++) {
+                if (sel.options[i].value == targetWargaId || sel.options[i].value == currentScannedWarga.id) {
+                    sel.selectedIndex = i;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                const opt = document.createElement('option');
+                opt.value = currentScannedWarga.id;
+                opt.textContent = `${currentScannedWarga.nama} (RT ${currentScannedWarga.rt_number} · Blok ${currentScannedWarga.blok_rumah || '-'})`;
+                opt.selected = true;
+                sel.appendChild(opt);
+            }
+        }
+
+        const amountInput = document.getElementById('quickPayAmount');
+        if (amountInput) {
+            amountInput.value = 100000;
+        }
+
+        const quickPayModalEl = document.getElementById('modalQuickPay');
+        if (quickPayModalEl) {
+            setTimeout(() => {
+                new bootstrap.Modal(quickPayModalEl).show();
+            }, 300);
+        }
+    });
+}
+
+if (btnSimulateIuran) {
+    btnSimulateIuran.addEventListener('click', function () {
+        @php
+            $sampleUid = null;
+            foreach ($rows as $r) {
+                if (!empty($r['warga']->rfid_uid)) {
+                    $sampleUid = $r['warga']->rfid_uid;
+                    break;
+                }
+            }
+        @endphp
+        const sampleUid = '{{ $sampleUid ?? "" }}';
+        const randomHex = Array.from({ length: 7 }, () =>
+            Math.floor(Math.random() * 256).toString(16).padStart(2, '0').toUpperCase()
+        ).join('');
+        const uidToSend = sampleUid ? sampleUid : randomHex;
+
+        fetch(`{{ route('rfid.receive') }}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                uid: uidToSend,
+                context: 'iuran',
+                method: 'simulation'
+            })
+        })
+        .then(r => r.json())
+        .then(() => {
+            // Polling akan otomatis menangkap dalam 1.5 detik
+        })
+        .catch(() => {});
+    });
+}
+
+// Buka otomatis jika ada query parameter ?scan=1
+document.addEventListener('DOMContentLoaded', function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('scan') === '1' && bsModalScanIuran) {
+        bsModalScanIuran.show();
+    }
+});
 function openDirectPayModal(wargaId, nama, rt, nominal) {
     const sel = document.getElementById('quickPayWargaId');
     sel.value = wargaId;

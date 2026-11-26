@@ -19,6 +19,9 @@
         <p class="nx-page-subtitle">Kelola dan pantau seluruh pemasukan serta pengeluaran keuangan lingkungan {{ $isAdminRt ? 'RT ' . $user->rt_number : 'RW' }}.</p>
     </div>
     <div class="d-flex flex-wrap gap-2">
+        <a href="{{ route('laporan.iuran', ['scan' => 1]) }}" class="btn btn-outline-success">
+            <i class="fas fa-id-card me-1"></i> Scan E-KTP Warga
+        </a>
         <a href="{{ route('laporan.index') }}" class="btn btn-outline-primary">
             <i class="fas fa-chart-pie me-1"></i> Lihat Laporan Bulanan
         </a>

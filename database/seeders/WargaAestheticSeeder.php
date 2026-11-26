@@ -105,7 +105,7 @@ class WargaAestheticSeeder extends Seeder
                 'rw_number' => '018',
                 'is_kk' => true,
                 'kk_id' => null,
-                'alamat' => 'Jl. Merdeka Indah No. ' . rand(1, 120) . ', RT ' . $rt . ' RW 018, KOTA BANDUNG, JAWA BARAT'
+                'alamat' => 'Jl. Braga, ' . $blokRumah . ', RT ' . $rt . ' / RW 018, Kel. Braga, Kec. Sumur Bandung, Kota Bandung'
             ]);
 
             // 2. Generate Pasangan (Istri)

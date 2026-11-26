@@ -29,6 +29,10 @@ class AuthController extends Controller
 
     public function sendResetLinkEmail(Request $request)
     {
+        if ($request->has('email')) {
+            $request->merge(['email' => strtolower(trim((string) $request->email))]);
+        }
+
         $request->validate([
             'email' => 'required|email',
         ], [
@@ -44,7 +48,13 @@ class AuthController extends Controller
             return back()->with('status', 'Kami telah mengirimkan tautan pemulihan kata sandi ke email Anda. Silakan periksa kotak masuk atau spam.');
         }
 
-        return back()->withErrors(['email' => 'Alamat email tidak terdaftar dalam sistem NexaNest.'])->withInput();
+        $errorMessage = match($status) {
+            Password::RESET_THROTTLED => 'Permintaan tautan pemulihan terlalu sering. Harap tunggu 1–2 menit sebelum mencoba kembali.',
+            Password::INVALID_USER => 'Alamat email tidak terdaftar dalam sistem NexaNest.',
+            default => 'Gagal mengirimkan tautan pemulihan kata sandi. Silakan coba kembali beberapa saat lagi.'
+        };
+
+        return back()->withErrors(['email' => $errorMessage])->withInput();
     }
 
     public function showResetPassword(Request $request, $token = null)
@@ -57,6 +67,10 @@ class AuthController extends Controller
 
     public function resetPassword(Request $request)
     {
+        if ($request->has('email')) {
+            $request->merge(['email' => strtolower(trim((string) $request->email))]);
+        }
+
         $request->validate([
             'token' => 'required',
             'email' => 'required|email',
@@ -154,6 +168,10 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        if ($request->has('email')) {
+            $request->merge(['email' => strtolower(trim((string) $request->email))]);
+        }
+
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required'
@@ -220,7 +238,30 @@ class AuthController extends Controller
                   ->orWhere('is_kk', '1');
         })->orderBy('nama', 'asc')->get();
 
-        return view('auth.register', compact('kepalaKeluargas'));
+        // Ambil daftar blok per RT 006 - 010 untuk mapping dinamis
+        $rtList = ['006', '007', '008', '009', '010'];
+        $blocksPerRt = [];
+        foreach ($rtList as $rt) {
+            $rawBloks = \App\Models\Warga::where('rt_number', $rt)
+                ->whereNotNull('blok_rumah')
+                ->pluck('blok_rumah');
+
+            $detected = [];
+            foreach ($rawBloks as $rb) {
+                if (preg_match('/Blok\s+([A-Za-z0-9]+)/i', $rb, $m)) {
+                    $letter = strtoupper($m[1]);
+                    $detected[$letter] = true;
+                }
+            }
+            $blockList = array_keys($detected);
+            sort($blockList);
+            if (empty($blockList)) {
+                $blockList = ['A', 'B', 'C', 'D', 'E', 'F'];
+            }
+            $blocksPerRt[$rt] = $blockList;
+        }
+
+        return view('auth.register', compact('kepalaKeluargas', 'blocksPerRt'));
     }
 
     public function register(Request $request)
@@ -228,8 +269,13 @@ class AuthController extends Controller
         if ($request->has('rt_number') && $request->rt_number != '') {
             $request->merge(['rt_number' => str_pad($request->rt_number, 3, '0', STR_PAD_LEFT)]);
         }
-        if ($request->has('rw_number') && $request->rw_number != '') {
-            $request->merge(['rw_number' => str_pad($request->rw_number, 3, '0', STR_PAD_LEFT)]);
+        // Nomor RW terkunci ke 018
+        $request->merge(['rw_number' => '018']);
+
+        // Format blok_rumah dari input blok dan nomor_rumah jika dikirim terpisah
+        if ($request->filled('blok') && $request->filled('nomor_rumah')) {
+            $blokFormatted = 'Blok ' . strtoupper(trim($request->blok)) . ' No. ' . trim($request->nomor_rumah);
+            $request->merge(['blok_rumah' => $blokFormatted]);
         }
 
         $request->merge(['is_kk' => $request->is_kk == '1']);
@@ -246,21 +292,32 @@ class AuthController extends Controller
             ],
             'password' => 'required|string|min:6|confirmed',
             'blok_rumah' => 'required|string|max:50',
-            'phone' => 'nullable|string|max:20',
-            'no_kk' => 'nullable|string|max:25',
-            'nik' => 'nullable|string|max:25',
-            'gender' => 'nullable|in:L,P',
+            'nomor_hp' => 'required|string|max:20',
+            'no_kk' => 'required|digits:16',
+            'nik' => 'required|digits:16|unique:users,nik|unique:wargas,nik',
+            'gender' => 'required|in:Laki-laki,Perempuan,L,P',
             'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'tanggal_lahir' => 'required|date',
             'rt_number' => 'required|string|size:3|in:006,007,008,009,010',
-            'rw_number' => 'required|string|size:3',
+            'rw_number' => 'required|string|size:3|in:018',
             'is_kk' => 'required|boolean',
             'kk_id' => 'nullable|exists:wargas,id',
-            'address' => 'required|string',
+            'alamat' => 'required|string',
         ], [
+            'nik.required' => 'Nomor Induk Kependudukan (NIK) wajib diisi.',
+            'nik.digits' => 'NIK harus tepat 16 digit angka.',
+            'nik.unique' => 'NIK ini sudah terdaftar di sistem kependudukan NexaNest.',
+            'no_kk.required' => 'Nomor Kartu Keluarga (No. KK) wajib diisi.',
+            'no_kk.digits' => 'No. KK harus tepat 16 digit angka.',
+            'blok_rumah.required' => 'Blok dan Nomor Rumah wajib dilengkapi.',
+            'nomor_hp.required' => 'Nomor HP / WhatsApp wajib diisi.',
+            'gender.required' => 'Jenis kelamin wajib dipilih.',
+            'rt_number.in' => 'RT yang dipilih harus dalam lingkup RW 018 (RT 006 - RT 010).',
+            'rw_number.in' => 'Nomor RW harus RW 018.',
             'email.regex' => 'Alamat email wajib menggunakan domain @gmail.com (contoh: nama@gmail.com).',
             'email.email' => 'Format alamat email tidak valid.',
             'email.unique' => 'Alamat email ini sudah terdaftar. Silakan gunakan email lain atau masuk ke akun Anda.',
+            'alamat.required' => 'Alamat domisili lengkap wajib diisi.',
         ]);
 
         $profilePhotoPath = null;
@@ -268,14 +325,17 @@ class AuthController extends Controller
             $profilePhotoPath = $request->file('profile_photo')->store('warga_photos', 'public');
         }
 
+        $phone = $request->nomor_hp ?: $request->phone;
+        $genderStandard = in_array($request->gender, ['Laki-laki', 'L']) ? 'L' : 'P';
+
         // 1. Create login account (User) — pendaftar baru mandiri wajib verifikasi email (email_verified_at = null)
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'warga',
-            'phone' => $request->phone,
-            'address' => $request->address,
+            'phone' => $phone,
+            'address' => $request->alamat,
             'rt_number' => $request->rt_number,
             'no_kk' => $request->no_kk,
             'nik' => $request->nik,
@@ -286,9 +346,10 @@ class AuthController extends Controller
         // 2. Create profile record (Warga)
         \App\Models\Warga::create([
             'nama' => $request->name,
+            'user_id' => $user->id,
             'blok_rumah' => $request->blok_rumah,
-            'nomor_hp' => $request->phone,
-            'gender' => $request->gender,
+            'nomor_hp' => $phone,
+            'gender' => $genderStandard,
             'no_kk' => $request->no_kk,
             'nik' => $request->nik,
             'profile_photo' => $profilePhotoPath,
@@ -297,7 +358,7 @@ class AuthController extends Controller
             'rw_number' => $request->rw_number,
             'is_kk' => $request->is_kk,
             'kk_id' => $request->is_kk ? null : $request->kk_id,
-            'alamat' => $request->address,
+            'alamat' => $request->alamat,
         ]);
 
         // 3. Picu pengiriman notifikasi email verifikasi akun baru
