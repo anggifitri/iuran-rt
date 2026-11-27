@@ -95,13 +95,13 @@ class IotSettingController extends Controller
             'api_token' => 'required|string|min:16|max:64',
             'gate_latitude' => 'nullable|numeric|between:-90,90',
             'gate_longitude' => 'nullable|numeric|between:-180,180',
-            'geofence_radius' => 'required|integer|min:5|max:500',
+            'geofence_radius' => 'required|integer|min:5|max:20',
         ], [
             'gate_name.required' => 'Nama gerbang wajib diisi.',
             'api_token.required' => 'Token API wajib diisi.',
             'api_token.min' => 'Token API minimal 16 karakter.',
             'geofence_radius.min' => 'Radius geofencing minimal 5 meter.',
-            'geofence_radius.max' => 'Radius geofencing maksimal 500 meter.',
+            'geofence_radius.max' => 'Radius geofencing maksimal 20 meter.',
         ]);
 
         $setting = IotSetting::current();

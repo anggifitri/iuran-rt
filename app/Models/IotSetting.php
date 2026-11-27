@@ -39,7 +39,7 @@ class IotSetting extends Model
                 'gate_name' => 'Gerbang Utama RW',
                 'gate_latitude' => -6.388889,
                 'gate_longitude' => 106.845556,
-                'geofence_radius' => 20,
+                'geofence_radius' => 15,
             ]);
         }
         return $setting;

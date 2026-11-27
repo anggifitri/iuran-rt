@@ -16,24 +16,21 @@
         --nx-mint-soft: #EAF4EB;
         --nx-powder: #DCEAF5;
         --nx-powder-soft: #EBF4FB;
-        --nx-natural-white: #F7F9F7;
+        --nx-natural-white: #F8FAF9;
         --nx-white: #FFFFFF;
-        --nx-dark-text: #263449;
-        --nx-secondary-text: #718096;
-        --nx-soft-red: #FDE8E8;
-        --nx-red-accent: #E26D6D;
-        --nx-border: #E5EFE7;
+        --nx-dark-text: #1E293B;
+        --nx-secondary-text: #64748B;
+        --nx-border: #E2E8F0;
+        --nx-navy-card: #0F172A;
     }
 
     body {
         background: var(--nx-natural-white) !important;
         color: var(--nx-dark-text) !important;
-        font-family: 'Plus Jakarta Sans', 'Inter', sans-serif !important;
-        overflow-x: hidden;
-    }
-
-    .theme-toggle-btn {
-        display: none !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        overflow-x: hidden !important;
+        margin: 0;
+        padding: 0;
     }
 
     .nexa-dashboard-root {
@@ -42,24 +39,23 @@
         max-width: 100%;
     }
 
-    /* ============ LANDING WRAPPER & BACKGROUND ============ */
     .nx-landing {
         min-height: 100vh;
         position: relative;
-        overflow: hidden;
-        background: linear-gradient(180deg, #E8F2FA 0%, #F1F7F3 46%, #F7F9F7 100%);
+        overflow-x: hidden !important;
+        background: linear-gradient(180deg, #EBF3F8 0%, #F4F8F5 35%, #F8FAF9 100%);
     }
 
-    /* ============ 3. STICKY HORIZONTAL NAVBAR ============ */
+    /* 1. NAVBAR */
     .nx-navbar-wrap {
         position: sticky;
         top: 0;
         z-index: 1030;
-        padding: 18px 0 12px;
-        background: rgba(247, 249, 247, 0.72);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-bottom: 1px solid rgba(168, 201, 181, 0.25);
+        padding: 14px 0;
+        background: rgba(248, 250, 249, 0.88);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border-bottom: 1px solid rgba(226, 232, 240, 0.8);
         transition: all 0.25s ease;
     }
 
@@ -70,7 +66,6 @@
         gap: 16px;
     }
 
-    /* Left: Brand */
     .nx-brand {
         display: inline-flex;
         align-items: center;
@@ -79,18 +74,19 @@
     }
 
     .nx-brand-icon {
-        width: 46px;
-        height: 46px;
-        border-radius: 14px;
+        width: 44px;
+        height: 44px;
+        border-radius: 13px;
         background: linear-gradient(135deg, #DCEBDD 0%, #B8D8C2 100%);
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 6px 16px rgba(40, 89, 67, 0.12);
+        box-shadow: 0 4px 14px rgba(40, 89, 67, 0.12);
+        flex-shrink: 0;
     }
 
     .nx-brand-name {
-        font-size: 1.32rem;
+        font-size: 1.25rem;
         font-weight: 800;
         color: var(--nx-forest);
         letter-spacing: -0.02em;
@@ -99,171 +95,99 @@
     }
 
     .nx-brand-tagline {
-        font-size: 0.74rem;
+        font-size: 0.72rem;
         font-weight: 600;
         color: #547263;
         margin: 0;
     }
 
-    /* Center: Pill Navigation */
     .nx-nav-pill-bar {
-        background: rgba(255, 255, 255, 0.92);
+        background: rgba(255, 255, 255, 0.94);
         border: 1px solid rgba(168, 201, 181, 0.45);
         border-radius: 999px;
-        padding: 5px 8px;
+        padding: 4px 6px;
         display: inline-flex;
         align-items: center;
         gap: 4px;
-        box-shadow: 0 8px 24px rgba(38, 52, 73, 0.05);
+        box-shadow: 0 4px 18px rgba(38, 52, 73, 0.04);
     }
 
     .nx-nav-item-link {
         display: inline-flex;
         align-items: center;
-        gap: 7px;
-        padding: 8px 18px;
+        gap: 6px;
+        padding: 7px 16px;
         border-radius: 999px;
-        font-size: 0.88rem;
+        font-size: 0.85rem;
         font-weight: 600;
         color: var(--nx-dark-text);
         text-decoration: none;
         transition: all 0.2s ease;
-        border: none;
-        background: transparent;
     }
 
-    .nx-nav-item-link:hover {
+    .nx-nav-item-link:hover, .nx-nav-item-link.active {
         background: var(--nx-mint-soft);
         color: var(--nx-forest);
     }
 
-    .nx-nav-item-link.active {
-        background: var(--nx-mint);
-        color: var(--nx-forest);
-        font-weight: 700;
-    }
-
-    /* Right: Search + Login Button */
     .nx-nav-actions {
         display: flex;
         align-items: center;
-        gap: 12px;
-    }
-
-    .nx-search-box {
-        position: relative;
-        width: 225px;
-    }
-
-    .nx-search-box input {
-        width: 100%;
-        background: rgba(255, 255, 255, 0.94);
-        border: 1px solid rgba(168, 201, 181, 0.48);
-        border-radius: 999px;
-        padding: 9px 16px 9px 38px;
-        font-size: 0.85rem;
-        color: var(--nx-dark-text);
-        box-shadow: 0 6px 18px rgba(38, 52, 73, 0.04);
-        transition: all 0.2s ease;
-    }
-
-    .nx-search-box input:focus {
-        outline: none;
-        border-color: var(--nx-forest);
-        box-shadow: 0 0 0 3px rgba(40, 89, 67, 0.12);
-    }
-
-    .nx-search-box i {
-        position: absolute;
-        left: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: var(--nx-secondary-text);
-        font-size: 0.85rem;
+        gap: 10px;
     }
 
     .nx-btn-login {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        background: var(--nx-forest);
-        color: var(--nx-white) !important;
-        font-size: 0.88rem;
-        font-weight: 700;
-        padding: 10px 24px;
+        gap: 7px;
+        padding: 8px 18px;
         border-radius: 999px;
+        background: var(--nx-forest);
+        color: #FFFFFF !important;
+        font-size: 0.85rem;
+        font-weight: 700;
         text-decoration: none;
-        box-shadow: 0 8px 20px rgba(40, 89, 67, 0.22);
-        transition: all 0.22s ease;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(40, 89, 67, 0.22);
     }
 
     .nx-btn-login:hover {
         background: var(--nx-forest-hover);
         transform: translateY(-1px);
-        box-shadow: 0 10px 24px rgba(40, 89, 67, 0.28);
+        box-shadow: 0 6px 16px rgba(40, 89, 67, 0.3);
     }
 
-    /* ============ 4. HERO SECTION ============ */
+    /* 2. HERO SECTION */
     .nx-hero-section {
         position: relative;
-        padding: 56px 0 86px;
-        min-height: 520px;
+        padding: 48px 0 76px;
         background-color: #F1F7F3;
-        background-image: linear-gradient(90deg, rgba(240, 249, 255, 0.95) 0%, rgba(240, 249, 255, 0.82) 42%, rgba(240, 249, 255, 0.25) 72%, rgba(240, 249, 255, 0) 100%), url("{{ asset('images/hero-community.jpg') }}");
+        background-image: linear-gradient(90deg, rgba(240, 249, 255, 0.96) 0%, rgba(240, 249, 255, 0.85) 44%, rgba(240, 249, 255, 0.3) 72%, rgba(240, 249, 255, 0) 100%), url("{{ asset('images/hero-community.jpg') }}");
         background-size: cover;
         background-position: right bottom;
         background-repeat: no-repeat;
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-    }
-
-    .nx-kalam-floating {
-        position: absolute;
-        top: 36px;
-        right: 48px;
-        z-index: 5;
-        transform: rotate(-4deg);
-        text-align: center;
-        pointer-events: none;
-    }
-
-    .nx-kalam-line {
-        font-family: 'Kalam', cursive !important;
-        font-size: 1.7rem;
-        font-weight: 700;
-        color: #1B4332;
-        line-height: 1.15;
-        letter-spacing: -0.01em;
-        text-shadow: 0 2px 14px rgba(255, 255, 255, 0.95);
-    }
-
-    .nx-kalam-curve {
-        display: block;
-        margin: 3px auto 0;
-        filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.9));
     }
 
     .nx-welcome-badge {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        background: var(--nx-mint);
-        color: var(--nx-forest);
-        font-size: 0.84rem;
-        font-weight: 700;
-        padding: 8px 18px;
+        gap: 6px;
+        padding: 5px 14px;
         border-radius: 999px;
-        margin-bottom: 18px;
-        border: 1px solid rgba(40, 89, 67, 0.12);
+        background: #E8F5E9;
+        color: #1B5E20;
+        font-size: 0.78rem;
+        font-weight: 700;
+        margin-bottom: 16px;
+        border: 1px solid #C8E6C9;
     }
 
     .nx-hero-heading {
-        font-size: clamp(2.5rem, 4.6vw, 3.85rem);
+        font-size: clamp(2.2rem, 4.4vw, 3.6rem);
         font-weight: 800;
-        line-height: 1.08;
+        line-height: 1.1;
         letter-spacing: -0.03em;
-        margin-bottom: 18px;
+        margin-bottom: 16px;
     }
 
     .nx-hero-heading .line-green {
@@ -278,34 +202,33 @@
     }
 
     .nx-hero-desc {
-        font-size: 1.02rem;
-        line-height: 1.68;
-        color: #46586B;
+        font-size: 1rem;
+        line-height: 1.65;
+        color: #475569;
         max-width: 500px;
-        margin-bottom: 28px;
-        font-weight: 500;
+        margin-bottom: 24px;
     }
 
     .nx-hero-cta {
         display: flex;
-        flex-wrap: wrap;
         align-items: center;
-        gap: 14px;
+        gap: 12px;
+        flex-wrap: wrap;
     }
 
     .nx-btn-primary {
         display: inline-flex;
         align-items: center;
-        gap: 10px;
-        background: var(--nx-forest);
-        color: var(--nx-white) !important;
-        padding: 13px 28px;
+        gap: 8px;
+        padding: 12px 24px;
         border-radius: 999px;
-        font-size: 0.94rem;
+        background: var(--nx-forest);
+        color: #FFFFFF !important;
+        font-size: 0.92rem;
         font-weight: 700;
         text-decoration: none;
-        box-shadow: 0 10px 24px rgba(40, 89, 67, 0.24);
-        transition: all 0.24s ease;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 14px rgba(40, 89, 67, 0.25);
     }
 
     .nx-btn-primary:hover {
@@ -316,611 +239,616 @@
     .nx-btn-outline {
         display: inline-flex;
         align-items: center;
-        gap: 10px;
-        background: rgba(255, 255, 255, 0.85);
-        color: var(--nx-forest) !important;
-        border: 1.5px solid var(--nx-forest);
-        padding: 12px 26px;
+        gap: 8px;
+        padding: 12px 22px;
         border-radius: 999px;
-        font-size: 0.94rem;
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--nx-forest) !important;
+        font-size: 0.92rem;
         font-weight: 700;
         text-decoration: none;
-        transition: all 0.24s ease;
+        border: 1.5px solid var(--nx-forest);
+        transition: all 0.2s ease;
     }
 
     .nx-btn-outline:hover {
-        background: var(--nx-mint);
+        background: var(--nx-mint-soft);
         transform: translateY(-2px);
     }
 
-    /* Right Hero Landscape Illustration */
-    .nx-hero-illustration-wrap {
+    /* 3. FLOATING HIGHLIGHT BAR (TANPA JUMLAH POPULASI) */
+    .nx-highlight-section {
+        margin-top: -36px;
         position: relative;
-        min-height: 360px;
+        z-index: 10;
+        margin-bottom: 48px;
+    }
+
+    .nx-highlight-card {
+        background: #FFFFFF;
+        border-radius: 18px;
+        border: 1px solid var(--nx-border);
+        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.05);
+        padding: 18px 20px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        height: 100%;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .nx-highlight-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 34px rgba(15, 23, 42, 0.08);
+    }
+
+    .nx-highlight-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        background: var(--nx-mint-soft);
+        color: var(--nx-forest);
         display: flex;
         align-items: center;
         justify-content: center;
-    }
-
-    .nx-motto-floating {
-        position: absolute;
-        top: 6px;
-        right: 18px;
-        z-index: 4;
-        transform: rotate(-4deg);
-        text-align: center;
-    }
-
-    .nx-motto-floating span {
-        display: block;
         font-size: 1.25rem;
+        flex-shrink: 0;
+    }
+
+    .nx-highlight-title {
+        font-size: 0.92rem;
         font-weight: 800;
-        color: var(--nx-forest);
+        color: var(--nx-dark-text);
+        margin: 0;
         line-height: 1.2;
-        text-shadow: 0 2px 10px rgba(255, 255, 255, 0.9);
     }
 
-    /* Gentle Wave Divider into Feature Section */
-    .nx-wave-divider {
-        position: absolute;
-        bottom: -1px;
-        left: 0;
-        width: 100%;
-        line-height: 0;
-        pointer-events: none;
+    .nx-highlight-sub {
+        font-size: 0.74rem;
+        color: var(--nx-secondary-text);
+        margin: 2px 0 0;
+        line-height: 1.3;
     }
 
-    /* ============ 5. FEATURE SECTION — JELAJAHI FITUR UNGGULAN ============ */
-    .nx-features-section {
-        background: var(--nx-natural-white);
-        position: relative;
-        padding: 20px 0 64px;
-        z-index: 2;
-    }
-
+    /* 4. FITUR UNGGULAN (GRID 3x2) */
     .nx-section-header {
         text-align: center;
-        margin-bottom: 38px;
+        margin-bottom: 36px;
     }
 
-    .nx-section-title-wrap {
+    .nx-section-pill {
         display: inline-flex;
         align-items: center;
-        gap: 18px;
+        gap: 6px;
+        padding: 4px 14px;
+        border-radius: 999px;
+        background: var(--nx-mint-soft);
+        color: var(--nx-forest);
+        font-size: 0.75rem;
+        font-weight: 700;
         margin-bottom: 8px;
     }
 
-    .nx-section-title-line {
-        width: 70px;
-        height: 1.5px;
-        background: var(--nx-sage);
-        display: inline-block;
-    }
-
     .nx-section-title {
-        font-size: 1.85rem;
+        font-size: clamp(1.6rem, 3.2vw, 2.2rem);
         font-weight: 800;
-        color: var(--nx-forest);
-        margin: 0;
+        color: var(--nx-dark-text);
         letter-spacing: -0.02em;
+        margin-bottom: 8px;
     }
 
     .nx-section-subtitle {
-        font-size: 0.96rem;
+        font-size: 0.92rem;
         color: var(--nx-secondary-text);
-        font-weight: 500;
-        margin: 0;
+        max-width: 580px;
+        margin: 0 auto;
     }
 
-    /* Six Feature Cards (Horizontal Layout Matching Reference) */
-    .nx-feature-card {
-        background: var(--nx-white);
+    .nx-card-feature {
+        background: #FFFFFF;
+        border-radius: 20px;
         border: 1px solid var(--nx-border);
-        border-radius: 22px;
-        padding: 22px 22px;
+        padding: 22px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .nx-card-feature:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07);
+        color: inherit;
+    }
+
+    .nx-feat-icon-box {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
         display: flex;
         align-items: center;
-        gap: 18px;
-        text-decoration: none;
-        color: var(--nx-dark-text);
-        box-shadow: 0 10px 28px rgba(40, 89, 67, 0.05);
-        transition: all 0.26s cubic-bezier(0.4, 0, 0.2, 1);
-        height: 100%;
-        position: relative;
-    }
-
-    .nx-feature-card:hover {
-        transform: translateY(-5px);
-        border-color: var(--nx-sage);
-        box-shadow: 0 16px 34px rgba(40, 89, 67, 0.10);
-        color: var(--nx-dark-text);
-    }
-
-    .nx-feature-icon {
-        width: 68px;
-        height: 68px;
-        border-radius: 20px;
-        display: inline-flex;
-        align-items: center;
         justify-content: center;
-        font-size: 1.65rem;
+        font-size: 1.3rem;
+        margin-bottom: 16px;
         flex-shrink: 0;
-        transition: transform 0.25s ease;
     }
 
-    .nx-feature-card:hover .nx-feature-icon {
-        transform: scale(1.06);
-    }
+    .nx-feat-icon-box.green { background: #ECFDF5; color: #059669; }
+    .nx-feat-icon-box.blue { background: #EFF6FF; color: #2563EB; }
+    .nx-feat-icon-box.amber { background: #FFFBEB; color: #D97706; }
+    .nx-feat-icon-box.purple { background: #FAF5FF; color: #7C3AED; }
+    .nx-feat-icon-box.rose { background: #FFF1F2; color: #E11D48; }
+    .nx-feat-icon-box.cyan { background: #ECFEFF; color: #0891B2; }
 
-    .nx-accent-green .nx-feature-icon {
-        background: var(--nx-mint);
-        color: var(--nx-forest);
-    }
-
-    .nx-accent-blue .nx-feature-icon {
-        background: var(--nx-powder);
-        color: #3E7CB8;
-    }
-
-    .nx-accent-red .nx-feature-icon {
-        background: var(--nx-soft-red);
-        color: var(--nx-red-accent);
-    }
-
-    .nx-feature-body {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .nx-feature-title {
-        font-size: 1.08rem;
+    .nx-card-feature h4 {
+        font-size: 1.05rem;
         font-weight: 800;
         color: var(--nx-dark-text);
-        margin-bottom: 5px;
+        margin-bottom: 8px;
     }
 
-    .nx-feature-desc {
-        font-size: 0.83rem;
-        line-height: 1.5;
+    .nx-card-feature p {
+        font-size: 0.82rem;
+        line-height: 1.55;
         color: var(--nx-secondary-text);
         margin: 0;
-        font-weight: 500;
+        flex-grow: 1;
     }
 
-    .nx-feature-arrow {
-        width: 34px;
-        height: 34px;
+    .nx-feat-arrow {
+        margin-top: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--nx-forest);
+    }
+
+    /* 5. SPOTLIGHT: KEAMANAN CERDAS (DARK NAVY) */
+    .nx-spotlight-card {
+        background: linear-gradient(135deg, #0B132B 0%, #172554 100%);
+        border-radius: 28px;
+        padding: 40px;
+        color: #FFFFFF;
+        box-shadow: 0 20px 40px rgba(11, 19, 43, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .nx-spotlight-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        margin-bottom: 20px;
+    }
+
+    .nx-spotlight-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .nx-spotlight-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: rgba(56, 189, 248, 0.15);
+        color: #38BDF8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.05rem;
+        flex-shrink: 0;
+        margin-top: 2px;
+    }
+
+    .nx-spotlight-title {
+        font-size: 0.95rem;
+        font-weight: 800;
+        color: #F8FAFC;
+        margin: 0;
+    }
+
+    .nx-spotlight-desc {
+        font-size: 0.78rem;
+        color: #94A3B8;
+        margin: 2px 0 0;
+        line-height: 1.45;
+    }
+
+    /* Preview Gerbang Kanan */
+    .nx-gate-preview-box {
+        background: rgba(15, 23, 42, 0.75);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 20px;
+        padding: 24px;
+        backdrop-filter: blur(12px);
+    }
+
+    .nx-gate-anim-frame {
+        background: #090E1A;
+        border-radius: 14px;
+        height: 140px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border: 1px dashed rgba(255, 255, 255, 0.15);
+        margin: 14px 0;
+    }
+
+    /* 6. LANGKAH PENDAFTARAN */
+    .nx-step-card {
+        background: #FFFFFF;
+        border: 1px solid var(--nx-border);
+        border-radius: 20px;
+        padding: 24px 20px;
+        text-align: center;
+        position: relative;
+        height: 100%;
+    }
+
+    .nx-step-badge {
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
+        background: var(--nx-mint-soft);
+        color: var(--nx-forest);
+        font-weight: 800;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.82rem;
-        flex-shrink: 0;
-        transition: transform 0.22s ease;
+        font-size: 0.95rem;
+        margin-bottom: 12px;
     }
 
-    .nx-accent-green .nx-feature-arrow {
-        background: var(--nx-mint);
-        color: var(--nx-forest);
+    /* 7. FAQ ACCORDION */
+    .nx-faq-item {
+        background: #FFFFFF;
+        border: 1px solid var(--nx-border);
+        border-radius: 16px;
+        margin-bottom: 12px;
+        overflow: hidden;
     }
 
-    .nx-accent-blue .nx-feature-arrow {
-        background: var(--nx-powder);
-        color: #2B5F8E;
-    }
-
-    .nx-accent-red .nx-feature-arrow {
-        background: #EEF2F6;
+    .nx-faq-btn {
+        width: 100%;
+        text-align: left;
+        background: transparent;
+        border: none;
+        padding: 16px 20px;
+        font-weight: 700;
+        font-size: 0.92rem;
         color: var(--nx-dark-text);
-    }
-
-    .nx-feature-card:hover .nx-feature-arrow {
-        transform: translateX(3px);
-    }
-
-    /* ============ FOOTER PILL BANNER ============ */
-    .nx-footer-pill-wrap {
-        text-align: center;
-        margin-top: 44px;
-    }
-
-    .nx-footer-pill {
-        display: inline-flex;
+        display: flex;
         align-items: center;
-        gap: 10px;
-        background: var(--nx-mint);
-        border: 1px solid var(--nx-sage);
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .nx-faq-btn i {
+        transition: transform 0.2s ease;
         color: var(--nx-forest);
-        padding: 11px 28px;
-        border-radius: 999px;
-        font-size: 0.86rem;
-        font-weight: 600;
-        font-style: italic;
-        box-shadow: 0 6px 20px rgba(40, 89, 67, 0.06);
     }
 
-    /* Corner Leaf Ornaments */
-    .nx-corner-leaf-left {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 120px;
-        pointer-events: none;
-        z-index: 1;
-        opacity: 0.85;
+    .nx-faq-btn:not(.collapsed) i {
+        transform: rotate(180deg);
     }
 
-    .nx-corner-leaf-right {
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        width: 120px;
-        pointer-events: none;
-        z-index: 1;
-        opacity: 0.85;
+    .nx-faq-body {
+        padding: 0 20px 16px;
+        font-size: 0.84rem;
+        line-height: 1.6;
+        color: var(--nx-secondary-text);
     }
 
-    @media (max-width: 991.98px) {
-        .nx-nav-pill-bar {
-            display: none;
+    /* 8. FOOTER */
+    .nx-footer {
+        background: #F1F5F9;
+        border-top: 1px solid var(--nx-border);
+        padding: 48px 0 24px;
+        margin-top: 64px;
+    }
+
+    .nx-footer-col h5 {
+        font-size: 0.88rem;
+        font-weight: 800;
+        color: var(--nx-dark-text);
+        margin-bottom: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .nx-footer-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .nx-footer-links li {
+        margin-bottom: 8px;
+    }
+
+    .nx-footer-links a {
+        color: var(--nx-secondary-text);
+        text-decoration: none;
+        font-size: 0.82rem;
+        transition: color 0.15s ease;
+    }
+
+    .nx-footer-links a:hover {
+        color: var(--nx-forest);
+    }
+
+    /* ==========================================================================
+       RESPONSIVE MOBILE BREAKPOINTS (@media max-width: 768px)
+       ========================================================================== */
+    @media (max-width: 768px) {
+        /* Container Breathing Room: 18px-20px padding */
+        .container, .container-fluid {
+            padding-left: 18px !important;
+            padding-right: 18px !important;
         }
-        .nx-search-box {
-            width: 165px;
+
+        .nx-navbar-wrap {
+            padding: 10px 0;
         }
+
+        .nx-nav-pill-bar, .nx-search-box {
+            display: none !important;
+        }
+
+        /* Hero Mobile Proporsional */
         .nx-hero-section {
-            padding: 24px 0 48px;
+            padding: 24px 0 44px;
+            background-position: center bottom;
             text-align: center;
         }
+
+        .nx-hero-heading {
+            font-size: 1.85rem !important;
+            line-height: 1.15;
+            margin-bottom: 12px;
+        }
+
         .nx-hero-desc {
+            font-size: 0.85rem !important;
+            line-height: 1.5;
             margin-left: auto;
             margin-right: auto;
+            margin-bottom: 18px;
         }
+
         .nx-hero-cta {
             justify-content: center;
+            gap: 8px;
+        }
+
+        .nx-btn-primary, .nx-btn-outline {
+            padding: 9px 16px;
+            font-size: 0.82rem;
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Floating Highlight Bar: Grid 2x2 */
+        .nx-highlight-section {
+            margin-top: -24px;
+            margin-bottom: 32px;
+        }
+
+        .nx-highlight-card {
+            padding: 12px 10px;
+            gap: 10px;
+            border-radius: 14px;
+        }
+
+        .nx-highlight-icon {
+            width: 36px;
+            height: 36px;
+            font-size: 1rem;
+            border-radius: 10px;
+        }
+
+        .nx-highlight-title {
+            font-size: 0.80rem;
+        }
+
+        .nx-highlight-sub {
+            font-size: 0.68rem;
+        }
+
+        /* Fitur Unggulan Mobile */
+        .nx-card-feature {
+            padding: 16px;
+            border-radius: 16px;
+        }
+
+        .nx-feat-icon-box {
+            width: 40px;
+            height: 40px;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+        }
+
+        .nx-card-feature h4 {
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+        }
+
+        .nx-card-feature p {
+            font-size: 0.78rem;
+            line-height: 1.45;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Spotlight Dark Navy Mobile */
+        .nx-spotlight-card {
+            padding: 22px 18px;
+            border-radius: 20px;
+            margin: 0 4px;
+        }
+
+        .nx-gate-preview-box {
+            margin-top: 24px;
+            padding: 16px;
+        }
+
+        .nx-gate-anim-frame {
+            height: 110px;
+        }
+
+        .nx-spotlight-title {
+            font-size: 0.88rem;
+        }
+
+        .nx-spotlight-desc {
+            font-size: 0.74rem;
+        }
+
+        /* Steps & FAQ Mobile */
+        .nx-step-card {
+            padding: 18px 14px;
+            margin-bottom: 10px;
+        }
+
+        .nx-faq-btn {
+            padding: 14px 16px;
+            font-size: 0.86rem;
+        }
+
+        .nx-faq-body {
+            padding: 0 16px 14px;
+            font-size: 0.78rem;
+        }
+
+        /* Footer Mobile */
+        .nx-footer {
+            padding: 32px 0 20px;
+            margin-top: 40px;
         }
     }
 
     /* ==========================================================================
-       LANDING PAGE (COVER) DARK MODE OVERRIDES (DARK NAVY -> DEEP INDIGO)
+       DARK MODE HARMONIZATION
        ========================================================================== */
-    html.dark body {
+    html.dark body, html.dark .nx-landing {
         background: #0A0F1E !important;
         color: #F1F5F9 !important;
     }
 
-    html.dark .nx-landing {
-        background: #0A0F1E !important;
-        color: #F1F5F9 !important;
-    }
-
-    /* 1. Global NexaNest Brand Logo Dark Mode */
-    html.dark .nexanest-brand-logo .nx-brand-title {
-        color: #F8FAFC !important;
-    }
-
-    html.dark .nexanest-brand-logo .nx-brand-sub {
-        color: #94A3B8 !important;
-    }
-
-    html.dark .nexanest-brand-logo .nx-logo-house {
-        stroke: #38BDF8 !important;
-    }
-
-    html.dark .nexanest-brand-logo .nx-logo-leaf-1 {
-        fill: #10B981 !important;
-        stroke: #059669 !important;
-    }
-
-    html.dark .nexanest-brand-logo .nx-logo-leaf-2 {
-        fill: #34D399 !important;
-        stroke: #10B981 !important;
-    }
-
-    html.dark .nexanest-brand-logo .nx-logo-leaf-vein {
-        stroke: #D1FAE5 !important;
-    }
-
-    /* 2. Top Navbar Landing Page */
     html.dark .nx-navbar-wrap {
-        background: rgba(13, 20, 38, 0.92) !important;
-        backdrop-filter: blur(12px) !important;
-        -webkit-backdrop-filter: blur(12px) !important;
-        border-bottom: 1px solid #1E293B !important;
+        background: rgba(10, 15, 30, 0.92);
+        border-bottom-color: rgba(30, 41, 59, 0.8);
     }
+
+    html.dark .nx-brand-name { color: #38BDF8 !important; }
+    html.dark .nx-brand-tagline { color: #94A3B8 !important; }
 
     html.dark .nx-nav-pill-bar {
-        background: #0D1426 !important;
-        border: 1px solid #1E2D4A !important;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45) !important;
+        background: #131B2E;
+        border-color: #1E2D4A;
     }
 
     html.dark .nx-nav-item-link {
-        color: #CBD5E1 !important;
+        color: #94A3B8;
     }
 
-    html.dark .nx-nav-item-link:hover {
-        background: rgba(56, 189, 248, 0.12) !important;
-        color: #38BDF8 !important;
+    html.dark .nx-nav-item-link:hover, html.dark .nx-nav-item-link.active {
+        background: #172554;
+        color: #38BDF8;
     }
 
-    html.dark .nx-nav-item-link.active {
-        background: #172554 !important;
-        color: #38BDF8 !important;
-    }
-
-    html.dark .nx-brand-tagline {
-        color: #94A3B8 !important;
-    }
-
-    html.dark .nx-search-box input {
-        background: #0F172A !important;
-        border: 1px solid #273654 !important;
-        color: #F1F5F9 !important;
-    }
-
-    html.dark .nx-search-box input:focus {
-        border-color: #38BDF8 !important;
-        box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2) !important;
-    }
-
-    html.dark .nx-search-box i {
-        color: #64748B !important;
-    }
-
-    /* 3. Hero Section */
     html.dark .nx-hero-section {
         background-color: #0A0F1E !important;
-        background-image: linear-gradient(90deg, rgba(10, 15, 30, 0.96) 0%, rgba(10, 15, 30, 0.88) 42%, rgba(10, 15, 30, 0.45) 72%, rgba(10, 15, 30, 0.2) 100%), url("{{ asset('images/hero-community.jpg') }}") !important;
+        background-image: linear-gradient(90deg, rgba(10, 15, 30, 0.96) 0%, rgba(10, 15, 30, 0.88) 44%, rgba(10, 15, 30, 0.4) 72%, rgba(10, 15, 30, 0.2) 100%), url("{{ asset('images/hero-community.jpg') }}") !important;
     }
 
-    html.dark .nx-welcome-badge {
-        background: rgba(16, 185, 129, 0.16) !important;
-        color: #34D399 !important;
-        border: 1px solid rgba(52, 211, 153, 0.3) !important;
-    }
-
-    html.dark .nx-hero-heading .line-green {
-        color: #F8FAFC !important;
-    }
-
-    html.dark .nx-hero-heading .line-blue {
-        color: #38BDF8 !important;
-    }
-
-    html.dark .nx-hero-desc {
-        color: #94A3B8 !important;
-    }
+    html.dark .nx-hero-heading .line-green { color: #F8FAFC !important; }
+    html.dark .nx-hero-heading .line-blue { color: #38BDF8 !important; }
+    html.dark .nx-hero-desc { color: #94A3B8 !important; }
 
     html.dark .nx-btn-outline {
-        background: rgba(19, 27, 46, 0.75) !important;
-        border: 1.5px solid #38BDF8 !important;
-        color: #38BDF8 !important;
-    }
-
-    html.dark .nx-btn-outline:hover {
-        background: rgba(56, 189, 248, 0.2) !important;
-        color: #FFFFFF !important;
+        background: #131B2E !important;
         border-color: #38BDF8 !important;
-    }
-
-    html.dark .nx-kalam-line {
-        color: #34D399 !important;
-        text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85) !important;
-    }
-
-    html.dark .nx-kalam-curve path {
-        stroke: #34D399 !important;
-    }
-
-    /* 4. Lekukan Wave Bawah Hero */
-    html.dark .nx-wave-divider svg path {
-        fill: #0A0F1E !important;
-    }
-
-    /* 5. Section "Jelajahi Fitur Unggulan" */
-    html.dark .nx-features-section {
-        background: #0A0F1E !important;
-        background-color: #0A0F1E !important;
-    }
-
-    html.dark .nx-section-title {
-        color: #F1F5F9 !important;
-    }
-
-    html.dark .nx-section-subtitle {
-        color: #94A3B8 !important;
-    }
-
-    html.dark .nx-section-title-line {
-        background: #1E3A5F !important;
-    }
-
-    html.dark .nx-section-header i.fa-seedling {
-        color: #34D399 !important;
-    }
-
-    /* 6. 6 Feature Cards Grid */
-    html.dark .nx-feature-card {
-        background: #131B2E !important;
-        border: 1px solid #1E2D4A !important;
-        color: #F1F5F9 !important;
-        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35) !important;
-    }
-
-    html.dark .nx-feature-card:hover {
-        border-color: #3B82F6 !important;
-        box-shadow: 0 16px 34px rgba(59, 130, 246, 0.18) !important;
-        transform: translateY(-5px);
-        color: #F1F5F9 !important;
-    }
-
-    html.dark .nx-feature-title {
-        color: #F1F5F9 !important;
-    }
-
-    html.dark .nx-feature-desc {
-        color: #94A3B8 !important;
-    }
-
-    /* Kotak Ikon Translucent Gelap Sesuai Warna Masing-Masing */
-    html.dark .nx-accent-green .nx-feature-icon {
-        background: rgba(16, 185, 129, 0.16) !important;
-        color: #34D399 !important;
-    }
-
-    html.dark .nx-accent-blue .nx-feature-icon {
-        background: rgba(56, 189, 248, 0.16) !important;
         color: #38BDF8 !important;
     }
 
-    html.dark .nx-accent-red .nx-feature-icon {
-        background: rgba(239, 68, 68, 0.16) !important;
-        color: #F87171 !important;
-    }
-
-    /* Tombol Panah Bulat #1E293B dengan Ikon #38BDF8 */
-    html.dark .nx-feature-arrow,
-    html.dark .nx-accent-green .nx-feature-arrow,
-    html.dark .nx-accent-blue .nx-feature-arrow,
-    html.dark .nx-accent-red .nx-feature-arrow {
-        background: #1E293B !important;
-        color: #38BDF8 !important;
-    }
-
-    html.dark .nx-feature-card:hover .nx-feature-arrow,
-    html.dark .nx-accent-green:hover .nx-feature-arrow,
-    html.dark .nx-accent-blue:hover .nx-feature-arrow,
-    html.dark .nx-accent-red:hover .nx-feature-arrow {
-        background: #2563EB !important;
-        color: #FFFFFF !important;
-    }
-
-    /* 7. Footer Pill */
-    html.dark .nx-footer-pill {
+    html.dark .nx-highlight-card, 
+    html.dark .nx-card-feature,
+    html.dark .nx-step-card,
+    html.dark .nx-faq-item {
         background: #131B2E !important;
-        border: 1px solid #1E2D4A !important;
-        color: #CBD5E1 !important;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35) !important;
-    }
-
-    html.dark .nx-footer-pill i {
-        color: #34D399 !important;
-    }
-
-    /* 8. Modals & Dropdown on Landing Page */
-    html.dark .modal-content {
-        background: #131B2E !important;
-        color: #F1F5F9 !important;
-        border: 1px solid #1E2D4A !important;
-    }
-
-    html.dark .modal-header,
-    html.dark .modal-footer {
         border-color: #1E2D4A !important;
-    }
-
-    html.dark .modal-title {
         color: #F1F5F9 !important;
     }
 
-    html.dark .modal-body,
-    html.dark .modal-body p {
-        color: #CBD5E1 !important;
+    html.dark .nx-highlight-title,
+    html.dark .nx-section-title,
+    html.dark .nx-card-feature h4,
+    html.dark .nx-faq-btn,
+    html.dark .nx-footer-col h5 {
+        color: #F1F5F9 !important;
     }
 
-    html.dark .modal-body .text-muted {
+    html.dark .nx-highlight-sub,
+    html.dark .nx-section-subtitle,
+    html.dark .nx-card-feature p,
+    html.dark .nx-faq-body,
+    html.dark .nx-footer-links a {
         color: #94A3B8 !important;
     }
 
-    html.dark .modal-content .btn-close {
-        filter: invert(1) grayscale(100%) brightness(200%);
-    }
-
-    html.dark .dropdown-menu {
-        background-color: #131B2E !important;
-        border: 1px solid #1E2D4A !important;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45) !important;
-    }
-
-    html.dark .dropdown-item {
-        color: #E2E8F0 !important;
-    }
-
-    html.dark .dropdown-item:hover {
-        background-color: #1A2744 !important;
-        color: #38BDF8 !important;
-    }
-
-    html.dark .nx-corner-leaf-left,
-    html.dark .nx-corner-leaf-right {
-        opacity: 0.35 !important;
-        filter: brightness(0.65) contrast(1.2);
+    html.dark .nx-footer {
+        background: #080D1A !important;
+        border-top-color: #1E293B !important;
     }
 </style>
 
 <div class="nx-landing">
-
-    <!-- ==================== 3. STICKY HORIZONTAL NAVBAR ==================== -->
+    <!-- 1. NAVBAR STICKY -->
     <header class="nx-navbar-wrap">
         <div class="container">
             <div class="nx-navbar-inner">
-                <!-- Left: Logo + Brand NexaNest + Tagline (Vector Resmi Tanpa Kotak Hijau) -->
-                <x-nexanest-logo size="md" />
-
-                <!-- Center: Pill Navigation (Beranda, Fitur Dropdown, Tentang Kami, Bantuan Dropdown) -->
-                <nav class="nx-nav-pill-bar" aria-label="Navigasi Utama">
-                    <a href="{{ url('/') }}" class="nx-nav-item-link active">
-                        <i class="fas fa-home"></i> Beranda
-                    </a>
-
-                    <div class="dropdown">
-                        <button class="nx-nav-item-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-border-all text-success"></i> Fitur
-                        </button>
-                        <ul class="dropdown-menu border-0 shadow-lg p-2" style="border-radius: 16px; min-width: 220px;">
-                            <li><a class="dropdown-item rounded-3 py-2 small fw-semibold" href="#fiturUnggulan"><i class="fas fa-wallet text-success me-2"></i>Keuangan Transparan</a></li>
-                            <li><a class="dropdown-item rounded-3 py-2 small fw-semibold" href="{{ route('surat.index') }}"><i class="fas fa-file-signature text-success me-2"></i>Penerbitan Surat &amp; TTE</a></li>
-                            <li><a class="dropdown-item rounded-3 py-2 small fw-semibold" href="{{ route('posyandu.index') }}"><i class="fas fa-heart-pulse text-danger me-2"></i>Posyandu Keluarga</a></li>
-                            <li><a class="dropdown-item rounded-3 py-2 small fw-semibold" href="{{ route('umkm.index') }}"><i class="fas fa-store text-primary me-2"></i>Direktori UMKM Warga</a></li>
-                            <li><a class="dropdown-item rounded-3 py-2 small fw-semibold" href="{{ route('pengaduan.index') }}"><i class="fas fa-qrcode text-success me-2"></i>Pengaduan &amp; QR Lingkungan</a></li>
-                        </ul>
+                <!-- Brand -->
+                <a href="{{ route('home') }}" class="nx-brand">
+                    <span class="nx-brand-icon">
+                        <i class="fas fa-leaf" style="color: var(--nx-forest); font-size: 1.25rem;"></i>
+                    </span>
+                    <div>
+                        <h1 class="nx-brand-name">NexaNest</h1>
+                        <p class="nx-brand-tagline">Smart &amp; Green Community RW 018</p>
                     </div>
+                </a>
 
-                    <a href="#tentangNexaNest" data-bs-toggle="modal" class="nx-nav-item-link">
-                        Tentang Kami
-                    </a>
-
-                    <div class="dropdown">
-                        <button class="nx-nav-item-link dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="far fa-life-ring text-success"></i> Bantuan
-                        </button>
-                        <ul class="dropdown-menu border-0 shadow-lg p-2" style="border-radius: 16px; min-width: 220px;">
-                            <li><a class="dropdown-item rounded-3 py-2 small fw-semibold" href="#modalBantuan" data-bs-toggle="modal"><i class="fas fa-circle-question text-success me-2"></i>Cara Pendaftaran Warga</a></li>
-                            <li><a class="dropdown-item rounded-3 py-2 small fw-semibold" href="#modalDaruratLanding" data-bs-toggle="modal"><i class="fas fa-bell text-danger me-2"></i>Kontak Darurat Lingkungan</a></li>
-                            <li><a class="dropdown-item rounded-3 py-2 small fw-semibold" href="{{ route('password.request') }}"><i class="fas fa-key text-primary me-2"></i>Lupa Password Akun</a></li>
-                        </ul>
-                    </div>
+                <!-- Desktop Pill Navigation -->
+                <nav class="nx-nav-pill-bar d-none d-lg-inline-flex" aria-label="Navigasi Utama">
+                    <a href="#beranda" class="nx-nav-item-link active"><i class="fas fa-home"></i> Beranda</a>
+                    <a href="#fiturUnggulan" class="nx-nav-item-link"><i class="fas fa-layer-group"></i> Fitur</a>
+                    <a href="#keamanan" class="nx-nav-item-link"><i class="fas fa-shield-halved"></i> Keamanan IoT</a>
+                    <a href="#faq" class="nx-nav-item-link"><i class="fas fa-circle-question"></i> FAQ</a>
                 </nav>
 
-                <!-- Right: Search Bar + Login / Dashboard Button -->
+                <!-- Actions: Theme Toggle + Login / Dashboard -->
                 <div class="nx-nav-actions">
-                    <div class="nx-search-box d-none d-sm-block">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="landingSearchInput" placeholder="Cari fitur..." aria-label="Cari fitur">
-                    </div>
-
-                    <button type="button" class="nx-theme-toggle-btn me-2" id="nxThemeToggleBtnLanding" title="Beralih Tema (Dark/Light)">
+                    <button type="button" class="nx-theme-toggle-btn" id="nxThemeToggleBtnLanding" title="Beralih Tema (Dark/Light)">
                         <i class="far fa-moon dark-icon-moon"></i>
                         <i class="far fa-sun dark-icon-sun"></i>
                     </button>
 
                     @auth
                         <a href="{{ route('dashboard') }}" class="nx-btn-login">
-                            <i class="fas fa-gauge-high"></i> Dashboard
+                            <i class="fas fa-gauge-high"></i> <span>Dashboard</span>
                         </a>
                     @else
                         <a href="{{ route('login') }}" class="nx-btn-login">
-                            <i class="fas fa-user"></i> Login
+                            <i class="fas fa-arrow-right-to-bracket"></i> <span>Login</span>
                         </a>
                     @endauth
                 </div>
@@ -928,22 +856,13 @@
         </div>
     </header>
 
-    <!-- ==================== 4. HERO SECTION ==================== -->
+    <!-- 2. HERO SECTION -->
     <section class="nx-hero-section" id="beranda">
-        <!-- Floating Handwritten Motto Callout -->
-        <div class="nx-kalam-floating d-none d-md-block">
-            <div class="nx-kalam-line">Bersama Jaga</div>
-            <div class="nx-kalam-line">Lingkungan Kita</div>
-            <svg class="nx-kalam-curve" width="145" height="14" viewBox="0 0 145 14" fill="none">
-                <path d="M4 10C45 3 98 3 141 9" stroke="#1B4332" stroke-width="2.6" stroke-linecap="round"/>
-            </svg>
-        </div>
         <div class="container">
             <div class="row align-items-center g-4">
-                <!-- Left Column: Copywriting & CTA -->
                 <div class="col-lg-6">
                     <div class="nx-welcome-badge">
-                        <i class="fas fa-leaf"></i> Selamat Datang di NexaNest
+                        <i class="fas fa-leaf"></i> Selamat Datang di Ekosistem Digital RW 018
                     </div>
 
                     <h2 class="nx-hero-heading">
@@ -958,13 +877,13 @@
                     </h2>
 
                     <p class="nx-hero-desc">
-                        Wujudkan lingkungan yang lebih baik bersama warga melalui layanan digital yang mudah, transparan, dan terpercaya.
+                        Wujudkan lingkungan yang lebih baik bersama warga melalui layanan digital yang mudah, transparan, terintegrasi IoT, dan aman terpercaya.
                     </p>
 
                     <div class="nx-hero-cta">
                         @auth
                             <a href="{{ route('dashboard') }}" class="nx-btn-primary">
-                                Buka Dashboard <i class="fas fa-arrow-right"></i>
+                                Masuk ke Dashboard <i class="fas fa-arrow-right"></i>
                             </a>
                         @else
                             <a href="{{ route('register') }}" class="nx-btn-primary">
@@ -973,312 +892,424 @@
                         @endauth
 
                         <a href="#fiturUnggulan" class="nx-btn-outline">
-                            <i class="fas fa-play-circle"></i> Pelajari Lebih Lanjut
+                            <i class="fas fa-circle-play"></i> Pelajari Lebih Lanjut
                         </a>
                     </div>
                 </div>
 
-                <!-- Right Column: Visual Spacer allowing hero-community illustration to shine -->
-                <div class="col-lg-6 d-none d-lg-block position-relative" style="min-height: 380px;">
+                <div class="col-lg-6 d-none d-lg-block">
+                    <!-- Spasi visual untuk ilustrasi jalan hijau hero -->
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Soft Wave Merging into Feature Section -->
-        <div class="nx-wave-divider">
-            <svg viewBox="0 0 1440 70" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="width: 100%; height: 54px;">
-                <path d="M0 45C320 0 680 75 1080 35C1260 17 1370 25 1440 35V70H0V45Z" fill="#F7F9F7"/>
-            </svg>
+    <!-- 3. FLOATING HIGHLIGHT BAR (4 POIN RINGKAS TANPA POPULASI) -->
+    <section class="nx-highlight-section">
+        <div class="container">
+            <div class="row g-2 g-md-3">
+                <div class="col-6 col-md-3">
+                    <div class="nx-highlight-card">
+                        <div class="nx-highlight-icon">
+                            <i class="fas fa-location-dot"></i>
+                        </div>
+                        <div>
+                            <h3 class="nx-highlight-title">RW 018 Aktif</h3>
+                            <p class="nx-highlight-sub">Wilayah Operasional</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="nx-highlight-card">
+                        <div class="nx-highlight-icon" style="background: #EFF6FF; color: #2563EB;">
+                            <i class="fas fa-building-user"></i>
+                        </div>
+                        <div>
+                            <h3 class="nx-highlight-title">5 RT Terintegrasi</h3>
+                            <p class="nx-highlight-sub">RT 006 – RT 010</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="nx-highlight-card">
+                        <div class="nx-highlight-icon" style="background: #FFFBEB; color: #D97706;">
+                            <i class="fas fa-torii-gate"></i>
+                        </div>
+                        <div>
+                            <h3 class="nx-highlight-title">24/7 Smart Gate</h3>
+                            <p class="nx-highlight-sub">Sistem RFID &amp; GPS</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <div class="nx-highlight-card">
+                        <div class="nx-highlight-icon" style="background: #FAF5FF; color: #7C3AED;">
+                            <i class="fas fa-shield-halved"></i>
+                        </div>
+                        <div>
+                            <h3 class="nx-highlight-title">Layanan Terpadu</h3>
+                            <p class="nx-highlight-sub">Administrasi &amp; Keamanan</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- ==================== 5. FEATURE SECTION — JELAJAHI FITUR UNGGULAN ==================== -->
-    <section class="nx-features-section" id="fiturUnggulan">
+    <!-- 4. SECTION JELAJAHI FITUR UNGGULAN (6 KARTU KURASI INTI) -->
+    <section class="py-4 py-md-5" id="fiturUnggulan">
         <div class="container">
             <div class="nx-section-header">
-                <div class="mb-1">
-                    <i class="fas fa-seedling" style="color: var(--nx-forest); font-size: 1.25rem;"></i>
-                </div>
-                <div class="nx-section-title-wrap">
-                    <span class="nx-section-title-line d-none d-sm-inline-block"></span>
-                    <h3 class="nx-section-title">Jelajahi Fitur Unggulan</h3>
-                    <span class="nx-section-title-line d-none d-sm-inline-block"></span>
-                </div>
+                <span class="nx-section-pill"><i class="fas fa-sparkles"></i> Ekosistem Lengkap</span>
+                <h3 class="nx-section-title">Jelajahi Fitur Unggulan</h3>
                 <p class="nx-section-subtitle">
-                    Solusi digital lengkap untuk mempermudah urusan warga dan pengurus RT/RW.
+                    Inovasi tata kelola lingkungan terpadu untuk memberikan kenyamanan dan transparansi maksimal bagi seluruh warga.
                 </p>
             </div>
 
-            <!-- 6 Feature Cards Grid (3 Columns Desktop) -->
-            <div class="row g-4" id="featureCardsGrid">
-                <!-- CARD 1 — KEUANGAN TRANSPARAN (Pastel Green) -->
-                <div class="col-md-6 col-lg-4 feature-card-col" data-title="keuangan transparan iuran kas warga laporan">
-                    <a href="{{ auth()->check() ? route('laporan.iuran') : route('login') }}" class="nx-feature-card nx-accent-green">
-                        <div class="nx-feature-icon">
-                            <i class="fas fa-file-invoice-dollar"></i>
+            <div class="row g-3 g-md-4">
+                <!-- 1. Keuangan & Iuran -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <a href="{{ auth()->check() ? (Route::has('laporan.iuran') ? route('laporan.iuran') : url('/laporan/iuran')) : route('login') }}" class="nx-card-feature">
+                        <div class="nx-feat-icon-box green">
+                            <i class="fas fa-wallet"></i>
                         </div>
-                        <div class="nx-feature-body">
-                            <h4 class="nx-feature-title">Keuangan Transparan</h4>
-                            <p class="nx-feature-desc">
-                                Kelola iuran dan kas warga dengan sistem pencatatan cerdas dan transparan.
-                            </p>
-                        </div>
-                        <span class="nx-feature-arrow">
-                            <i class="fas fa-arrow-right"></i>
-                        </span>
+                        <h4>Keuangan &amp; Iuran</h4>
+                        <p>Kelola iuran, kas, dan laporan keuangan warga secara transparan dan akuntabel.</p>
+                        <span class="nx-feat-arrow">Buka Modul <i class="fas fa-arrow-right"></i></span>
                     </a>
                 </div>
 
-                <!-- CARD 2 — BANK SAMPAH (Pastel Blue) -->
-                <div class="col-md-6 col-lg-4 feature-card-col" data-title="bank sampah daur ulang lingkungan bersih">
-                    <a href="#modalBankSampahLanding" data-bs-toggle="modal" class="nx-feature-card nx-accent-blue">
-                        <div class="nx-feature-icon">
+                <!-- 2. Surat Pengantar Online -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <a href="{{ auth()->check() ? (Route::has('surat.index') ? route('surat.index') : url('/surat')) : route('login') }}" class="nx-card-feature">
+                        <div class="nx-feat-icon-box blue">
+                            <i class="fas fa-file-signature"></i>
+                        </div>
+                        <h4>Surat Pengantar Online</h4>
+                        <p>Pengajuan surat pengantar RT/RW secara digital tanpa perlu antre dengan verifikasi cepat.</p>
+                        <span class="nx-feat-arrow">Ajukan Surat <i class="fas fa-arrow-right"></i></span>
+                    </a>
+                </div>
+
+                <!-- 3. Lapor QR & Pengaduan -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <a href="{{ auth()->check() ? (Route::has('pengaduan.create') ? route('pengaduan.create', ['scan' => 1]) : url('/pengaduan/create')) : route('login') }}" class="nx-card-feature">
+                        <div class="nx-feat-icon-box rose">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                        <h4>Lapor QR &amp; Pengaduan</h4>
+                        <p>Laporkan masalah fasilitas atau lampu jalan via scan QR code &amp; pengaduan cepat.</p>
+                        <span class="nx-feat-arrow">Lapor Cepat <i class="fas fa-arrow-right"></i></span>
+                    </a>
+                </div>
+
+                <!-- 4. Peminjaman Fasilitas -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <a href="{{ auth()->check() ? (Route::has('fasilitas.index') ? route('fasilitas.index') : url('/fasilitas')) : route('login') }}" class="nx-card-feature">
+                        <div class="nx-feat-icon-box cyan">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h4>Peminjaman Fasilitas</h4>
+                        <p>Pesan dan pinjam fasilitas umum warga (lapangan, balai warga, tenda) dengan mudah.</p>
+                        <span class="nx-feat-arrow">Cek Jadwal <i class="fas fa-arrow-right"></i></span>
+                    </a>
+                </div>
+
+                <!-- 5. Bank Sampah & Posyandu -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <a href="{{ auth()->check() ? (Route::has('bank_sampah.index') ? route('bank_sampah.index') : url('/bank-sampah')) : route('login') }}" class="nx-card-feature">
+                        <div class="nx-feat-icon-box amber">
                             <i class="fas fa-recycle"></i>
                         </div>
-                        <div class="nx-feature-body">
-                            <h4 class="nx-feature-title">Bank Sampah</h4>
-                            <p class="nx-feature-desc">
-                                Setor sampah, dapatkan manfaat untuk lingkungan, dan dukung pengelolaan sampah berkelanjutan.
-                            </p>
-                        </div>
-                        <span class="nx-feature-arrow">
-                            <i class="fas fa-arrow-right"></i>
-                        </span>
+                        <h4>Bank Sampah &amp; Posyandu</h4>
+                        <p>Program lingkungan berkelanjutan serta pantauan jadwal kesehatan dan imunisasi keluarga.</p>
+                        <span class="nx-feat-arrow">Lihat Program <i class="fas fa-arrow-right"></i></span>
                     </a>
                 </div>
 
-                <!-- CARD 3 — POSYANDU (Pastel Green) -->
-                <div class="col-md-6 col-lg-4 feature-card-col" data-title="posyandu kesehatan balita ibu hamil keluarga">
-                    <a href="{{ auth()->check() ? route('posyandu.index') : route('login') }}" class="nx-feature-card nx-accent-green">
-                        <div class="nx-feature-icon">
-                            <i class="fas fa-heart-pulse"></i>
-                        </div>
-                        <div class="nx-feature-body">
-                            <h4 class="nx-feature-title">Posyandu</h4>
-                            <p class="nx-feature-desc">
-                                Pantau informasi dan kegiatan Posyandu untuk mendukung kesehatan keluarga.
-                            </p>
-                        </div>
-                        <span class="nx-feature-arrow">
-                            <i class="fas fa-arrow-right"></i>
-                        </span>
-                    </a>
-                </div>
-
-                <!-- CARD 4 — DIREKTORI UMKM (Pastel Blue) -->
-                <div class="col-md-6 col-lg-4 feature-card-col" data-title="direktori umkm toko usaha warga kuliner lokal">
-                    <a href="{{ auth()->check() ? route('umkm.index') : route('login') }}" class="nx-feature-card nx-accent-blue">
-                        <div class="nx-feature-icon">
+                <!-- 6. UMKM & Agenda Warga -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <a href="{{ auth()->check() ? (Route::has('umkm.index') ? route('umkm.index') : url('/umkm')) : route('login') }}" class="nx-card-feature">
+                        <div class="nx-feat-icon-box purple">
                             <i class="fas fa-store"></i>
                         </div>
-                        <div class="nx-feature-body">
-                            <h4 class="nx-feature-title">Direktori UMKM</h4>
-                            <p class="nx-feature-desc">
-                                Dukung produk lokal dan temukan berbagai usaha milik warga di lingkungan sekitar.
-                            </p>
-                        </div>
-                        <span class="nx-feature-arrow">
-                            <i class="fas fa-arrow-right"></i>
-                        </span>
+                        <h4>UMKM &amp; Agenda Warga</h4>
+                        <p>Dukung usaha warga sekitar dan pantau jadwal agenda kegiatan gotong royong RT/RW.</p>
+                        <span class="nx-feat-arrow">Jelajahi UMKM <i class="fas fa-arrow-right"></i></span>
                     </a>
-                </div>
-
-                <!-- CARD 5 — KALENDER KEGIATAN (Pastel Green) -->
-                <div class="col-md-6 col-lg-4 feature-card-col" data-title="kalender kegiatan jadwal kerja bakti rapat warga surat">
-                    <a href="{{ auth()->check() ? route('posyandu.index') : route('login') }}" class="nx-feature-card nx-accent-green">
-                        <div class="nx-feature-icon">
-                            <i class="fas fa-calendar-days"></i>
-                        </div>
-                        <div class="nx-feature-body">
-                            <h4 class="nx-feature-title">Kalender Kegiatan</h4>
-                            <p class="nx-feature-desc">
-                                Ikuti jadwal kegiatan warga, kerja bakti, rapat, dan berbagai kegiatan lingkungan.
-                            </p>
-                        </div>
-                        <span class="nx-feature-arrow">
-                            <i class="fas fa-arrow-right"></i>
-                        </span>
-                    </a>
-                </div>
-
-                <!-- CARD 6 — TOMBOL DARURAT (Soft Red) -->
-                <div class="col-md-6 col-lg-4 feature-card-col" data-title="tombol darurat keamanan kebakaran ambulans pengaduan">
-                    <a href="#modalDaruratLanding" data-bs-toggle="modal" class="nx-feature-card nx-accent-red">
-                        <div class="nx-feature-icon">
-                            <i class="fas fa-bell"></i>
-                        </div>
-                        <div class="nx-feature-body">
-                            <h4 class="nx-feature-title">Tombol Darurat</h4>
-                            <p class="nx-feature-desc">
-                                Laporkan keadaan darurat dan hubungi pihak terkait dengan lebih cepat.
-                            </p>
-                        </div>
-                        <span class="nx-feature-arrow">
-                            <i class="fas fa-arrow-right"></i>
-                        </span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Bottom Motto Pill Banner -->
-            <div class="nx-footer-pill-wrap">
-                <div class="nx-footer-pill">
-                    <i class="fas fa-leaf"></i>
-                    <span>NexaNest — Membangun lingkungan yang cerdas, peduli, dan berkelanjutan.</span>
                 </div>
             </div>
         </div>
     </section>
-</div>
 
-<!-- MODAL TENTANG NEXANEST -->
-<div class="modal fade" id="tentangNexaNest" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: 22px; background: #fff; color: var(--nx-dark-text);">
-            <div class="modal-header border-bottom">
-                <h5 class="modal-title fw-bold" style="color: var(--nx-forest);">
-                    <i class="fas fa-leaf me-2"></i>Tentang NexaNest
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-            </div>
-            <div class="modal-body p-4">
-                <p class="small text-muted mb-3">
-                    <strong>NexaNest (Smart &amp; Green Community)</strong> adalah platform digital terpadu untuk pengelolaan administrasi RT/RW, transparansi kas &amp; iuran warga, penerbitan surat ber-TTE (SHA-256), pemantauan Posyandu, direktori UMKM, serta pelaporan fasilitas lingkungan berbasis QR Code.
-                </p>
-                <div class="row g-2 text-center">
-                    <div class="col-4">
-                        <div class="p-2 rounded-3" style="background: var(--nx-mint-soft);">
-                            <div class="fw-bold" style="color: var(--nx-forest);">RT 006–010</div>
-                            <small class="text-muted" style="font-size: 0.72rem;">Cakupan RW 018</small>
+    <!-- 5. SECTION SPOTLIGHT: KEAMANAN CERDAS & PROTEKSI DATA (DARK NAVY) -->
+    <section class="py-4 py-md-5" id="keamanan">
+        <div class="container">
+            <div class="nx-spotlight-card">
+                <div class="row align-items-center g-4">
+                    <!-- Kolom Kiri: 4 Poin Keamanan -->
+                    <div class="col-lg-7">
+                        <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3" style="background: rgba(56, 189, 248, 0.15); color: #38BDF8; font-size: 0.76rem; font-weight: 700;">
+                            <i class="fas fa-shield-halved"></i> IoT &amp; Cybersecurity Architecture
+                        </div>
+                        <h3 class="fw-bold mb-3" style="font-size: clamp(1.4rem, 2.8vw, 1.9rem); color: #F8FAFC;">
+                            Keamanan Cerdas &amp; Proteksi Data Warga
+                        </h3>
+                        <p class="text-secondary small mb-4" style="color: #94A3B8 !important; max-width: 520px;">
+                            Infrastruktur otomatisasi gerbang terpadu mikrokontroler ESP32 + RC522 yang dirancang kokoh dengan standar keamanan data tingkat lanjut.
+                        </p>
+
+                        <!-- 4 Poin Ikon Bersih -->
+                        <div class="nx-spotlight-item">
+                            <div class="nx-spotlight-icon"><i class="fas fa-id-card"></i></div>
+                            <div>
+                                <h5 class="nx-spotlight-title">Smart Gate IoT &amp; e-KTP RFID</h5>
+                                <p class="nx-spotlight-desc">Akses gerbang otomatis terhubung mikrokontroler ESP32 &amp; pembaca RFID RC522 terenkripsi.</p>
+                            </div>
+                        </div>
+
+                        <div class="nx-spotlight-item">
+                            <div class="nx-spotlight-icon"><i class="fas fa-location-crosshairs"></i></div>
+                            <div>
+                                <h5 class="nx-spotlight-title">Buka Portal Darurat GPS 20m</h5>
+                                <p class="nx-spotlight-desc">Verifikasi geofencing lokasi real-time radius 5-20 meter khusus warga terdaftar saat kartu tertinggal.</p>
+                            </div>
+                        </div>
+
+                        <div class="nx-spotlight-item">
+                            <div class="nx-spotlight-icon"><i class="fas fa-users-gear"></i></div>
+                            <div>
+                                <h5 class="nx-spotlight-title">Validasi NIK &amp; Akses Multi-Role</h5>
+                                <p class="nx-spotlight-desc">Pemisahan hak akses ketat antara Super Admin, Pengurus RW, Ketua RT, dan Warga.</p>
+                            </div>
+                        </div>
+
+                        <div class="nx-spotlight-item">
+                            <div class="nx-spotlight-icon"><i class="fas fa-lock"></i></div>
+                            <div>
+                                <h5 class="nx-spotlight-title">Enkripsi &amp; Log Audit</h5>
+                                <p class="nx-spotlight-desc">Pencatatan aktivitas tap kartu dan audit trail menyeluruh tanpa menyimpan data sensitif terbuka.</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-4">
-                        <div class="p-2 rounded-3" style="background: var(--nx-powder-soft);">
-                            <div class="fw-bold" style="color: #2B5F8E;">TTE SHA-256</div>
-                            <small class="text-muted" style="font-size: 0.72rem;">Surat Digital</small>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="p-2 rounded-3" style="background: var(--nx-mint-soft);">
-                            <div class="fw-bold" style="color: var(--nx-forest);">100% Transparan</div>
-                            <small class="text-muted" style="font-size: 0.72rem;">Kas per RT &amp; RW</small>
+
+                    <!-- Kolom Kanan: Preview Minimalis Gerbang Utama -->
+                    <div class="col-lg-5">
+                        <div class="nx-gate-preview-box">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-2.5 py-1 rounded-pill" style="font-size: 0.72rem;">
+                                        <i class="fas fa-signal me-1"></i> ONLINE
+                                    </span>
+                                    <strong class="text-white small">Gerbang Utama RW 018</strong>
+                                </div>
+                                <small class="text-muted font-monospace" style="font-size: 0.70rem;">ESP32-GATE-01</small>
+                            </div>
+
+                            <!-- Ilustrasi Palang Gerbang -->
+                            <div class="nx-gate-anim-frame">
+                                <div class="text-center">
+                                    <i class="fas fa-torii-gate fa-2x mb-2" style="color: #38BDF8;"></i>
+                                    <div class="small fw-bold text-white font-monospace">STATUS: STANDBY</div>
+                                    <div class="text-muted" style="font-size: 0.70rem;">Tertutup • Menunggu Tap e-KTP</div>
+                                </div>
+                            </div>
+
+                            <div class="p-2.5 rounded-3 border d-flex align-items-center justify-content-between" style="background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1) !important;">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="fas fa-shield-check text-info"></i>
+                                    <small class="text-light" style="font-size: 0.75rem;">Geofencing Geolocation</small>
+                                </div>
+                                <span class="badge bg-primary-subtle text-primary font-monospace" style="font-size: 0.70rem;">Aktif 20m</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </section>
 
-<!-- MODAL BANK SAMPAH & LINGKUNGAN -->
-<div class="modal fade" id="modalBankSampahLanding" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: 22px; background: #fff; color: var(--nx-dark-text);">
-            <div class="modal-header border-bottom">
-                <h5 class="modal-title fw-bold" style="color: var(--nx-forest);">
-                    <i class="fas fa-recycle me-2"></i>Program Bank Sampah &amp; Lingkungan
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+    <!-- 6. SECTION: MULAI DALAM 3 LANGKAH MUDAH -->
+    <section class="py-4 py-md-5">
+        <div class="container">
+            <div class="nx-section-header">
+                <span class="nx-section-pill"><i class="fas fa-route"></i> Alur Praktis</span>
+                <h3 class="nx-section-title">Mulai dalam 3 Langkah Mudah</h3>
+                <p class="nx-section-subtitle">Akses seluruh fasilitas lingkungan dan gerbang otomatis hanya dalam hitungan menit.</p>
             </div>
-            <div class="modal-body p-4">
-                <p class="small text-muted mb-3">
-                    Dukung gerakan <strong>Smart &amp; Sustainable Neighborhood</strong> dengan memilah sampah organik dan anorganik dari rumah. Warga juga dapat melaporkan masalah kebersihan bak sampah komunal melalui fitur QR Code Aset Lingkungan.
-                </p>
-                <div class="d-flex justify-content-end gap-2">
-                    <a href="{{ auth()->check() ? route('pengaduan.create', ['scan' => 1]) : route('login') }}" class="btn btn-sm fw-bold px-3 py-2" style="background: var(--nx-forest); color: #fff; border-radius: 999px;">
-                        Buka Layanan Lingkungan
-                    </a>
+
+            <div class="row g-3 g-md-4">
+                <div class="col-12 col-md-4">
+                    <div class="nx-step-card">
+                        <div class="nx-step-badge">1</div>
+                        <h4 class="fw-bold mb-2" style="font-size: 1.05rem;">Daftar &amp; Verifikasi NIK</h4>
+                        <p class="text-secondary small mb-0">
+                            Registrasi akun warga sesuai nomor RT (006–010) dan data 16 digit NIK resmi untuk verifikasi pengurus.
+                        </p>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- MODAL TOMBOL DARURAT -->
-<div class="modal fade" id="modalDaruratLanding" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: 22px; background: #fff; color: var(--nx-dark-text);">
-            <div class="modal-header border-bottom">
-                <h5 class="modal-title fw-bold text-danger">
-                    <i class="fas fa-bell me-2"></i>Layanan &amp; Kontak Darurat Lingkungan
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-            </div>
-            <div class="modal-body p-4">
-                <div class="d-flex flex-column gap-2">
-                    <div class="p-3 rounded-3 d-flex justify-content-between align-items-center" style="background: var(--nx-soft-red);">
-                        <div>
-                            <div class="fw-bold text-danger">Pos Keamanan / Siskamling RW 018</div>
-                            <small class="text-muted">Lapor cepat insiden keamanan atau fasilitas</small>
-                        </div>
-                        <a href="{{ auth()->check() ? route('pengaduan.create', ['scan' => 1]) : route('login') }}" class="btn btn-sm btn-danger rounded-pill px-3">Lapor</a>
+                <div class="col-12 col-md-4">
+                    <div class="nx-step-card">
+                        <div class="nx-step-badge">2</div>
+                        <h4 class="fw-bold mb-2" style="font-size: 1.05rem;">Rekam e-KTP / Aktivasi</h4>
+                        <p class="text-secondary small mb-0">
+                            Tautkan chip RFID e-KTP Anda melalui perangkat perekam pengurus RT/RW untuk aktivasi akses kartu.
+                        </p>
                     </div>
-                    <div class="p-3 rounded-3 d-flex justify-content-between align-items-center" style="background: var(--nx-mint-soft);">
-                        <div>
-                            <div class="fw-bold" style="color: var(--nx-forest);">Ambulans / Medis Darurat</div>
-                            <small class="text-muted">Call Center 119</small>
-                        </div>
-                        <a href="tel:119" class="btn btn-sm btn-success rounded-pill px-3">119</a>
-                    </div>
-                    <div class="p-3 rounded-3 d-flex justify-content-between align-items-center" style="background: var(--nx-powder-soft);">
-                        <div>
-                            <div class="fw-bold" style="color: #2B5F8E;">Pemadam Kebakaran</div>
-                            <small class="text-muted">Call Center 113</small>
-                        </div>
-                        <a href="tel:113" class="btn btn-sm btn-primary rounded-pill px-3">113</a>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <div class="nx-step-card">
+                        <div class="nx-step-badge">3</div>
+                        <h4 class="fw-bold mb-2" style="font-size: 1.05rem;">Akses Layanan &amp; Gerbang</h4>
+                        <p class="text-secondary small mb-0">
+                            Nikmati kemudahan tap e-KTP di gerbang otomatis, bayar iuran transparan, dan buat surat secara digital.
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </section>
 
-<!-- MODAL BANTUAN PENDAFTARAN -->
-<div class="modal fade" id="modalBantuan" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-lg" style="border-radius: 22px; background: #fff; color: var(--nx-dark-text);">
-            <div class="modal-header border-bottom">
-                <h5 class="modal-title fw-bold" style="color: var(--nx-forest);">
-                    <i class="far fa-circle-question me-2"></i>Panduan Singkat Warga Baru
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+    <!-- 7. SECTION FAQ ACCORDION -->
+    <section class="py-4 py-md-5" id="faq">
+        <div class="container" style="max-width: 820px;">
+            <div class="nx-section-header">
+                <span class="nx-section-pill"><i class="fas fa-circle-question"></i> Pusat Informasi</span>
+                <h3 class="nx-section-title">Pertanyaan Umum (FAQ)</h3>
+                <p class="nx-section-subtitle">Jawaban atas pertanyaan seputar penggunaan platform dan Smart Gate NexaNest.</p>
             </div>
-            <div class="modal-body p-4 small text-muted">
-                <ol class="ps-3 mb-3">
-                    <li class="mb-2">Klik tombol <strong>Daftar Sekarang</strong> pada halaman utama.</li>
-                    <li class="mb-2">Isi identitas lengkap, nomor RT (006–010), blok rumah, dan pilih status Kepala Keluarga / Anggota Keluarga.</li>
-                    <li>Setelah terdaftar, Anda otomatis masuk ke Dashboard Warga untuk melihat riwayat iuran, mengajukan surat, dan mengakses layanan lingkungan.</li>
-                </ol>
-                <div class="text-end">
-                    <a href="{{ route('register') }}" class="btn btn-sm fw-bold px-3 py-2" style="background: var(--nx-forest); color: #fff; border-radius: 999px;">
-                        Daftar Warga Sekarang
-                    </a>
+
+            <div class="accordion" id="accordionFaq">
+                <!-- FAQ 1 -->
+                <div class="nx-faq-item">
+                    <button class="nx-faq-btn" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse1" aria-expanded="true">
+                        <span>Bagaimana cara merekam e-KTP untuk Smart Gate?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div id="faqCollapse1" class="collapse show" data-bs-parent="#accordionFaq">
+                        <div class="nx-faq-body">
+                            Warga yang telah memiliki akun terverifikasi cukup menemui pengurus RT atau Admin RW. Pengurus akan membuka modal Rekam e-KTP pada sistem, lalu Anda cukup menempelkan kartu e-KTP ke sensor RFID RC522 sekali saja untuk ditautkan secara permanen.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="nx-faq-item">
+                    <button class="nx-faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse2" aria-expanded="false">
+                        <span>Apakah data NIK dan data pribadi warga aman?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div id="faqCollapse2" class="collapse" data-bs-parent="#accordionFaq">
+                        <div class="nx-faq-body">
+                            Sangat aman. Sistem NexaNest membatasi akses data melalui kontrol peran berlapis (RBAC). Nomor identitas dan data sensitif dilindungi, hanya digunakan untuk validasi internal kependudukan warga RW 018, dan tidak pernah dibagikan kepada pihak ketiga.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div class="nx-faq-item">
+                    <button class="nx-faq-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse3" aria-expanded="false">
+                        <span>Bagaimana jika kartu e-KTP tertinggal saat di depan gerbang?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div id="faqCollapse3" class="collapse" data-bs-parent="#accordionFaq">
+                        <div class="nx-faq-body">
+                            Anda tetap dapat membuka gerbang menggunakan menu <strong>Smart Gate</strong> di smartphone Anda. Tekan tombol <em>Buka Gerbang Darurat via GPS</em> saat berada dalam radius izin gerbang (maksimal 20 meter). Sistem akan memverifikasi koordinat GPS perangkat Anda dan membuka palang secara instan.
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- 8. FOOTER MINIMALIS & KONTAK TERSENSOR (PRIVASI) -->
+    <footer class="nx-footer">
+        <div class="container">
+            <div class="row g-4 mb-4">
+                <div class="col-12 col-md-4">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span class="nx-brand-icon" style="width: 36px; height: 36px; border-radius: 10px;">
+                            <i class="fas fa-leaf" style="color: var(--nx-forest); font-size: 1rem;"></i>
+                        </span>
+                        <strong class="fs-5 fw-bold" style="color: var(--nx-forest);">NexaNest</strong>
+                    </div>
+                    <p class="text-secondary small mb-2" style="line-height: 1.5;">
+                        Platform Smart &amp; Green Community terpadu untuk lingkungan rukun, asri, transparan, dan berdaya saing digital.
+                    </p>
+                    <small class="text-muted d-block" style="font-size: 0.72rem;">
+                        Wilayah Operasional RW 018 (RT 006, RT 007, RT 008, RT 009, RT 010)
+                    </small>
+                </div>
+
+                <div class="col-6 col-md-2 nx-footer-col">
+                    <h5>Layanan</h5>
+                    <ul class="nx-footer-links">
+                        <li><a href="{{ route('login') }}">Iuran &amp; Kas RW</a></li>
+                        <li><a href="{{ route('login') }}">Surat Pengantar</a></li>
+                        <li><a href="{{ route('login') }}">Lapor Fasilitas QR</a></li>
+                        <li><a href="{{ route('login') }}">Peminjaman Aset</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-md-3 nx-footer-col">
+                    <h5>Sistem &amp; IoT</h5>
+                    <ul class="nx-footer-links">
+                        <li><a href="#keamanan">Smart Gate RFID</a></li>
+                        <li><a href="#keamanan">Geofencing GPS</a></li>
+                        <li><a href="{{ route('login') }}">Pusat Kendali IoT</a></li>
+                        <li><a href="{{ route('login') }}">Audit Log Sistem</a></li>
+                    </ul>
+                </div>
+
+                <!-- Kontak Tersensor Demi Privasi -->
+                <div class="col-12 col-md-3 nx-footer-col">
+                    <h5>Contact / Support</h5>
+                    <div class="p-3 rounded-3 border" style="background: rgba(255,255,255,0.7); border-color: var(--nx-border) !important;">
+                        <div class="d-flex align-items-center gap-2 mb-1.5">
+                            <i class="fab fa-telegram text-primary"></i>
+                            <span class="small fw-bold">Telegram Pengurus:</span>
+                        </div>
+                        <div class="font-monospace text-muted small mb-2">
+                            t.me/n••••••
+                        </div>
+                        <a href="{{ route('login') }}" class="btn btn-xs btn-outline-primary d-inline-flex align-items-center gap-1 w-100 justify-content-center py-1.5 mb-1.5" style="border-radius: 8px; font-size: 0.75rem;">
+                            <i class="fas fa-lock"></i>
+                            <span>Login untuk Hubungi Admin</span>
+                        </a>
+                        <small class="text-muted d-block" style="font-size: 0.68rem; line-height: 1.3;">
+                            *Tautan langsung layanan pengaduan otomatis aktif di pojok kanan bawah setelah masuk.
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-3 border-top text-center text-secondary small" style="border-color: var(--nx-border) !important; font-size: 0.75rem;">
+                &copy; {{ date('Y') }} NexaNest Community. Dikembangkan untuk kemaslahatan warga RW 018.
+            </div>
+        </div>
+    </footer>
 </div>
 
+@push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const searchInput = document.getElementById('landingSearchInput');
-    const cols = document.querySelectorAll('.feature-card-col');
-
-    if (searchInput) {
-        searchInput.addEventListener('input', function () {
-            const q = this.value.toLowerCase().trim();
-            cols.forEach(col => {
-                const hay = (col.dataset.title || '') + ' ' + col.textContent.toLowerCase();
-                col.style.display = hay.includes(q) ? '' : 'none';
-            });
-        });
-
-        searchInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                document.getElementById('fiturUnggulan')?.scrollIntoView({ behavior: 'smooth' });
+    // Smooth scroll internal anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const targetId = this.getAttribute('href');
+            if (targetId && targetId !== '#') {
+                const targetEl = document.querySelector(targetId);
+                if (targetEl) {
+                    e.preventDefault();
+                    targetEl.scrollIntoView({ behavior: 'smooth' });
+                }
             }
         });
-    }
+    });
 });
 </script>
+@endpush
 @endsection

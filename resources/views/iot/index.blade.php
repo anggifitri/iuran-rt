@@ -193,15 +193,20 @@
                                    style="background: var(--nx-bg); color: var(--nx-text); border-color: var(--nx-border);">
                         </div>
 
+                        @php
+                            $rawRadius = old('geofence_radius', $setting->geofence_radius ?? 15);
+                            // Clamp radius antara min: 5 meter dan max: 20 meter, default 15 meter
+                            $currentRadius = max(5, min(20, (int) ($rawRadius ?: 15)));
+                        @endphp
                         <div class="row g-2 mb-2">
-                            <div class="col-6">
-                                <label class="form-label small fw-semibold" style="color: var(--nx-text);">Latitude</label>
+                            <div class="col-12 col-sm-6">
+                                <label class="form-label small fw-semibold" style="color: var(--nx-text);">Latitude Gerbang</label>
                                 <input type="number" step="any" name="gate_latitude" id="inputLatitude" class="form-control form-control-sm font-monospace"
                                        value="{{ old('gate_latitude', $setting->gate_latitude) }}" placeholder="-6.388889"
                                        style="background: var(--nx-bg); color: var(--nx-text); border-color: var(--nx-border);">
                             </div>
-                            <div class="col-6">
-                                <label class="form-label small fw-semibold" style="color: var(--nx-text);">Longitude</label>
+                            <div class="col-12 col-sm-6">
+                                <label class="form-label small fw-semibold" style="color: var(--nx-text);">Longitude Gerbang</label>
                                 <input type="number" step="any" name="gate_longitude" id="inputLongitude" class="form-control form-control-sm font-monospace"
                                        value="{{ old('gate_longitude', $setting->gate_longitude) }}" placeholder="106.845556"
                                        style="background: var(--nx-bg); color: var(--nx-text); border-color: var(--nx-border);">
@@ -211,7 +216,7 @@
                         <div class="d-flex justify-content-end mb-3">
                             <button type="button" class="btn btn-sm btn-outline-success d-inline-flex align-items-center gap-1.5" id="btnCurrentLocation" style="font-size: 0.75rem;">
                                 <i class="fas fa-location-crosshairs"></i>
-                                <span>Ambil Lokasi Saya Saat Ini</span>
+                                <span>Gunakan Lokasi Saya Saat Ini</span>
                             </button>
                         </div>
 
@@ -219,13 +224,18 @@
                             <div class="d-flex align-items-center justify-content-between mb-1">
                                 <label class="form-label small fw-semibold m-0" style="color: var(--nx-text);">Radius Geofence (Meter)</label>
                                 <span class="badge bg-primary-subtle text-primary fw-bold font-monospace" id="radiusValueBadge">
-                                    {{ $setting->geofence_radius }} m
+                                    {{ $currentRadius }} m
                                 </span>
                             </div>
-                            <input type="range" class="form-range" name="geofence_radius" id="rangeGeofence" min="5" max="100" step="5" 
-                                   value="{{ old('geofence_radius', $setting->geofence_radius) }}">
-                            <small class="text-muted d-block" style="font-size: 0.7rem;">
-                                Rentang aman: 5 meter (presisi tinggi) s/d 100 meter (area bundaran/pos gerbang).
+                            <input type="range" class="form-range" name="geofence_radius" id="rangeGeofence" min="5" max="20" step="1" 
+                                   value="{{ $currentRadius }}">
+                            <div class="d-flex justify-content-between small text-muted font-monospace mt-1" style="font-size: 0.7rem;">
+                                <span>5 m (Min)</span>
+                                <span>15 m (Default)</span>
+                                <span>20 m (Maks)</span>
+                            </div>
+                            <small class="text-muted d-block mt-1" style="font-size: 0.7rem;">
+                                Radius geofencing aman gerbang otomatis: minimal 5 meter s/d maksimal 20 meter (rekomendasi: 15 meter).
                             </small>
                         </div>
                     </div>
@@ -504,7 +514,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // 4. Geolocation: Ambil Lokasi Saya Saat Ini
+    // 4. Geolocation: Gunakan Lokasi Saya Saat Ini
     const btnCurrentLocation = document.getElementById('btnCurrentLocation');
     const inputLat = document.getElementById('inputLatitude');
     const inputLng = document.getElementById('inputLongitude');
@@ -516,7 +526,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             btnCurrentLocation.disabled = true;
-            btnCurrentLocation.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mendeteksi...';
+            btnCurrentLocation.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mendeteksi Lokasi GPS...';
 
             navigator.geolocation.getCurrentPosition(
                 function (position) {
@@ -525,13 +535,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     btnCurrentLocation.disabled = false;
                     btnCurrentLocation.innerHTML = '<i class="fas fa-check text-success"></i> Koordinat Terisi';
                     setTimeout(() => {
-                        btnCurrentLocation.innerHTML = '<i class="fas fa-location-crosshairs"></i> <span>Ambil Lokasi Saya Saat Ini</span>';
+                        btnCurrentLocation.innerHTML = '<i class="fas fa-location-crosshairs"></i> <span>Gunakan Lokasi Saya Saat Ini</span>';
                     }, 2000);
                 },
                 function (err) {
                     btnCurrentLocation.disabled = false;
-                    btnCurrentLocation.innerHTML = '<i class="fas fa-location-crosshairs"></i> <span>Ambil Lokasi Saya Saat Ini</span>';
-                    alert('Gagal mendeteksi lokasi: ' + err.message + '\nPastikan izin lokasi telah diaktifkan pada browser Anda.');
+                    btnCurrentLocation.innerHTML = '<i class="fas fa-location-crosshairs"></i> <span>Gunakan Lokasi Saya Saat Ini</span>';
+                    alert('Gagal mendeteksi lokasi: ' + err.message + '\nPastikan izin GPS / akses lokasi browser telah diizinkan.');
                 },
                 { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
             );
