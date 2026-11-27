@@ -1306,6 +1306,138 @@
             }
         }
 
+        /* Mobile Layout Ala GoPay (<= 768px) */
+        @media (max-width: 768px) {
+            body {
+                overflow-x: hidden;
+                box-sizing: border-box;
+            }
+            .nx-shell {
+                overflow-x: hidden;
+                max-width: 100vw;
+            }
+            .nx-main {
+                padding: 12px !important;
+                padding-bottom: 84px !important;
+                overflow-x: hidden;
+                max-width: 100vw;
+            }
+            .nx-topbar {
+                padding: 10px 12px;
+                gap: 8px;
+            }
+            .nx-page-title {
+                font-size: clamp(0.85rem, 3.8vw, 1.05rem) !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
+            }
+
+            /* Bottom Navigation Bar ala GoPay */
+            .nx-bottom-nav {
+                display: flex !important;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 62px;
+                background: rgba(255, 255, 255, 0.96);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                border-top: 1px solid rgba(0, 0, 0, 0.08);
+                z-index: 1045;
+                justify-content: space-around;
+                align-items: center;
+                padding: 4px 6px calc(env(safe-area-inset-bottom, 0px) + 4px);
+                box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.04);
+            }
+            html.dark .nx-bottom-nav {
+                background: rgba(15, 23, 42, 0.96);
+                border-top: 1px solid rgba(255, 255, 255, 0.08);
+                box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.35);
+            }
+            .nx-bottom-nav-item {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+                color: #64748b;
+                padding: 4px 2px;
+                border-radius: 8px;
+                transition: all 0.15s ease;
+                background: transparent;
+                border: 0;
+                cursor: pointer;
+            }
+            html.dark .nx-bottom-nav-item {
+                color: #94a3b8;
+            }
+            .nx-bottom-nav-item i {
+                font-size: 19px;
+                margin-bottom: 2px;
+                line-height: 1;
+            }
+            .nx-bottom-nav-item span {
+                font-size: 10px;
+                font-weight: 600;
+                letter-spacing: -0.01em;
+                line-height: 1.1;
+            }
+            .nx-bottom-nav-item.active {
+                color: #1e4633;
+                font-weight: 700;
+            }
+            html.dark .nx-bottom-nav-item.active {
+                color: #38bdf8;
+            }
+            .nx-bottom-nav-item:active {
+                transform: scale(0.93);
+            }
+
+            /* Quick Action Grid ala GoPay di Mobile Hero */
+            .nx-hero-actions {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 8px !important;
+                width: 100% !important;
+            }
+            .nx-hero-actions button,
+            .nx-hero-actions a,
+            .nx-hero-actions form {
+                width: 100% !important;
+                margin: 0 !important;
+            }
+            .nx-hero-actions button,
+            .nx-hero-actions a {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+                padding: 10px 4px !important;
+                gap: 5px !important;
+                min-height: 64px;
+            }
+            .nx-hero-actions button i,
+            .nx-hero-actions a i {
+                font-size: 1.1rem !important;
+            }
+            .nx-hero-actions button span,
+            .nx-hero-actions a span {
+                font-size: 0.68rem !important;
+                line-height: 1.15 !important;
+                font-weight: 600;
+            }
+        }
+        @media (min-width: 769px) {
+            .nx-bottom-nav {
+                display: none !important;
+            }
+        }
+
         /* ============ TOPBAR EMERGENCY BUTTON & THEME TOGGLE ============ */
         .nx-topbar-emergency-btn {
             display: inline-flex;
@@ -1827,7 +1959,10 @@
 
                         <div class="dropdown">
                             <a href="#" class="nx-profile-btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{{ $authProfilePhotoUrl }}" alt="{{ $authDisplayName }}" class="nx-profile-avatar">
+                                <img src="{{ $authProfilePhotoUrl }}" 
+                                     alt="{{ $authDisplayName }}" 
+                                     class="nx-profile-avatar"
+                                     onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ urlencode($authDisplayName) }}&background=285943&color=fff';">
                                 <div class="d-none d-sm-block text-start me-1">
                                     <div class="fw-bold" style="font-size: 0.85rem; line-height: 1.15; color: var(--nx-text);">
                                         Hello, {{ $firstNameAuth }}!
@@ -2116,5 +2251,71 @@
     </script>
 
     @stack('scripts')
+
+    @auth
+    @php
+        $currUser = Auth::user();
+        $isUserWarga = $currUser->isWarga();
+        $isUserAdminRw = $currUser->isAdminRw();
+        $isUserAdminRt = $currUser->isAdminRt();
+    @endphp
+    <!-- Mobile Bottom Navigation Bar ala GoPay (<= 768px) -->
+    <nav class="nx-bottom-nav" aria-label="Navigasi Bawah Mobile">
+        <a href="{{ route('dashboard') }}" class="nx-bottom-nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+            <i class="fas fa-home"></i>
+            <span>Beranda</span>
+        </a>
+
+        @if($isUserWarga)
+            <a href="{{ route('laporan.iuran') }}" class="nx-bottom-nav-item {{ request()->routeIs('laporan.iuran*') ? 'active' : '' }}">
+                <i class="fas fa-receipt"></i>
+                <span>Iuran</span>
+            </a>
+            <a href="{{ route('smart-gate.index') }}" class="nx-bottom-nav-item {{ request()->routeIs('smart-gate*') ? 'active' : '' }}">
+                <i class="fas fa-torii-gate"></i>
+                <span>Smart Gate</span>
+            </a>
+            <a href="{{ route('surat.index') }}" class="nx-bottom-nav-item {{ request()->routeIs('surat*') || request()->routeIs('pengaduan*') ? 'active' : '' }}">
+                <i class="fas fa-envelope-open-text"></i>
+                <span>Layanan</span>
+            </a>
+        @elseif($isUserAdminRw)
+            <a href="{{ route('warga.index') }}" class="nx-bottom-nav-item {{ request()->routeIs('warga*') ? 'active' : '' }}">
+                <i class="fas fa-users"></i>
+                <span>Warga/RT</span>
+            </a>
+            <a href="{{ route('pembayaran.index') }}" class="nx-bottom-nav-item {{ request()->routeIs('pembayaran*') || request()->routeIs('kas*') ? 'active' : '' }}">
+                <i class="fas fa-wallet"></i>
+                <span>Keuangan</span>
+            </a>
+            <a href="{{ route('smart-gate.index') }}" class="nx-bottom-nav-item {{ request()->routeIs('smart-gate*') ? 'active' : '' }}">
+                <i class="fas fa-torii-gate"></i>
+                <span>Smart Gate</span>
+            </a>
+        @else
+            {{-- Admin RT / Bendahara RT --}}
+            <a href="{{ route('warga.index') }}" class="nx-bottom-nav-item {{ request()->routeIs('warga*') ? 'active' : '' }}">
+                <i class="fas fa-users"></i>
+                <span>Warga</span>
+            </a>
+            <a href="{{ route('pembayaran.index') }}" class="nx-bottom-nav-item {{ request()->routeIs('pembayaran*') || request()->routeIs('laporan.iuran*') ? 'active' : '' }}">
+                <i class="fas fa-receipt"></i>
+                <span>Iuran</span>
+            </a>
+            <a href="{{ route('surat.index') }}" class="nx-bottom-nav-item {{ request()->routeIs('surat*') || request()->routeIs('laporan_rt*') ? 'active' : '' }}">
+                <i class="fas fa-clipboard-check"></i>
+                <span>Surat/Laporan</span>
+            </a>
+        @endif
+
+        <button type="button" class="nx-bottom-nav-item" onclick="document.getElementById('nxShell')?.classList.toggle('mobile-open')">
+            <i class="fas fa-bars"></i>
+            <span>Menu</span>
+        </button>
+    </nav>
+    @endauth
+
+    <!-- Floating Telegram Button Pengaduan (Warga, Admin RT, Admin RW) -->
+    @include('components.floating-telegram')
 </body>
 </html>

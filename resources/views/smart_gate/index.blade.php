@@ -14,8 +14,8 @@
     <div class="card p-4 rounded-4 border mb-4 shadow-sm" style="background: var(--nx-card-bg); border-color: var(--nx-border) !important;">
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
             <div class="d-flex align-items-center gap-3">
-                <div class="rounded-3 d-flex align-items-center justify-content-center text-white" 
-                     style="width: 52px; height: 52px; background: linear-gradient(135deg, #1E4633 0%, #285943 100%); box-shadow: 0 4px 12px rgba(40,89,67,0.25);">
+                <div class="rounded-3 d-flex align-items-center justify-content-center text-white flex-shrink-0 align-self-start" 
+                     style="width: 48px; height: 48px; min-width: 48px; min-height: 48px; background: linear-gradient(135deg, #1E4633 0%, #285943 100%); box-shadow: 0 4px 12px rgba(40,89,67,0.25);">
                     <i class="fas fa-torii-gate fa-xl"></i>
                 </div>
                 <div>
@@ -112,18 +112,18 @@
                 </div>
 
                 <!-- BANNER STATUS RESPON EVENT AKTIF -->
-                <div id="gateEventAlert" class="alert alert-secondary d-flex align-items-center gap-3 p-3 rounded-3 mb-0 transition-all">
+                <div id="gateEventAlert" class="alert alert-secondary d-flex flex-wrap align-items-center gap-2 gap-sm-3 p-3 rounded-3 mb-0 transition-all">
                     <div class="alert-icon-box rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" id="alertIconBox"
                          style="width: 42px; height: 42px; background: rgba(100, 116, 139, 0.15); color: #64748B;">
                         <i class="fas fa-shield-halved fa-lg"></i>
                     </div>
-                    <div class="flex-grow-1 min-w-0">
+                    <div class="flex-grow-1" style="min-width: 0; word-break: break-word;">
                         <strong class="d-block mb-0.5" id="alertTitle" style="color: var(--nx-text);">Menunggu Aktivitas Tap Kartu atau GPS...</strong>
-                        <p class="small text-muted mb-0 text-truncate" id="alertDesc">
+                        <p class="small text-muted mb-0" id="alertDesc" style="white-space: normal; line-height: 1.4;">
                             Tempelkan E-KTP pada RFID RC522 gerbang atau gunakan tombol buka darurat GPS warga.
                         </p>
                     </div>
-                    <div id="countdownBox" class="text-end d-none flex-shrink-0">
+                    <div id="countdownBox" class="text-end d-none flex-shrink-0 ms-auto">
                         <span class="badge bg-success-subtle text-success font-monospace px-2.5 py-1.5" id="countdownTimer">
                             Menutup: 6s
                         </span>

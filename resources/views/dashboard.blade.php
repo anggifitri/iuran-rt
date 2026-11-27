@@ -1522,7 +1522,10 @@
                 <!-- User Profile Dropdown -->
                 <div class="dropdown">
                     <a href="#" class="nx-profile-btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="{{ $dashboardProfilePhotoUrl }}" alt="{{ $dashboardDisplayName }}" class="nx-profile-avatar">
+                        <img src="{{ $dashboardProfilePhotoUrl }}" 
+                             alt="{{ $dashboardDisplayName }}" 
+                             class="nx-profile-avatar"
+                             onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ urlencode($dashboardDisplayName) }}&background=285943&color=fff';">
                         <div class="d-none d-sm-block text-start me-1">
                             <div class="fw-bold" style="font-size: 0.85rem; line-height: 1.15; color: var(--nx-text);">
                                 Hello, {{ $firstName }}!
@@ -1625,6 +1628,69 @@
                                 <i class="fas fa-eye me-1"></i>Simulasi Warga: {{ $wargaRecord->nama }} (RT {{ $wargaRecord->rt_number }})
                             </span>
                         @endif
+                    @endif
+                </div>
+
+                <!-- Quick Action Grid ala GoPay (Khusus Mobile <= 768px) -->
+                <div class="nx-hero-quick-actions d-md-none mt-3">
+                    @if($isAdminRW)
+                        <div class="nx-quick-grid">
+                            <a href="{{ route('warga.index') }}" class="nx-quick-item">
+                                <div class="nx-quick-icon"><i class="fas fa-users"></i></div>
+                                <span>Data Warga</span>
+                            </a>
+                            <a href="{{ route('pembayaran.index') }}" class="nx-quick-item">
+                                <div class="nx-quick-icon"><i class="fas fa-wallet"></i></div>
+                                <span>Kas RW</span>
+                            </a>
+                            <a href="{{ route('smart-gate.index') }}" class="nx-quick-item">
+                                <div class="nx-quick-icon"><i class="fas fa-torii-gate"></i></div>
+                                <span>Smart Gate</span>
+                            </a>
+                            <a href="{{ route('monitoring.index') }}" class="nx-quick-item">
+                                <div class="nx-quick-icon"><i class="fas fa-tower-observation"></i></div>
+                                <span>Monitoring</span>
+                            </a>
+                        </div>
+                    @elseif($isAdminRT)
+                        <div class="nx-quick-grid">
+                            <a href="{{ route('warga.index') }}" class="nx-quick-item">
+                                <div class="nx-quick-icon"><i class="fas fa-id-card"></i></div>
+                                <span>Data Warga</span>
+                            </a>
+                            <a href="{{ route('pembayaran.create') }}" class="nx-quick-item">
+                                <div class="nx-quick-icon"><i class="fas fa-money-bill-wave"></i></div>
+                                <span>Catat Iuran</span>
+                            </a>
+                            <a href="{{ route('surat.index', ['filter' => 'pending']) }}" class="nx-quick-item">
+                                <div class="nx-quick-icon"><i class="fas fa-check-double"></i></div>
+                                <span>Verif Surat</span>
+                            </a>
+                            <a href="{{ route('smart-gate.index') }}" class="nx-quick-item">
+                                <div class="nx-quick-icon"><i class="fas fa-torii-gate"></i></div>
+                                <span>Smart Gate</span>
+                            </a>
+                        </div>
+                    @else
+                        {{-- Warga --}}
+                        <div class="nx-quick-grid">
+                            <a href="{{ route('surat.create') }}" class="nx-quick-item">
+                                <div class="nx-quick-icon"><i class="fas fa-paper-plane"></i></div>
+                                <span>Buat Surat</span>
+                            </a>
+                            <a href="{{ route('laporan.iuran') }}" class="nx-quick-item">
+                                <div class="nx-quick-icon"><i class="fas fa-receipt"></i></div>
+                                <span>Iuran Saya</span>
+                            </a>
+                            <a href="{{ route('smart-gate.index') }}" class="nx-quick-item">
+                                <div class="nx-quick-icon"><i class="fas fa-torii-gate"></i></div>
+                                <span>Smart Gate</span>
+                            </a>
+                            <a href="{{ route('pengaduan.create') }}" class="nx-quick-item">
+                                <div class="nx-quick-icon"><i class="fas fa-bullhorn"></i></div>
+                                <span>Pengaduan</span>
+                            </a>
+                        </div>
                     @endif
                 </div>
             </div>
@@ -2804,4 +2870,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
+
+@include('components.floating-telegram')
 @endsection

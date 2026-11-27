@@ -281,7 +281,10 @@
                     <td class="py-3">
                         @if($rt->adminUser)
                             <div class="d-flex align-items-center gap-2">
-                                <img src="{{ $rt->adminUser->profile_photo_url }}" class="rounded-circle" width="28" height="28" alt="avatar">
+                                <img src="{{ $rt->adminUser->profile_photo_url }}" 
+                                     class="rounded-circle flex-shrink-0" 
+                                     width="28" height="28" alt="avatar"
+                                     onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ urlencode($rt->adminUser->name) }}&background=285943&color=fff';">
                                 <div>
                                     <strong class="d-block small" style="color: var(--nx-text);">{{ $rt->adminUser->name }}</strong>
                                     <small style="color: var(--nx-muted); font-size: 0.72rem;">{{ $rt->adminUser->email }}</small>
@@ -358,9 +361,12 @@
             <div class="p-3 rounded-3 border" style="background: var(--nx-bg); border-color: var(--nx-border) !important;">
                 @if($adminRw)
                     <div class="d-flex align-items-center gap-3 mb-3">
-                        <img src="{{ $adminRw->profile_photo_url }}" class="rounded-circle border border-warning" width="48" height="48" alt="avatar">
-                        <div>
-                            <strong class="d-block fs-6" style="color: var(--nx-text);">{{ $adminRw->name }}</strong>
+                        <img src="{{ $adminRw->profile_photo_url }}" 
+                             class="rounded-circle border border-warning flex-shrink-0" 
+                             width="48" height="48" alt="avatar"
+                             onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ urlencode($adminRw->name) }}&background=285943&color=fff';">
+                        <div style="min-width: 0;">
+                            <strong class="d-block fs-6 text-truncate" style="color: var(--nx-text);">{{ $adminRw->name }}</strong>
                             <small class="badge bg-warning-subtle text-dark border border-warning-subtle mt-0.5">Admin RW 018 · Pengurus Komunitas</small>
                         </div>
                     </div>
@@ -403,26 +409,26 @@
 
             <div class="d-flex flex-column gap-2 sa-matriks-rt-list" style="max-height: 420px; overflow-y: auto;">
                 @foreach($rts as $rt)
-                <div class="p-2.5 rounded-3 border d-flex align-items-center justify-content-between gap-3" style="background: var(--nx-bg); border-color: var(--nx-border) !important;">
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="badge bg-success-subtle text-success border border-success-subtle font-monospace fw-bold px-2 py-1">
+                <div class="p-2.5 rounded-3 border d-flex flex-wrap align-items-center justify-content-between gap-2" style="background: var(--nx-bg); border-color: var(--nx-border) !important;">
+                    <div class="d-flex align-items-center gap-2" style="min-width: 0; flex: 1 1 200px;">
+                        <span class="badge bg-success-subtle text-success border border-success-subtle font-monospace fw-bold px-2 py-1 flex-shrink-0">
                             RT {{ $rt->rt_number }}
                         </span>
-                        <div>
-                            <strong class="d-block small" style="color: var(--nx-text);">
+                        <div style="min-width: 0;">
+                            <strong class="d-block small text-truncate" style="color: var(--nx-text);">
                                 {{ $rt->adminUser ? $rt->adminUser->name : ($rt->nama_ketua_rt ?: 'Belum Ada Admin') }}
                             </strong>
-                            <small style="color: var(--nx-muted); font-size: 0.72rem;">
+                            <small class="d-block text-truncate" style="color: var(--nx-muted); font-size: 0.72rem;">
                                 {{ $rt->adminUser ? $rt->adminUser->email : 'Akun belum ditautkan' }}
                             </small>
                         </div>
                     </div>
 
-                    <div class="d-flex align-items-center gap-2">
+                    <div class="d-flex align-items-center gap-2 ms-auto flex-shrink-0">
                         <span class="badge {{ $rt->adminUser ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning' }}" style="font-size: 0.70rem;">
                             {{ $rt->adminUser ? 'Terhubung' : 'Pending' }}
                         </span>
-                        <button type="button" class="btn btn-xs btn-outline-secondary px-2 py-1" style="border-radius: 6px; font-size: 0.72rem;" data-bs-toggle="modal" data-bs-target="#modalEditRt{{ $rt->id }}">
+                        <button type="button" class="btn btn-xs btn-outline-secondary px-2.5 py-1" style="border-radius: 6px; font-size: 0.72rem;" data-bs-toggle="modal" data-bs-target="#modalEditRt{{ $rt->id }}">
                             Ubah
                         </button>
                     </div>

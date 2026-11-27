@@ -486,12 +486,14 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <span class="font-monospace small text-muted">{{ $m['route_name'] }}</span>
-                                    @if($m['route_exists'])
-                                        <i class="fas fa-check-circle text-success ms-1 small" title="Route aktif"></i>
-                                    @else
-                                        <i class="fas fa-times-circle text-danger ms-1 small" title="Route tidak ditemukan"></i>
-                                    @endif
+                                    <div class="d-inline-flex align-items-center gap-1.5 text-nowrap">
+                                        <span class="font-monospace small text-muted">{{ $m['route_name'] }}</span>
+                                        @if($m['route_exists'])
+                                            <i class="fas fa-check-circle text-success small" title="Route aktif"></i>
+                                        @else
+                                            <i class="fas fa-times-circle text-danger small" title="Route tidak ditemukan"></i>
+                                        @endif
+                                    </div>
                                 </td>
                                 <td>
                                     <span class="font-monospace small text-muted">{{ $m['table_name'] }}</span>

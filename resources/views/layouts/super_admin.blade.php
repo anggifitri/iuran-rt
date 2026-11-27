@@ -537,9 +537,19 @@
                 gap: 8px;
                 border-radius: 14px;
             }
+            .sa-topbar-title {
+                min-width: 0;
+                flex: 1 1 auto;
+            }
             .sa-topbar-title h1 {
-                font-size: 0.95rem !important;
-                max-width: 140px !important;
+                font-size: clamp(0.85rem, 3.8vw, 1.05rem) !important;
+                max-width: 100% !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .sa-topbar-actions {
+                flex-shrink: 0;
             }
             .sa-kpi-card {
                 padding: 12px;
@@ -592,6 +602,120 @@
             .sa-table td {
                 padding: 10px;
                 font-size: 0.78rem;
+            }
+        }
+
+        /* Mobile Layout Ala GoPay (<= 768px) */
+        @media (max-width: 768px) {
+            body {
+                overflow-x: hidden;
+                box-sizing: border-box;
+            }
+            .sa-main {
+                padding-bottom: 84px !important;
+                overflow-x: hidden;
+                max-width: 100vw;
+            }
+            .sa-bottom-nav {
+                display: flex !important;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 62px;
+                background: rgba(255, 255, 255, 0.96);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                border-top: 1px solid rgba(0, 0, 0, 0.08);
+                z-index: 1045;
+                justify-content: space-around;
+                align-items: center;
+                padding: 4px 6px calc(env(safe-area-inset-bottom, 0px) + 4px);
+                box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.04);
+            }
+            html.dark .sa-bottom-nav {
+                background: rgba(15, 23, 42, 0.96);
+                border-top: 1px solid rgba(255, 255, 255, 0.08);
+                box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.35);
+            }
+            .sa-bottom-nav-item {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+                color: #64748b;
+                padding: 4px 2px;
+                border-radius: 8px;
+                transition: all 0.15s ease;
+                background: transparent;
+                border: 0;
+                cursor: pointer;
+            }
+            html.dark .sa-bottom-nav-item {
+                color: #94a3b8;
+            }
+            .sa-bottom-nav-item i {
+                font-size: 19px;
+                margin-bottom: 2px;
+                line-height: 1;
+            }
+            .sa-bottom-nav-item span {
+                font-size: 10px;
+                font-weight: 600;
+                letter-spacing: -0.01em;
+                line-height: 1.1;
+            }
+            .sa-bottom-nav-item.active {
+                color: #1e4633;
+                font-weight: 700;
+            }
+            html.dark .sa-bottom-nav-item.active {
+                color: #38bdf8;
+            }
+            .sa-bottom-nav-item:active {
+                transform: scale(0.93);
+            }
+
+            /* Quick Action Grid ala GoPay di Mobile Hero */
+            .sa-hero-actions {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 8px !important;
+                width: 100% !important;
+            }
+            .sa-hero-actions button,
+            .sa-hero-actions a,
+            .sa-hero-actions form {
+                width: 100% !important;
+                margin: 0 !important;
+            }
+            .sa-hero-actions button,
+            .sa-hero-actions a {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+                padding: 10px 4px !important;
+                gap: 5px !important;
+                min-height: 64px;
+            }
+            .sa-hero-actions button i,
+            .sa-hero-actions a i {
+                font-size: 1.1rem !important;
+            }
+            .sa-hero-actions button span,
+            .sa-hero-actions a span {
+                font-size: 0.68rem !important;
+                line-height: 1.15 !important;
+                font-weight: 600;
+            }
+        }
+        @media (min-width: 769px) {
+            .sa-bottom-nav {
+                display: none !important;
             }
         }
     </style>
@@ -688,7 +812,11 @@
             <div class="mt-auto pt-3 border-top">
                 <div class="d-flex align-items-center justify-content-between p-2 rounded-3" style="background: #F8FAFC;">
                     <a href="{{ route('super_admin.profile.index') }}" class="d-flex align-items-center gap-2 overflow-hidden text-decoration-none" title="Buka Profil Super Admin">
-                        <img src="{{ Auth::user()->profile_photo_url }}" alt="Super Admin" class="rounded-circle" style="width: 34px; height: 34px; border: 2px solid var(--nx-gold); object-fit: cover;">
+                        <img src="{{ Auth::user()->profile_photo_url }}" 
+                             alt="Super Admin" 
+                             class="rounded-circle" 
+                             style="width: 34px; height: 34px; border: 2px solid var(--nx-gold); object-fit: cover;"
+                             onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->display_name) }}&background=D4AF37&color=000';">
                         <div class="overflow-hidden">
                             <strong class="d-block text-truncate small" style="color: var(--nx-text);">{{ Auth::user()->display_name }}</strong>
                             <span class="d-block text-truncate text-muted" style="font-size: 0.70rem;">{{ Auth::user()->email }}</span>
@@ -819,5 +947,29 @@
         });
     </script>
     @stack('scripts')
+
+    <!-- Mobile Bottom Navigation Bar ala GoPay (<= 768px) -->
+    <nav class="sa-bottom-nav" aria-label="Navigasi Bawah Super Admin">
+        <a href="{{ route('super_admin.dashboard') }}" class="sa-bottom-nav-item {{ request()->routeIs('super_admin.dashboard*') ? 'active' : '' }}">
+            <i class="fas fa-home"></i>
+            <span>Beranda</span>
+        </a>
+        <a href="{{ route('smart-gate.index') }}" class="sa-bottom-nav-item {{ request()->routeIs('smart-gate*') ? 'active' : '' }}">
+            <i class="fas fa-torii-gate"></i>
+            <span>Smart Gate</span>
+        </a>
+        <a href="{{ route('super_admin.modules.index') }}" class="sa-bottom-nav-item {{ request()->routeIs('super_admin.modules*') || request()->routeIs('iot.*') ? 'active' : '' }}">
+            <i class="fas fa-sliders"></i>
+            <span>Modul/IoT</span>
+        </a>
+        <a href="{{ route('super_admin.wilayah') }}" class="sa-bottom-nav-item {{ request()->routeIs('super_admin.wilayah*') ? 'active' : '' }}">
+            <i class="fas fa-map-location-dot"></i>
+            <span>Wilayah</span>
+        </a>
+        <button type="button" class="sa-bottom-nav-item" onclick="document.querySelector('.sa-sidebar')?.classList.toggle('mobile-open'); document.getElementById('saSidebarBackdrop')?.classList.toggle('active');">
+            <i class="fas fa-bars"></i>
+            <span>Menu</span>
+        </button>
+    </nav>
 </body>
 </html>

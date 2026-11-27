@@ -38,22 +38,22 @@
     <div class="card p-4 rounded-4 border mb-4 shadow-sm" style="background: var(--nx-card-bg); border-color: var(--nx-border) !important;">
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
             <div class="d-flex align-items-center gap-3">
-                <div class="rounded-3 d-flex align-items-center justify-content-center text-white" 
-                     style="width: 52px; height: 52px; background: linear-gradient(135deg, #1E4633 0%, #285943 100%); box-shadow: 0 4px 12px rgba(40,89,67,0.25);">
+                <div class="rounded-3 d-flex align-items-center justify-content-center text-white flex-shrink-0 align-self-start" 
+                     style="width: 48px; height: 48px; min-width: 48px; min-height: 48px; background: linear-gradient(135deg, #1E4633 0%, #285943 100%); box-shadow: 0 4px 12px rgba(40,89,67,0.25);">
                     <i class="fas fa-microchip fa-xl"></i>
                 </div>
-                <div>
+                <div style="min-width: 0;">
                     <h4 class="fw-bold m-0" style="color: var(--nx-text);">Pusat Kendali IoT &amp; Smart Gate</h4>
                     <p class="text-muted small m-0">Pengaturan token autentikasi ESP32 + RFID RC522, koordinat geofencing, dan log tap kartu.</p>
                 </div>
             </div>
 
-            <div class="d-flex align-items-center gap-2">
-                <span class="badge {{ $setting->is_active ? 'bg-success' : 'bg-danger' }} px-3 py-2 rounded-pill fs-7 fw-semibold shadow-sm">
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                <span class="badge {{ $setting->is_active ? 'bg-success' : 'bg-danger' }} px-3 py-2 rounded-pill fs-7 fw-semibold shadow-sm text-wrap text-start">
                     <i class="fas {{ $setting->is_active ? 'fa-signal' : 'fa-power-off' }} me-1"></i>
                     API IoT: {{ $setting->is_active ? 'AKTIF' : 'NONAKTIF' }}
                 </span>
-                <span class="badge bg-secondary-subtle text-secondary px-3 py-2 rounded-pill fs-7 fw-semibold border">
+                <span class="badge bg-secondary-subtle text-secondary px-3 py-2 rounded-pill fs-7 fw-semibold border text-wrap text-start">
                     <i class="fas fa-shield-halved me-1"></i> Mode Keamanan: Terproteksi Token
                 </span>
             </div>
