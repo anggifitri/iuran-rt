@@ -27,7 +27,7 @@ class RfidLog extends Model
 
     public function warga(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\warga::class, 'warga_id');
+        return $this->belongsTo(\App\Models\Warga::class, 'warga_id');
     }
 
     public function getStatusLabelAttribute(): string
