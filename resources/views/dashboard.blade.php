@@ -1635,38 +1635,38 @@
                 <div class="nx-hero-quick-actions d-md-none mt-3">
                     @if($isAdminRW)
                         <div class="nx-quick-grid">
-                            <a href="{{ route('warga.index') }}" class="nx-quick-item">
+                            <a href="{{ Route::has('warga.index') ? route('warga.index') : url('/warga') }}" class="nx-quick-item">
                                 <div class="nx-quick-icon"><i class="fas fa-users"></i></div>
                                 <span>Data Warga</span>
                             </a>
-                            <a href="{{ route('pembayaran.index') }}" class="nx-quick-item">
+                            <a href="{{ Route::has('pembayaran.index') ? route('pembayaran.index') : url('/pembayaran') }}" class="nx-quick-item">
                                 <div class="nx-quick-icon"><i class="fas fa-wallet"></i></div>
                                 <span>Kas RW</span>
                             </a>
-                            <a href="{{ route('smart-gate.index') }}" class="nx-quick-item">
+                            <a href="{{ Route::has('smart_gate.index') ? route('smart_gate.index') : url('/smart-gate') }}" class="nx-quick-item">
                                 <div class="nx-quick-icon"><i class="fas fa-torii-gate"></i></div>
                                 <span>Smart Gate</span>
                             </a>
-                            <a href="{{ route('monitoring.index') }}" class="nx-quick-item">
+                            <a href="{{ Route::has('monitoring.index') ? route('monitoring.index') : url('/monitoring') }}" class="nx-quick-item">
                                 <div class="nx-quick-icon"><i class="fas fa-tower-observation"></i></div>
                                 <span>Monitoring</span>
                             </a>
                         </div>
                     @elseif($isAdminRT)
                         <div class="nx-quick-grid">
-                            <a href="{{ route('warga.index') }}" class="nx-quick-item">
+                            <a href="{{ Route::has('warga.index') ? route('warga.index') : url('/warga') }}" class="nx-quick-item">
                                 <div class="nx-quick-icon"><i class="fas fa-id-card"></i></div>
                                 <span>Data Warga</span>
                             </a>
-                            <a href="{{ route('pembayaran.create') }}" class="nx-quick-item">
+                            <a href="{{ Route::has('pembayaran.create') ? route('pembayaran.create') : url('/pembayaran/create') }}" class="nx-quick-item">
                                 <div class="nx-quick-icon"><i class="fas fa-money-bill-wave"></i></div>
                                 <span>Catat Iuran</span>
                             </a>
-                            <a href="{{ route('surat.index', ['filter' => 'pending']) }}" class="nx-quick-item">
+                            <a href="{{ Route::has('surat.index') ? route('surat.index', ['filter' => 'pending']) : url('/surat?filter=pending') }}" class="nx-quick-item">
                                 <div class="nx-quick-icon"><i class="fas fa-check-double"></i></div>
                                 <span>Verif Surat</span>
                             </a>
-                            <a href="{{ route('smart-gate.index') }}" class="nx-quick-item">
+                            <a href="{{ Route::has('smart_gate.index') ? route('smart_gate.index') : url('/smart-gate') }}" class="nx-quick-item">
                                 <div class="nx-quick-icon"><i class="fas fa-torii-gate"></i></div>
                                 <span>Smart Gate</span>
                             </a>
@@ -1674,19 +1674,19 @@
                     @else
                         {{-- Warga --}}
                         <div class="nx-quick-grid">
-                            <a href="{{ route('surat.create') }}" class="nx-quick-item">
+                            <a href="{{ Route::has('surat.create') ? route('surat.create') : url('/surat/create') }}" class="nx-quick-item">
                                 <div class="nx-quick-icon"><i class="fas fa-paper-plane"></i></div>
                                 <span>Buat Surat</span>
                             </a>
-                            <a href="{{ route('laporan.iuran') }}" class="nx-quick-item">
+                            <a href="{{ Route::has('laporan.iuran') ? route('laporan.iuran') : url('/laporan/iuran') }}" class="nx-quick-item">
                                 <div class="nx-quick-icon"><i class="fas fa-receipt"></i></div>
                                 <span>Iuran Saya</span>
                             </a>
-                            <a href="{{ route('smart-gate.index') }}" class="nx-quick-item">
+                            <a href="{{ Route::has('smart_gate.index') ? route('smart_gate.index') : url('/smart-gate') }}" class="nx-quick-item">
                                 <div class="nx-quick-icon"><i class="fas fa-torii-gate"></i></div>
                                 <span>Smart Gate</span>
                             </a>
-                            <a href="{{ route('pengaduan.create') }}" class="nx-quick-item">
+                            <a href="{{ Route::has('pengaduan.create') ? route('pengaduan.create') : url('/pengaduan/create') }}" class="nx-quick-item">
                                 <div class="nx-quick-icon"><i class="fas fa-bullhorn"></i></div>
                                 <span>Pengaduan</span>
                             </a>

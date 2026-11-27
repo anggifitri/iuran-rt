@@ -2261,48 +2261,48 @@
     @endphp
     <!-- Mobile Bottom Navigation Bar ala GoPay (<= 768px) -->
     <nav class="nx-bottom-nav" aria-label="Navigasi Bawah Mobile">
-        <a href="{{ route('dashboard') }}" class="nx-bottom-nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+        <a href="{{ Route::has('dashboard') ? route('dashboard') : url('/dashboard') }}" class="nx-bottom-nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <i class="fas fa-home"></i>
             <span>Beranda</span>
         </a>
 
         @if($isUserWarga)
-            <a href="{{ route('laporan.iuran') }}" class="nx-bottom-nav-item {{ request()->routeIs('laporan.iuran*') ? 'active' : '' }}">
+            <a href="{{ Route::has('laporan.iuran') ? route('laporan.iuran') : url('/laporan/iuran') }}" class="nx-bottom-nav-item {{ request()->routeIs('laporan.iuran*') ? 'active' : '' }}">
                 <i class="fas fa-receipt"></i>
                 <span>Iuran</span>
             </a>
-            <a href="{{ route('smart-gate.index') }}" class="nx-bottom-nav-item {{ request()->routeIs('smart-gate*') ? 'active' : '' }}">
+            <a href="{{ Route::has('smart_gate.index') ? route('smart_gate.index') : url('/smart-gate') }}" class="nx-bottom-nav-item {{ request()->routeIs('smart_gate*') ? 'active' : '' }}">
                 <i class="fas fa-torii-gate"></i>
                 <span>Smart Gate</span>
             </a>
-            <a href="{{ route('surat.index') }}" class="nx-bottom-nav-item {{ request()->routeIs('surat*') || request()->routeIs('pengaduan*') ? 'active' : '' }}">
+            <a href="{{ Route::has('surat.index') ? route('surat.index') : url('/surat') }}" class="nx-bottom-nav-item {{ request()->routeIs('surat*') || request()->routeIs('pengaduan*') ? 'active' : '' }}">
                 <i class="fas fa-envelope-open-text"></i>
                 <span>Layanan</span>
             </a>
         @elseif($isUserAdminRw)
-            <a href="{{ route('warga.index') }}" class="nx-bottom-nav-item {{ request()->routeIs('warga*') ? 'active' : '' }}">
+            <a href="{{ Route::has('warga.index') ? route('warga.index') : url('/warga') }}" class="nx-bottom-nav-item {{ request()->routeIs('warga*') ? 'active' : '' }}">
                 <i class="fas fa-users"></i>
                 <span>Warga/RT</span>
             </a>
-            <a href="{{ route('pembayaran.index') }}" class="nx-bottom-nav-item {{ request()->routeIs('pembayaran*') || request()->routeIs('kas*') ? 'active' : '' }}">
+            <a href="{{ Route::has('pembayaran.index') ? route('pembayaran.index') : url('/pembayaran') }}" class="nx-bottom-nav-item {{ request()->routeIs('pembayaran*') || request()->routeIs('kas*') ? 'active' : '' }}">
                 <i class="fas fa-wallet"></i>
                 <span>Keuangan</span>
             </a>
-            <a href="{{ route('smart-gate.index') }}" class="nx-bottom-nav-item {{ request()->routeIs('smart-gate*') ? 'active' : '' }}">
+            <a href="{{ Route::has('smart_gate.index') ? route('smart_gate.index') : url('/smart-gate') }}" class="nx-bottom-nav-item {{ request()->routeIs('smart_gate*') ? 'active' : '' }}">
                 <i class="fas fa-torii-gate"></i>
                 <span>Smart Gate</span>
             </a>
         @else
             {{-- Admin RT / Bendahara RT --}}
-            <a href="{{ route('warga.index') }}" class="nx-bottom-nav-item {{ request()->routeIs('warga*') ? 'active' : '' }}">
+            <a href="{{ Route::has('warga.index') ? route('warga.index') : url('/warga') }}" class="nx-bottom-nav-item {{ request()->routeIs('warga*') ? 'active' : '' }}">
                 <i class="fas fa-users"></i>
                 <span>Warga</span>
             </a>
-            <a href="{{ route('pembayaran.index') }}" class="nx-bottom-nav-item {{ request()->routeIs('pembayaran*') || request()->routeIs('laporan.iuran*') ? 'active' : '' }}">
+            <a href="{{ Route::has('pembayaran.index') ? route('pembayaran.index') : url('/pembayaran') }}" class="nx-bottom-nav-item {{ request()->routeIs('pembayaran*') || request()->routeIs('laporan.iuran*') ? 'active' : '' }}">
                 <i class="fas fa-receipt"></i>
                 <span>Iuran</span>
             </a>
-            <a href="{{ route('surat.index') }}" class="nx-bottom-nav-item {{ request()->routeIs('surat*') || request()->routeIs('laporan_rt*') ? 'active' : '' }}">
+            <a href="{{ Route::has('surat.index') ? route('surat.index') : url('/surat') }}" class="nx-bottom-nav-item {{ request()->routeIs('surat*') || request()->routeIs('laporan_rt*') ? 'active' : '' }}">
                 <i class="fas fa-clipboard-check"></i>
                 <span>Surat/Laporan</span>
             </a>

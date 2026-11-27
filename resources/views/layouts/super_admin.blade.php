@@ -950,19 +950,19 @@
 
     <!-- Mobile Bottom Navigation Bar ala GoPay (<= 768px) -->
     <nav class="sa-bottom-nav" aria-label="Navigasi Bawah Super Admin">
-        <a href="{{ route('super_admin.dashboard') }}" class="sa-bottom-nav-item {{ request()->routeIs('super_admin.dashboard*') ? 'active' : '' }}">
+        <a href="{{ Route::has('super_admin.dashboard') ? route('super_admin.dashboard') : url('/super-admin/dashboard') }}" class="sa-bottom-nav-item {{ request()->routeIs('super_admin.dashboard*') ? 'active' : '' }}">
             <i class="fas fa-home"></i>
             <span>Beranda</span>
         </a>
-        <a href="{{ route('smart-gate.index') }}" class="sa-bottom-nav-item {{ request()->routeIs('smart-gate*') ? 'active' : '' }}">
+        <a href="{{ Route::has('smart_gate.index') ? route('smart_gate.index') : (Route::has('super_admin.smart_gate.index') ? route('super_admin.smart_gate.index') : url('/smart-gate')) }}" class="sa-bottom-nav-item {{ request()->routeIs('smart_gate*') || request()->routeIs('super_admin.smart_gate*') ? 'active' : '' }}">
             <i class="fas fa-torii-gate"></i>
             <span>Smart Gate</span>
         </a>
-        <a href="{{ route('super_admin.modules.index') }}" class="sa-bottom-nav-item {{ request()->routeIs('super_admin.modules*') || request()->routeIs('iot.*') ? 'active' : '' }}">
+        <a href="{{ Route::has('super_admin.modules.index') ? route('super_admin.modules.index') : (Route::has('iot.index') ? route('iot.index') : url('/super-admin/modules')) }}" class="sa-bottom-nav-item {{ request()->routeIs('super_admin.modules*') || request()->routeIs('iot.*') ? 'active' : '' }}">
             <i class="fas fa-sliders"></i>
             <span>Modul/IoT</span>
         </a>
-        <a href="{{ route('super_admin.wilayah') }}" class="sa-bottom-nav-item {{ request()->routeIs('super_admin.wilayah*') ? 'active' : '' }}">
+        <a href="{{ Route::has('super_admin.wilayah.index') ? route('super_admin.wilayah.index') : url('/super-admin/wilayah') }}" class="sa-bottom-nav-item {{ request()->routeIs('super_admin.wilayah*') ? 'active' : '' }}">
             <i class="fas fa-map-location-dot"></i>
             <span>Wilayah</span>
         </a>
